@@ -13,8 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="order")
-public class OrderEntity extends BaseEntity {
+@Table(name="orders")
+public class Order extends Base {
 	@Column(name="paymentmethod", columnDefinition="VARCHAR(100)")
 	private String paymentMethod;
 	
@@ -24,9 +24,12 @@ public class OrderEntity extends BaseEntity {
 	/**
 	 * Foreign key section
 	 */
-	private UserEntity user;	
-    
-    private List<OrderDetailEntity> orderDetails = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;	
+
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -44,22 +47,19 @@ public class OrderEntity extends BaseEntity {
 		this.status = status;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<OrderDetailEntity> getOrderDetails() {
+	public List<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetailEntity> orderDetails) {
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 }

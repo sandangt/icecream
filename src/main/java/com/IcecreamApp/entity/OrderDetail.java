@@ -8,8 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="orderdetail")
-public class OrderDetailEntity extends BaseEntity {
+@Table(name="order_detail")
+public class OrderDetail extends Base {
 	
 	@Column(name="code", columnDefinition="VARCHAR(250)")
 	private String code;
@@ -21,9 +21,13 @@ public class OrderDetailEntity extends BaseEntity {
 	 * Foreign key section
 	 */
 
-	private OrderEntity order;
-	
-	private ProductEntity product;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="order_id")
+	private Order order;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="product_id")
+	private Product product;
 
 	public String getCode() {
 		return code;
@@ -40,24 +44,19 @@ public class OrderDetailEntity extends BaseEntity {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="order_id")
-	public OrderEntity getOrder() {
+	public Order getOrder() {
 		return order;
 	}
 
-	public void setOrder(OrderEntity order) {
+	public void setOrder(Order order) {
 		this.order = order;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="product_id")
-	public ProductEntity getProduct() {
+	public Product getProduct() {
 		return product;
 	}
 
-	public void setProduct(ProductEntity product) {
+	public void setProduct(Product product) {
 		this.product = product;
 	}
 	

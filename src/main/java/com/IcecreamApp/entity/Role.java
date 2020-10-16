@@ -1,6 +1,5 @@
 package com.IcecreamApp.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,9 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name="role")
-public class RoleEntity extends BaseEntity {
+@Table(name="roles")
+public class Role extends Base {
 	
 	@Column(name="code", unique=true, columnDefinition="VARCHAR(15)")
 	private String code;
@@ -18,8 +19,10 @@ public class RoleEntity extends BaseEntity {
 	/**
 	 * Foreign key section
 	 */
-	
-	private List<UserEntity> users = new ArrayList<>();
+
+	@ManyToMany(mappedBy="roles")
+	@JsonIgnore
+	private List<User> users;
 	
 	public String getCode() {
 		return code;
@@ -29,12 +32,11 @@ public class RoleEntity extends BaseEntity {
 		this.code = code;
 	}
 
-	@ManyToMany(mappedBy="roles")
-	public List<UserEntity> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<UserEntity> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 }

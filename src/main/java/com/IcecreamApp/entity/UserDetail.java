@@ -2,18 +2,18 @@ package com.IcecreamApp.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.MapsId;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "userdetail")
-public class UserDetailEntity extends BaseEntity { 
+@Table(name = "user_detail")
+public class UserDetail extends Base { 
     
-    @Column(name="fullname", columnDefinition="VARCHAR(100")
+    @Column(name="fullname", columnDefinition="VARCHAR(100)")
     private String fullname;
 
 	@Column(name="address", columnDefinition="VARCHAR(100)")
@@ -25,7 +25,7 @@ public class UserDetailEntity extends BaseEntity {
     @Column(name="birthday", columnDefinition="DATE")
     private Date birthday;
     
-    @Column(name="avatar")
+    @Column(name="avatar", columnDefinition="VARCHAR(250)")
     private String avatar;
     
     @Column(name="status", columnDefinition="TINYINT")
@@ -34,9 +34,9 @@ public class UserDetailEntity extends BaseEntity {
     /**
      * Foreign key section 
      */
-    private UserEntity user;
-    
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
     
     public String getFullname() {
 		return fullname;
@@ -86,13 +86,11 @@ public class UserDetailEntity extends BaseEntity {
 		this.status = status;
 	}
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 }

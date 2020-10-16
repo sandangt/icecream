@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.IcecreamApp.entity.UserEntity;
+import com.IcecreamApp.entity.User;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
 
@@ -15,24 +17,29 @@ public class UserService implements IUserService {
 
 	@Autowired
 	UserRepository userRepository;
+	
 	@Override
-	public List<UserEntity> findAll() {
-		return (List<UserEntity>) userRepository.findAll();
+	public ResponseEntity<List<User>> findAll() {
+		
+    	List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@Override
-	public Optional<UserEntity> findById(long id) {
+	public Optional<User> findById(long id) {
 		return userRepository.findById(id);
 	}
 
 	@Override
-	public void save(UserEntity user) {
+	public void save(User user) {
 		userRepository.save(user);
-		
 	}
 
 	@Override
-	public void delete(UserEntity user) {
+	public void delete(User user) {
 		userRepository.delete(user);
 	}
 }

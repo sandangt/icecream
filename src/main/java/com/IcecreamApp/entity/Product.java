@@ -13,8 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "product")
-public class ProductEntity extends BaseEntity {
+@Table(name = "products")
+public class Product extends Base {
 
 	@Column(name = "name", columnDefinition="VARCHAR(100)")
 	private String name;
@@ -34,13 +34,17 @@ public class ProductEntity extends BaseEntity {
 	/**
 	 * Foreign key section
 	 */
-    
-    private List<FeedbackEntity> feedbacks = new ArrayList<>();
-    
-    
-    private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 
-	private CategoryEntity category;
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedbacks = new ArrayList<>();
+    
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "categoryName",
+	        referencedColumnName = "name")
+	private Category category;
     
 	public String getName() {
 		return name;
@@ -82,30 +86,23 @@ public class ProductEntity extends BaseEntity {
 		this.status = status;
 	}
 	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<FeedbackEntity> getFeedbacks() {
+	public List<Feedback> getFeedbacks() {
 		return feedbacks;
 	}
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<OrderDetailEntity> getOrderDetails() {
+	public List<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetailEntity> orderDetails) {
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(
-	        name = "categoryName",
-	        referencedColumnName = "name"
-	    )
-	public CategoryEntity getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(CategoryEntity category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 

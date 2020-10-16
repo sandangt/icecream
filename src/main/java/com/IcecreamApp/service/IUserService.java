@@ -3,16 +3,18 @@ package com.IcecreamApp.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.IcecreamApp.entity.UserEntity;
+import org.springframework.http.ResponseEntity;
+
+import com.IcecreamApp.entity.User;
 
 public interface IUserService {
 	
-	List<UserEntity> findAll();
+	ResponseEntity<List<User>> findAll();
 	
- 	Optional<UserEntity> findById(long id);   
+ 	Optional<User> findById(long id);   
  	
- 	void save(UserEntity user);    
+ 	void save(User user);    
  	
- 	void delete(UserEntity user);
+ 	void delete(User user);
 	
 }

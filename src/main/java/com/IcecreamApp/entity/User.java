@@ -14,8 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "user")
-public class UserEntity extends BaseEntity {
+@Table(name = "users")
+public class User extends Base {
 
 	@Column(name = "username", unique = true, columnDefinition="VARCHAR(100)")
 	private String userName;
@@ -32,16 +32,24 @@ public class UserEntity extends BaseEntity {
 	/**
 	 * Foreign key section
 	 */
-	
-	private UserDetailEntity userDetail;
-	
-	private List<RoleEntity> roles = new ArrayList<>();
-	
-    
-    private List<FeedbackEntity> feedbacks = new ArrayList<>();
 
-    
-    private List<OrderEntity> orders = new ArrayList<>();
+	@OneToOne(mappedBy="user")
+	private UserDetail userDetail;
+
+
+	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@JoinTable(name = "user_role", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private List<Role> roles = new ArrayList<>();
+	
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedbacks = new ArrayList<>();
+
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
 
 	public String getUserName() {
 		return userName;
@@ -75,42 +83,34 @@ public class UserEntity extends BaseEntity {
 		this.status = status;
 	}
 
-	@OneToOne(mappedBy="user", cascade=CascadeType.ALL)
-	public UserDetailEntity getUserDetail() {
+	public UserDetail getUserDetail() {
 		return userDetail;
 	}
 
-	public void setUserDetail(UserDetailEntity userDetail) {
+	public void setUserDetail(UserDetail userDetail) {
 		this.userDetail = userDetail;
 	}
-
-	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-	@JoinTable(name = "user_role", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	public List<RoleEntity> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<RoleEntity> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<FeedbackEntity> getFeedbacks() {
+	public List<Feedback> getFeedbacks() {
 		return feedbacks;
 	}
 
-	public void setFeedbacks(List<FeedbackEntity> feedbacks) {
+	public void setFeedbacks(List<Feedback> feedbacks) {
 		this.feedbacks = feedbacks;
 	}
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<OrderEntity> getOrders() {
+	public List<Order> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<OrderEntity> orders) {
+	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
     

@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="faq")
-public class FAQEntity extends BaseEntity {
+public class FAQ extends Base {
 	
 	@Column(name="question", columnDefinition="TEXT")
 	private String question;

@@ -10,8 +10,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="category")
-public class CategoryEntity extends BaseEntity {
+@Table(name="categories")
+public class Category extends Base {
 
 	@Column(name="name", unique=true)
 	private String name;
@@ -19,7 +19,8 @@ public class CategoryEntity extends BaseEntity {
 	/**
 	 * Foreign key section
 	 */
-    private List<ProductEntity> productEntities = new ArrayList<>();
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> productEntities = new ArrayList<>();
 	
 	public String getName() {
 		return name;
@@ -29,12 +30,11 @@ public class CategoryEntity extends BaseEntity {
 		this.name = name;
 	}
 	
-	@OneToMany(mappedBy = "categoryName", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<ProductEntity> getProductEntities() {
+	public List<Product> getProductEntities() {
 		return productEntities;
 	}
 
-	public void setProductEntities(List<ProductEntity> productEntities) {
+	public void setProductEntities(List<Product> productEntities) {
 		this.productEntities = productEntities;
 	}
 	
