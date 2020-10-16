@@ -23,23 +23,48 @@ public class UserService implements IUserService {
 		
     	List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@Override
-	public Optional<User> findById(long id) {
-		return userRepository.findById(id);
+	public ResponseEntity<User> findById(long id) {
+    	Optional<User> user = this.userRepository.findById(id);
+
+        if (!user.isPresent()) {
+            return new ResponseEntity<>(user.get(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
 	}
 
 	@Override
-	public void save(User user) {
+	public ResponseEntity<User> create(User user) {
 		userRepository.save(user);
+		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 
 	@Override
-	public void delete(User user) {
-		userRepository.delete(user);
+	public ResponseEntity<User> update(long id, User user) {
+
+		Optional<User> currentUser = this.userRepository.findById(id);
+
+	    if (!currentUser.isPresent()) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	    this.userRepository.delete(user);
+	    this.userRepository.save(user);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<User> delete(long id) {
+		
+    	Optional<User> currentUser = userRepository.findById(id);
+        if (!currentUser.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userRepository.delete(currentUser.get());
+        return new ResponseEntity<>(currentUser.get(), HttpStatus.OK);
 	}
 }

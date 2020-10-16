@@ -1,7 +1,6 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
@@ -11,10 +10,12 @@ public interface IUserService {
 	
 	ResponseEntity<List<User>> findAll();
 	
- 	Optional<User> findById(long id);   
+ 	ResponseEntity<User> findById(long id);   
  	
- 	void save(User user);    
+ 	ResponseEntity<User> create(User user);
  	
- 	void delete(User user);
+ 	ResponseEntity<User> update(long id, User user);
+ 	
+ 	ResponseEntity<User> delete(long id);
 	
 }
