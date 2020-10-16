@@ -12,14 +12,30 @@ import javax.persistence.Table;
 @Entity
 @Table(name="category")
 public class CategoryEntity extends BaseEntity {
+
 	@Column(name="name", unique=true)
 	private String name;
 	
 	/**
 	 * Foreign key section
 	 */
+    private List<ProductEntity> productEntities = new ArrayList<>();
+	
+	public String getName() {
+		return name;
+	}
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetailEntity> orderDetails = new ArrayList<>();
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@OneToMany(mappedBy = "categoryName", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<ProductEntity> getProductEntities() {
+		return productEntities;
+	}
 
+	public void setProductEntities(List<ProductEntity> productEntities) {
+		this.productEntities = productEntities;
+	}
+	
 }

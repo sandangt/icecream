@@ -15,8 +15,8 @@ public class UserDetailEntity extends BaseEntity {
     
     @Column(name="fullname", columnDefinition="VARCHAR(100")
     private String fullname;
-    
-    @Column(name="address", columnDefinition="VARCHAR(100)")
+
+	@Column(name="address", columnDefinition="VARCHAR(100)")
     private String address;
     
     @Column(name="gender", columnDefinition="TINYINT")
@@ -34,7 +34,66 @@ public class UserDetailEntity extends BaseEntity {
     /**
      * Foreign key section 
      */
+    private UserEntity user;
+    
+
+    
+    public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private UserEntity user;
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
 }
+
