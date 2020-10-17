@@ -1,5 +1,6 @@
 package com.IcecreamApp.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "products")
-public class Product extends Base {
+public class Product extends Base implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -321247931329528117L;
 
 	@Column(name = "name", columnDefinition="VARCHAR(100)")
 	private String name;
@@ -36,14 +45,16 @@ public class Product extends Base {
 	 */
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference(value="feedback-product")
     private List<Feedback> feedbacks = new ArrayList<>();
     
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference(value="order_detail-product")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "categoryName",
-	        referencedColumnName = "name")
+	@JoinColumn(name = "category_name", referencedColumnName = "name")
+	@JsonBackReference(value="product-category")
 	private Category category;
     
 	public String getName() {

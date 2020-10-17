@@ -1,18 +1,25 @@
 package com.IcecreamApp.entity;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="roles")
-public class Role extends Base {
+public class Role extends Base implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2834524789864968814L;
+
 	@Column(name="code", unique=true, columnDefinition="VARCHAR(15)")
 	private String code;
 
@@ -21,8 +28,8 @@ public class Role extends Base {
 	 */
 
 	@ManyToMany(mappedBy="roles")
-	@JsonIgnore
-	private List<User> users;
+	@JsonIgnoreProperties("roles")
+	private Set<User> users = new HashSet<>();
 	
 	public String getCode() {
 		return code;
@@ -32,11 +39,11 @@ public class Role extends Base {
 		this.code = code;
 	}
 
-	public List<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 }

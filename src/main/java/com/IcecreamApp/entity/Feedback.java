@@ -1,5 +1,7 @@
 package com.IcecreamApp.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,9 +9,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="feedbacks")
-public class Feedback extends Base {
+public class Feedback extends Base implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -72177654282647916L;
+
 	@Column(name="title", columnDefinition="VARCHAR(100)")
 	private String title;
 	
@@ -21,11 +30,13 @@ public class Feedback extends Base {
 	 */
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id")
+	@JoinColumn(name="user_id", referencedColumnName = "id")
+	@JsonBackReference(value="feedback-user")
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="product_id")
+	@JoinColumn(name="product_id", referencedColumnName = "id")
+	@JsonBackReference(value="feedback-product")
 	private Product product;
 
 	public String getTitle() {

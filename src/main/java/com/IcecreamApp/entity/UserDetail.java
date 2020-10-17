@@ -1,5 +1,6 @@
 package com.IcecreamApp.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -10,10 +11,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "user_detail")
-public class UserDetail extends Base { 
+@Table(name = "user_details")
+public class UserDetail extends Base implements Serializable { 
     
-    @Column(name="fullname", columnDefinition="VARCHAR(100)")
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3166009761593242165L;
+
+	@Column(name="fullname", columnDefinition="VARCHAR(100)")
     private String fullname;
 
 	@Column(name="address", columnDefinition="VARCHAR(100)")
@@ -27,9 +33,6 @@ public class UserDetail extends Base {
     
     @Column(name="avatar", columnDefinition="VARCHAR(250)")
     private String avatar;
-    
-    @Column(name="status", columnDefinition="TINYINT")
-    private Integer status;
 
     /**
      * Foreign key section 
@@ -76,14 +79,6 @@ public class UserDetail extends Base {
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 
 	public User getUser() {

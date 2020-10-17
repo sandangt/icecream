@@ -1,5 +1,6 @@
 package com.IcecreamApp.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="orders")
-public class Order extends Base {
+public class Order extends Base implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5185509684141990101L;
+
 	@Column(name="paymentmethod", columnDefinition="VARCHAR(100)")
 	private String paymentMethod;
 	
@@ -25,10 +34,12 @@ public class Order extends Base {
 	 * Foreign key section
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonBackReference(value="order-user")
 	private User user;	
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference(value="order_detail-order")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	public String getPaymentMethod() {

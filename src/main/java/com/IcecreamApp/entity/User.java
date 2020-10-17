@@ -1,11 +1,13 @@
 package com.IcecreamApp.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -13,9 +15,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
+@DynamicUpdate
 @Table(name = "users")
-public class User extends Base {
+public class User extends Base implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5375733254179455598L;
 
 	@Column(name = "username", unique = true, columnDefinition="VARCHAR(100)")
 	private String userName;
@@ -33,23 +46,24 @@ public class User extends Base {
 	 * Foreign key section
 	 */
 
-	@OneToOne(mappedBy="user")
+	@OneToOne(mappedBy="user", orphanRemoval=true, fetch = FetchType.EAGER)
 	private UserDetail userDetail;
 
-
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_role", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles = new ArrayList<>();
-	
+				joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"), 
+				inverseJoinColumns = @JoinColumn(name = "code", referencedColumnName = "code"))
+	@JsonIgnoreProperties("users")
+	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Feedback> feedbacks = new ArrayList<>();
+	@JsonManagedReference(value="feedback-user")
+    private Set<Feedback> feedbacks = new HashSet<>();
 
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+	@JsonManagedReference(value="order-user")
+    private Set<Order> orders = new HashSet<>();
 
 	public String getUserName() {
 		return userName;
@@ -90,28 +104,28 @@ public class User extends Base {
 	public void setUserDetail(UserDetail userDetail) {
 		this.userDetail = userDetail;
 	}
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
-	public List<Feedback> getFeedbacks() {
+	public Set<Feedback> getFeedbacks() {
 		return feedbacks;
 	}
 
-	public void setFeedbacks(List<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
+	public void setFeedbacks(Set<Feedback> feedbacks) {
+		this.feedbacks.addAll(feedbacks);
 	}
 
-	public List<Order> getOrders() {
+	public Set<Order> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
+	public void setOrders(Set<Order> orders) {
+		this.orders.addAll(orders);
 	}
     
 }

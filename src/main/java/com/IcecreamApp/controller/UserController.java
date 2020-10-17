@@ -25,12 +25,12 @@ public class UserController {
 
     @GetMapping(value = "/users")
     public ResponseEntity<List<User>> getAllUser() {        
-    	return userService.findAll();
+    	return userService.readAll();
     }
 
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-    	return userService.findById(id);
+    	return userService.readById(id);
     }
 
     @PostMapping(value = "/users")
