@@ -3,6 +3,7 @@ package com.IcecreamApp.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -37,5 +38,20 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 	public ResponseEntity<EntityType> create(EntityType entity) {
 		repository.save(entity);
 		return new ResponseEntity<>(entity, HttpStatus.CREATED);
+	}
+
+
+	@Override
+	public ResponseEntity<EntityType> update(long id, EntityType entity) {
+
+		Optional<EntityType> currentEntityWrapper = this.repository.findById(id);
+
+	    if (!currentEntityWrapper.isPresent()) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	    EntityType currentEntity = currentEntityWrapper.get();
+	    BeanUtils.copyProperties(entity, currentEntity);
+	    this.repository.save(currentEntity);
+		return new ResponseEntity<>(currentEntity, HttpStatus.OK);
 	}
 }
