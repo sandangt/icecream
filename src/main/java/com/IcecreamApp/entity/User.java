@@ -15,13 +15,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@DynamicUpdate
 @Table(name = "users")
 public class User extends Base implements Serializable {
 
@@ -31,7 +28,7 @@ public class User extends Base implements Serializable {
 	private static final long serialVersionUID = 5375733254179455598L;
 
 	@Column(name = "username", unique = true, columnDefinition="VARCHAR(100)")
-	private String userName;
+	private String username;
 	
 	@Column(name = "email", unique = true, columnDefinition="VARCHAR(100)")
 	private String email;
@@ -46,7 +43,8 @@ public class User extends Base implements Serializable {
 	 * Foreign key section
 	 */
 
-	@OneToOne(mappedBy="user", orphanRemoval=true, fetch = FetchType.EAGER)
+	@OneToOne(mappedBy="user",fetch = FetchType.LAZY, orphanRemoval = true)
+	@JsonIgnoreProperties("user")
 	private UserDetail userDetail;
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
@@ -66,11 +64,11 @@ public class User extends Base implements Serializable {
     private Set<Order> orders = new HashSet<>();
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -102,8 +100,17 @@ public class User extends Base implements Serializable {
 	}
 
 	public void setUserDetail(UserDetail userDetail) {
-		this.userDetail = userDetail;
+		if (userDetail == null) {
+	        if (this.userDetail != null) {
+	            this.userDetail.setUser(null);
+	        }
+		}
+		else {
+			userDetail.setUser(this);
+		}
+	    this.userDetail = userDetail;
 	}
+	
 	public Set<Role> getRoles() {
 		return roles;
 	}

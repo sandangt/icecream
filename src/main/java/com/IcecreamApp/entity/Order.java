@@ -33,7 +33,7 @@ public class Order extends Base implements Serializable {
 	/**
 	 * Foreign key section
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonBackReference(value="order-user")
 	private User user;	
@@ -63,6 +63,7 @@ public class Order extends Base implements Serializable {
 	}
 
 	public void setUser(User user) {
+		System.out.println(user.getUserName());
 		this.user = user;
 	}
 

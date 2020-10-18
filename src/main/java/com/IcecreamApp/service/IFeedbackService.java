@@ -1,5 +1,7 @@
 package com.IcecreamApp.service;
 
-public interface IFeedbackService {
+import com.IcecreamApp.entity.Feedback;
+
+public interface IFeedbackService extends IGeneralService<Feedback> {
 
 }

@@ -1,14 +1,16 @@
 package com.IcecreamApp.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "user_details")
@@ -17,8 +19,8 @@ public class UserDetail extends Base implements Serializable {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -3166009761593242165L;
-
+	private static final long serialVersionUID = -3166009761593242165L; 
+	
 	@Column(name="fullname", columnDefinition="VARCHAR(100)")
     private String fullname;
 
@@ -29,6 +31,7 @@ public class UserDetail extends Base implements Serializable {
     private Integer gender;
     
     @Column(name="birthday", columnDefinition="DATE")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date birthday;
     
     @Column(name="avatar", columnDefinition="VARCHAR(250)")
@@ -37,10 +40,10 @@ public class UserDetail extends Base implements Serializable {
     /**
      * Foreign key section 
      */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
-    
+	
     public String getFullname() {
 		return fullname;
 	}

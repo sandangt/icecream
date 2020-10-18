@@ -36,7 +36,7 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 
 	@Override
 	public ResponseEntity<EntityType> create(EntityType entity) {
-		repository.save(entity);
+		repository.saveAndFlush(entity);
 		return new ResponseEntity<>(entity, HttpStatus.CREATED);
 	}
 

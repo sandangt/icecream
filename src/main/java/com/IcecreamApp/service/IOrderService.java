@@ -1,5 +1,7 @@
 package com.IcecreamApp.service;
 
-public interface IOrderService {
+import com.IcecreamApp.entity.Order;
+
+public interface IOrderService extends IGeneralService<Order> {
 
 }
