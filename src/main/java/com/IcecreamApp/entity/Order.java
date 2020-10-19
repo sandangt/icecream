@@ -1,8 +1,7 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="orders")
-public class Order extends Base implements Serializable {
+public class Order extends Base {
 	/**
 	 * 
 	 */
@@ -33,14 +32,14 @@ public class Order extends Base implements Serializable {
 	/**
 	 * Foreign key section
 	 */
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonBackReference(value="order-user")
 	private User user;	
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="order_detail-order")
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+	private Set<OrderDetail> orderDetails = new HashSet<>();
 
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -67,11 +66,11 @@ public class Order extends Base implements Serializable {
 		this.user = user;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
+	public Set<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
+	public void setOrderDetails(Set<OrderDetail> orderDetails) {
+		this.orderDetails.addAll(orderDetails);
 	}
 }

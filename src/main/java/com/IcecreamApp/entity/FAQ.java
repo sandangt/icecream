@@ -1,14 +1,12 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="faq")
-public class FAQ extends Base implements Serializable {
+public class FAQ extends Base {
 	
 	/**
 	 * 

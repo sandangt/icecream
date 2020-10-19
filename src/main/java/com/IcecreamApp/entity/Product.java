@@ -1,8 +1,7 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "products")
-public class Product extends Base implements Serializable {
+public class Product extends Base {
 
 	/**
 	 * 
@@ -46,14 +45,14 @@ public class Product extends Base implements Serializable {
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="feedback-product")
-    private List<Feedback> feedbacks = new ArrayList<>();
+    private Set<Feedback> feedbacks = new HashSet<>();
     
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="order_detail-product")
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+    private Set<OrderDetail> orderDetails = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_name", referencedColumnName = "name")
+	@JoinColumn(name = "category_id", referencedColumnName = "id")
 	@JsonBackReference(value="product-category")
 	private Category category;
     
@@ -97,15 +96,19 @@ public class Product extends Base implements Serializable {
 		this.status = status;
 	}
 	
-	public List<Feedback> getFeedbacks() {
+	public Set<Feedback> getFeedbacks() {
 		return feedbacks;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
+	public void setFeedbacks(Set<Feedback> feedbacks) {
+		this.feedbacks.addAll(feedbacks);
+	}
+
+	public Set<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
+	public void setOrderDetails(Set<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 

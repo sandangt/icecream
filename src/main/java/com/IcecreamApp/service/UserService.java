@@ -1,4 +1,4 @@
-package com.IcecreamApp.service.impl;
+package com.IcecreamApp.service;
 
 import java.util.Optional;
 
@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.repository.UserRepository;
-import com.IcecreamApp.service.IUserService;
 
 @Service
-public class UserService extends GeneralService<User, UserRepository> implements IUserService {
+public class UserService extends GeneralService<User, UserRepository> {
 	
+	public UserService(UserRepository repository) {
+		super(repository);
+	}
+
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public ResponseEntity<User> delete(long id) {

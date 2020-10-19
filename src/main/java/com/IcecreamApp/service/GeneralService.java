@@ -1,22 +1,21 @@
-package com.IcecreamApp.service.impl;
+package com.IcecreamApp.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.IcecreamApp.service.IGeneralService;
+public abstract class GeneralService<EntityType, RepositoryType extends JpaRepository<EntityType, Long>> {
 
-public abstract class GeneralService<EntityType, RepositoryType extends JpaRepository<EntityType, Long>> implements IGeneralService<EntityType> {
-
-	@Autowired
-	RepositoryType repository;
+	protected final RepositoryType repository;
 	
-	@Override
+	public GeneralService(RepositoryType repository) {
+		this.repository = repository;
+	}
+		
 	public ResponseEntity<List<EntityType>> readAll() {
 		
     	List<EntityType> entities = repository.findAll();
@@ -25,7 +24,6 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 		return new ResponseEntity<>(entities, HttpStatus.OK);
 	}
 
-	@Override
 	public ResponseEntity<EntityType> readById(long id) {
     	Optional<EntityType> entity = this.repository.findById(id);
 
@@ -34,14 +32,12 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
         return new ResponseEntity<>(entity.get(), HttpStatus.OK);
 	}
 
-	@Override
 	public ResponseEntity<EntityType> create(EntityType entity) {
 		repository.saveAndFlush(entity);
 		return new ResponseEntity<>(entity, HttpStatus.CREATED);
 	}
 
 
-	@Override
 	public ResponseEntity<EntityType> update(long id, EntityType entity) {
 
 		Optional<EntityType> currentEntityWrapper = this.repository.findById(id);
@@ -53,5 +49,14 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 	    BeanUtils.copyProperties(entity, currentEntity);
 	    this.repository.save(currentEntity);
 		return new ResponseEntity<>(currentEntity, HttpStatus.OK);
+	}
+
+	public ResponseEntity<EntityType> delete(long id) {
+    	Optional<EntityType> currentEntityWrapper = repository.findById(id);
+        if (!currentEntityWrapper.isPresent())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        EntityType currentEntity = currentEntityWrapper.get();
+        repository.delete(currentEntity);
+        return new ResponseEntity<>(currentEntity, HttpStatus.OK);
 	}
 }

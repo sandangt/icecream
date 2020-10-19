@@ -1,8 +1,7 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="categories")
-public class Category extends Base implements Serializable {
+public class Category extends Base {
 
 	/**
 	 * 
@@ -29,7 +28,7 @@ public class Category extends Base implements Serializable {
 	 */
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="product-category")
-    private List<Product> products = new ArrayList<>();
+    private Set<Product> products = new HashSet<>();
 	
 	public String getName() {
 		return name;
@@ -39,12 +38,12 @@ public class Category extends Base implements Serializable {
 		this.name = name;
 	}
 	
-	public List<Product> getProducts() {
+	public Set<Product> getProducts() {
 		return this.products;
 	}
 
-	public void setProducts(List<Product> productEntities) {
-		this.products = productEntities;
+	public void setProducts(Set<Product> productEntities) {
+		this.products.addAll(productEntities);
 	}
 	
 }

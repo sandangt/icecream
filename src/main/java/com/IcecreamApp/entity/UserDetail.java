@@ -1,20 +1,19 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "user_details")
-public class UserDetail extends Base implements Serializable { 
+public class UserDetail extends Base { 
     
     /**
 	 * 
@@ -40,8 +39,9 @@ public class UserDetail extends Base implements Serializable {
     /**
      * Foreign key section 
      */
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     private User user;
 	
     public String getFullname() {

@@ -1,4 +1,4 @@
-package com.IcecreamApp.service.impl;
+package com.IcecreamApp.service;
 
 import java.util.Optional;
 
@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.entity.Role;
 import com.IcecreamApp.repository.RoleRepository;
-import com.IcecreamApp.service.IRoleSerivce;
 
 @Service
-public class RoleService extends GeneralService<Role, RoleRepository> implements IRoleSerivce {
+public class RoleService extends GeneralService<Role, RoleRepository> {
+
+	public RoleService(RoleRepository repository) {
+		super(repository);
+	}
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override

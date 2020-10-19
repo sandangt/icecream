@@ -1,6 +1,5 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "users")
-public class User extends Base implements Serializable {
+public class User extends Base {
 
 	/**
 	 * 

@@ -1,7 +1,5 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="order_details")
-public class OrderDetail extends Base implements Serializable {
+public class OrderDetail extends Base {
 	
 	/**
 	 * 

@@ -1,6 +1,5 @@
 package com.IcecreamApp.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="roles")
-public class Role extends Base implements Serializable {
+public class Role extends Base {
 	
 	/**
 	 * 
