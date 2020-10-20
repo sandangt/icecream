@@ -23,6 +23,23 @@ public class Feedback extends Base {
 	@Column(name="content", columnDefinition="TEXT")
 	private String content;
 	
+//	@Transient
+//	private String username;
+//	
+//	public String getUsername() {
+//		return username;
+//	}
+//
+//	public void setUsername(String username) {
+//		this.username = username;
+//	}
+//
+//	@PostLoad
+//	public void convertProperties() {
+//		this.username = this.user.getUserName();
+//	}
+	
+	
 	/**
 	 * Foreign key section
 	 */

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -26,7 +27,7 @@ public class Role extends Base {
 	 * Foreign key section
 	 */
 
-	@ManyToMany(mappedBy="roles")
+	@ManyToMany(mappedBy="roles", fetch = FetchType.LAZY)
 	@JsonIgnoreProperties("roles")
 	private Set<User> users = new HashSet<>();
 	

@@ -109,7 +109,7 @@ public class Product extends Base {
 	}
 
 	public void setOrderDetails(Set<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
+		this.orderDetails.addAll(orderDetails);
 	}
 
 	public Category getCategory() {

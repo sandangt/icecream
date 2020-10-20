@@ -42,8 +42,9 @@ public class Category extends Base {
 		return this.products;
 	}
 
-	public void setProducts(Set<Product> productEntities) {
-		this.products.addAll(productEntities);
+	public void setProducts(Set<Product> product) {
+		this.products.clear();
+		this.products.addAll(product);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.IcecreamApp.service;
+	package com.IcecreamApp.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 
 	public ResponseEntity<EntityType> readById(long id) {
     	Optional<EntityType> entity = this.repository.findById(id);
-
+    	
         if (!entity.isPresent())
             return new ResponseEntity<>(entity.get(), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(entity.get(), HttpStatus.OK);

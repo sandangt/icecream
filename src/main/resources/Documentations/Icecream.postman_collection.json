@@ -1,10 +1,193 @@
 {
 	"info": {
-		"_postman_id": "bfae82b7-8d18-48da-9856-a2f50e9f5ccd",
+		"_postman_id": "bd4567b9-6a53-43fc-a143-8e6af4cc0a89",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "get all roles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roles"
+					]
+				},
+				"description": "get all roles"
+			},
+			"response": []
+		},
+		{
+			"name": "get role by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/roles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roles",
+						"1"
+					]
+				},
+				"description": "get role by id"
+			},
+			"response": []
+		},
+		{
+			"name": "create role",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\" : \"ADMIN\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roles"
+					]
+				},
+				"description": "create role"
+			},
+			"response": []
+		},
+		{
+			"name": "create role",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\" : \"USER\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roles"
+					]
+				},
+				"description": "create role"
+			},
+			"response": []
+		},
+		{
+			"name": "update role by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\" : 1,\n    \"code\" : \"ADMINISTRATION\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/roles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roles",
+						"1"
+					]
+				},
+				"description": "update role by id"
+			},
+			"response": []
+		},
+		{
+			"name": "delete role by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/roles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roles",
+						"1"
+					]
+				},
+				"description": "delete role by id"
+			},
+			"response": []
+		},
 		{
 			"name": "read all user",
 			"request": {
@@ -193,189 +376,6 @@
 			"response": []
 		},
 		{
-			"name": "get all roles",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/roles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"roles"
-					]
-				},
-				"description": "get all roles"
-			},
-			"response": []
-		},
-		{
-			"name": "get role by id",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/roles/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"roles",
-						"1"
-					]
-				},
-				"description": "get role by id"
-			},
-			"response": []
-		},
-		{
-			"name": "create role",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"code\" : \"ADMIN\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/roles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"roles"
-					]
-				},
-				"description": "create role"
-			},
-			"response": []
-		},
-		{
-			"name": "create role",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"code\" : \"USER\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/roles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"roles"
-					]
-				},
-				"description": "create role"
-			},
-			"response": []
-		},
-		{
-			"name": "update role by id",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\" : 1,\n    \"code\" : \"ADMINISTRATION\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/roles/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"roles",
-						"1"
-					]
-				},
-				"description": "update role by id"
-			},
-			"response": []
-		},
-		{
-			"name": "delete role by id",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/roles/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"roles",
-						"1"
-					]
-				},
-				"description": "delete role by id"
-			},
-			"response": []
-		},
-		{
 			"name": "read all user details",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -447,7 +447,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fullname\" : \"Dang Thai San\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"1\",\n    \"birthday\" : \"01-01-2020\",\n    \"avatar\" : \"my/avatar\",\n    \"user\" : {\n        \"id\" : 1\n    }\n}",
+					"raw": "{\n    \"fullname\" : \"Dang Thai San\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"1\",\n    \"birthday\" : \"01-01-2020\",\n    \"avatar\" : \"my/avatar\",\n    \"user\" : {\n        \"id\" : \"1\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -590,6 +590,39 @@
 			"response": []
 		},
 		{
+			"name": "read feedback by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/feedbacks/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"feedbacks",
+						"1"
+					]
+				},
+				"description": "read feedback by id"
+			},
+			"response": []
+		},
+		{
 			"name": "create feedback",
 			"request": {
 				"method": "POST",
@@ -653,7 +686,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 1,\n    \"title\": \"Not Hello\",\n    \"content\": \"ascascascascascascascascascacs\",\n    \"user\" : {\n        \"id\" : 1\n    }\n}",
+					"raw": "{\n    \"id\": \"2\",\n    \"title\": \"Not Hello\",\n    \"content\": \"ascascascascascascascascascacs\",\n    \"user\" : {\n        \"id\" : \"1\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -703,6 +736,523 @@
 					]
 				},
 				"description": "delete feedback by id"
+			},
+			"response": []
+		},
+		{
+			"name": "read all orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				},
+				"description": "read all orders"
+			},
+			"response": []
+		},
+		{
+			"name": "create order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"paymentMethod\" : \"cash\",\n    \"status\" : \"1\",\n    \"user\" : {\n        \"id\": \"2\"\n    } \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				},
+				"description": "create order"
+			},
+			"response": []
+		},
+		{
+			"name": "update order by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\" : \"2\",\n    \"paymentMethod\" : \"invalid\",\n    \"status\" : \"2\",\n    \"user\" : {\n        \"id\": \"1\"\n    } \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1"
+					]
+				},
+				"description": "update order by id"
+			},
+			"response": []
+		},
+		{
+			"name": "delete order by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1"
+					]
+				},
+				"description": "delete order by id"
+			},
+			"response": []
+		},
+		{
+			"name": "read all categories",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories"
+					]
+				},
+				"description": "read all categories"
+			},
+			"response": []
+		},
+		{
+			"name": "create category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"Electronics\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories"
+					]
+				},
+				"description": "create category"
+			},
+			"response": []
+		},
+		{
+			"name": "update category by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"name\": \"Mechatronics\",\n    \"products\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories",
+						"1"
+					]
+				},
+				"description": "update category by id"
+			},
+			"response": []
+		},
+		{
+			"name": "delete category by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories",
+						"1"
+					]
+				},
+				"description": "delete category by id"
+			},
+			"response": []
+		},
+		{
+			"name": "read all products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read product by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"1"
+					]
+				},
+				"description": "read product by id"
+			},
+			"response": []
+		},
+		{
+			"name": "create product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\" : \"this is a product\",\r\n    \"image\" : \"/my/image\",\r\n    \"name\" : \"Some book\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"category\" : {\r\n        \"id\" : \"1\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				},
+				"description": "create product"
+			},
+			"response": []
+		},
+		{
+			"name": "update product by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"name\": \"Not event a book\",\n    \"description\": \"sacacacaca s acasca\",\n    \"image\": \"/my/image\",\n    \"price\": 2.5,\n    \"status\": 0,\n    \"category\" : {\n        \"id\" : 1\n    }    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"1"
+					]
+				},
+				"description": "update product by id"
+			},
+			"response": []
+		},
+		{
+			"name": "delete product by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"1"
+					]
+				},
+				"description": "delete product by id"
+			},
+			"response": []
+		},
+		{
+			"name": "read all order details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/order-details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order-details"
+					]
+				},
+				"description": "read all order details"
+			},
+			"response": []
+		},
+		{
+			"name": "create order detail",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\" : \"012_Eas34\",\r\n    \"quantity\" : 100,\r\n    \"order\" : {\r\n        \"id\" : 1\r\n    },\r\n    \"product\" : {\r\n        \"id\" : 2\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/order-details/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order-details",
+						"1"
+					]
+				},
+				"description": "create order detail"
+			},
+			"response": []
+		},
+		{
+			"name": "update order detail by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : 2,\r\n    \"code\" : \"012_ERS34\",\r\n    \"quantity\" : 100,\r\n    \"order\" : {\r\n        \"id\" : 1\r\n    },\r\n    \"product\" : {\r\n        \"id\" : 2\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/order-details/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order-details",
+						"2"
+					]
+				},
+				"description": "update order detail by id"
+			},
+			"response": []
+		},
+		{
+			"name": "delete order detail by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/order-details/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order-details",
+						"2"
+					]
+				},
+				"description": "delete order detail by id"
 			},
 			"response": []
 		}

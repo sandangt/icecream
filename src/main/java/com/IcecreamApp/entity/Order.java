@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,6 +25,10 @@ public class Order extends Base {
 	 */
 	private static final long serialVersionUID = -5185509684141990101L;
 
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="code", columnDefinition = "INT")
+	private Long code;
+	
 	@Column(name="paymentmethod", columnDefinition="VARCHAR(100)")
 	private String paymentMethod;
 	
