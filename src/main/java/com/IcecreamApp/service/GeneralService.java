@@ -3,7 +3,6 @@
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +45,8 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	    EntityType currentEntity = currentEntityWrapper.get();
-	    BeanUtils.copyProperties(entity, currentEntity);
-	    this.repository.save(currentEntity);
+//	    BeanUtils.copyProperties(entity, currentEntity);
+//	    this.repository.save(currentEntity);
 		return new ResponseEntity<>(currentEntity, HttpStatus.OK);
 	}
 
