@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -18,6 +19,17 @@ public class OrderDTO extends BaseDTO {
 	private UserDTO user;	
 
 	private Set<OrderDetailDTO> orderDetails;
+
+	
+	public OrderDTO(long id, Date modifiedDate, long code, String paymentMethod, int status, UserDTO user,
+			Set<OrderDetailDTO> orderDetails) {
+		super(id, modifiedDate);
+		this.code = code;
+		this.paymentMethod = paymentMethod;
+		this.status = status;
+		this.user = user;
+		this.orderDetails = orderDetails;
+	}
 
 	public long getCode() {
 		return code;

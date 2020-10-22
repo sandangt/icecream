@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.Set;
 
 public class UserDTO extends BaseDTO {
@@ -20,16 +21,20 @@ public class UserDTO extends BaseDTO {
 
 
     private Set<OrderDTO> orders;
-	
-	public UserDTO() {
-	}
+    
+    
 
-	public UserDTO(String username, String email, String password, int status, Set<RoleDTO> roles) {
+	public UserDTO(long id, Date modifiedDate, String username, String email, String password, int status,
+			UserDetailDTO userDetail, Set<RoleDTO> roles, Set<FeedbackDTO> feedbacks, Set<OrderDTO> orders) {
+		super(id, modifiedDate);
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.status = status;
+		this.userDetail = userDetail;
 		this.roles = roles;
+		this.feedbacks = feedbacks;
+		this.orders = orders;
 	}
 
 	public String getUsername() {

@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.Set;
 
 public class CategoryDTO extends BaseDTO {
@@ -7,14 +8,13 @@ public class CategoryDTO extends BaseDTO {
 	private String name;
 	
 	private Set<ProductDTO> products;
-
-	public CategoryDTO() {
-	}
 	
-	public CategoryDTO(String name ) {
+	public CategoryDTO(long id, Date modifiedDate, String name, Set<ProductDTO> products) {
+		super(id, modifiedDate);
 		this.name = name;
+		this.products = products;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

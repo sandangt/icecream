@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.Set;
 
 public class ProductDTO extends BaseDTO {
@@ -20,6 +21,21 @@ public class ProductDTO extends BaseDTO {
 
 	private CategoryDTO category;
 	
+	
+	
+	public ProductDTO(long id, Date modifiedDate, String name, String description, String image, double price,
+			int status, Set<FeedbackDTO> feedbacks, Set<OrderDetailDTO> orderDetails, CategoryDTO category) {
+		super(id, modifiedDate);
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.price = price;
+		this.status = status;
+		this.feedbacks = feedbacks;
+		this.orderDetails = orderDetails;
+		this.category = category;
+	}
+
 	public String getName() {
 		return name;
 	}

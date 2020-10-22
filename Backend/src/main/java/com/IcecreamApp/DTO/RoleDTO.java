@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.Set;
 
 public class RoleDTO extends BaseDTO {
@@ -7,12 +8,14 @@ public class RoleDTO extends BaseDTO {
 
 	private String code;
 
-	/**
-	 * Foreign key section
-	 */
-
 	private Set<UserDTO> users;
 	
+	public RoleDTO(long id, Date modifiedDate, String code, Set<UserDTO> users) {
+		super(id, modifiedDate);
+		this.code = code;
+		this.users = users;
+	}
+
 	public String getCode() {
 		return code;
 	}
