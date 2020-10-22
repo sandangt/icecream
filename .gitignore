@@ -1,5 +1,11 @@
 /*
 !.gitignore
-!pom.xml
 !README.md
-!/src
+!/Backend/pom.xml
+!/Backend/README.md
+!/Backend/src
+!/Frontend/package.json
+!/Frontend/.env
+!/Frontend/README.md
+!/Frontend/src
+!Documentations
