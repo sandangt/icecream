@@ -24,11 +24,11 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 	}
 
 	public ResponseEntity<EntityType> readById(long id) {
-    	Optional<EntityType> entity = this.repository.findById(id);
+    	Optional<EntityType> currentEntityWrapper = this.repository.findById(id);
     	
-        if (!entity.isPresent())
-            return new ResponseEntity<>(entity.get(), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(entity.get(), HttpStatus.OK);
+        if (!currentEntityWrapper.isPresent())
+            return new ResponseEntity<>(currentEntityWrapper.get(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(currentEntityWrapper.get(), HttpStatus.OK);
 	}
 
 	public ResponseEntity<EntityType> create(EntityType entity) {

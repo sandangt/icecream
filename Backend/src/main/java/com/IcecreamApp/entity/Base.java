@@ -48,6 +48,10 @@ public abstract class Base implements Serializable {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Date getModifiedDate() {
 		return modifiedDate;
 	}

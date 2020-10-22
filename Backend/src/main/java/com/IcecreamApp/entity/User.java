@@ -61,6 +61,17 @@ public class User extends Base implements ForeignConnection<User> {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="order-user")
     private Set<Order> orders = new HashSet<>();
+	
+	public User() {
+	}
+
+	public User(String username, String email, String password, int status, Set<Role> roles) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.status = status;
+		this.roles = roles;
+	}
 
 	public String getUserName() {
 		return username;

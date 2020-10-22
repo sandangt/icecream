@@ -31,6 +31,13 @@ public class Role extends Base implements ForeignConnection<Role> {
 	@JsonIgnoreProperties("roles")
 	private Set<User> users = new HashSet<>();
 	
+	public Role() {
+	}
+	
+	public Role(String code) {
+		this.code = code;
+	}
+
 	public String getCode() {
 		return code;
 	}

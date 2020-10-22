@@ -4,13 +4,13 @@ import java.util.Date;
 
 public abstract class BaseDTO {
 	
-	private Long id;
+	private long id;
 	private Date modifiedDate;
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 

@@ -19,7 +19,7 @@ public class Category extends Base implements ForeignConnection<Category> {
 	 * 
 	 */
 	private static final long serialVersionUID = 8919753937582267690L;
-
+	
 	@Column(name="name", unique=true)
 	private String name;
 	
@@ -29,6 +29,13 @@ public class Category extends Base implements ForeignConnection<Category> {
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="product-category")
     private Set<Product> products = new HashSet<>();
+	
+	public Category() {
+	}
+	
+	public Category(String name) {
+		this.name = name;
+	}
 	
 	public String getName() {
 		return name;
@@ -49,6 +56,5 @@ public class Category extends Base implements ForeignConnection<Category> {
 	@Override
 	public void setForeignKey(Category entity) {
 		this.products = entity.products;
-		
 	}	
 }

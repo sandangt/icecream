@@ -38,6 +38,16 @@ public class OrderDetail extends Base {
 	@JsonBackReference(value="order_detail-product")
 	private Product product;
 
+	public OrderDetail() {
+	}
+	
+	public OrderDetail(String code, int quantity, Order order, Product product) {
+		this.code = code;
+		this.quantity = quantity;
+		this.order = order;
+		this.product = product;
+	}
+	
 	public String getCode() {
 		return code;
 	}

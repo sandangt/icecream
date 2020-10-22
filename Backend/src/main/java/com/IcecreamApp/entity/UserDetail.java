@@ -44,7 +44,19 @@ public class UserDetail extends Base {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     private User user;
 	
-    public String getFullname() {
+    public UserDetail() {
+    }
+    
+    public UserDetail(String fullname, String address, int gender, Date birthday, String avatar, User user) {
+		this.fullname = fullname;
+		this.address = address;
+		this.gender = gender;
+		this.birthday = birthday;
+		this.avatar = avatar;
+		this.user = user;
+	}
+
+	public String getFullname() {
 		return fullname;
 	}
 

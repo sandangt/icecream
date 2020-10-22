@@ -54,6 +54,16 @@ public class Feedback extends Base {
 	@JsonBackReference(value="feedback-product")
 	private Product product;
 
+	public Feedback() {
+	}
+	
+	public Feedback(String title, String content, User user, Product product) {
+		this.title = title;
+		this.content = content;
+		this.user = user;
+		this.product = product;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

@@ -19,6 +19,14 @@ public class FAQ extends Base {
 	@Column(name="answer", columnDefinition="TEXT")
 	private String answer;
 
+	public FAQ() {
+	}
+	
+	public FAQ(String question, String answer) {
+		this.question = question;
+		this.answer = answer;
+	}
+	
 	public String getQuestion() {
 		return question;
 	}

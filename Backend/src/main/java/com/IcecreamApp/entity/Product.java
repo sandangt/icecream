@@ -56,6 +56,18 @@ public class Product extends Base implements ForeignConnection<Product>{
 	@JsonBackReference(value="product-category")
 	private Category category;
     
+	public Product() {
+	}
+	
+	public Product(String name, String description, String image, double price, int status, Category category) {
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.price = price;
+		this.status = status;
+		this.category = category;
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -47,6 +47,16 @@ public class Order extends Base implements ForeignConnection<Order>{
 	@JsonManagedReference(value="order_detail-order")
 	private Set<OrderDetail> orderDetails = new HashSet<>();
 
+	public Order() {
+	}
+	
+	public Order(long code, String paymentMethod, int status, User user) {
+		this.code = code;
+		this.paymentMethod = paymentMethod;
+		this.status = status;
+		this.user = user;
+	}
+	
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
