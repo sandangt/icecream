@@ -17,13 +17,22 @@ class Header extends React.Component {
           </a>
         </li>
         <li className="nav-item">
-          <a id="MajorPage" className="nav-link" href="<c:url value='/admin/major'/>" >Major</a>
+          <a id="UserPage" className="nav-link" href="<c:url value='/admin/major'/>" >User</a>
         </li>
         <li className="nav-item">
-          <a id="CurriculumPage" className="nav-link" href="<c:url value='/admin/curriculum'/>" >Curriculum</a>
+          <a id="ProductPage" className="nav-link" href="<c:url value='/admin/curriculum'/>" >Product</a>
         </li>
         <li className="nav-item">
-          <a id="CoursePage" className="nav-link" href="<c:url value='/admin/course'/>" >Course</a>
+          <a id="OrderPage" className="nav-link" href="<c:url value='/admin/course'/>" >Order</a>
+        </li>
+        <li className="nav-item">
+          <a id="CategoryPage" className="nav-link" href="<c:url value='/admin/course'/>" >Category</a>
+        </li>
+        <li className="nav-item">
+          <a id="FAQPage" className="nav-link" href="<c:url value='/admin/course'/>" >FAQ</a>
+        </li>
+        <li className="nav-item">
+          <a id="FeedbackPage" className="nav-link" href="<c:url value='/admin/course'/>" >Feedback</a>
         </li>
       </ul>
     </div>
