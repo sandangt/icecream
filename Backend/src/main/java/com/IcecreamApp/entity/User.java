@@ -48,8 +48,8 @@ public class User extends Base implements ForeignConnection<User> {
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_role", 
-				joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"), 
-				inverseJoinColumns = @JoinColumn(name = "code", referencedColumnName = "code"))
+				joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	@JsonIgnoreProperties("users")
 	private Set<Role> roles = new HashSet<>();
 
