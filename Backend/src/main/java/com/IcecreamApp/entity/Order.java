@@ -26,10 +26,10 @@ public class Order extends Base implements ForeignConnection<Order>{
 	private static final long serialVersionUID = -5185509684141990101L;
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="code", columnDefinition = "INT")
-	private Long code;
+	@Column(name="code", columnDefinition = "VARCHAR(250)")
+	private String code;
 	
-	@Column(name="paymentmethod", columnDefinition="VARCHAR(100)")
+	@Column(name="payment_method", columnDefinition="VARCHAR(100)")
 	private String paymentMethod;
 	
 	@Column(name="status", columnDefinition="TINYINT")
@@ -50,13 +50,21 @@ public class Order extends Base implements ForeignConnection<Order>{
 	public Order() {
 	}
 	
-	public Order(long code, String paymentMethod, int status, User user) {
+	public Order(String code, String paymentMethod, int status, User user) {
 		this.code = code;
 		this.paymentMethod = paymentMethod;
 		this.status = status;
 		this.user = user;
 	}
 	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
