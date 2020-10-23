@@ -34,6 +34,9 @@ class Header extends React.Component {
         <li className="nav-item">
           <a id="FeedbackPage" className="nav-link" href="<c:url value='/admin/course'/>" >Feedback</a>
         </li>
+        <li className="nav-item">
+          <a id="FeedbackPage" className="nav-link" href="<c:url value='/admin/course'/>" >Logout</a>
+        </li>
       </ul>
     </div>
   </div>
