@@ -3,11 +3,6 @@ package com.IcecreamApp.DTO;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Entity
-@Table(name="orders")
 public class OrderDTO extends BaseDTO {
 
 	private long code;

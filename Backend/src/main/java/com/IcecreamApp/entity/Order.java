@@ -92,6 +92,6 @@ public class Order extends Base implements ForeignConnection<Order>{
 
 	@Override
 	public void setForeignKey(Order entity) {
-		this.orderDetails = entity.orderDetails;
+		this.orderDetails.addAll(entity.orderDetails);
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d73846a6-1609-41ef-85a1-102d941ab1b3",
+		"_postman_id": "9b063e5c-ab7b-45ff-b1c3-490eccce21c7",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -236,7 +236,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\"\n    }]\n}",
+					"raw": "{\n    \"userName\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"code\" : \"ROLE_ADMIN\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -264,7 +264,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\"\n    }]\n}",
+					"raw": "{\n    \"userName\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"code\" : \"ROLE_USER\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -293,7 +293,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : \"2\",\n    \"userName\" : \"JaneDoe\",\n    \"email\" : \"janedoe@hotmail.com\",\n    \"password\" : \"123456789\",\n    \"status\" : \"0\",\n    \"roles\": [{\n                \"id\": 2,\n                \"code\": \"CUSTOMER\"\n            }, {\n                \"id\": 1,\n                \"code\": \"ADMIN\"\n            }]\n}",
+					"raw": "{\n    \"id\" : \"1\",\n    \"userName\" : \"JaneDoe\",\n    \"email\" : \"janedoe@hotmail.com\",\n    \"password\" : \"123456789\",\n    \"status\" : \"0\",\n    \"roles\": [ {\n                \"id\": 1,\n                \"code\": \"ROLE_ADMIN\"\n            }, {\n                \"id\" : 2,\n                \"code\": \"ROLE_USER\"\n            }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -301,7 +301,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/2",
+					"raw": "http://localhost:8080/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -309,7 +309,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"2"
+						"1"
 					]
 				},
 				"description": "update user by id"
@@ -323,7 +323,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : 1,\n    \"userName\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\",\n        \"code\": \"ADMIN\"\n    }]\n}",
+					"raw": "{\n    \"id\" : 1,\n    \"userName\" : \"SonDang\",\n    \"email\" : \"sondang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\",\n        \"code\": \"ROLE_ADMIN\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"

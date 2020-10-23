@@ -25,7 +25,7 @@ public class CategoryService extends GeneralService<Category, CategoryRepository
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	    entity.setForeignKey(currentEntityWrapper.get());
-	    this.repository.save(entity);
+	    this.repository.saveAndFlush(entity);
 		return new ResponseEntity<>(entity, HttpStatus.OK);
 	}
 }

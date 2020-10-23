@@ -134,8 +134,8 @@ public class Product extends Base implements ForeignConnection<Product>{
 
 	@Override
 	public void setForeignKey(Product entity) {
-		this.feedbacks = entity.feedbacks; 
-		this.orderDetails = entity.orderDetails;
+		this.feedbacks.addAll(entity.feedbacks); 
+		this.orderDetails.addAll(entity.orderDetails);
 	}
 
 }

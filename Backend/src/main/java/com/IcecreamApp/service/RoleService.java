@@ -37,7 +37,8 @@ public class RoleService extends GeneralService<Role, RoleRepository> {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	    entity.setForeignKey(currentEntityWrapper.get());
-	    this.repository.save(entity);
+	    System.out.println(currentEntityWrapper.get().getUsers());
+	    this.repository.saveAndFlush(entity);
 		return new ResponseEntity<>(entity, HttpStatus.OK);
 	}
 }

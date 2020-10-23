@@ -55,6 +55,6 @@ public class Category extends Base implements ForeignConnection<Category> {
 
 	@Override
 	public void setForeignKey(Category entity) {
-		this.products = entity.products;
+		this.products.addAll(entity.products);
 	}	
 }

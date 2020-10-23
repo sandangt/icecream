@@ -46,7 +46,7 @@ public abstract class GeneralService<EntityType, RepositoryType extends JpaRepos
 	    }
 //	    EntityType currentEntity = currentEntityWrapper.get();
 //	    BeanUtils.copyProperties(entity, currentEntity);
-	    this.repository.save(entity);
+	    this.repository.saveAndFlush(entity);
 		return new ResponseEntity<>(entity, HttpStatus.OK);
 	}
 

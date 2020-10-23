@@ -56,6 +56,6 @@ public class Role extends Base implements ForeignConnection<Role> {
 
 	@Override
 	public void setForeignKey(Role entity) {
-		this.users = entity.users;
+		this.users.addAll(entity.users);
 	}
 }

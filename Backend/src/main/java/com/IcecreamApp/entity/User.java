@@ -48,8 +48,8 @@ public class User extends Base implements ForeignConnection<User> {
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_role", 
-				joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+				joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"), 
+				inverseJoinColumns = @JoinColumn(name = "code", referencedColumnName = "code"))
 	@JsonIgnoreProperties("users")
 	private Set<Role> roles = new HashSet<>();
 
@@ -148,8 +148,8 @@ public class User extends Base implements ForeignConnection<User> {
 	@Override
 	public void setForeignKey(User entity) {
 		this.userDetail = entity.userDetail;
-		this.feedbacks = entity.feedbacks;
-		this.orders = entity.orders;
+		this.feedbacks.addAll(entity.feedbacks);
+		this.orders.addAll(entity.orders);
 	}
     
 }
