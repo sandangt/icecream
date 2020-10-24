@@ -1,7 +1,7 @@
 package com.IcecreamApp.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,7 +45,7 @@ public class Order extends Base implements ForeignConnection<Order>{
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="order_detail-order")
-	private Set<OrderDetail> orderDetails = new HashSet<>();
+	private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	public Order() {
 	}
@@ -90,12 +90,13 @@ public class Order extends Base implements ForeignConnection<Order>{
 		this.user = user;
 	}
 
-	public Set<OrderDetail> getOrderDetails() {
+	public List<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(Set<OrderDetail> orderDetails) {
-		this.orderDetails.addAll(orderDetails);
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+//		this.orderDetails.addAll(orderDetails);
+		this.orderDetails = orderDetails;
 	}
 
 	@Override

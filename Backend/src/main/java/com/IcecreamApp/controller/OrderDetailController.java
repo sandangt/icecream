@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.entity.OrderDetail;
@@ -16,6 +17,7 @@ import com.IcecreamApp.service.OrderDetailService;
 
 
 @RestController
+@RequestMapping("order-details")
 public class OrderDetailController {
 	
 	private OrderDetailService orderDetailService;
@@ -24,27 +26,27 @@ public class OrderDetailController {
 		this.orderDetailService = orderDetailService;
 	}
 
-    @GetMapping(value = "/order-details")
+    @GetMapping
     public ResponseEntity<List<OrderDetail>> getAllOrderDetails() {        
     	return orderDetailService.readAll();
     }
 
-    @GetMapping(value = "/order-details/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDetail> getOrderDetailById(@PathVariable("id") Long id) {
     	return orderDetailService.readById(id);
     }
 
-    @PostMapping(value = "/order-details")
+    @PostMapping
     public ResponseEntity<OrderDetail> createOrderDetail(@RequestBody OrderDetail orderDetail) {
     	return this.orderDetailService.create(orderDetail);
     }
 
-    @PutMapping(value = "/order-details/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<OrderDetail> updateOrderDetail(@PathVariable("id") Long id, @RequestBody OrderDetail orderDetail) {
     	return this.orderDetailService.update(id, orderDetail);
     }
 
-    @DeleteMapping(value = "/order-details/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<OrderDetail> deleteOrderDetail(@PathVariable("id") Long id) {
     	return this.orderDetailService.delete(id);
     }

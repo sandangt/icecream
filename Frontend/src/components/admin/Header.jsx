@@ -1,46 +1,56 @@
 import React from "react";
 
+import "./Header.css";
+
 class Header extends React.Component {
   render() {
     return (
-<nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-  <div className="container">
-    <a className="navbar-brand" href="#">spring</a>
-    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon"></span>
-    </button>
-    <div className="collapse navbar-collapse" id="navbarResponsive">
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <a id="HomePage" className="nav-link" href="<c:url value='/admin/home'/>" >Home
-            <span className="sr-only">(current)</span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a id="UserPage" className="nav-link" href="<c:url value='/admin/major'/>" >User</a>
-        </li>
-        <li className="nav-item">
-          <a id="ProductPage" className="nav-link" href="<c:url value='/admin/curriculum'/>" >Product</a>
-        </li>
-        <li className="nav-item">
-          <a id="OrderPage" className="nav-link" href="<c:url value='/admin/course'/>" >Order</a>
-        </li>
-        <li className="nav-item">
-          <a id="CategoryPage" className="nav-link" href="<c:url value='/admin/course'/>" >Category</a>
-        </li>
-        <li className="nav-item">
-          <a id="FAQPage" className="nav-link" href="<c:url value='/admin/course'/>" >FAQ</a>
-        </li>
-        <li className="nav-item">
-          <a id="FeedbackPage" className="nav-link" href="<c:url value='/admin/course'/>" >Feedback</a>
-        </li>
-        <li className="nav-item">
-          <a id="FeedbackPage" className="nav-link" href="<c:url value='/admin/course'/>" >Logout</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div>
+	<nav className="navbar fixed-top navbar-expand-md flex-nowrap navbar-new-top">
+		<a href="/" className="navbar-brand"><img src="#" alt=""/>Bootstrap 4</a>
+		<ul className="nav navbar-nav mr-auto"></ul>
+		<ul className="navbar-nav flex-row">
+			<li className="nav-item">
+				<a className="nav-link px-2">Link</a>
+			</li>
+			<li className="nav-item">
+			    <a className="nav-link px-2">Link</a>
+			</li>
+			<li className="nav-item">
+			    <button type="button"  className="header-btn">Button</button>
+			</li>
+		</ul>
+		<button className="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbar2">
+			<span className="navbar-toggler-icon"></span>
+		</button>
+	</nav>
+
+	<nav className="navbar fixed-top navbar-expand-md navbar-new-bottom">
+		<div className="navbar-collapse collapse pt-2 pt-md-0" id="navbar2">
+
+			<ul className="navbar-nav w-100 justify-content-center px-3">
+				<li className="nav-item active">
+					<a className="nav-link" href="#">Link</a>
+				</li>
+			    <li className="nav-item">
+			        <a className="nav-link">Link</a>
+			    </li>
+			    <li className="nav-item">
+			        <a className="nav-link">Link</a>
+			    </li>
+			    <li className="nav-item">
+			        <a className="nav-link">Link</a>
+			    </li>
+			    <li className="nav-item">
+			        <a className="nav-link">Link</a>
+			    </li>
+			    <li className="nav-item">
+			        <a className="nav-link">Link</a>
+			    </li>
+			</ul>
+		</div>
+	</nav>
+</div>
     );
   }
 }

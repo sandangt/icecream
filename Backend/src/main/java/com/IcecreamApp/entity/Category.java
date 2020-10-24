@@ -1,7 +1,7 @@
 package com.IcecreamApp.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,7 +28,8 @@ public class Category extends Base implements ForeignConnection<Category> {
 	 */
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="product-category")
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
+	// private Set<Product> products = new HashSet<>();
 	
 	public Category() {
 	}
@@ -45,16 +46,18 @@ public class Category extends Base implements ForeignConnection<Category> {
 		this.name = name;
 	}
 	
-	public Set<Product> getProducts() {
+	public List<Product> getProducts() {
 		return this.products;
 	}
 
-	public void setProducts(Set<Product> product) {
-		this.products.addAll(product);
+	public void setProducts(List<Product> products) {
+//		this.products.addAll(product);
+		this.products = products;
 	}
 
 	@Override
 	public void setForeignKey(Category entity) {
-		this.products.addAll(entity.products);
+//		this.products.addAll(entity.products);
+		this.products = entity.products;
 	}	
 }

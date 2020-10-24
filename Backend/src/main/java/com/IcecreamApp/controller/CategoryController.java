@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.entity.Category;
 import com.IcecreamApp.service.CategoryService;
 
 @RestController
+@RequestMapping("categories")
 public class CategoryController {
 	
 	private CategoryService categoryService;
@@ -23,27 +25,27 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
-    @GetMapping(value = "/categories")
+    @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {        
     	return categoryService.readAll();
     }
 
-    @GetMapping(value = "/categories/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable("id") Long id) {
     	return categoryService.readById(id);
     }
 
-    @PostMapping(value = "/categories")
+    @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
     	return this.categoryService.create(category);
     }
 
-    @PutMapping(value = "/categories/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable("id") Long id, @RequestBody Category category) {
     	return this.categoryService.update(id, category);
     }
 
-    @DeleteMapping(value = "/categories/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Category> deleteCategory(@PathVariable("id") Long id) {
     	return this.categoryService.delete(id);
     }

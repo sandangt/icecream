@@ -1,7 +1,7 @@
 package com.IcecreamApp.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,11 +45,11 @@ public class Product extends Base implements ForeignConnection<Product>{
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="feedback-product")
-    private Set<Feedback> feedbacks = new HashSet<>();
+    private List<Feedback> feedbacks = new ArrayList<>();
     
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference(value="order_detail-product")
-    private Set<OrderDetail> orderDetails = new HashSet<>();
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -108,20 +108,22 @@ public class Product extends Base implements ForeignConnection<Product>{
 		this.status = status;
 	}
 	
-	public Set<Feedback> getFeedbacks() {
+	public List<Feedback> getFeedbacks() {
 		return feedbacks;
 	}
 
-	public void setFeedbacks(Set<Feedback> feedbacks) {
-		this.feedbacks.addAll(feedbacks);
+	public void setFeedbacks(List<Feedback> feedbacks) {
+//		this.feedbacks.addAll(feedbacks);
+		this.feedbacks = feedbacks;
 	}
 
-	public Set<OrderDetail> getOrderDetails() {
+	public List<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(Set<OrderDetail> orderDetails) {
-		this.orderDetails.addAll(orderDetails);
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+//		this.orderDetails.addAll(orderDetails);
+		this.orderDetails = orderDetails;
 	}
 
 	public Category getCategory() {
