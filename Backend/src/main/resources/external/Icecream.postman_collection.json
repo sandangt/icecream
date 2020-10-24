@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9b063e5c-ab7b-45ff-b1c3-490eccce21c7",
+		"_postman_id": "bb43e9fb-a0db-4c60-8e78-5117cf390e4f",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -751,6 +751,35 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"description\" : \"Operating system book\",\r\n    \"image\" : \"/my/image\",\r\n    \"name\" : \"3 simple pieces of Operating system\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"category\" : {\r\n        \"id\" : \"1\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				},
+				"description": "create product"
+			},
+			"response": []
+		},
+		{
+			"name": "create product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\" : \"Data structures and algorithms\",\r\n    \"image\" : \"/my/image2\",\r\n    \"name\" : \"DSA made easy\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"category\" : {\r\n        \"id\" : \"1\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
