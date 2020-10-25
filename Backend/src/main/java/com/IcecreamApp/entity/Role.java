@@ -51,7 +51,7 @@ public class Role extends Base implements ForeignConnection<Role> {
 	}
 
 	public void setUsers(Set<User> users) {
-		this.users = users;
+		this.users.addAll(users);
 	}
 
 	@Override

@@ -128,7 +128,7 @@ public class User extends Base implements ForeignConnection<User> {
 	}
 
 	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+		this.roles.addAll(roles);
 	}
 
 	public List<Feedback> getFeedbacks() {
