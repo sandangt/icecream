@@ -9,7 +9,7 @@ class Navlist extends React.Component {
 <ul className="nav nav-list">
     <Dashboard/>
     {/*UI & Element*/}
-    <NavlistElement icon="menu-icon fa fa-desktop" content="UI &amp; Elements" 
+    <NavlistElement icon="menu-icon fa fa-desktop" content="UI &amp; Elements"
         subElement={[{
             url: "typography.html",
             content: "Typography"
@@ -28,7 +28,7 @@ class Navlist extends React.Component {
         }]}
     />
     {/*Table*/}
-    <NavlistElement icon="menu-icon fa fa-list" content="Tables" 
+    <NavlistElement icon="menu-icon fa fa-list" content="Tables" isActive="Active open"
         subElement={[{
             url: "tables.html",
             content: "Users"

@@ -4,7 +4,7 @@ import NavlistSubElement from "./NavlistSubElement";
 
 function NavlistElement(props) {
     return (
-<li>
+<li className={props.isActive}>
     <NavlistElementTitle icon={props.icon} content={props.content}/>
     <ul className="submenu">
         {props.subElement.map( element => {
