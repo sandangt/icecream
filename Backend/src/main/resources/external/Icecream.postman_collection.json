@@ -236,7 +236,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"code\" : \"ROLE_ADMIN\"\n    }]\n}",
+					"raw": "{\n    \"userName\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -264,7 +264,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"code\" : \"ROLE_USER\"\n    }]\n}",
+					"raw": "{\n    \"userName\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"2\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -564,6 +564,9 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -1283,6 +1286,167 @@
 					]
 				},
 				"description": "delete order detail by id"
+			},
+			"response": []
+		},
+		{
+			"name": "real all users with authentication",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "SanDang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				},
+				"description": "real all users with authentication"
+			},
+			"response": []
+		},
+		{
+			"name": "create user with authentication",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "SanDang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\"\n    }]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				},
+				"description": "create user with authentication"
+			},
+			"response": []
+		},
+		{
+			"name": "create user with authentication",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "JohnDoe",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"2\"\n    }]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				},
+				"description": "create user with authentication"
+			},
+			"response": []
+		},
+		{
+			"name": "real all products with authentication",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "SanDang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				},
+				"description": "real all products with authentication"
 			},
 			"response": []
 		}
