@@ -1,64 +1,76 @@
 import React from "react";
 
 import Dashboard from "./elements/Dashboard.jsx";
-import UIAndElement from "./elements/UIAndElement.jsx";
-import Table from "./elements/Table.jsx";
+import NavlistElement from "./elements/NavlistElement.jsx";
 
 class Navlist extends React.Component {
     render() {
         return (
 <ul className="nav nav-list">
     <Dashboard/>
-    <UIAndElement/>
-    <Table/>
-    <li className>
-        <a href="#" className="dropdown-toggle">
-            <i className="menu-icon fa fa-pencil-square-o" />
-            <span className="menu-text">
-                {" "}
-                Forms{" "}
-            </span>
-            <b className="arrow fa fa-angle-down" />
-        </a>
-        <b className="arrow" />
-        <ul className="submenu">
-            <li className>
-                <a href="form-elements.html">
-                    <i className="menu-icon fa fa-caret-right" />
-                    Form Elements
-                </a>
-                <b className="arrow" />
-            </li>
-            <li className>
-                <a href="form-elements-2.html">
-                    <i className="menu-icon fa fa-caret-right" />
-                    Form Elements 2
-                </a>
-                <b className="arrow" />
-            </li>
-            <li className>
-                <a href="form-wizard.html">
-                    <i className="menu-icon fa fa-caret-right" />
-                    Wizard &amp; Validation
-                </a>
-                <b className="arrow" />
-            </li>
-            <li className>
-                <a href="wysiwyg.html">
-                    <i className="menu-icon fa fa-caret-right" />
-                    Wysiwyg &amp; Markdown
-                </a>
-                <b className="arrow" />
-            </li>
-            <li className>
-                <a href="dropzone.html">
-                    <i className="menu-icon fa fa-caret-right" />
-                    Dropzone File Upload
-                </a>
-                <b className="arrow" />
-            </li>
-        </ul>
-    </li>
+    {/*UI & Element*/}
+    <NavlistElement icon="menu-icon fa fa-desktop" content="UI &amp; Elements" 
+        subElement={[{
+            url: "typography.html",
+            content: "Typography"
+        },{
+            url: "elements.html",
+            content: "Elements"
+        },{
+            url: "buttons.html",
+            content: "Buttons & Icons"
+        },{
+            url: "content-slider.html",
+            content: "Content Sliders"
+        },{
+            url: "treeview.html",
+            content: "Treeview"
+        }]}
+    />
+    {/*Table*/}
+    <NavlistElement icon="menu-icon fa fa-list" content="Tables" 
+        subElement={[{
+            url: "tables.html",
+            content: "Users"
+        },{
+            url: "jqgrid.html",
+            content: "Products"
+        },{
+            url: "jqgrid.html",
+            content: "Orders"
+        },{
+            url: "jqgrid.html",
+            content: "Categories"
+        },{
+            url: "jqgrid.html",
+            content: "FAQ"
+        },{
+            url: "jqgrid.html",
+            content: "Feedbacks"
+        }]}
+    />
+    {/*Form*/}
+    <NavlistElement icon="menu-icon fa fa-pencil-square-o" content="Forms" 
+        subElement={[{
+            url: "form-elements.html",
+            content: "Form Elements"
+        },{
+            url: "jqgrid.html",
+            content: "Products"
+        },{
+            url: "jqgrid.html",
+            content: "Orders"
+        },{
+            url: "jqgrid.html",
+            content: "Wizard &amp; Validation"
+        },{
+            url: "jqgrid.html",
+            content: "Wysiwyg &amp; Markdown"
+        },{
+            url: "jqgrid.html",
+            content: "Feedbacks"
+        }]}
+    />
     <li className>
         <a href="widgets.html">
             <i className="menu-icon fa fa-list-alt" />
