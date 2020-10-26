@@ -10,6 +10,7 @@ public class UserDetailService extends GeneralService<UserDetail, UserDetailRepo
 
 	public UserDetailService(UserDetailRepository repository) {
 		super(repository);
+		entityName = "user detail";
 	}
 	
 }

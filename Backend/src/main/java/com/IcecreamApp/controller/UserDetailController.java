@@ -2,7 +2,6 @@ package com.IcecreamApp.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,27 +25,27 @@ public class UserDetailController {
 	}
 
     @GetMapping
-    public ResponseEntity<List<UserDetail>> getAllUserDetails() {        
+    public List<UserDetail> getAllUserDetails() {        
     	return userDetailService.readAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDetail> getUserDetailById(@PathVariable("id") Long id) {
+    public UserDetail getUserDetailById(@PathVariable("id") Long id) {
     	return userDetailService.readById(id);
     }
 
     @PostMapping
-    public ResponseEntity<UserDetail> createUserDetail(@RequestBody UserDetail userDetail) {
+    public UserDetail createUserDetail(@RequestBody UserDetail userDetail) {
     	return this.userDetailService.create(userDetail);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDetail> updateUserDetail(@PathVariable("id") Long id, @RequestBody UserDetail userDetail) {
+    public UserDetail updateUserDetail(@PathVariable("id") Long id, @RequestBody UserDetail userDetail) {
     	return this.userDetailService.update(id, userDetail);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<UserDetail> deleteUserDetail(@PathVariable("id") Long id) {
-    	return this.userDetailService.delete(id);
+    public void deleteUserDetail(@PathVariable("id") Long id) {
+    	this.userDetailService.delete(id);
     }
 }

@@ -10,5 +10,6 @@ public class OrderDetailService extends GeneralService<OrderDetail, OrderDetailR
 
 	public OrderDetailService(OrderDetailRepository repository) {
 		super(repository);
+		entityName = "order detail";
 	}
 }

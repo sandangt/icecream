@@ -10,6 +10,7 @@ public class FeedbackService extends GeneralService<Feedback, FeedbackRepository
 
 	public FeedbackService(FeedbackRepository repository) {
 		super(repository);
+		entityName = "feedback";
 	}
 	
 }

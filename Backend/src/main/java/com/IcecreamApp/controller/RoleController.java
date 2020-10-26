@@ -2,7 +2,6 @@ package com.IcecreamApp.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,27 +25,27 @@ public class RoleController {
 	}
 	
     @GetMapping
-    public ResponseEntity<List<Role>> getAllRole() {        
+    public List<Role> getAllRole() {        
     	return roleService.readAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Role> getRoleById(@PathVariable("id") Long id) {
+    public Role getRoleById(@PathVariable("id") Long id) {
     	return roleService.readById(id);
     }
     
     @PostMapping
-    public ResponseEntity<Role> createRole(@RequestBody Role role) {
+    public Role createRole(@RequestBody Role role) {
     	return this.roleService.create(role);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
+    public Role updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
     	return this.roleService.update(id, role);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Role> deleteRole(@PathVariable("id") Long id) {
-    	return this.roleService.delete(id);
+    public void deleteRole(@PathVariable("id") Long id) {
+    	this.roleService.delete(id);
     }
 }

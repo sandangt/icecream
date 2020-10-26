@@ -2,7 +2,6 @@ package com.IcecreamApp.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,28 +25,28 @@ public class CategoryController {
 	}
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {        
+    public List<Category> getAllCategories() {        
     	return categoryService.readAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable("id") Long id) {
+    public Category getCategoryById(@PathVariable("id") Long id) {
     	return categoryService.readById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+    public Category createCategory(@RequestBody Category category) {
     	return this.categoryService.create(category);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable("id") Long id, @RequestBody Category category) {
+    public Category updateCategory(@PathVariable("id") Long id, @RequestBody Category category) {
     	return this.categoryService.update(id, category);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable("id") Long id) {
-    	return this.categoryService.delete(id);
+    public void deleteCategory(@PathVariable("id") Long id) {
+    	this.categoryService.delete(id);
     }
 }
 
