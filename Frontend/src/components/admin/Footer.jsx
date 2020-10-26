@@ -1,36 +1,39 @@
 import React from "react";
 
-class Footer extends React.Component {
-    render() {
-        return (	
+function Footer() {
+	return (	
 <div>
-	<div class="footer">
-		<div class="footer-inner">
-			<div class="footer-content">
-				<p class="bigger-120">
-					<span class="blue bolder">Ace </span>
-				 	<span>Application copy 2013-2014</span>
-				</p>
-				<p class="action-buttons">
+	<div className="footer">
+		<div className="footer-inner">
+			<div className="footer-content">
+				<span className="bigger-120">
+					<span className="blue bolder">Ace</span>
+					Application © 2013-2014
+				</span>
+				&nbsp; &nbsp;
+				<span className="action-buttons">
 					<a href="#">
-						<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+						<i className="ace-icon fa fa-twitter-square light-blue bigger-150" />
 					</a>
 					<a href="#">
-						<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+						<i className="ace-icon fa fa-facebook-square text-primary bigger-150" />
 					</a>
 					<a href="#">
-						<i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+						<i className="ace-icon fa fa-rss-square orange bigger-150" />
 					</a>
-				</p>
+				</span>
 			</div>
 		</div>
 	</div>
-	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-		<i className="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+	<a
+		href="#"
+		id="btn-scroll-up"
+		className="btn-scroll-up btn btn-sm btn-inverse"
+	>
+		<i className="ace-icon fa fa-angle-double-up icon-only bigger-110" />
 	</a>
 </div>
-        );
-    }
+	);
 }
 
 export default Footer;
