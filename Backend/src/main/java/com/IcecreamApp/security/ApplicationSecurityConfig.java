@@ -2,42 +2,50 @@ package com.IcecreamApp.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.IcecreamApp.repository.UserRepository;
+import com.IcecreamApp.security.jwt.JwtAuthenticationFilter;
+import com.IcecreamApp.security.jwt.JwtAuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final ApplicationUserService applicationUserService;
+	private final UserRepository userRepository;
 	
-	public ApplicationSecurityConfig(ApplicationUserService applicationUserService) {
+	public ApplicationSecurityConfig(ApplicationUserService applicationUserService, UserRepository userRepository) {
 		this.applicationUserService = applicationUserService;
+		this.userRepository = userRepository;
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-		// .csrf().disable()
-		.authorizeRequests()
-		.antMatchers("/").permitAll()
+        // remove csrf and state in session because in jwt we do not need them
+        .csrf().disable()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        // add jwt filters (1. authentication, 2. authorization)
+        .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+        .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository))
+        .authorizeRequests()
+        
+		.antMatchers(HttpMethod.POST, "/login").permitAll()
 		.antMatchers("/users/**").authenticated()
 		.antMatchers("/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/products/**").hasRole("ADMIN")
 		.antMatchers("/categories/**").hasRole("ADMIN")
-		.and()
-		.formLogin()
-		.loginPage("/login").permitAll()
-		.and()
-		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
-		.and()
-		.rememberMe();
+        .anyRequest().authenticated();
 	}
 	
 	@Override

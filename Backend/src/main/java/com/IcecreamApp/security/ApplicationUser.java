@@ -85,7 +85,7 @@ public class ApplicationUser implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return user.getStatus() == 0 ? false : true;
+		return user.getStatus() == 1;
 	}
 
 }
