@@ -48,7 +48,7 @@ public class User extends Base implements ForeignConnection<User> {
 	@JsonIgnoreProperties("user")
 	private UserDetail userDetail;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	@JoinTable(name = "user_role", 
 				joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
