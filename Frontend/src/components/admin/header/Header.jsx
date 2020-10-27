@@ -412,12 +412,6 @@ class Header extends React.Component {
                     </a>
                     <ul className="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li>
-                            <a href="#">
-                                <i className="ace-icon fa fa-cog" />
-                                Settings
-                            </a>
-                        </li>
-                        <li>
                             <a href="profile.html">
                                 <i className="ace-icon fa fa-user" />
                                 Profile
