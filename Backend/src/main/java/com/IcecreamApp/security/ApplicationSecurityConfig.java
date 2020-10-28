@@ -3,7 +3,7 @@ package com.IcecreamApp.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,11 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.IcecreamApp.repository.UserRepository;
-import com.IcecreamApp.security.jwt.JwtAuthenticationFilter;
 import com.IcecreamApp.security.jwt.JwtAuthorizationFilter;
-import com.IcecreamApp.security.jwt.JwtUtils;
 import com.IcecreamApp.security.jwt.UnauthEntryPointJwt;
 
 @Configuration
@@ -23,17 +21,17 @@ import com.IcecreamApp.security.jwt.UnauthEntryPointJwt;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final ApplicationUserService applicationUserService;
-	private final UserRepository userRepository;
 	private final UnauthEntryPointJwt unauthorizedHandler;
-	private final JwtUtils jwtUtils;
 	
 	public ApplicationSecurityConfig(ApplicationUserService applicationUserService, 
-			UserRepository userRepository, UnauthEntryPointJwt unauthorizedHandler,
-			JwtUtils jwtUtils) {
+			UnauthEntryPointJwt unauthorizedHandler) {
 		this.applicationUserService = applicationUserService;
-		this.userRepository = userRepository;
 		this.unauthorizedHandler = unauthorizedHandler;
-		this.jwtUtils = jwtUtils;
+	}
+
+	@Bean
+	public JwtAuthorizationFilter authorizationJwtTokenFilter() {
+		return new JwtAuthorizationFilter();
 	}
 	
 	@Override
@@ -41,57 +39,36 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
         // remove csrf and state in session because in jwt we do not need them
 		.cors().and().csrf().disable()
-		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-		.and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         // add jwt filters (1. authentication, 2. authorization)
-        .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtils))
-        .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository, jwtUtils))
+        // .addFilter(new JwtAuthenticationFilter(authenticationManager(), this.jwtUtils))
         .authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 		.antMatchers("/users/**").authenticated()
 		.antMatchers("/feedbacks/**").hasAnyRole("ADMIN", "USER")
-		.antMatchers("/products/**").hasRole("ADMIN")
-		.antMatchers("/categories/**").hasRole("ADMIN")
-        .anyRequest().authenticated();
+		.antMatchers(HttpMethod.GET, "/products/**").hasRole("ADMIN")
+		.antMatchers(HttpMethod.GET, "/categories/**").hasRole("ADMIN")
+        .anyRequest().authenticated()
+        .and()
+		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
+		
+		http.addFilterBefore(authorizationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
-	
+
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(this.authenticationProvider());
+	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(applicationUserService).passwordEncoder(passwordEncoder());
 	}
-	
+
 	@Bean
-	DaoAuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-		daoAuthenticationProvider.setUserDetailsService(this.applicationUserService);
-		return daoAuthenticationProvider;
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
-	
 	
 	@Bean 
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-//	@Override
-//	@Bean
-//	protected UserDetailsService userDetailsService() {
-//		UserDetails SanDang = User.builder()
-//				.username("SanDang")
-//				.password(this.passwordEncoder.encode("1234"))
-//				// .roles(ApplicationUserRole.ADMIN.name()) // ROLE_USER
-//				.authorities(ApplicationUserRole.ADMIN.getGrantedAuthorities())
-//				.build();
-//		
-//		UserDetails JohnDoe = User.builder()
-//				.username("JohnDoe")
-//				.password(this.passwordEncoder.encode("password"))
-//				// .roles(ApplicationUserRole.USER.name()) // ROLE_USER
-//				.authorities(ApplicationUserRole.USER.getGrantedAuthorities())
-//				.build();
-//		return new InMemoryUserDetailsManager(SanDang, JohnDoe);
-//	}
 }

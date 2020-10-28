@@ -7,27 +7,24 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.IcecreamApp.entity.User;
-import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.security.ApplicationUser;
+import com.IcecreamApp.security.ApplicationUserService;
 
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	
-	private final UserRepository userRepository;
-	private final JwtUtils jwtUtils;
-	
-	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, JwtUtils jwtUtils) {
-		super(authenticationManager);
-        this.userRepository = userRepository;
-        this.jwtUtils = jwtUtils;
-	}
 
+	@Autowired
+	private JwtUtils jwtUtils;
+
+	@Autowired
+	private ApplicationUserService applicationUserService;
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 	    // Read the Authorization header, where the JWT token should be
@@ -53,14 +50,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	
 	    if (token != null) {
 	        // parse the token and validate it
-	    	String username = jwtUtils.getDecodedBody(token).getSubject();
+	    	String username = jwtUtils.getUserNameFromJwtToken(token);
 	
 	        // Search in the DB if we find the user by token subject (username)
 	        // If so, then grab user details and create spring auth token using username, pass, authorities/roles
 	        if (username != null) {
-	            User user = userRepository.findByUsername(username).get();
-	            ApplicationUser applicationUser = new ApplicationUser(user);
-	            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, applicationUser.getAuthorities());
+	            ApplicationUser applicationUser = (ApplicationUser) applicationUserService.loadUserByUsername(username);
+	            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(applicationUser.getUsername(), null, applicationUser.getAuthorities());
 	            return auth;
 	        }
 	        return null;

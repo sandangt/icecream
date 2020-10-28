@@ -7,11 +7,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.IcecreamApp.security.ApplicationUser;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtils {
@@ -27,40 +25,23 @@ public class JwtUtils {
 
 	public String generateJwtToken(Authentication authentication) {
 
-		ApplicationUser applicationUser = (ApplicationUser) authentication.getPrincipal();
-		try {
-			return JWT.create()
-				.withIssuer("auth0")
-	            .withSubject(applicationUser.getUsername())
-	            .withExpiresAt(new Date(System.currentTimeMillis() + this.EXPIRATION_TIME))
-	            .sign(Algorithm.HMAC512(this.SECRET.getBytes()));
-		}
-		catch (JWTCreationException e) {
-			e.printStackTrace();
-			return null;
-		}
-		
+		ApplicationUser userPrincipal = (ApplicationUser) authentication.getPrincipal();
+
+		return Jwts.builder()
+				.setSubject((userPrincipal.getUsername()))
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + this.EXPIRATION_TIME))
+				.signWith(SignatureAlgorithm.HS512, this.SECRET)
+				.compact();
 	}
 
-	public DecodedJWT getDecodedBody(String token) {	
-	    if (token != null) {
-	    	try {
-	    		return JWT.require(Algorithm.HMAC512(this.SECRET.getBytes()))
-	                .build()
-	                .verify(token);
-	    	}
-	    	catch (JWTVerificationException e) {
-	    		e.printStackTrace();
-	    		return null;
-	    	}
-	    }
-	    return null;
+	public String getUserNameFromJwtToken(String token) {
+		return Jwts.parser().setSigningKey(this.SECRET).parseClaimsJws(token).getBody().getSubject();
 	}
-	
+
 //	public boolean validateJwtToken(String authToken) {
 //		try {
-//			JWT.require(algorithm)
-//			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+//			Jwts.parser().setSigningKey(this.SECRET).parseClaimsJws(authToken);
 //			return true;
 //		} catch (SignatureException e) {
 //			logger.error("Invalid JWT signature: {}", e.getMessage());
@@ -76,4 +57,6 @@ public class JwtUtils {
 //
 //		return false;
 //	}
+//}
+
 }
