@@ -44,7 +44,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .addFilter(new JwtAuthenticationFilter(authenticationManager()))
         .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository))
         .authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+		.antMatchers(HttpMethod.POST, "/login").permitAll()
 		.antMatchers("/users/**").authenticated()
 		.antMatchers("/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/products/**").hasRole("ADMIN")

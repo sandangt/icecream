@@ -1,22 +1,10 @@
 package com.IcecreamApp.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.IcecreamApp.repository.RoleRepository;
-import com.IcecreamApp.repository.UserRepository;
-
 //@CrossOrigin(origins = "*", maxAge = 3600)
 //@RestController
 //@RequestMapping("auth")
-//public class VerifyController {
+//public class AuthenticationController {
+//	
 //	private final AuthenticationManager authenticationManager;
 //
 //	private final UserRepository userRepository;
@@ -33,13 +21,13 @@ import com.IcecreamApp.repository.UserRepository;
 //		this.roleRepository = roleRepository;
 //		this.encoder = encoder;
 //	}
-
+//
 //	@Autowired
 //	JwtUtils jwtUtils;
-
+//
 //	@PostMapping("/login")
 //	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-
+//
 //		Authentication authentication = authenticationManager.authenticate(
 //				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 //
@@ -57,9 +45,10 @@ import com.IcecreamApp.repository.UserRepository;
 //												 userDetails.getEmail(), 
 //												 roles));
 //		System.out.println(response);
+//		System.out.println(response);
 //		return ResponseEntity.ok(response);
-	}
-
+//	}
+//
 //	@PostMapping("/signup")
 //	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 //		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -114,5 +103,5 @@ import com.IcecreamApp.repository.UserRepository;
 //
 //		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 //	}
-
+//
 //}
