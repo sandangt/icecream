@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -20,8 +22,9 @@ public class Role extends Base implements ForeignConnection<Role> {
 	 */
 	private static final long serialVersionUID = -2834524789864968814L;
 
-	@Column(name="code", unique=true, columnDefinition="VARCHAR(15)")
-	private String code;
+	@Column(name="name", unique=true, columnDefinition="VARCHAR(15)")
+	@Enumerated(EnumType.STRING)
+	private ERole name;
 
 	/**
 	 * Foreign key section
@@ -34,16 +37,16 @@ public class Role extends Base implements ForeignConnection<Role> {
 	public Role() {
 	}
 	
-	public Role(String code) {
-		this.code = code;
+	public Role(ERole name) {
+		this.name = name;
 	}
 
-	public String getCode() {
-		return code;
+	public ERole getName() {
+		return name;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setCode(ERole name) {
+		this.name = name;
 	}
 
 	public Set<User> getUsers() {

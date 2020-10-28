@@ -9,4 +9,8 @@ public class ResourceNotFoundException extends RuntimeException {
 	public ResourceNotFoundException(String entityName, Long id) {
 			super(String.format("Could not find %s %ld", entityName, id));
 	}
+
+	public ResourceNotFoundException(String message) {
+			super(message);
+	}
 }

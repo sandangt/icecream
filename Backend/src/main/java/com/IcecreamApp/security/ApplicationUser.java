@@ -2,6 +2,7 @@ package com.IcecreamApp.security;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -16,43 +17,18 @@ public class ApplicationUser implements UserDetails {
 	 * 
 	 */
 	private static final long serialVersionUID = -1836394355611648180L;
-
-//	private final List<? extends GrantedAuthority> grantedAuthorities;
-//	private final String password;
-//	private final String username;
-//	private final boolean isAccountNonExpired;
-//	private final boolean isAccountNonLocked;
-//	private final boolean isCredentialsNonExpired;
-//	private final boolean isEnabled;
 	
 	private User user;
 	
 	public ApplicationUser(User user) {
 		this.user = user;
 	}
-	
-//	public ApplicationUser(List<? extends GrantedAuthority> grantedAuthorities, 
-//			String password, 
-//			String username,
-//			boolean isAccountNonExpired, 
-//			boolean isAccountNonLocked, 
-//			boolean isCredentialsNonExpired,
-//			boolean isEnabled) {
-//		super();
-//		this.grantedAuthorities = grantedAuthorities;
-//		this.password = password;
-//		this.username = username;
-//		this.isAccountNonExpired = isAccountNonExpired;
-//		this.isAccountNonLocked = isAccountNonLocked;
-//		this.isCredentialsNonExpired = isCredentialsNonExpired;
-//		this.isEnabled = isEnabled;
-//	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 		this.user.getRoles().forEach( i -> {
-			GrantedAuthority authority = new SimpleGrantedAuthority(i.getCode());
+			GrantedAuthority authority = new SimpleGrantedAuthority(i.getName().name());
 			authorities.add(authority);
 		});
 		return authorities;	
@@ -88,4 +64,14 @@ public class ApplicationUser implements UserDetails {
 		return user.getStatus() == 1;
 	}
 
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		ApplicationUser appUser = (ApplicationUser) o;
+		return Objects.equals(this.getUsername(), appUser.getUsername());
+	}
 }
