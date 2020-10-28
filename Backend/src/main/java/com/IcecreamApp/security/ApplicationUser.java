@@ -19,7 +19,7 @@ public class ApplicationUser implements UserDetails {
 	private static final long serialVersionUID = -1836394355611648180L;
 	
 	private User user;
-	
+
 	public ApplicationUser(User user) {
 		this.user = user;
 	}
@@ -63,7 +63,6 @@ public class ApplicationUser implements UserDetails {
 	public boolean isEnabled() {
 		return user.getStatus() == 1;
 	}
-
 
 	@Override
 	public boolean equals(Object o) {

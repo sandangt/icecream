@@ -12,38 +12,42 @@ package com.IcecreamApp.controller;
 //	private final RoleRepository roleRepository;
 //
 //	private final PasswordEncoder encoder;
+//	
+//	private final JwtUtils jwtUtils;
 //
 //	
-//	public VerifyController(AuthenticationManager authenticationManager, UserRepository userRepository,
-//			RoleRepository roleRepository, PasswordEncoder encoder) {
+//	public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository,
+//			RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
 //		this.authenticationManager = authenticationManager;
 //		this.userRepository = userRepository;
 //		this.roleRepository = roleRepository;
 //		this.encoder = encoder;
+//		this.jwtUtils = jwtUtils;
 //	}
 //
-//	@Autowired
-//	JwtUtils jwtUtils;
 //
 //	@PostMapping("/login")
 //	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+//		
 //
-//		Authentication authentication = authenticationManager.authenticate(
-//				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+//        		loginRequest.getUsername(),
+//        		loginRequest.getPassword(),
+//                new HashSet<>());
+//		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 //
 //		SecurityContextHolder.getContext().setAuthentication(authentication);
 //		String jwt = jwtUtils.generateJwtToken(authentication);
 //		
-//		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-//		List<String> roles = userDetails.getAuthorities().stream()
+//		ApplicationUser appUser = (ApplicationUser) authentication.getPrincipal();		
+//		List<String> roles = appUser.getAuthorities().stream()
 //				.map(item -> item.getAuthority())
 //				.collect(Collectors.toList());
 //
 //		return ResponseEntity.ok(new JwtResponse(jwt, 
-//												 userDetails.getId(), 
-//												 userDetails.getUsername(), 
-//												 userDetails.getEmail(), 
-//												 roles));
+//													appUser.getUsername(), 
+//													appUser.getEmail(), 
+//													roles));
 //		System.out.println(response);
 //		System.out.println(response);
 //		return ResponseEntity.ok(response);

@@ -1,7 +1,6 @@
 package com.IcecreamApp.security.jwt;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashSet;
 
 import javax.servlet.FilterChain;
@@ -15,27 +14,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.IcecreamApp.DTO.LoginDTO;
-import com.IcecreamApp.security.ApplicationUser;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import com.IcecreamApp.payload.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
     private AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
     	
-    	LoginDTO loginCredentials = null;
+    	LoginRequest loginCredentials = null;
     	
     	try {
-    		loginCredentials = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
+    		loginCredentials = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,14 +55,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     		FilterChain chain, 
     		Authentication authResult) throws IOException, ServletException {
     	
-        ApplicationUser applicationUser = (ApplicationUser) authResult.getPrincipal();
-        // Create JWT Token
-        String token = JWT.create()
-                .withSubject(applicationUser.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()));
+    	// Generate token
+        String token = this.jwtUtils.generateJwtToken(authResult);
 
         // Add token in response
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+        response.addHeader(this.jwtUtils.HEADER_STRING, this.jwtUtils.TOKEN_PREFIX + token);
     }
 }

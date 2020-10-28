@@ -19,12 +19,12 @@ public class ProductDTO extends BaseDTO {
     
     private Set<OrderDetailDTO> orderDetails;
 
-	private CategoryDTO category;
+	private String category_name;
 	
 	
 	
 	public ProductDTO(long id, Date modifiedDate, String name, String description, String image, double price,
-			int status, Set<FeedbackDTO> feedbacks, Set<OrderDetailDTO> orderDetails, CategoryDTO category) {
+			int status, Set<FeedbackDTO> feedbacks, Set<OrderDetailDTO> orderDetails, String category_name) {
 		super(id, modifiedDate);
 		this.name = name;
 		this.description = description;
@@ -33,7 +33,7 @@ public class ProductDTO extends BaseDTO {
 		this.status = status;
 		this.feedbacks = feedbacks;
 		this.orderDetails = orderDetails;
-		this.category = category;
+		this.category_name = category_name;
 	}
 
 	public String getName() {
@@ -92,12 +92,12 @@ public class ProductDTO extends BaseDTO {
 		this.orderDetails = orderDetails;
 	}
 
-	public CategoryDTO getCategory() {
-		return category;
+	public String getCategory() {
+		return category_name;
 	}
 
-	public void setCategory(CategoryDTO category) {
-		this.category = category;
+	public void setCategory(String category_name) {
+		this.category_name = category_name;
 	}
 	
 }

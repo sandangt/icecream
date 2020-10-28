@@ -8,12 +8,12 @@ public class RoleDTO extends BaseDTO {
 
 	private String code;
 
-	private Set<UserDTO> users;
+	private Set<String> user_names;
 	
-	public RoleDTO(long id, Date modifiedDate, String code, Set<UserDTO> users) {
+	public RoleDTO(long id, Date modifiedDate, String code, Set<String> user_names) {
 		super(id, modifiedDate);
 		this.code = code;
-		this.users = users;
+		this.user_names = user_names;
 	}
 
 	public String getCode() {
@@ -24,12 +24,8 @@ public class RoleDTO extends BaseDTO {
 		this.code = code;
 	}
 
-	public Set<UserDTO> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<UserDTO> users) {
-		this.users = users;
+	public void setUsers(Set<String> user_names) {
+		this.user_names.addAll(user_names);
 	}
 	
 }

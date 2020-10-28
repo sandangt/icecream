@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.security.jwt.JwtAuthenticationFilter;
 import com.IcecreamApp.security.jwt.JwtAuthorizationFilter;
+import com.IcecreamApp.security.jwt.JwtUtils;
 import com.IcecreamApp.security.jwt.UnauthEntryPointJwt;
 
 @Configuration
@@ -24,11 +25,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final ApplicationUserService applicationUserService;
 	private final UserRepository userRepository;
 	private final UnauthEntryPointJwt unauthorizedHandler;
+	private final JwtUtils jwtUtils;
+	
 	public ApplicationSecurityConfig(ApplicationUserService applicationUserService, 
-			UserRepository userRepository, UnauthEntryPointJwt unauthorizedHandler) {
+			UserRepository userRepository, UnauthEntryPointJwt unauthorizedHandler,
+			JwtUtils jwtUtils) {
 		this.applicationUserService = applicationUserService;
 		this.userRepository = userRepository;
 		this.unauthorizedHandler = unauthorizedHandler;
+		this.jwtUtils = jwtUtils;
 	}
 	
 	@Override
@@ -41,10 +46,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         // add jwt filters (1. authentication, 2. authorization)
-        .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-        .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository))
+        .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtils))
+        .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository, jwtUtils))
         .authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/login").permitAll()
+		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 		.antMatchers("/users/**").authenticated()
 		.antMatchers("/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/products/**").hasRole("ADMIN")

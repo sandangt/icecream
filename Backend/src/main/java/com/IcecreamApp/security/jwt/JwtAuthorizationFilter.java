@@ -16,25 +16,25 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.security.ApplicationUser;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	
 	private final UserRepository userRepository;
-
-	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+	private final JwtUtils jwtUtils;
+	
+	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, JwtUtils jwtUtils) {
 		super(authenticationManager);
         this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils;
 	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 	    // Read the Authorization header, where the JWT token should be
-	    String header = request.getHeader(JwtProperties.HEADER_STRING);
+	    String header = request.getHeader(jwtUtils.HEADER_STRING);
 	
 	    // If header does not contain BEARER or is null delegate to Spring impl and exit
-	    if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
+	    if (header == null || !header.startsWith(jwtUtils.TOKEN_PREFIX)) {
 	        chain.doFilter(request, response);
 	        return;
 	    }
@@ -48,22 +48,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 	
 	private Authentication getUsernamePasswordAuthentication(HttpServletRequest request) {
-	    String token = request.getHeader(JwtProperties.HEADER_STRING)
-	            .replace(JwtProperties.TOKEN_PREFIX,"");
+	    String token = request.getHeader(jwtUtils.HEADER_STRING)
+	            .replace(jwtUtils.TOKEN_PREFIX,"");
 	
 	    if (token != null) {
 	        // parse the token and validate it
-	        String userName = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()))
-	                .build()
-	                .verify(token)
-	                .getSubject();
+	    	String username = jwtUtils.getDecodedBody(token).getSubject();
 	
 	        // Search in the DB if we find the user by token subject (username)
 	        // If so, then grab user details and create spring auth token using username, pass, authorities/roles
-	        if (userName != null) {
-	            User user = userRepository.findByUsername(userName).get();
+	        if (username != null) {
+	            User user = userRepository.findByUsername(username).get();
 	            ApplicationUser applicationUser = new ApplicationUser(user);
-	            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userName, null, applicationUser.getAuthorities());
+	            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, applicationUser.getAuthorities());
 	            return auth;
 	        }
 	        return null;
