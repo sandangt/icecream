@@ -43,6 +43,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         // add jwt filters (1. authentication, 2. authorization)
         .authorizeRequests()
+        .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 		.antMatchers("/users/{userId}/**").access("@WebFilter.checkUserId(authentication,#userId)")
 		.antMatchers("/users/**").hasRole("ADMIN")
