@@ -1,4 +1,4 @@
-package com.IcecreamApp.security.jwt;
+package com.IcecreamApp.security.filter;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -27,7 +27,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtUtils = jwtUtils;
     }
 
-    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
     	
     	LoginRequest loginCredentials = null;
@@ -49,7 +48,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     	
     }
 
-    @Override
     protected void successfulAuthentication(HttpServletRequest request, 
     		HttpServletResponse response, 
     		FilterChain chain, 

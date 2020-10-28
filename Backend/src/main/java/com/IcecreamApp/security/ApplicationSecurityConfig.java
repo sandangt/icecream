@@ -13,8 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.IcecreamApp.security.jwt.JwtAuthorizationFilter;
-import com.IcecreamApp.security.jwt.UnauthEntryPointJwt;
+import com.IcecreamApp.security.filter.JwtAuthorizationFilter;
+import com.IcecreamApp.security.filter.UnauthEntryPointJwt;
 
 @Configuration
 @EnableWebSecurity
@@ -42,14 +42,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         // add jwt filters (1. authentication, 2. authorization)
-        // .addFilter(new JwtAuthenticationFilter(authenticationManager(), this.jwtUtils))
         .authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
-		.antMatchers("/users/**").authenticated()
+		.antMatchers("/users/{userId}/**").access("@WebFilter.checkUserId(authentication,#userId)")
+		.antMatchers("/users/**").hasRole("ADMIN")
 		.antMatchers("/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers(HttpMethod.GET, "/products/**").hasRole("ADMIN")
 		.antMatchers(HttpMethod.GET, "/categories/**").hasRole("ADMIN")
         .anyRequest().authenticated()
+        .and()
+		.logout()
+        .logoutUrl("/logout")
         .and()
 		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
 		

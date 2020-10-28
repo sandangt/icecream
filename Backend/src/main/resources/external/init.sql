@@ -1,8 +1,8 @@
 use Icecream;
 
 insert into roles (name) values ("ROLE_ADMIN");
-insert into roles (name) values ("ROLE_USER");
 insert into roles (name) values ("ROLE_STAFF");
+insert into roles (name) values ("ROLE_USER");
 
 insert into categories (name) values ("Electronics");
 insert into categories (name) values ("Mathematics");
@@ -11,10 +11,14 @@ insert into categories (name) values ("Economics");
 
 insert into users (username, email, password, status) values ("SanDang", "sandang@hotmail.com", "1234", "1");
 insert into users (username, email, password, status) values ("JohnDoe", "johndoe@gmail.com", "1234", "1");
+insert into users (username, email, password, status) values ("Socrates", "socrates@yahoo.com", "1234", "1");
+insert into users (username, email, password, status) values ("DavidBowie", "Bowie@gmail.com", "1234", "1");
 
 insert into user_role (user_id, role_id) values ("1", "1");
+insert into user_role (user_id, role_id) values ("1", "2");
 insert into user_role (user_id, role_id) values ("2", "1");
-insert into user_role (user_id, role_id) values ("2", "2");
+insert into user_role (user_id, role_id) values ("3", "3");
+insert into user_role (user_id, role_id) values ("4", "2");
 
 insert into user_details (fullname, address, gender, birthday, avatar, user_id) values ("Dang Thai San", "xyz str", "1","2020-01-01", "/my/avatar","1");
 insert into user_details (fullname, address, gender, birthday, avatar, user_id) values ("Jane Doe", "xyz str", "0","2020-01-01","/my/avatar2","2");

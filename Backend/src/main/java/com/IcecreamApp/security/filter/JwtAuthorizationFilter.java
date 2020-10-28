@@ -1,4 +1,4 @@
-package com.IcecreamApp.security.jwt;
+package com.IcecreamApp.security.filter;
 
 import java.io.IOException;
 
@@ -56,7 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	        // If so, then grab user details and create spring auth token using username, pass, authorities/roles
 	        if (username != null) {
 	            ApplicationUser applicationUser = (ApplicationUser) applicationUserService.loadUserByUsername(username);
-	            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(applicationUser.getUsername(), null, applicationUser.getAuthorities());
+	            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(applicationUser.getUsername(), applicationUser.getId(), applicationUser.getAuthorities());
 	            return auth;
 	        }
 	        return null;

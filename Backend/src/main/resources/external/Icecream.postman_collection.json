@@ -11,6 +11,9 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -191,6 +194,16 @@
 		{
 			"name": "read all user",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZEJvd2llIiwiaWF0IjoxNjAzODk5ODUxLCJleHAiOjE2MDM5ODYyNTF9.IcGyfLnft7-1J44JC-inOt3llFUcUK15uHe2fb9Ga8w0_o_Pcv6Afy4fH50W3ab34qaoNJO2DZYv5rpF8KOrQA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -211,10 +224,20 @@
 		{
 			"name": "read user by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZEJvd2llIiwiaWF0IjoxNjAzOTAyMjc1LCJleHAiOjE2MDM5ODg2NzV9.ml4a59WIOHBNAQKocFaDMvqq6KbIpMot-9Oon53nPcKClfdiQAmQ3aWs7DUz5lDTtSKtPiDDl6-csiIAiSnqPg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users/1",
+					"raw": "http://localhost:8080/users/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -222,7 +245,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"1"
+						"4"
 					]
 				},
 				"description": "read user by id"
@@ -565,7 +588,14 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaXNzIjoiYXV0aDAiLCJleHAiOjE2MDM5Njc3Njd9.qqQ57MDic7HddBP_LJw8Vi9uvpch4G7VSrSxnr_oml5uIGaOpOypKAEDFhwJhwVgJkdHwq5pfGisbW_GpiVt1A",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -688,6 +718,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaXNzIjoiYXV0aDAiLCJleHAiOjE2MDM5Njg2MDF9.yU-PgYe6YV1IWqhEY42ix0gEmKHqaPtAisNYVy1-cBZaX27DAG_IQISaXHWukZHhH-1-k8agfIhB8ld5s0mySg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -1293,31 +1333,26 @@
 			"name": "real all users with authentication",
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "1234",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "SanDang",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiZXhwIjoxNjA0NjU2NTkyfQ.B_lYA9oRQJssxnmomMn7BVS3_Fk8G-_1KBiQ1xklDSL-sHpDElXCpHAQbrVkbZL7EH7Ys6uYBrZlbFeucKR2cw",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:8080/users",
+					"raw": "http://localhost:8080/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users"
+						"users",
+						"1"
 					]
 				},
 				"description": "real all users with authentication"
@@ -1447,6 +1482,125 @@
 					]
 				},
 				"description": "real all products with authentication"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Autho",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"DavidBowie\",\n    \"password\" : \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				},
+				"description": "login"
+			},
+			"response": []
+		},
+		{
+			"name": "login failed",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"JohnDoe\",\n    \"password\" : \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				},
+				"description": "login failed"
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjAzODk4OTMzLCJleHAiOjE2MDM5ODUzMzN9.Ohi7qMzaMBaedeh3W2LDp9VEGNNAo5lzvr8gA19kOzN44x0O9A2bOpieYqrpAzn2crFJOgERjolyzfsvfu8Jaw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Autho",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"logout"
+					]
+				},
+				"description": "logout"
 			},
 			"response": []
 		}

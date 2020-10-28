@@ -1,4 +1,4 @@
-package com.IcecreamApp.security.jwt;
+package com.IcecreamApp.security.filter;
 
 import java.io.IOException;
 

@@ -44,6 +44,14 @@ public class ApplicationUser implements UserDetails {
 		return user.getUserName();
 	}
 
+	public long getId() {
+		return user.getId();
+	}
+
+	public String getEmail() {
+		return user.getEmail();
+	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
