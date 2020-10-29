@@ -1,7 +1,8 @@
 package com.IcecreamApp.DTO;
 
-import java.util.Date;
 import java.util.Set;
+
+import com.IcecreamApp.systemConstant.EStatus;
 
 public class UserDTO extends BaseDTO {
 
@@ -11,31 +12,11 @@ public class UserDTO extends BaseDTO {
 
 	private String password;
 	
-	private int status;
+	private EStatus status;
 	
 	private UserDetailDTO userDetail;
 
 	private Set<RoleDTO> roles;
-
-    private Set<FeedbackDTO> feedbacks;
-
-
-    private Set<OrderDTO> orders;
-    
-    
-
-	public UserDTO(long id, Date modifiedDate, String username, String email, String password, int status,
-			UserDetailDTO userDetail, Set<RoleDTO> roles, Set<FeedbackDTO> feedbacks, Set<OrderDTO> orders) {
-		super(id, modifiedDate);
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.status = status;
-		this.userDetail = userDetail;
-		this.roles = roles;
-		this.feedbacks = feedbacks;
-		this.orders = orders;
-	}
 
 	public String getUsername() {
 		return username;
@@ -61,11 +42,11 @@ public class UserDTO extends BaseDTO {
 		this.password = password;
 	}
 
-	public int getStatus() {
+	public EStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(EStatus status) {
 		this.status = status;
 	}
 
@@ -85,21 +66,4 @@ public class UserDTO extends BaseDTO {
 		this.roles = roles;
 	}
 
-	public Set<FeedbackDTO> getFeedbacks() {
-		return feedbacks;
-	}
-
-	public void setFeedbacks(Set<FeedbackDTO> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
-
-	public Set<OrderDTO> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(Set<OrderDTO> orders) {
-		this.orders = orders;
-	}
-	
-	
 }

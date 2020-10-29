@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.IcecreamApp.entity.User;
+import com.IcecreamApp.systemConstant.EStatus;
 
 public class ApplicationUser implements UserDetails {
 
@@ -69,7 +70,7 @@ public class ApplicationUser implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return user.getStatus() == 1;
+		return user.getStatus() == EStatus.AVAILABLE;
 	}
 
 	@Override

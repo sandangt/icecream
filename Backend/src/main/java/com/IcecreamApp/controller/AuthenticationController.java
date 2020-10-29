@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IcecreamApp.entity.ERole;
 import com.IcecreamApp.entity.Role;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.payload.request.LoginRequest;
@@ -32,6 +31,8 @@ import com.IcecreamApp.repository.RoleRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.security.ApplicationUser;
 import com.IcecreamApp.security.filter.JwtUtils;
+import com.IcecreamApp.systemConstant.ERole;
+import com.IcecreamApp.systemConstant.EStatus;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -129,7 +130,7 @@ public class AuthenticationController {
 
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
-				1,new HashSet<Role>());
+				EStatus.AVAILABLE,new HashSet<Role>());
 		
 		user.setRoles(roles);
 		userRepository.save(user);

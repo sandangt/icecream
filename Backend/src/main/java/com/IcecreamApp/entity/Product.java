@@ -6,12 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.IcecreamApp.systemConstant.EStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -36,8 +39,9 @@ public class Product extends Base implements ForeignConnection<Product>{
 	@Column(name="price", columnDefinition="FLOAT")
 	private Double price;
 	
-	@Column(name="status", columnDefinition="TINYINT")
-	private Integer status;
+	@Column(name="status")
+	@Enumerated(EnumType.ORDINAL)
+	private EStatus status;
 	
 	/**
 	 * Foreign key section
@@ -59,7 +63,7 @@ public class Product extends Base implements ForeignConnection<Product>{
 	public Product() {
 	}
 	
-	public Product(String name, String description, String image, double price, int status, Category category) {
+	public Product(String name, String description, String image, double price, EStatus status, Category category) {
 		this.name = name;
 		this.description = description;
 		this.image = image;
@@ -100,11 +104,11 @@ public class Product extends Base implements ForeignConnection<Product>{
 		this.price = price;
 	}
 
-	public Integer getStatus() {
+	public EStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(EStatus status) {
 		this.status = status;
 	}
 	

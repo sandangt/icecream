@@ -45,7 +45,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
-		.antMatchers("/users/{userId}/**").access("@WebFilter.checkUserId(authentication,#userId)")
+		.antMatchers("/users/{userId}/**").access("hasRole('ADMIN') or @WebFilter.checkUserId(authentication,#userId)")
 		.antMatchers("/users/**").hasRole("ADMIN")
 		.antMatchers("/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers(HttpMethod.GET, "/products/**").hasRole("ADMIN")
@@ -70,8 +70,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
-	@Bean 
+	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}

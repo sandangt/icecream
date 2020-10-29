@@ -2,37 +2,24 @@ package com.IcecreamApp.DTO;
 
 import java.sql.Date;
 
+import com.IcecreamApp.systemConstant.EGender;
+
 public class UserDetailDTO extends BaseDTO { 
     
-    private String fullname;
+    private String firstname;
+    
+    private String lastname;
 
     private String address;
     
-    private int gender;
+    private EGender gender;
     
     private Date birthday;
     
     private String avatar;
     
-    private UserDTO user;
-	
-    public UserDetailDTO(long id, java.util.Date modifiedDate, String fullname, String address, int gender,
-			Date birthday, String avatar, UserDTO user) {
-		super(id, modifiedDate);
-		this.fullname = fullname;
-		this.address = address;
-		this.gender = gender;
-		this.birthday = birthday;
-		this.avatar = avatar;
-		this.user = user;
-	}
-
 	public String getFullname() {
-		return fullname;
-	}
-
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+		return (this.firstname + " " + this.lastname);
 	}
 
 	public String getAddress() {
@@ -43,11 +30,11 @@ public class UserDetailDTO extends BaseDTO {
 		this.address = address;
 	}
 
-	public Integer getGender() {
+	public EGender getGender() {
 		return gender;
 	}
 
-	public void setGender(Integer gender) {
+	public void setGender(EGender gender) {
 		this.gender = gender;
 	}
 
@@ -67,16 +54,21 @@ public class UserDetailDTO extends BaseDTO {
 		this.avatar = avatar;
 	}
 
-	public UserDTO getUser() {
-		return user;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setUser(UserDTO user) {
-		this.user = user;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
-	public void setGender(int gender) {
-		this.gender = gender;
+	public String getLastname() {
+		return lastname;
 	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	
 }
 

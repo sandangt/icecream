@@ -1,4 +1,4 @@
-package com.IcecreamApp.entity;
+package com.IcecreamApp.systemConstant;
 
 public enum ERole {
 	ROLE_USER,

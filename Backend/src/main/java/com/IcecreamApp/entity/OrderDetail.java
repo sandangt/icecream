@@ -18,9 +18,6 @@ public class OrderDetail extends Base {
 	 */
 	private static final long serialVersionUID = -6829660858432189043L;
 
-	@Column(name="code", columnDefinition="VARCHAR(250)")
-	private String code;
-	
 	@Column(name="quantity", columnDefinition="INT")
 	private Integer quantity;
 	
@@ -41,21 +38,12 @@ public class OrderDetail extends Base {
 	public OrderDetail() {
 	}
 	
-	public OrderDetail(String code, int quantity, Order order, Product product) {
-		this.code = code;
+	public OrderDetail(int quantity, Order order, Product product) {
 		this.quantity = quantity;
 		this.order = order;
 		this.product = product;
 	}
 	
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	public Integer getQuantity() {
 		return quantity;
 	}

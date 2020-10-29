@@ -1,9 +1,12 @@
 package com.IcecreamApp.DTO;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.IcecreamApp.systemConstant.EStatus;
 
 public class ProductDTO extends BaseDTO {
+
 
 	private String name;
 	
@@ -13,29 +16,10 @@ public class ProductDTO extends BaseDTO {
 	
 	private double price;
 	
-	private int status;
-
-    private Set<FeedbackDTO> feedbacks;
+	private EStatus status;
+	
+    private List<FeedbackDTO> feedbacks = new ArrayList<>();
     
-    private Set<OrderDetailDTO> orderDetails;
-
-	private String category_name;
-	
-	
-	
-	public ProductDTO(long id, Date modifiedDate, String name, String description, String image, double price,
-			int status, Set<FeedbackDTO> feedbacks, Set<OrderDetailDTO> orderDetails, String category_name) {
-		super(id, modifiedDate);
-		this.name = name;
-		this.description = description;
-		this.image = image;
-		this.price = price;
-		this.status = status;
-		this.feedbacks = feedbacks;
-		this.orderDetails = orderDetails;
-		this.category_name = category_name;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -60,44 +44,28 @@ public class ProductDTO extends BaseDTO {
 		this.image = image;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
-	public int getStatus() {
+	public EStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(EStatus status) {
 		this.status = status;
 	}
 
-	public Set<FeedbackDTO> getFeedbacks() {
+	public List<FeedbackDTO> getFeedbacks() {
 		return feedbacks;
 	}
 
-	public void setFeedbacks(Set<FeedbackDTO> feedbacks) {
+	public void setFeedbacks(List<FeedbackDTO> feedbacks) {
 		this.feedbacks = feedbacks;
 	}
 
-	public Set<OrderDetailDTO> getOrderDetails() {
-		return orderDetails;
-	}
-
-	public void setOrderDetails(Set<OrderDetailDTO> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
-
-	public String getCategory() {
-		return category_name;
-	}
-
-	public void setCategory(String category_name) {
-		this.category_name = category_name;
-	}
-	
 }

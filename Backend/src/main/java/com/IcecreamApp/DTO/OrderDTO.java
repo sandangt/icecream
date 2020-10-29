@@ -1,7 +1,8 @@
 package com.IcecreamApp.DTO;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.List;
+
+import com.IcecreamApp.systemConstant.EStatus;
 
 public class OrderDTO extends BaseDTO {
 
@@ -9,22 +10,11 @@ public class OrderDTO extends BaseDTO {
 	
 	private String paymentMethod;
 	
-	private int status;
+	private EStatus status;
 
 	private UserDTO user;	
 
-	private Set<OrderDetailDTO> orderDetails;
-
-	
-	public OrderDTO(long id, Date modifiedDate, long code, String paymentMethod, int status, UserDTO user,
-			Set<OrderDetailDTO> orderDetails) {
-		super(id, modifiedDate);
-		this.code = code;
-		this.paymentMethod = paymentMethod;
-		this.status = status;
-		this.user = user;
-		this.orderDetails = orderDetails;
-	}
+	private List<OrderDetailDTO> orderDetails;
 
 	public long getCode() {
 		return code;
@@ -42,8 +32,12 @@ public class OrderDTO extends BaseDTO {
 		this.paymentMethod = paymentMethod;
 	}
 
-	public int getStatus() {
+	public EStatus getStatus() {
 		return status;
+	}
+
+	public void setStatus(EStatus status) {
+		this.status = status;
 	}
 
 	public UserDTO getUser() {
@@ -54,15 +48,19 @@ public class OrderDTO extends BaseDTO {
 		this.user = user;
 	}
 
-	public Set<OrderDetailDTO> getOrderDetails() {
+	public List<OrderDetailDTO> getOrderDetails() {
 		return orderDetails;
 	}
 
-	public void setOrderDetails(Set<OrderDetailDTO> orderDetails) {
+	public void setOrderDetails(List<OrderDetailDTO> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
-
-	public void setStatus(int status) {
-		this.status = status;
+	
+	public double getTotalPrice() {
+		double result = 0.0;
+		for (OrderDetailDTO i : this.orderDetails) {
+			result += i.getTotalPrice();
+		}
+		return result;
 	}
 }

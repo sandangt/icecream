@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -16,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.IcecreamApp.systemConstant.EStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -37,8 +40,9 @@ public class User extends Base implements ForeignConnection<User> {
 	@Column(name = "password")
 	private String password;
 	
-	@Column(name="status", columnDefinition = "TINYINT")
-	private Integer status;
+	@Column(name="status")
+	@Enumerated(EnumType.ORDINAL)
+	private EStatus status;
 	
 	/**
 	 * Foreign key section
@@ -67,7 +71,7 @@ public class User extends Base implements ForeignConnection<User> {
 	public User() {
 	}
 
-	public User(String username, String email, String password, int status, Set<Role> roles) {
+	public User(String username, String email, String password, EStatus status, Set<Role> roles) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -99,11 +103,11 @@ public class User extends Base implements ForeignConnection<User> {
 		this.password = password;
 	}
 
-	public Integer getStatus() {
+	public EStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(EStatus status) {
 		this.status = status;
 	}
 

@@ -4,10 +4,13 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.IcecreamApp.systemConstant.EGender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -20,14 +23,18 @@ public class UserDetail extends Base {
 	 */
 	private static final long serialVersionUID = -3166009761593242165L; 
 	
-	@Column(name="fullname", columnDefinition="VARCHAR(100)")
-    private String fullname;
+	@Column(name="firstname", columnDefinition="VARCHAR(100)")
+    private String firstname;
+	
+	@Column(name="lastname", columnDefinition="VARCHAR(100)")
+    private String lastname;
 
 	@Column(name="address", columnDefinition="VARCHAR(100)")
     private String address;
     
-    @Column(name="gender", columnDefinition="TINYINT")
-    private Integer gender;
+    @Column(name="gender", columnDefinition="VARCHAR(20)")
+    @Enumerated(EnumType.STRING)
+    private EGender gender;
     
     @Column(name="birthday", columnDefinition="DATE")
     @JsonFormat(pattern="dd-MM-yyyy")
@@ -47,8 +54,9 @@ public class UserDetail extends Base {
     public UserDetail() {
     }
     
-    public UserDetail(String fullname, String address, int gender, Date birthday, String avatar, User user) {
-		this.fullname = fullname;
+    public UserDetail(String firstname, String lastname, String address, EGender gender, Date birthday, String avatar, User user) {
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.address = address;
 		this.gender = gender;
 		this.birthday = birthday;
@@ -56,12 +64,20 @@ public class UserDetail extends Base {
 		this.user = user;
 	}
 
-	public String getFullname() {
-		return fullname;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public String getAddress() {
@@ -72,11 +88,11 @@ public class UserDetail extends Base {
 		this.address = address;
 	}
 
-	public Integer getGender() {
+	public EGender getGender() {
 		return gender;
 	}
 
-	public void setGender(Integer gender) {
+	public void setGender(EGender gender) {
 		this.gender = gender;
 	}
 

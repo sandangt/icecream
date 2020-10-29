@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.IcecreamApp.systemConstant.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -22,7 +23,7 @@ public class Role extends Base implements ForeignConnection<Role> {
 	 */
 	private static final long serialVersionUID = -2834524789864968814L;
 
-	@Column(name="name", unique=true, columnDefinition="VARCHAR(15)")
+	@Column(name="name", unique=true, columnDefinition="VARCHAR(20)")
 	@Enumerated(EnumType.STRING)
 	private ERole name;
 
