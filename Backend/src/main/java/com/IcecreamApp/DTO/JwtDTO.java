@@ -11,6 +11,7 @@ public class JwtDTO {
 
 	public JwtDTO(String accessToken, String type, String username, List<String> roles) {
 		this.token = accessToken;
+		this.type = type;
 		this.username = username;
 		this.roles = roles;
 	}

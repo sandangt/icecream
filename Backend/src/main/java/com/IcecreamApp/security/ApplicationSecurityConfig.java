@@ -1,5 +1,6 @@
 package com.IcecreamApp.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,15 +21,11 @@ import com.IcecreamApp.security.filter.UnauthEntryPointJwt;
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private final ApplicationUserService applicationUserService;
-	private final UnauthEntryPointJwt unauthorizedHandler;
+	@Autowired
+	private ApplicationUserService applicationUserService;
+	@Autowired
+	private UnauthEntryPointJwt unauthorizedHandler;
 	
-	public ApplicationSecurityConfig(ApplicationUserService applicationUserService, 
-			UnauthEntryPointJwt unauthorizedHandler) {
-		this.applicationUserService = applicationUserService;
-		this.unauthorizedHandler = unauthorizedHandler;
-	}
-
 	@Bean
 	public JwtAuthorizationFilter authorizationJwtTokenFilter() {
 		return new JwtAuthorizationFilter();
@@ -70,6 +67,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
+	
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

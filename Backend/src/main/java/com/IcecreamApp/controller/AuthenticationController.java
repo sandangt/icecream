@@ -122,7 +122,6 @@ public class AuthenticationController {
 		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 		roles.add(userRole);
-		// Create new user's account
 		User user = new User(null, signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
 				EStatus.AVAILABLE,new HashSet<Role>());
 		
