@@ -12,6 +12,8 @@ public class CategoryConverter {
 
 	public static CategoryDTO toDTO(Category entity) {
 
+		if (entity == null)
+			return null;
 		List<ProductDTO> products = new ArrayList<>();
 		if (entity.getProducts() != null) {
 			for (Product i : entity.getProducts()) {

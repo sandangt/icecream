@@ -6,6 +6,8 @@ import com.IcecreamApp.entity.FAQ;
 public class FAQConverter {
 	
 	public static FAQDTO toDTO(FAQ entity) {
+		if (entity == null) 
+			return null;
 		return new FAQDTO(entity.getId(), entity.getModifiedDate(), entity.getQuestion(), entity.getAnswer());
 	}
 	

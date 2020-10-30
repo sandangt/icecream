@@ -29,7 +29,6 @@ public class Category extends Base implements ForeignConnection<Category> {
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="product-category")
     private List<Product> products = new ArrayList<>();
-	// private Set<Product> products = new HashSet<>();
 	
 	public Category() {
 	}
@@ -51,13 +50,11 @@ public class Category extends Base implements ForeignConnection<Category> {
 	}
 
 	public void setProducts(List<Product> products) {
-//		this.products.addAll(product);
 		this.products = products;
 	}
 
 	@Override
 	public void setForeignKey(Category entity) {
-//		this.products.addAll(entity.products);
 		this.products = entity.products;
 	}	
 }

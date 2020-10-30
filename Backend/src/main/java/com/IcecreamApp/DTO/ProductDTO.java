@@ -17,13 +17,16 @@ public class ProductDTO extends BaseDTO {
 	private double price;
 	
 	private EStatus status;
-	
-    private List<FeedbackDTO> feedbacks = new ArrayList<>();
     
+    /**
+     * Foreign key
+     */
+    private List<FeedbackDTO> feedbacks = new ArrayList<>();
     private long categoryId;
+    private String categoryName;
     
 	public ProductDTO(long id, Date modifiedDate, String name, String description, String image, double price,
-			EStatus status, List<FeedbackDTO> feedbacks, long categoryId) {
+			EStatus status, List<FeedbackDTO> feedbacks, String categoryName) {
 		super(id, modifiedDate);
 		this.name = name;
 		this.description = description;
@@ -31,7 +34,7 @@ public class ProductDTO extends BaseDTO {
 		this.price = price;
 		this.status = status;
 		this.feedbacks = feedbacks;
-		this.categoryId = categoryId; 
+		this.categoryName = categoryName; 
 	}
 
 	public String getName() {
@@ -88,6 +91,18 @@ public class ProductDTO extends BaseDTO {
 
 	public void setCategoryId(long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 }

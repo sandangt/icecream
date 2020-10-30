@@ -11,10 +11,13 @@ import com.IcecreamApp.entity.User;
 
 public class OrderConverter {
 	public OrderDTO toDTO(Order entity) {
-		
+		if (entity == null)
+			return null;
 		List<OrderDetailDTO> orderDetails = new ArrayList<>();
-		for (OrderDetail i: entity.getOrderDetails()) {
-			orderDetails.add(OrderDetailConverter.toDTO(i));
+		if (entity.getOrderDetails() != null) {
+			for (OrderDetail i: entity.getOrderDetails()) {
+				orderDetails.add(OrderDetailConverter.toDTO(i));
+			}
 		}
 		return new OrderDTO(entity.getId(), 
 				entity.getModifiedDate(), 

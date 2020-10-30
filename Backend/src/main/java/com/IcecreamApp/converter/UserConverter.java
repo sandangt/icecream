@@ -10,10 +10,15 @@ import com.IcecreamApp.entity.User;
 
 public class UserConverter {
 	public static UserDTO toDTO(User entity) {
+		if (entity == null)
+			return null;
 		
 		Set<RoleDTO> roles = new HashSet<>();
-		for (Role i : entity.getRoles()) {
-			roles.add(RoleConverter.toDTO(i));
+		if (entity.getRoles() != null)
+		{
+			for (Role i : entity.getRoles()) {
+				roles.add(RoleConverter.toDTO(i));
+			}
 		}
 		
 		return new UserDTO(entity.getId(), 
@@ -29,12 +34,12 @@ public class UserConverter {
 
 		if (dto == null)
 			return null;
-		
 		Set<Role> roles = new HashSet<>();
-		for (RoleDTO i : dto.getRoles()) {
-			roles.add(RoleConverter.toEntity(i));
+		if (dto.getRoles() != null) {
+			for (RoleDTO i : dto.getRoles()) {
+				roles.add(RoleConverter.toEntity(i));
+			}
 		}
-		
 		return new User(dto.getId(), dto.getUsername(), dto.getEmail(), dto.getPassword(), dto.getStatus(), roles);
 	}
 }

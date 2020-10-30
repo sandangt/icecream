@@ -6,7 +6,14 @@ import com.IcecreamApp.entity.OrderDetail;
 
 public class OrderDetailConverter {
 	public static OrderDetailDTO toDTO(OrderDetail entity) {
-		return new OrderDetailDTO(entity.getId(), entity.getModifiedDate(), entity.getQuantity(), ProductConverter.toDTO(entity.getProduct()), entity.getOrder().getId() );
+		if (entity == null)
+			return null;
+		String orderCode = entity.getOrder() != null ? entity.getOrder().getCode() : null;
+		return new OrderDetailDTO(entity.getId(), 
+				entity.getModifiedDate(), 
+				entity.getQuantity(), 
+				ProductConverter.toDTO(entity.getProduct()), 
+				orderCode);
 	}
 	
 	public static OrderDetail toEntity(OrderDetailDTO dto) {

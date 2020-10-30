@@ -11,13 +11,14 @@ public class FeedbackDTO extends BaseDTO {
 	private UserDTO user;
 	
 	private long productId;
+	private String productName;
 
-	public FeedbackDTO(long id, Date modifiedDate, String title, String content, UserDTO user, long productId) {
+	public FeedbackDTO(long id, Date modifiedDate, String title, String content, UserDTO user, String productName) {
 		super(id, modifiedDate);
 		this.title = title;
 		this.content = content;
 		this.user = user;
-		this.productId = productId;
+		this.productName = productName;
 	}
 
 	public String getTitle() {
@@ -50,6 +51,14 @@ public class FeedbackDTO extends BaseDTO {
 
 	public void setProductId(long productId) {
 		this.productId = productId;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 }

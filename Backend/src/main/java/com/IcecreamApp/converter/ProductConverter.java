@@ -12,11 +12,17 @@ import com.IcecreamApp.entity.Product;
 public class ProductConverter {
 
 	public static ProductDTO toDTO(Product entity) {
-
+		if (entity == null)
+			return null;
+		
 		List<FeedbackDTO> feedbacks = new ArrayList<>();
-		for (Feedback i : entity.getFeedbacks()) {
-			feedbacks.add(FeedbackConverter.toDTO(i));
+		if (entity.getFeedbacks() != null) {
+			for (Feedback i : entity.getFeedbacks()) {
+				feedbacks.add(FeedbackConverter.toDTO(i));
+			}
 		}
+		
+		String categoryName = entity.getCategory() != null ? entity.getCategory().getName() : null;
 	    
 		return new ProductDTO(entity.getId(), 
 				entity.getModifiedDate(), 
@@ -26,7 +32,7 @@ public class ProductConverter {
 				entity.getPrice(), 
 				entity.getStatus(), 
 				feedbacks, 
-				entity.getCategory().getId());
+				categoryName);
 	}
 
 	public static Product toEntity(ProductDTO dto) {

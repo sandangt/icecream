@@ -9,12 +9,13 @@ public class OrderDetailDTO extends BaseDTO {
 	private ProductDTO product;
 	
 	private long orderId;
+	private String orderCode;
 	
-	public OrderDetailDTO(long id, Date modifiedDate, int quantity, ProductDTO product, long orderId) {
+	public OrderDetailDTO(long id, Date modifiedDate, int quantity, ProductDTO product, String orderCode) {
 		super(id, modifiedDate);
 		this.quantity = quantity;
 		this.product = product;
-		this.orderId = orderId;
+		this.orderCode = orderCode;
 	}
 
 	public int getQuantity() {
@@ -44,4 +45,13 @@ public class OrderDetailDTO extends BaseDTO {
 	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
+
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
+	}
+	
 }
