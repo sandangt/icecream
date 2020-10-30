@@ -15,13 +15,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtUtils {
 	
 	@Value("${IcecreamApp.jwtSecret}")
-	protected String SECRET;
+	public String SECRET;
 	@Value("${IcecreamApp.jwtExpirationTime}")
-	protected Long EXPIRATION_TIME;
+	public Long EXPIRATION_TIME;
 	@Value("${IcecreamApp.jwtPrefix}")
-	protected String TOKEN_PREFIX;
+	public String TOKEN_PREFIX;
 	@Value("${IcecreamApp.jwtHeader}")
-	protected String HEADER_STRING;
+	public String HEADER_STRING;
 
 	public String generateJwtToken(Authentication authentication) {
 

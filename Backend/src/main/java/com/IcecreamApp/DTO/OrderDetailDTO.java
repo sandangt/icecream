@@ -4,15 +4,17 @@ import java.util.Date;
 
 public class OrderDetailDTO extends BaseDTO {
 	
-
 	private int quantity;
 
 	private ProductDTO product;
 	
-	public OrderDetailDTO(long id, Date modifiedDate, int quantity, ProductDTO product) {
+	private long orderId;
+	
+	public OrderDetailDTO(long id, Date modifiedDate, int quantity, ProductDTO product, long orderId) {
 		super(id, modifiedDate);
 		this.quantity = quantity;
 		this.product = product;
+		this.orderId = orderId;
 	}
 
 	public int getQuantity() {
@@ -33,5 +35,13 @@ public class OrderDetailDTO extends BaseDTO {
 	
 	public double getTotalPrice() {
 		return (this.product.getPrice() * this.quantity);
+	}
+
+	public long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(long orderId) {
+		this.orderId = orderId;
 	}
 }

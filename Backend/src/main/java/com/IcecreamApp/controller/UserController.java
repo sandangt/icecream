@@ -2,6 +2,7 @@ package com.IcecreamApp.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,18 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.entity.User;
-import com.IcecreamApp.service.UserService;
+import com.IcecreamApp.service.IUserService;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
 	
-	private UserService userService;
-	
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+	@Autowired
+	private IUserService userService;
 
     @GetMapping
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -41,6 +40,7 @@ public class UserController {
     public User createUser(@RequestBody User user) {
     	return this.userService.create(user);
     }
+    
 
     @PutMapping(value = "/{id}")
 //    @PreAuthorize("hasAuthority('USER_WRITE')")
@@ -53,4 +53,10 @@ public class UserController {
     public void deleteUser(@PathVariable("id") Long id) {
     	this.userService.delete(id);
     }
+    
+    @PostMapping(value="/test")
+    public UserDTO createUser(@RequestBody UserDTO user) {
+    	return this.userService.createDTO(user);
+    }
+    
 }

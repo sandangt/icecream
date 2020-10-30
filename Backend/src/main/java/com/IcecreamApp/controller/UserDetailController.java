@@ -2,6 +2,7 @@ package com.IcecreamApp.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,17 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.entity.UserDetail;
-import com.IcecreamApp.service.UserDetailService;
+import com.IcecreamApp.service.IUserDetailService;
 
 @RestController
 @RequestMapping("user-details")
 public class UserDetailController {
 	
-	private UserDetailService userDetailService;
-	
-	public UserDetailController(UserDetailService userDetailService) {
-		this.userDetailService = userDetailService;
-	}
+	@Autowired
+	private IUserDetailService userDetailService;
 
     @GetMapping
     public List<UserDetail> getAllUserDetails() {        

@@ -1,8 +1,9 @@
-package com.IcecreamApp.authenticationPayload.request;
+package com.IcecreamApp.DTO;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class LoginRequestDTO {
+	
 	@NotBlank
 	private String username;
 
@@ -24,4 +25,7 @@ public class LoginRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
+
 }

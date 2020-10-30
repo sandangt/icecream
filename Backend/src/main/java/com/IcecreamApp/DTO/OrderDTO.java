@@ -7,7 +7,7 @@ import com.IcecreamApp.systemConstant.EStatus;
 
 public class OrderDTO extends BaseDTO {
 
-	private long code;
+	private String code;
 	
 	private String paymentMethod;
 	
@@ -17,7 +17,7 @@ public class OrderDTO extends BaseDTO {
 
 	private List<OrderDetailDTO> orderDetails;
 
-	public OrderDTO(long id, Date modifiedDate, long code, String paymentMethod, EStatus status, UserDTO user,
+	public OrderDTO(long id, Date modifiedDate, String code, String paymentMethod, EStatus status, UserDTO user,
 			List<OrderDetailDTO> orderDetails) {
 		super(id, modifiedDate);
 		this.code = code;
@@ -27,11 +27,11 @@ public class OrderDTO extends BaseDTO {
 		this.orderDetails = orderDetails;
 	}
 
-	public long getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(long code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

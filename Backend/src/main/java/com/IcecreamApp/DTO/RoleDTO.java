@@ -6,7 +6,6 @@ import com.IcecreamApp.systemConstant.ERole;
 
 public class RoleDTO extends BaseDTO {
 	
-
 	private ERole name;
 
 	public RoleDTO(long id, Date modifiedDate, ERole name) {

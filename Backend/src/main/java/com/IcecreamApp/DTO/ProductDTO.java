@@ -8,7 +8,6 @@ import com.IcecreamApp.systemConstant.EStatus;
 
 public class ProductDTO extends BaseDTO {
 
-
 	private String name;
 	
 	private String description;
@@ -21,8 +20,10 @@ public class ProductDTO extends BaseDTO {
 	
     private List<FeedbackDTO> feedbacks = new ArrayList<>();
     
+    private long categoryId;
+    
 	public ProductDTO(long id, Date modifiedDate, String name, String description, String image, double price,
-			EStatus status, List<FeedbackDTO> feedbacks) {
+			EStatus status, List<FeedbackDTO> feedbacks, long categoryId) {
 		super(id, modifiedDate);
 		this.name = name;
 		this.description = description;
@@ -30,6 +31,7 @@ public class ProductDTO extends BaseDTO {
 		this.price = price;
 		this.status = status;
 		this.feedbacks = feedbacks;
+		this.categoryId = categoryId; 
 	}
 
 	public String getName() {
@@ -78,6 +80,14 @@ public class ProductDTO extends BaseDTO {
 
 	public void setFeedbacks(List<FeedbackDTO> feedbacks) {
 		this.feedbacks = feedbacks;
+	}
+
+	public long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
 	}
 
 }

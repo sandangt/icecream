@@ -1,9 +1,9 @@
-package com.IcecreamApp.authenticationPayload.response;
+package com.IcecreamApp.DTO;
 
-public class MessageResponse {
+public class MessageResponseDTO {
 	private String message;
 
-	public MessageResponse(String message) {
+	public MessageResponseDTO(String message) {
 	    this.message = message;
 	  }
 
@@ -14,4 +14,5 @@ public class MessageResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
 }

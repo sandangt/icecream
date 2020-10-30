@@ -26,7 +26,7 @@ public abstract class Base implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long id;
 	
 //	@Column
 //	private String createdBy;
@@ -42,7 +42,7 @@ public abstract class Base implements Serializable {
 	@Column(name="last_update_time")
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date modifiedDate;
+	protected Date modifiedDate;
 
 	public Long getId() {
 		return id;

@@ -9,6 +9,6 @@ public class RoleConverter {
 	}
 	
 	public static Role toEntity(RoleDTO dto) {
-		return new Role(dto.getName());
+		return new Role(dto.getId(), dto.getName());
 	}
 }

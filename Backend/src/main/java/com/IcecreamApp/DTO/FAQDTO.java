@@ -8,7 +8,6 @@ public class FAQDTO extends BaseDTO {
 	
 	private String answer;
 
-
 	public FAQDTO(long id, Date modifiedDate, String question, String answer) {
 		super(id, modifiedDate);
 		this.question = question;

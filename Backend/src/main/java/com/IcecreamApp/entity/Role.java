@@ -38,7 +38,8 @@ public class Role extends Base implements ForeignConnection<Role> {
 	public Role() {
 	}
 	
-	public Role(ERole name) {
+	public Role(Long id, ERole name) {
+		this.id = id;
 		this.name = name;
 	}
 
