@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.IcecreamApp.systemConstant.EStatus;
@@ -17,6 +18,17 @@ public class UserDTO extends BaseDTO {
 	private UserDetailDTO userDetail;
 
 	private Set<RoleDTO> roles;
+
+	public UserDTO(long id, Date modifiedDate, String username, String email, String password, EStatus status,
+			UserDetailDTO userDetail, Set<RoleDTO> roles) {
+		super(id, modifiedDate);
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.status = status;
+		this.userDetail = userDetail;
+		this.roles = roles;
+	}
 
 	public String getUsername() {
 		return username;

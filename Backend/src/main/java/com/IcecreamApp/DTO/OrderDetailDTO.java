@@ -1,5 +1,7 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
+
 public class OrderDetailDTO extends BaseDTO {
 	
 
@@ -7,6 +9,12 @@ public class OrderDetailDTO extends BaseDTO {
 
 	private ProductDTO product;
 	
+	public OrderDetailDTO(long id, Date modifiedDate, int quantity, ProductDTO product) {
+		super(id, modifiedDate);
+		this.quantity = quantity;
+		this.product = product;
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}

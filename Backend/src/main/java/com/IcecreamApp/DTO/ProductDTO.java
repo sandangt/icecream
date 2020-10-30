@@ -1,6 +1,7 @@
 package com.IcecreamApp.DTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.IcecreamApp.systemConstant.EStatus;
@@ -20,6 +21,17 @@ public class ProductDTO extends BaseDTO {
 	
     private List<FeedbackDTO> feedbacks = new ArrayList<>();
     
+	public ProductDTO(long id, Date modifiedDate, String name, String description, String image, double price,
+			EStatus status, List<FeedbackDTO> feedbacks) {
+		super(id, modifiedDate);
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.price = price;
+		this.status = status;
+		this.feedbacks = feedbacks;
+	}
+
 	public String getName() {
 		return name;
 	}

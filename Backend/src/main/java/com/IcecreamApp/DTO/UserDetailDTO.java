@@ -18,6 +18,17 @@ public class UserDetailDTO extends BaseDTO {
     
     private String avatar;
     
+	public UserDetailDTO(long id, java.util.Date modifiedDate, String firstname, String lastname, String address,
+			EGender gender, Date birthday, String avatar) {
+		super(id, modifiedDate);
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.address = address;
+		this.gender = gender;
+		this.birthday = birthday;
+		this.avatar = avatar;
+	}
+
 	public String getFullname() {
 		return (this.firstname + " " + this.lastname);
 	}

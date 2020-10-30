@@ -154,8 +154,8 @@ public class User extends Base implements ForeignConnection<User> {
 	@Override
 	public void setForeignKey(User entity) {
 		this.userDetail = entity.userDetail;
-		this.feedbacks.addAll(entity.feedbacks);
-		this.orders.addAll(entity.orders);
+		this.feedbacks = entity.feedbacks;
+		this.orders = entity.orders;
 	}
     
 }

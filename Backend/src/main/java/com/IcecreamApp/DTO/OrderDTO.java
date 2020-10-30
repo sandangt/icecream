@@ -1,5 +1,6 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
 import java.util.List;
 
 import com.IcecreamApp.systemConstant.EStatus;
@@ -15,6 +16,16 @@ public class OrderDTO extends BaseDTO {
 	private UserDTO user;	
 
 	private List<OrderDetailDTO> orderDetails;
+
+	public OrderDTO(long id, Date modifiedDate, long code, String paymentMethod, EStatus status, UserDTO user,
+			List<OrderDetailDTO> orderDetails) {
+		super(id, modifiedDate);
+		this.code = code;
+		this.paymentMethod = paymentMethod;
+		this.status = status;
+		this.user = user;
+		this.orderDetails = orderDetails;
+	}
 
 	public long getCode() {
 		return code;

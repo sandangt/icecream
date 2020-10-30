@@ -126,7 +126,6 @@ public class Product extends Base implements ForeignConnection<Product>{
 	}
 
 	public void setOrderDetails(List<OrderDetail> orderDetails) {
-//		this.orderDetails.addAll(orderDetails);
 		this.orderDetails = orderDetails;
 	}
 
@@ -140,8 +139,8 @@ public class Product extends Base implements ForeignConnection<Product>{
 
 	@Override
 	public void setForeignKey(Product entity) {
-		this.feedbacks.addAll(entity.feedbacks); 
-		this.orderDetails.addAll(entity.orderDetails);
+		this.feedbacks = entity.feedbacks; 
+		this.orderDetails = entity.orderDetails;
 	}
 
 }

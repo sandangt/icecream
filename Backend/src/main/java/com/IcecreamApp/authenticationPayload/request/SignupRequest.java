@@ -1,4 +1,4 @@
-package com.IcecreamApp.payload.request;
+package com.IcecreamApp.authenticationPayload.request;
 
 import java.util.Set;
 

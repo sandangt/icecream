@@ -1,5 +1,7 @@
 package com.IcecreamApp.DTO;
 
+import java.util.Date;
+
 public class FeedbackDTO extends BaseDTO {
 
 	private String title;
@@ -7,6 +9,13 @@ public class FeedbackDTO extends BaseDTO {
 	private String content;
 
 	private UserDTO user;
+
+	public FeedbackDTO(long id, Date modifiedDate, String title, String content, UserDTO user) {
+		super(id, modifiedDate);
+		this.title = title;
+		this.content = content;
+		this.user = user;
+	}
 
 	public String getTitle() {
 		return title;

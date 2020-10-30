@@ -1,4 +1,4 @@
-package com.IcecreamApp.payload.response;
+package com.IcecreamApp.authenticationPayload.response;
 
 import java.util.List;
 

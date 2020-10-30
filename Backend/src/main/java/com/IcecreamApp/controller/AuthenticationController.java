@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.entity.Role;
 import com.IcecreamApp.entity.User;
-import com.IcecreamApp.payload.request.LoginRequest;
-import com.IcecreamApp.payload.request.SignupRequest;
-import com.IcecreamApp.payload.response.JwtResponse;
-import com.IcecreamApp.payload.response.MessageResponse;
+import com.IcecreamApp.authenticationPayload.request.LoginRequest;
+import com.IcecreamApp.authenticationPayload.request.SignupRequest;
+import com.IcecreamApp.authenticationPayload.response.JwtResponse;
+import com.IcecreamApp.authenticationPayload.response.MessageResponse;
 import com.IcecreamApp.repository.RoleRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.security.ApplicationUser;

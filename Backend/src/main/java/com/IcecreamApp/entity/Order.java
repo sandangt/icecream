@@ -99,12 +99,11 @@ public class Order extends Base implements ForeignConnection<Order>{
 	}
 
 	public void setOrderDetails(List<OrderDetail> orderDetails) {
-//		this.orderDetails.addAll(orderDetails);
 		this.orderDetails = orderDetails;
 	}
 
 	@Override
 	public void setForeignKey(Order entity) {
-		this.orderDetails.addAll(entity.orderDetails);
+		this.orderDetails = entity.orderDetails;
 	}
 }

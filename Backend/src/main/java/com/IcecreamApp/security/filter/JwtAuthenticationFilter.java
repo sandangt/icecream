@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.IcecreamApp.payload.request.LoginRequest;
+import com.IcecreamApp.authenticationPayload.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

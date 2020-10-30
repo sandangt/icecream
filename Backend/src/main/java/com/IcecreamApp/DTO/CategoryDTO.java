@@ -1,6 +1,7 @@
 package com.IcecreamApp.DTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CategoryDTO extends BaseDTO {
@@ -9,7 +10,12 @@ public class CategoryDTO extends BaseDTO {
 	
     private List<ProductDTO> products = new ArrayList<>();
 	
-	
+	public CategoryDTO(long id, Date modifiedDate, String name, List<ProductDTO> products) {
+		super(id, modifiedDate);
+		this.name = name;
+		this.products = products;
+	}
+
 	public String getName() {
 		return name;
 	}
