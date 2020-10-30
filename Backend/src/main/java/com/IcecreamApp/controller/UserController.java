@@ -59,4 +59,9 @@ public class UserController {
     	return this.userService.createDTO(user);
     }
     
+    @GetMapping(value="/test")
+    public List<UserDTO> read() {
+    	return this.userService.readDTO();
+    }
+    
 }

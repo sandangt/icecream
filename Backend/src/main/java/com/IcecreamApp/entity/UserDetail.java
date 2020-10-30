@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "user_details")
-public class UserDetail extends Base { 
+public class UserDetail extends Base{ 
     
-    /**
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3166009761593242165L; 
-	
+	private static final long serialVersionUID = 1L;
+
 	@Column(name="firstname", columnDefinition="VARCHAR(100)")
     private String firstname;
 	
@@ -50,12 +50,13 @@ public class UserDetail extends Base {
     @JoinColumn(name="user_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     private User user;
-	
-    public UserDetail() {
-    }
+	public UserDetail() {
+		
+	}
     
-    public UserDetail(String firstname, String lastname, String address, EGender gender, Date birthday, String avatar, User user) {
-		this.firstname = firstname;
+    public UserDetail(Long id, String firstname, String lastname, String address, EGender gender, Date birthday, String avatar, User user) {
+		this.id = id;
+    	this.firstname = firstname;
 		this.lastname = lastname;
 		this.address = address;
 		this.gender = gender;

@@ -13,8 +13,10 @@ public class CategoryConverter {
 	public static CategoryDTO toDTO(Category entity) {
 
 		List<ProductDTO> products = new ArrayList<>();
-		for (Product i : entity.getProducts()) {
-			products.add(ProductConverter.toDTO(i));
+		if (entity.getProducts() != null) {
+			for (Product i : entity.getProducts()) {
+				products.add(ProductConverter.toDTO(i));
+			}
 		}
 		return new CategoryDTO(entity.getId(), entity.getModifiedDate(), entity.getName(), products);
 		
@@ -23,6 +25,6 @@ public class CategoryConverter {
 	public static Category toEntity(CategoryDTO dto) {
 		if (dto == null)
 			return null;
-		return new Category(dto.getName());
+		return new Category(dto.getId(), dto.getName());
 	}
 }

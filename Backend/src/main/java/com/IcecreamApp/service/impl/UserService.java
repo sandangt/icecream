@@ -1,5 +1,7 @@
 package com.IcecreamApp.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -61,6 +63,15 @@ public class UserService extends GeneralService<User, UserRepository> implements
 		System.out.println("username: " + user.getUserName());
 		this.repository.save(user);
 		return userDTO;
+	}
+
+	@Override
+	public List<UserDTO> readDTO() {
+		List<UserDTO> listUser = new ArrayList<>();
+		for (User i : repository.findAll()) {
+			listUser.add(UserConverter.toDTO(i));
+		}
+		return listUser;
 	}
 
 //	@Override

@@ -20,9 +20,10 @@ public class FAQ extends Base {
 	private String answer;
 
 	public FAQ() {
+		
 	}
-	
-	public FAQ(String question, String answer) {
+	public FAQ(Long id, String question, String answer) {
+		this.id = id;
 		this.question = question;
 		this.answer = answer;
 	}

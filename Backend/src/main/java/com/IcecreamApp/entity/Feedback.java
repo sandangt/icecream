@@ -55,9 +55,11 @@ public class Feedback extends Base {
 	private Product product;
 
 	public Feedback() {
+		
 	}
 	
-	public Feedback(String title, String content, User user, Product product) {
+	public Feedback(Long id, String title, String content, User user, Product product) {
+		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.user = user;

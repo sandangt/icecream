@@ -20,7 +20,8 @@ public class FeedbackConverter {
 			return null;
 		Product product = new Product();
 		product.setId(dto.getProductId());
-		return new Feedback(dto.getTitle(), 
+		return new Feedback(dto.getId(),
+				dto.getTitle(), 
 				dto.getContent(), 
 				UserConverter.toEntity(dto.getUser()),
 				product);

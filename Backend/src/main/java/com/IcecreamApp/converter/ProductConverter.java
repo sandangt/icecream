@@ -27,7 +27,6 @@ public class ProductConverter {
 				entity.getStatus(), 
 				feedbacks, 
 				entity.getCategory().getId());
-		
 	}
 
 	public static Product toEntity(ProductDTO dto) {
@@ -35,7 +34,8 @@ public class ProductConverter {
 			return null;
 		Category category = new Category();
 		category.setId(dto.getCategoryId());
-		return new Product(dto.getName(), 
+		return new Product(dto.getId(),
+				dto.getName(), 
 				dto.getDescription(),
 				dto.getImage(),
 				dto.getPrice(),

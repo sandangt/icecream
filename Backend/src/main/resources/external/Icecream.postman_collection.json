@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bb43e9fb-a0db-4c60-8e78-5117cf390e4f",
+		"_postman_id": "8d7b26e7-864c-431c-b604-34a035e198d4",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,14 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDQ0NTIwLCJleHAiOjE2MDQxMzA5MjB9.nxE18Zvual9POEcU6aPnYY8nKjHRmeBQQJ5ht1rAD4tBYzxfPTAy5qovBypodh-uTdXhbdtRi0zFbZJVWAx_oQ",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -199,7 +206,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZEJvd2llIiwiaWF0IjoxNjAzODk5ODUxLCJleHAiOjE2MDM5ODYyNTF9.IcGyfLnft7-1J44JC-inOt3llFUcUK15uHe2fb9Ga8w0_o_Pcv6Afy4fH50W3ab34qaoNJO2DZYv5rpF8KOrQA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDUxMzAzLCJleHAiOjE2MDQxMzc3MDN9.V9Fj2kejPcgsFyJ5Iv4Kn6eKNOA4_4YDYfIA8GlX4FzM9H_3oJpiWdHQa3bqNN_Cfo1pNuy-6u5buPg2vxXjQA",
 							"type": "string"
 						}
 					]
@@ -1501,7 +1508,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\" : \"DavidBowie\",\n    \"password\" : \"1234\"\n}",
+					"raw": "{\n    \"username\" : \"SanDang\",\n    \"password\" : \"1234\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1601,6 +1608,105 @@
 					]
 				},
 				"description": "logout"
+			},
+			"response": []
+		},
+		{
+			"name": "create userdto",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDU1MzYxLCJleHAiOjE2MDQxNDE3NjF9.Q8NBNxkyPL3mvCUmgtQivyX2v4eypDSwVKfJZ8PEY4KmzpqVllBYh7qjFGGDiGaxw-FSqC3TJbqGDVMPRyfixQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"SonDang\",\n    \"email\" : \"sondang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"3\"\n    }]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"test"
+					]
+				},
+				"description": "create userdto"
+			},
+			"response": []
+		},
+		{
+			"name": "create productdto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\" : \"algorithms\",\r\n    \"image\" : \"/my/image\",\r\n    \"name\" : \"3 simple pieces of Operating system\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"category\" : {\r\n        \"id\" : \"1\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read all userdto",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDU2MjI0LCJleHAiOjE2MDQxNDI2MjR9.G-FWTgZdV6_NFUGvRrLfRA9Wdiklr0cizyIv1SpYsy0beIj7rOVMjiRIFFjbe80ocgBEsGqOesFtnYs7E40qUA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"test"
+					]
+				},
+				"description": "read all userdto"
 			},
 			"response": []
 		}

@@ -36,6 +36,7 @@ public class Role extends Base implements ForeignConnection<Role> {
 	private Set<User> users = new HashSet<>();
 	
 	public Role() {
+		
 	}
 	
 	public Role(Long id, ERole name) {

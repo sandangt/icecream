@@ -53,8 +53,8 @@ public class Order extends Base implements ForeignConnection<Order>{
 
 	public Order() {
 	}
-	
-	public Order(String code, String paymentMethod, EStatus status, User user) {
+	public Order(Long id, String code, String paymentMethod, EStatus status, User user) {
+		this.id = id;
 		this.code = code;
 		this.paymentMethod = paymentMethod;
 		this.status = status;

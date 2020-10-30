@@ -62,8 +62,8 @@ public class Product extends Base implements ForeignConnection<Product>{
     
 	public Product() {
 	}
-	
-	public Product(String name, String description, String image, double price, EStatus status, Category category) {
+	public Product(Long id, String name, String description, String image, double price, EStatus status, Category category) {
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.image = image;

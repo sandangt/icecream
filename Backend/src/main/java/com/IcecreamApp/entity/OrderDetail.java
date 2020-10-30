@@ -36,9 +36,10 @@ public class OrderDetail extends Base {
 	private Product product;
 
 	public OrderDetail() {
+		
 	}
-	
-	public OrderDetail(int quantity, Order order, Product product) {
+	public OrderDetail(Long id, Integer quantity, Order order, Product product) {
+		this.id = id;
 		this.quantity = quantity;
 		this.order = order;
 		this.product = product;

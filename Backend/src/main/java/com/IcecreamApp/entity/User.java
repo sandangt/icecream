@@ -70,8 +70,8 @@ public class User extends Base implements ForeignConnection<User> {
 	
 	public User() {
 	}
-
-	public User(String username, String email, String password, EStatus status, Set<Role> roles) {
+	public User(Long id, String username, String email, String password, EStatus status, Set<Role> roles) {
+		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.password = password;

@@ -123,7 +123,7 @@ public class AuthenticationController {
 				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 		roles.add(userRole);
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
+		User user = new User(null, signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
 				EStatus.AVAILABLE,new HashSet<Role>());
 		
 		user.setRoles(roles);

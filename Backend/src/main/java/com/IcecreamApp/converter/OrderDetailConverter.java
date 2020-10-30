@@ -16,6 +16,6 @@ public class OrderDetailConverter {
 		Order order = new Order();
 		order.setId(dto.getOrderId());
 		
-		return new OrderDetail(dto.getQuantity(), order, ProductConverter.toEntity(dto.getProduct()));
+		return new OrderDetail(dto.getId(), dto.getQuantity(), order, ProductConverter.toEntity(dto.getProduct()));
 	}
 }

@@ -33,8 +33,8 @@ public class Category extends Base implements ForeignConnection<Category> {
 	
 	public Category() {
 	}
-	
-	public Category(String name) {
+	public Category(Long id, String name) {
+		this.id = id;
 		this.name = name;
 	}
 	

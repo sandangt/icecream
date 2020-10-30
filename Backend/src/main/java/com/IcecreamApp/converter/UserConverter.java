@@ -35,6 +35,6 @@ public class UserConverter {
 			roles.add(RoleConverter.toEntity(i));
 		}
 		
-		return new User(dto.getUsername(), dto.getEmail(), dto.getPassword(), dto.getStatus(), roles);
+		return new User(dto.getId(), dto.getUsername(), dto.getEmail(), dto.getPassword(), dto.getStatus(), roles);
 	}
 }

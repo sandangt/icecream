@@ -12,6 +12,6 @@ public class FAQConverter {
 	public static FAQ toEntity(FAQDTO dto) {
 		if (dto == null) 
 			return null;
-		return new FAQ(dto.getQuestion(), dto.getAnswer());
+		return new FAQ(dto.getId(), dto.getQuestion(), dto.getAnswer());
 	}
 }
