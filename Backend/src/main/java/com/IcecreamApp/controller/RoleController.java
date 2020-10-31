@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IcecreamApp.entity.Role;
+import com.IcecreamApp.DTO.RoleDTO;
 import com.IcecreamApp.service.IRoleService;
 
 @RestController
@@ -23,23 +23,23 @@ public class RoleController {
 	private IRoleService roleService;
 	
     @GetMapping
-    public List<Role> getAllRole() {        
+    public List<RoleDTO> getAllRole() {        
     	return roleService.readAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Role getRoleById(@PathVariable("id") Long id) {
+    public RoleDTO getRoleById(@PathVariable("id") Long id) {
     	return roleService.readById(id);
     }
     
     @PostMapping
-    public Role createRole(@RequestBody Role role) {
-    	return this.roleService.create(role);
+    public RoleDTO createRole(@RequestBody RoleDTO roleDTO) {
+    	return this.roleService.create(roleDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public Role updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
-    	return this.roleService.update(id, role);
+    public RoleDTO updateRole(@PathVariable("id") Long id, @RequestBody RoleDTO roleDTO) {
+    	return this.roleService.update(id, roleDTO);
     }
 
     @DeleteMapping(value = "/{id}")

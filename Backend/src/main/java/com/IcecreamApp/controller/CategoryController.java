@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IcecreamApp.entity.Category;
+import com.IcecreamApp.DTO.CategoryDTO;
 import com.IcecreamApp.service.ICategoryService;
 
 @RestController
@@ -23,23 +23,23 @@ public class CategoryController {
 	private ICategoryService categoryService;
 	
     @GetMapping
-    public List<Category> getAllCategories() {        
+    public List<CategoryDTO> getAllCategories() {        
     	return categoryService.readAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Category getCategoryById(@PathVariable("id") Long id) {
+    public CategoryDTO getCategoryById(@PathVariable("id") Long id) {
     	return categoryService.readById(id);
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-    	return this.categoryService.create(category);
+    public CategoryDTO createCategory(@RequestBody CategoryDTO categoryDTO) {
+    	return this.categoryService.create(categoryDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public Category updateCategory(@PathVariable("id") Long id, @RequestBody Category category) {
-    	return this.categoryService.update(id, category);
+    public CategoryDTO updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDTO categoryDTO) {
+    	return this.categoryService.update(id, categoryDTO);
     }
 
     @DeleteMapping(value = "/{id}")

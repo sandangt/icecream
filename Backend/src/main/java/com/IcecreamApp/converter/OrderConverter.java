@@ -10,7 +10,7 @@ import com.IcecreamApp.entity.OrderDetail;
 import com.IcecreamApp.entity.User;
 
 public class OrderConverter {
-	public OrderDTO toDTO(Order entity) {
+	public static OrderDTO toDTO(Order entity) {
 		if (entity == null)
 			return null;
 		List<OrderDetailDTO> orderDetails = new ArrayList<>();
@@ -28,7 +28,7 @@ public class OrderConverter {
 				orderDetails);
 	}
 	
-	public Order toEntity(OrderDTO dto) {
+	public static Order toEntity(OrderDTO dto) {
 		if (dto == null)
 			return null;
 		User user = UserConverter.toEntity(dto.getUser());

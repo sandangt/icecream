@@ -1,8 +1,19 @@
 package com.IcecreamApp.service;
 
-import com.IcecreamApp.entity.Role;
-import com.IcecreamApp.repository.RoleRepository;
+import java.util.List;
 
-public interface IRoleService extends IGeneralService<Role, RoleRepository> {
+import com.IcecreamApp.DTO.RoleDTO;
+
+public interface IRoleService {
+
+	RoleDTO create(RoleDTO roleDTO);
+
+	List<RoleDTO> readAll();
+
+	RoleDTO readById(long id);
+
+	RoleDTO update(long id, RoleDTO roleDTO);
+
+	void delete(long id);
 
 }

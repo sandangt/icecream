@@ -2,16 +2,18 @@ package com.IcecreamApp.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.IcecreamApp.DTO.UserDTO;
-import com.IcecreamApp.entity.User;
-import com.IcecreamApp.repository.UserRepository;
 
-public interface IUserService extends IGeneralService<User, UserRepository> {
+public interface IUserService {
 
-	public UserDTO createDTO(@RequestBody UserDTO userDTO);
+	UserDTO create(UserDTO userDTO);
 
-	public List<UserDTO> readDTO();
-	
+	List<UserDTO> readAll();
+
+	UserDTO readById(long id);
+
+	UserDTO update(long id, UserDTO userDTO);
+
+	void delete(long id);
+
 }

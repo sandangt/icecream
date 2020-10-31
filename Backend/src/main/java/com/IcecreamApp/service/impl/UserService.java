@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.UserDTO;
@@ -14,7 +17,61 @@ import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
 
 @Service
-public class UserService extends GeneralService<User, UserRepository> implements IUserService {
+public class UserService implements IUserService {
+
+	@Autowired
+	private UserRepository repository;
+	
+	private String entityName = "User";
+	
+	Logger log = LoggerFactory.getLogger(CategoryService.class);
+	
+	@Override
+	public List<UserDTO> readAll() {
+		
+		List<UserDTO> users = new ArrayList<>();
+		
+    	for (User i : repository.findAll()) {
+    		users.add(UserConverter.toDTO(i));
+    	}
+    	return users;
+	}
+
+	@Override
+	public UserDTO readById(long id) {
+    	User user = repository.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
+    	return UserConverter.toDTO(user);
+	}
+
+	@Override
+	public UserDTO create(UserDTO userDTO) {
+		repository.save(UserConverter.toEntity(userDTO));
+		return userDTO;
+	}	
+	
+	@Override
+	public UserDTO update(long id, UserDTO userDTO) {
+
+//		Optional<Role> currentEntityWrapper = this.repository.findById(id);
+//
+//	    if (!currentEntityWrapper.isPresent()) {
+//	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//	    }
+//	    entity.setForeignKey(currentEntityWrapper.get());
+//	    System.out.println(currentEntityWrapper.get().getUsers());
+//	    this.repository.saveAndFlush(entity);
+//		return new ResponseEntity<>(entity, HttpStatus.OK);
+		
+		Optional<User> currentEntityWrapper = repository.findById(id);
+		if (!currentEntityWrapper.isPresent()) {
+			throw new ResourceNotFoundException(this.entityName, id);
+	    }
+		User user = UserConverter.toEntity(userDTO);
+		user.setForeignKey(currentEntityWrapper.get());
+		this.repository.save(user);
+		return userDTO;
+	}
 	
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
@@ -27,51 +84,13 @@ public class UserService extends GeneralService<User, UserRepository> implements
 //        repository.delete(currentUser);
 //        return new ResponseEntity<>(currentUser, HttpStatus.OK);
         
-        Optional<User> currentUserWrapper = repository.findById(id);
-		if (!currentUserWrapper.isPresent()) {
-			throw new ResourceNotFoundException(this.entityName, id);
-	    }
-        User currentUser = currentUserWrapper.get();
-        currentUserWrapper.get().getRoles().remove(currentUser);
-        repository.delete(currentUser);
-	}
-
-	@Override
-	public User update(long id, User entity) {
-
-//		Optional<User> currentEntityWrapper = this.repository.findById(id);
-//
-//	    if (!currentEntityWrapper.isPresent()) {
-//	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//	    }
-//	    entity.setForeignKey(currentEntityWrapper.get());
-//	    this.repository.saveAndFlush(entity);
-//		return new ResponseEntity<>(entity, HttpStatus.OK);
-		
-		Optional<User> currentEntityWrapper = repository.findById(id);
+        Optional<User> currentEntityWrapper = repository.findById(id);
 		if (!currentEntityWrapper.isPresent()) {
 			throw new ResourceNotFoundException(this.entityName, id);
 	    }
-		entity.setForeignKey(currentEntityWrapper.get());
-		return this.repository.save(entity);
-	}
-
-	@Override
-	public UserDTO createDTO(UserDTO userDTO) {
-		User user = UserConverter.toEntity(userDTO);
-		System.out.println("password: " + user.getPassword());
-		System.out.println("username: " + user.getUserName());
-		this.repository.save(user);
-		return userDTO;
-	}
-
-	@Override
-	public List<UserDTO> readDTO() {
-		List<UserDTO> listUser = new ArrayList<>();
-		for (User i : repository.findAll()) {
-			listUser.add(UserConverter.toDTO(i));
-		}
-		return listUser;
+        User currentUser = currentEntityWrapper.get();
+        currentEntityWrapper.get().getRoles().remove(currentUser);
+        repository.delete(currentUser);
 	}
 
 //	@Override

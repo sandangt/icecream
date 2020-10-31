@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.UserDTO;
-import com.IcecreamApp.entity.User;
 import com.IcecreamApp.service.IUserService;
 
 @RestController
@@ -25,27 +24,27 @@ public class UserController {
 
     @GetMapping
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<User> getAllUser() {        
+    public List<UserDTO> getAllUser() {        
     	return userService.readAll();
     }
 
     @GetMapping(value = "/{id}")
 //    @PreAuthorize("hasAuthority('USER_READ')")
-    public User getUserById(@PathVariable("id") Long id) {
+    public UserDTO getUserById(@PathVariable("id") Long id) {
     	return userService.readById(id);
     }
 
     @PostMapping
 //    @PreAuthorize("hasAuthority('USER_WRITE')")
-    public User createUser(@RequestBody User user) {
-    	return this.userService.create(user);
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+    	return this.userService.create(userDTO);
     }
     
 
     @PutMapping(value = "/{id}")
 //    @PreAuthorize("hasAuthority('USER_WRITE')")
-    public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-    	return this.userService.update(id, user);
+    public UserDTO updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+    	return this.userService.update(id, userDTO);
     }
 
     @DeleteMapping(value = "/{id}")	
@@ -53,15 +52,5 @@ public class UserController {
     public void deleteUser(@PathVariable("id") Long id) {
     	this.userService.delete(id);
     }
-    
-    @PostMapping(value="/test")
-    public UserDTO createUser(@RequestBody UserDTO user) {
-    	return this.userService.createDTO(user);
-    }
-    
-    @GetMapping(value="/test")
-    public List<UserDTO> read() {
-    	return this.userService.readDTO();
-    }
-    
+        
 }

@@ -1,8 +1,19 @@
 package com.IcecreamApp.service;
 
-import com.IcecreamApp.entity.Feedback;
-import com.IcecreamApp.repository.FeedbackRepository;
+import java.util.List;
 
-public interface IFeedbackService extends IGeneralService<Feedback, FeedbackRepository> {
+import com.IcecreamApp.DTO.FeedbackDTO;
+
+public interface IFeedbackService {
+
+	FeedbackDTO create(FeedbackDTO feedbackDTO);
+
+	List<FeedbackDTO> readAll();
+
+	FeedbackDTO readById(long id);
+
+	FeedbackDTO update(long id, FeedbackDTO feedbackDTO);
+
+	void delete(long id);
 	
 }

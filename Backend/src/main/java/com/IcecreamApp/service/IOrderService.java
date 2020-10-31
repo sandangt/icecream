@@ -1,8 +1,19 @@
 package com.IcecreamApp.service;
 
-import com.IcecreamApp.entity.Order;
-import com.IcecreamApp.repository.OrderRepository;
+import java.util.List;
 
-public interface IOrderService extends IGeneralService<Order, OrderRepository> {
+import com.IcecreamApp.DTO.OrderDTO;
+
+public interface IOrderService {
+
+	OrderDTO create(OrderDTO orderDTO);
+
+	List<OrderDTO> readAll();
+
+	OrderDTO readById(long id);
+
+	OrderDTO update(long id, OrderDTO orderDTO);
+
+	void delete(long id);
 
 }

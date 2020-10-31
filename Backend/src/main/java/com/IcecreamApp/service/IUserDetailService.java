@@ -1,8 +1,19 @@
 package com.IcecreamApp.service;
 
-import com.IcecreamApp.entity.UserDetail;
-import com.IcecreamApp.repository.UserDetailRepository;
+import java.util.List;
 
-public interface IUserDetailService extends IGeneralService<UserDetail, UserDetailRepository> {
+import com.IcecreamApp.DTO.UserDetailDTO;
+
+public interface IUserDetailService {
+
+	UserDetailDTO create(UserDetailDTO userDetailDTO);
+
+	List<UserDetailDTO> readAll();
+
+	UserDetailDTO readById(long id);
+
+	UserDetailDTO update(long id, UserDetailDTO userDetailDTO);
+
+	void delete(long id);
 
 }

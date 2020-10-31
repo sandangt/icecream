@@ -1,8 +1,19 @@
 package com.IcecreamApp.service;
 
-import com.IcecreamApp.entity.Category;
-import com.IcecreamApp.repository.CategoryRepository;
+import java.util.List;
 
-public interface ICategoryService extends IGeneralService<Category, CategoryRepository>{
+import com.IcecreamApp.DTO.CategoryDTO;
+
+public interface ICategoryService {
+
+	List<CategoryDTO> readAll();
+
+	CategoryDTO readById(long id);
+
+	CategoryDTO create(CategoryDTO categoryDTO);
+
+	CategoryDTO update(long id, CategoryDTO categoryDTO);
+
+	void delete(long id);
 	
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IcecreamApp.entity.Product;
+import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.service.IProductService;
 
 @RestController
@@ -23,23 +23,23 @@ public class ProductController {
 	private IProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {        
+    public List<ProductDTO> getAllProducts() {        
     	return productService.readAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public ProductDTO getProductById(@PathVariable("id") Long id) {
     	return productService.readById(id);
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-    	return this.productService.create(product);
+    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
+    	return this.productService.create(productDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-    	return this.productService.update(id, product);
+    public ProductDTO updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO productDTO) {
+    	return this.productService.update(id, productDTO);
     }
 
     @DeleteMapping(value = "/{id}")

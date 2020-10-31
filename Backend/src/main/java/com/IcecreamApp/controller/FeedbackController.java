@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.IcecreamApp.entity.Feedback;
+import com.IcecreamApp.DTO.FeedbackDTO;
 import com.IcecreamApp.service.IFeedbackService;
 
 @RestController
@@ -23,23 +23,23 @@ public class FeedbackController {
 	private IFeedbackService feedbackService;
 	
 	@GetMapping
-	public List<Feedback> getAllFeedbacks() {        
+	public List<FeedbackDTO> getAllFeedbacks() {        
 		return feedbackService.readAll();
 	}
 
 	@GetMapping(value = "/{id}")
-	public Feedback getFeedbackById(@PathVariable("id") Long id) {
+	public FeedbackDTO getFeedbackById(@PathVariable("id") Long id) {
 		return feedbackService.readById(id);
 	}
 
 	@PostMapping
-	public Feedback createFeedback(@RequestBody Feedback feedback) {
-		return this.feedbackService.create(feedback);
+	public FeedbackDTO createFeedback(@RequestBody FeedbackDTO feedbackDTO) {
+		return this.feedbackService.create(feedbackDTO);
 	}
 
 	@PutMapping(value = "/{id}")
-	public Feedback updateFeedback(@PathVariable("id") Long id, @RequestBody Feedback feedback) {
-		return this.feedbackService.update(id, feedback);
+	public FeedbackDTO updateFeedback(@PathVariable("id") Long id, @RequestBody FeedbackDTO feedbackDTO) {
+		return this.feedbackService.update(id, feedbackDTO);
 	}
 
 	@DeleteMapping(value = "/{id}")

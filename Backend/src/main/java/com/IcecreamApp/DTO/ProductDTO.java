@@ -22,6 +22,7 @@ public class ProductDTO extends BaseDTO {
      * Foreign key
      */
     private List<FeedbackDTO> feedbacks = new ArrayList<>();
+    
     private long categoryId;
     private String categoryName;
     

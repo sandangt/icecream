@@ -1,8 +1,20 @@
 package com.IcecreamApp.service;
 
-import com.IcecreamApp.entity.Product;
-import com.IcecreamApp.repository.ProductRepository;
+import java.util.List;
 
-public interface IProductService extends IGeneralService<Product, ProductRepository> {
+import com.IcecreamApp.DTO.ProductDTO;
+
+public interface IProductService {
+
+	ProductDTO create(ProductDTO productDTO);
+
+	List<ProductDTO> readAll();
+
+	ProductDTO readById(long id);
+
+	ProductDTO update(long id, ProductDTO productDTO);
+
+	void delete(long id);
+
 
 }

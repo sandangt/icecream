@@ -1,6 +1,13 @@
 use Icecream;
 
 insert into roles (name) values ("ROLE_ADMIN");
+
+insert into users (username, email, password, status) values ("SanDang", "sandang@hotmail.com", "1234", "1");
+
+
+insert into user_role (user_id, role_id) values ("1", "1");
+
+/*
 insert into roles (name) values ("ROLE_STAFF");
 insert into roles (name) values ("ROLE_USER");
 
@@ -8,13 +15,6 @@ insert into categories (name) values ("Electronics");
 insert into categories (name) values ("Mathematics");
 insert into categories (name) values ("Computer science");
 insert into categories (name) values ("Economics");
-
-/*
-insert into users (username, email, password, status) values ("SanDang", "sandang@hotmail.com", SHA1("1234"), "1");
-insert into users (username, email, password, status) values ("JohnDoe", "johndoe@gmail.com", SHA1("1234"), "1");
-insert into users (username, email, password, status) values ("Socrates", "socrates@yahoo.com", SHA1("1234"), "1");
-insert into users (username, email, password, status) values ("DavidBowie", "Bowie@gmail.com", SHA1("1234"), "1");
-*/
 
 insert into users (username, email, password, status) values ("SanDang", "sandang@hotmail.com", "1234", "1");
 insert into users (username, email, password, status) values ("JohnDoe", "johndoe@gmail.com", "1234", "1");
@@ -38,3 +38,4 @@ insert into feedbacks (content,title,user_id, product_id) values ("some contents
 insert into orders (payment_method,status,user_id) values ("cash","1","1"); 
 
 insert into order_details (quantity,order_id,product_id) values (100,1,1);
+*/
