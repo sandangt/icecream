@@ -52,19 +52,19 @@ public class User extends Base implements ForeignConnection<User> {
 	@JsonIgnoreProperties("user")
 	private UserDetail userDetail;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.EAGER, cascade= {CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "user_role", 
 				joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	@JsonIgnoreProperties("users")
 	private Set<Role> roles = new HashSet<>();
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JsonManagedReference(value="feedback-user")
     private List<Feedback> feedbacks = new ArrayList<>();
 
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JsonManagedReference(value="order-user")
 	private List<Order> orders = new ArrayList<>();
 	

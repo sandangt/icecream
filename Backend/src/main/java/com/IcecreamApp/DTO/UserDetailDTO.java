@@ -1,8 +1,10 @@
 package com.IcecreamApp.DTO;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import com.IcecreamApp.systemConstant.EGender;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserDetailDTO extends BaseDTO { 
     
@@ -14,6 +16,7 @@ public class UserDetailDTO extends BaseDTO {
     
     private EGender gender;
     
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date birthday;
     
     private String avatar;

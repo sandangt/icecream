@@ -23,6 +23,7 @@ public class ProductDTO extends BaseDTO {
      */
     private List<FeedbackDTO> feedbacks = new ArrayList<>();
     
+
     private long categoryId;
     private String categoryName;
     

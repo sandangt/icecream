@@ -2,16 +2,22 @@ package com.IcecreamApp.DTO;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class FeedbackDTO extends BaseDTO {
 
 	private String title;
 	
 	private String content;
-
-	private UserDTO user;
 	
-	private long productId;
+	/**
+	 * Foreign keys
+	 */
+	private UserDTO user;
+
 	private String productName;
+	@JsonIgnore
+	private long productId;
 
 	public FeedbackDTO(long id, Date modifiedDate, String title, String content, UserDTO user, String productName) {
 		super(id, modifiedDate);

@@ -19,6 +19,8 @@ public class UserDetailConverter {
 	}
 	
 	public static UserDetail toEntity(UserDetailDTO dto) {
+		if (dto == null) 
+			return null;
 		User user = new User();
 		user.setId(dto.getId());
 		return new UserDetail(dto.getId(),

@@ -3,6 +3,7 @@ package com.IcecreamApp.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -31,7 +32,7 @@ public class Role extends Base implements ForeignConnection<Role> {
 	 * Foreign key section
 	 */
 
-	@ManyToMany(mappedBy="roles", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy="roles", fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JsonIgnoreProperties("roles")
 	private Set<User> users = new HashSet<>();
 	

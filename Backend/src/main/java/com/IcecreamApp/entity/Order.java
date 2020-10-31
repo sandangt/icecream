@@ -47,7 +47,7 @@ public class Order extends Base implements ForeignConnection<Order>{
 	@JsonBackReference(value="order-user")
 	private User user;	
 
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JsonManagedReference(value="order_detail-order")
 	private List<OrderDetail> orderDetails = new ArrayList<>();
 

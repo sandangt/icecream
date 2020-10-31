@@ -8,6 +8,9 @@ public class CategoryDTO extends BaseDTO {
 
 	private String name;
 	
+	/**
+	 * Foreign keys
+	 */
     private List<ProductDTO> products = new ArrayList<>();
 	
 	public CategoryDTO(long id, Date modifiedDate, String name, List<ProductDTO> products) {
