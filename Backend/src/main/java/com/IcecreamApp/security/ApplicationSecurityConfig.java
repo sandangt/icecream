@@ -49,8 +49,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, "/categories/**").hasRole("ADMIN")
         .anyRequest().authenticated()
         .and()
-		.logout()
-        .logoutUrl("/logout")
+		.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/")
         .and()
 		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
 		

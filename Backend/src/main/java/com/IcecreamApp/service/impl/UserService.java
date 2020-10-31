@@ -7,20 +7,32 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.UserDTO;
+import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.converter.UserConverter;
+import com.IcecreamApp.converter.UserDetailConverter;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.exception.ResourceNotFoundException;
+import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
+import com.IcecreamApp.systemConstant.EStatus;
 
 @Service
 public class UserService implements IUserService {
 
 	@Autowired
-	private UserRepository repository;
+	private UserRepository userRepository;
+	@Autowired
+	private UserDetailRepository userDetailRepository;
+	@Autowired
+	private PasswordEncoder encoder;
 	
 	private String entityName = "User";
 	
@@ -31,7 +43,7 @@ public class UserService implements IUserService {
 		
 		List<UserDTO> users = new ArrayList<>();
 		
-    	for (User i : repository.findAll()) {
+    	for (User i : userRepository.findAll()) {
     		users.add(UserConverter.toDTO(i));
     	}
     	return users;
@@ -39,14 +51,14 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserDTO readById(long id) {
-    	User user = repository.findById(id)
+    	User user = userRepository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
     	return UserConverter.toDTO(user);
 	}
 
 	@Override
 	public UserDTO create(UserDTO userDTO) {
-		repository.save(UserConverter.toEntity(userDTO));
+		userRepository.save(UserConverter.toEntity(userDTO));
 		return userDTO;
 	}	
 	
@@ -63,13 +75,13 @@ public class UserService implements IUserService {
 //	    this.repository.saveAndFlush(entity);
 //		return new ResponseEntity<>(entity, HttpStatus.OK);
 		
-		Optional<User> currentEntityWrapper = repository.findById(id);
+		Optional<User> currentEntityWrapper = userRepository.findById(id);
 		if (!currentEntityWrapper.isPresent()) {
 			throw new ResourceNotFoundException(this.entityName, id);
 	    }
 		User user = UserConverter.toEntity(userDTO);
 		user.setForeignKey(currentEntityWrapper.get());
-		this.repository.save(user);
+		this.userRepository.save(user);
 		return userDTO;
 	}
 	
@@ -84,13 +96,43 @@ public class UserService implements IUserService {
 //        repository.delete(currentUser);
 //        return new ResponseEntity<>(currentUser, HttpStatus.OK);
         
-        Optional<User> currentEntityWrapper = repository.findById(id);
+        Optional<User> currentEntityWrapper = userRepository.findById(id);
 		if (!currentEntityWrapper.isPresent()) {
 			throw new ResourceNotFoundException(this.entityName, id);
 	    }
         User currentUser = currentEntityWrapper.get();
         currentEntityWrapper.get().getRoles().remove(currentUser);
-        repository.delete(currentUser);
+        userRepository.delete(currentUser);
+	}
+
+	@Override
+	public ResponseEntity<MessageResponseDTO> changePassword(long id, String[] passwords) {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
+		if (!encoder.matches(passwords[0], user.getPassword())) 
+			return new ResponseEntity<>(new MessageResponseDTO("Incorrect password!"), HttpStatus.NOT_ACCEPTABLE);
+		user.setPassword(encoder.encode(passwords[1]));
+		return new ResponseEntity<>(new MessageResponseDTO("Password updated successfully!"), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<MessageResponseDTO> updateProfile(long id, UserDetailDTO newProfile) {
+		Optional<User> currentEntityWrapper = userRepository.findById(id);
+		if (!currentEntityWrapper.isPresent()) {
+			throw new ResourceNotFoundException(this.entityName, id);
+	    }
+		newProfile.setId(id);
+		userDetailRepository.save(UserDetailConverter.toEntity(newProfile));
+		return new ResponseEntity<>(new MessageResponseDTO("Update profile successfully!"), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<MessageResponseDTO> changeUserStatus(long id, EStatus newStatus) {
+		User user = userRepository.findById(id)
+			.orElseThrow( () -> new ResourceNotFoundException(this.entityName, id));
+		user.setStatus(newStatus);
+		userRepository.save(user);
+		return new ResponseEntity<>(new MessageResponseDTO("Update status successfully!"), HttpStatus.OK);
 	}
 
 //	@Override
