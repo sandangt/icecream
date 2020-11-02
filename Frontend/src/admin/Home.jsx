@@ -1,9 +1,9 @@
 import React from "react";
 
-import Header from "components/admin/header/Header.jsx";
-import Footer from "components/admin/Footer.jsx";
-import Body from "components/admin/body/Body.jsx";
-import Sidebar from "components/admin/sidebar/Sidebar.jsx";
+import Header from "admin/components/header/Header.jsx";
+import Footer from "admin/components/Footer.jsx";
+import Sidebar from "admin/components/sidebar/Sidebar.jsx";
+import Body from "admin/pages/Body.jsx";
 
 class Home extends React.Component {
     render() {

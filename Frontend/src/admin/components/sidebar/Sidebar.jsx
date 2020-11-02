@@ -1,8 +1,8 @@
 import React from "react";
 
-import SidebarShortcut from "components/admin/sidebar/SidebarShortcut.jsx";
-import Navlist from "components/admin/sidebar/Navlist.jsx";
-import SidebarCollapse from "components/admin/sidebar/SidebarCollapse.jsx";
+import SidebarShortcut from "admin/components/sidebar/SidebarShortcut.jsx";
+import Navlist from "admin/components/sidebar/Navlist.jsx";
+import SidebarCollapse from "admin/components/sidebar/SidebarCollapse.jsx";
 
 class Sidebar extends React.Component {
     render() {
