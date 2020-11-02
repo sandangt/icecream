@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "772f6ea0-81ac-44e0-b53d-e551a903cf44",
+		"name": "Customized Icecream",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Update profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb25EYW5nIiwiaWF0IjoxNjA0MTQ1MDkwLCJleHAiOjE2MDQyMzE0OTB9.0F61xBO2ORXJ_qh87dIae0JuzUQyEfFL7YFVwb6NVQmKzgKAgoF9-NorTDEgwzm9eWukXgZzqVzD4e61RGormQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Son\",\n    \"lastname\" : \"Dang\",\n    \"address\" : \"412 Marz\",\n    \"gender\" : \"MALE\",\n    \"birthday\" : \"2020-25-02\",\n    \"avatar\" : \"/my/avatar6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/5/user-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"5",
+						"user-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb25EYW5nIiwiaWF0IjoxNjA0MTQ3MDA0LCJleHAiOjE2MDQyMzM0MDR9.-S1D0QqabB5cz-kB9U9A2wclxkODDFuu3xyqr6F86wlD9D2SOZxPvg0NbeJzfWOFmJA0yhP6BLqSWMh3U3nKbA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    \"1234\",\n    \"12345\"\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/5/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"5",
+						"password"
+					]
+				},
+				"description": "Change password"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8d7b26e7-864c-431c-b604-34a035e198d4",
+		"_postman_id": "be47038f-887a-43fb-aa95-9786b10d5ace",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -16,7 +16,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDQ0NTIwLCJleHAiOjE2MDQxMzA5MjB9.nxE18Zvual9POEcU6aPnYY8nKjHRmeBQQJ5ht1rAD4tBYzxfPTAy5qovBypodh-uTdXhbdtRi0zFbZJVWAx_oQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMwMzk5LCJleHAiOjE2MDQyMTY3OTl9.R84v38o-z75ZyGV_gNbf5eZDGxt7r1620_x4wlSzGzTCgtstVSZnpNrwSZAJwo_xZ42yTzxSfgzmQkudFxLtrQ",
 							"type": "string"
 						}
 					]
@@ -87,7 +87,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"code\" : \"ROLE_ADMIN\"\n}",
+					"raw": "{\n    \"name\" : \"ROLE_ADMIN\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -112,11 +112,21 @@
 		{
 			"name": "create role",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"code\" : \"ROLE_USER\"\n}",
+					"raw": "{\n    \"name\" : \"ROLE_USER\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -141,11 +151,21 @@
 		{
 			"name": "update role by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE2MTkwLCJleHAiOjE2MDQyMDI1OTB9.m6cKMXRm_JMmILZxxzMgiAi9NfKrMlhW28vsDqMG4c9KN79bSpedWaqo0VIxZnoD33rK_7VSlOLLwMINBsjb0w",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : 1,\n    \"code\" : \"ADMINISTRATION\"\n}",
+					"raw": "{\n    \"id\" : 3,\n    \"name\" : \"ROLE_STAFF\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -153,7 +173,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/roles/1",
+					"raw": "http://localhost:8080/roles/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -161,7 +181,7 @@
 					"port": "8080",
 					"path": [
 						"roles",
-						"1"
+						"2"
 					]
 				},
 				"description": "update role by id"
@@ -171,6 +191,16 @@
 		{
 			"name": "delete role by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE2MTkwLCJleHAiOjE2MDQyMDI1OTB9.m6cKMXRm_JMmILZxxzMgiAi9NfKrMlhW28vsDqMG4c9KN79bSpedWaqo0VIxZnoD33rK_7VSlOLLwMINBsjb0w",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -183,7 +213,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/roles/1",
+					"raw": "http://localhost:8080/roles/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -191,7 +221,7 @@
 					"port": "8080",
 					"path": [
 						"roles",
-						"1"
+						"2"
 					]
 				},
 				"description": "delete role by id"
@@ -206,7 +236,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDUxMzAzLCJleHAiOjE2MDQxMzc3MDN9.V9Fj2kejPcgsFyJ5Iv4Kn6eKNOA4_4YDYfIA8GlX4FzM9H_3oJpiWdHQa3bqNN_Cfo1pNuy-6u5buPg2vxXjQA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTM5MDg3LCJleHAiOjE2MDQyMjU0ODd9.TZYnpza7mFBPjxGbxdULawK5QmmmbTnnNDlOfCTJRB_QYq_jfke_ZwDyn3TmK1QWrdolRKQW-4wi4C_JR6x0LQ",
 							"type": "string"
 						}
 					]
@@ -290,11 +320,21 @@
 		{
 			"name": "create user",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"2\"\n    }]\n}",
+					"raw": "{\n    \"username\" : \"JohnDoe\",\n    \"email\" : \"johndoe@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"2\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -319,11 +359,21 @@
 		{
 			"name": "update user by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE3Mzg4LCJleHAiOjE2MDQyMDM3ODh9.BUTCH-H-Ie8QsZPpQvFtjKFhizTg7LXNjJKlNblwqQQWPICwI3JbWeGH4cgzBm03meck3Zsfhz-VMK9ylvyo2g",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : \"1\",\n    \"userName\" : \"JaneDoe\",\n    \"email\" : \"janedoe@hotmail.com\",\n    \"password\" : \"123456789\",\n    \"status\" : \"0\",\n    \"roles\": [ {\n                \"id\": 1,\n                \"code\": \"ROLE_ADMIN\"\n            }, {\n                \"id\" : 2,\n                \"code\": \"ROLE_USER\"\n            }]\n}",
+					"raw": "{\n    \"id\" : \"1\",\n    \"username\" : \"SanDang\",\n    \"email\" : \"sandang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\": [ {\n                \"id\": 1,\n                \"name\": \"ROLE_ADMIN\"\n            }, {\n                \"id\" : 2,\n                \"name\": \"ROLE_USER\"\n            }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -349,11 +399,21 @@
 		{
 			"name": "update user by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMwNzA3LCJleHAiOjE2MDQyMTcxMDd9.fCyCwP5EKYhKg9YdS7P-OXWf489koef0B7vbl-DxfNJAqFOBpQrScKigYLGsEjXX2fu7NSBfQw4lHdDFw71WGg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : 1,\n    \"userName\" : \"SonDang\",\n    \"email\" : \"sondang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"1\",\n        \"code\": \"ROLE_ADMIN\"\n    }]\n}",
+					"raw": "{\n    \"id\" : 2,\n    \"username\" : \"SonDang\",\n    \"email\" : \"sondang@hotmail.com\",\n    \"password\" : \"1234\",\n    \"status\" : \"1\",\n    \"roles\" : [{\n        \"id\" : \"2\"\n    }, {\n        \"id\" : \"1\"\n    }]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -361,7 +421,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/1",
+					"raw": "http://localhost:8080/users/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -369,7 +429,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"1"
+						"2"
 					]
 				},
 				"description": "update user by id"
@@ -379,6 +439,16 @@
 		{
 			"name": "delete user by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE2MTkwLCJleHAiOjE2MDQyMDI1OTB9.m6cKMXRm_JMmILZxxzMgiAi9NfKrMlhW28vsDqMG4c9KN79bSpedWaqo0VIxZnoD33rK_7VSlOLLwMINBsjb0w",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -391,7 +461,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/1",
+					"raw": "http://localhost:8080/users/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -399,7 +469,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"1"
+						"2"
 					]
 				},
 				"description": "delete user by id"
@@ -474,11 +544,21 @@
 		{
 			"name": "create user detail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMwMzk5LCJleHAiOjE2MDQyMTY3OTl9.R84v38o-z75ZyGV_gNbf5eZDGxt7r1620_x4wlSzGzTCgtstVSZnpNrwSZAJwo_xZ42yTzxSfgzmQkudFxLtrQ",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : \"1\",\n    \"fullname\" : \"Dang Thai San\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"1\",\n    \"birthday\" : \"01-01-2020\",\n    \"avatar\" : \"/my/avatar\",\n    \"user\" : {\n        \"id\" : \"1\"\n    }\n}",
+					"raw": "{\n    \"id\" : \"1\",\n    \"fullname\" : \"Dang Thai San\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"1\",\n    \"birthday\" : \"2020-01-01\",\n    \"avatar\" : \"/my/avatar\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -503,11 +583,21 @@
 		{
 			"name": "create user detail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\":\"2\",\n    \"fullname\" : \"Jane Doe\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"0\",\n    \"birthday\" : \"01-01-2020\",\n    \"avatar\" : \"/my/avatar2\",\n    \"user\" : {\n        \"id\" : \"2\"\n    }\n}",
+					"raw": "{\n    \"id\":\"2\",\n    \"firstname\" : \"Jane\",\n    \"lastname\" : \"Doe\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"FEMALE\",\n    \"birthday\" : \"2020-03-02\",\n    \"avatar\" : \"/my/avatar2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -531,11 +621,21 @@
 		{
 			"name": "update user detail by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : \"1\",\n    \"fullname\" : \"Dang Thai Sang\",\n    \"address\" : \"abc str\",\n    \"gender\" : \"1\",\n    \"birthday\" : \"01-01-2020\",\n    \"avatar\" : \"my/avatar\",\n    \"user\" : {\n        \"id\" : 1\n    }\n}",
+					"raw": "{\n    \"id\":\"2\",\n    \"firstname\" : \"John\",\n    \"lastname\" : \"Doe\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"MALE\",\n    \"birthday\" : \"2020-01-02\",\n    \"avatar\" : \"/my/avatar3\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -543,7 +643,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user-details/1",
+					"raw": "http://localhost:8080/user-details/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -551,7 +651,7 @@
 					"port": "8080",
 					"path": [
 						"user-details",
-						"1"
+						"2"
 					]
 				},
 				"description": "update user detail by id"
@@ -599,7 +699,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaXNzIjoiYXV0aDAiLCJleHAiOjE2MDM5Njc3Njd9.qqQ57MDic7HddBP_LJw8Vi9uvpch4G7VSrSxnr_oml5uIGaOpOypKAEDFhwJhwVgJkdHwq5pfGisbW_GpiVt1A",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTI3OTAxLCJleHAiOjE2MDQyMTQzMDF9.mhJ0dc_WTNWOY-X7KvgOzvucyulR0aEV7G_PUsfTbIWvndnRzCz5HWW33Ia35MluYuGDVfzxyyM9bhiSymBsng",
 							"type": "string"
 						}
 					]
@@ -633,6 +733,16 @@
 		{
 			"name": "create category",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMyNzQ0LCJleHAiOjE2MDQyMTkxNDR9.3Nuoh0TlDLWbQYhS-XrRKzrTy3HCWOqH-G_gdWSfiZmBKLil0PnczMUt0mcLLLh1i1pCMDttB7eCUNhXPr5PPQ",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -662,6 +772,16 @@
 		{
 			"name": "update category by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTI3OTAxLCJleHAiOjE2MDQyMTQzMDF9.mhJ0dc_WTNWOY-X7KvgOzvucyulR0aEV7G_PUsfTbIWvndnRzCz5HWW33Ia35MluYuGDVfzxyyM9bhiSymBsng",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -730,7 +850,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaXNzIjoiYXV0aDAiLCJleHAiOjE2MDM5Njg2MDF9.yU-PgYe6YV1IWqhEY42ix0gEmKHqaPtAisNYVy1-cBZaX27DAG_IQISaXHWukZHhH-1-k8agfIhB8ld5s0mySg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
 							"type": "string"
 						}
 					]
@@ -766,6 +886,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE4Mjg1LCJleHAiOjE2MDQyMDQ2ODV9.SnZyQQtte4xjtt4TEE1n-v1Q_27yyz4g7VCCdnDG_TVnFff9Rsk417ayylOD-CWQ_0TSJJ40weDEL-QuGdZFfA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -796,11 +926,21 @@
 		{
 			"name": "create product",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMyNzQ0LCJleHAiOjE2MDQyMTkxNDR9.3Nuoh0TlDLWbQYhS-XrRKzrTy3HCWOqH-G_gdWSfiZmBKLil0PnczMUt0mcLLLh1i1pCMDttB7eCUNhXPr5PPQ",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"description\" : \"Operating system book\",\r\n    \"image\" : \"/my/image\",\r\n    \"name\" : \"3 simple pieces of Operating system\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"category\" : {\r\n        \"id\" : \"1\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"description\" : \"Operating system book\",\r\n    \"image\" : \"/my/image\",\r\n    \"name\" : \"3 simple pieces of Operating system\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"categoryId\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -825,11 +965,21 @@
 		{
 			"name": "create product",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"description\" : \"Data structures and algorithms\",\r\n    \"image\" : \"/my/image2\",\r\n    \"name\" : \"DSA made easy\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"category\" : {\r\n        \"id\" : \"1\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"description\" : \"Data structures and algorithms\",\r\n    \"image\" : \"/my/image2\",\r\n    \"name\" : \"DSA made easy\",\r\n    \"price\" : \"3.6\",\r\n    \"status\" : \"1\",\r\n    \"categoryId\" : \"1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -854,11 +1004,21 @@
 		{
 			"name": "update product by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTI3NjczLCJleHAiOjE2MDQyMTQwNzN9.UePsFaKQ8fPUTCn1ZvlrxIXgJTvaBzy-kNclTpiFfnTzJt1s2GUIXJGHh1mGuwXca2u4O-zwvs_Tg11vk3Pk-g",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 1,\n    \"name\": \"Not event a book\",\n    \"description\": \"sacacacaca s acasca\",\n    \"image\": \"/my/image\",\n    \"price\": 2.5,\n    \"status\": 0,\n    \"category\" : {\n        \"id\" : 1\n    }    \n}",
+					"raw": "{\n    \"id\": 1,\n    \"name\": \"Not event a book\",\n    \"description\": \"sacacacaca s acasca\",\n    \"image\": \"/my/image\",\n    \"price\": 2.5,\n    \"status\": 0,\n    \"categoryId\" : 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -884,6 +1044,16 @@
 		{
 			"name": "delete product by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTI3MDE1LCJleHAiOjE2MDQyMTM0MTV9.7Nl40CeQDjAyhrTa216OtNQEbwxGTHHdoMrvQJWMBu4vD6vLqy7JNVch8_He4hRRE5dFalfcBog9T4CKEU1Ngg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -979,11 +1149,21 @@
 		{
 			"name": "create feedback",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"content\" : \"this is painfully bad\",\n    \"title\" : \"Bad book!\",\n    \"user\" : {\n        \"id\": \"1\"\n    },\n    \"product\": {\n        \"id\": \"1\"\n    }\n}",
+					"raw": "{\n    \"content\" : \"this is painfully bad\",\n    \"title\" : \"Bad book!\",\n    \"user\" : {\n        \"id\": \"1\"\n    },\n    \"productId\": \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1008,11 +1188,21 @@
 		{
 			"name": "create feedback",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"content\" : \"some contents\",\n    \"title\" : \"Good book\",\n    \"user\" : {\n        \"id\" : \"2\"\n    },\n    \"product\": {\n        \"id\": \"1\"\n    }\n}",
+					"raw": "{\n    \"content\" : \"some contents\",\n    \"title\" : \"Good book\",\n    \"user\" : {\n        \"id\" : \"1\"\n    },\n    \"productId\": \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1036,11 +1226,21 @@
 		{
 			"name": "update feedback by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE4NTA1LCJleHAiOjE2MDQyMDQ5MDV9.QzHaQQHw03YBbfhjTXVoRDKFDv90D5aGX7XZBTWAjwTEF61T_cgEFkazv1mLTWikpD9_Apb2kQzl5uI_iS4Btw",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": \"2\",\n    \"title\": \"Not good\",\n    \"content\": \"boring\",\n    \"user\" : {\n        \"id\" : \"1\"\n    },\n    \"product\" : {\n        \"id\": \"1\"\n    }\n}",
+					"raw": "{\n    \"id\": \"1\",\n    \"title\": \"Not good\",\n    \"content\": \"boring\",\n    \"user\" : {\n        \"id\" : \"1\"\n    },\n    \"productId\" : \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1099,6 +1299,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -1128,6 +1338,16 @@
 		{
 			"name": "create order",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -1220,6 +1440,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE4NTA1LCJleHAiOjE2MDQyMDQ5MDV9.QzHaQQHw03YBbfhjTXVoRDKFDv90D5aGX7XZBTWAjwTEF61T_cgEFkazv1mLTWikpD9_Apb2kQzl5uI_iS4Btw",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -1249,11 +1479,21 @@
 		{
 			"name": "create order detail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"code\" : \"012_Eas34\",\r\n    \"quantity\" : 100,\r\n    \"order\" : {\r\n        \"id\" : 1\r\n    },\r\n    \"product\" : {\r\n        \"id\" : 1\r\n    }\r\n}",
+					"raw": "{\r\n    \"quantity\" : 100,\r\n    \"orderId\" : 1,\r\n    \"product\" : {\r\n        \"id\" : 1\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1261,15 +1501,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/order-details/1",
+					"raw": "http://localhost:8080/order-details",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"order-details",
-						"1"
+						"order-details"
 					]
 				},
 				"description": "create order detail"
@@ -1574,7 +1813,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjAzODk4OTMzLCJleHAiOjE2MDM5ODUzMzN9.Ohi7qMzaMBaedeh3W2LDp9VEGNNAo5lzvr8gA19kOzN44x0O9A2bOpieYqrpAzn2crFJOgERjolyzfsvfu8Jaw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNDEzOTQ1MCwiZXhwIjoxNjA0MjI1ODUwfQ.dtC8QtHDSP_ZToDff5BpMMDj_coZ25PXdAzplbFYEaBO4Cx1jcx-4BIRVwqt3mtGpS0b0W_vemgpYNlXOELAeg",
 							"type": "string"
 						}
 					]
@@ -1597,13 +1836,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/logout",
+					"raw": "http://localhost:8080/auth/logout",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"auth",
 						"logout"
 					]
 				},
@@ -1707,6 +1947,91 @@
 					]
 				},
 				"description": "read all userdto"
+			},
+			"response": []
+		},
+		{
+			"name": "signup",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Autho",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"SonDang\",\n    \"email\": \"dangthaison@hotmail.com\",\n    \"password\" : \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "signup"
+			},
+			"response": []
+		},
+		{
+			"name": "update faq",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MjUwOTI2LCJleHAiOjE2MDQzMzczMjZ9.R4DqESSlNXZoEFdV2Qe_zF_haxc8cxTPFkcI3T2YJ27yB4cAG9DYAPMx58S2MpmVgd4DB3Em7pQ3_OVT0icwLg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Autho",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"question\" : \"cascascascscscsacascascasc\",\n    \"answer\": \"scssacascascascascasc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/faq/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"faq",
+						"1"
+					]
+				},
+				"description": "update faq"
 			},
 			"response": []
 		}
