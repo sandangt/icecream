@@ -1,9 +1,10 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 function Header() {
 	return (
 <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-	<a className="navbar-brand" href="#">Icecream</a>
+	<Link className="navbar-brand" to="/">Icecream</Link>
 	<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 		<span className="navbar-toggler-icon"></span>
 	</button>
@@ -11,10 +12,10 @@ function Header() {
 	<div className="collapse navbar-collapse" id="navbarsExampleDefault">
 		<ul className="navbar-nav mr-auto">
 			<li className="nav-item active">
-				<a className="nav-link" href="#">Home<span className="sr-only">(current)</span></a>
+				<Link className="nav-link" to="/">Home<span className="sr-only">(current)</span></Link>
 			</li>
 			<li className="nav-item">
-				<a className="nav-link" href="#">Product</a>
+				<Link className="nav-link" to="/">Product</Link>
 			</li>
 			<li className="nav-item dropdown">
 				<a className="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>

@@ -1,4 +1,5 @@
 import React from "react";
+import {BrowserRouter, Route, Redirect, Switch} from "react-router-dom";
 
 import Header from "admin/components/header/Header.jsx";
 import Footer from "admin/components/Footer.jsx";
@@ -9,14 +10,18 @@ class Home extends React.Component {
     render() {
         return (
 <div>
-    <body className="no-skin">
-        <Header/>
-        <div className="main-container" id="main-container">
-            <Sidebar/>
-            <Body/>
-            <Footer/>
-        </div>
-    </body>
+    <BrowserRouter>
+        <body className="no-skin">
+            <Header/>
+            <div className="main-container" id="main-container">
+                <Sidebar/>
+                    <Switch>
+                        <Route path="/" exact component={Body}/>
+                    </Switch>
+                <Footer/>
+            </div>
+        </body>
+    </BrowserRouter>
 </div>
         );
     }

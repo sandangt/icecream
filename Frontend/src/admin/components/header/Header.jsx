@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 class Header extends React.Component {
     render() {
@@ -17,18 +18,16 @@ class Header extends React.Component {
             <span className="icon-bar" />
         </button>
         <div className="navbar-header pull-left">
-            <a href="index.html" className="navbar-brand">
+            <Link to="/" className="navbar-brand">
                 <small>
                     <i className="fa fa-leaf" />
                     Ace Admin
                 </small>
-            </a>
+            </Link>
         </div>
-        <div
-            className="navbar-buttons navbar-header pull-right"
-            role="navigation"
-        >
+        <div className="navbar-buttons navbar-header pull-right" role="navigation">
             <ul className="nav ace-nav">
+                {/*
                 <li className="grey">
                     <a
                         data-toggle="dropdown"
@@ -393,6 +392,7 @@ class Header extends React.Component {
                         </li>
                     </ul>
                 </li>
+                */}
                 <li className="light-blue">
                     <a
                         data-toggle="dropdown"
