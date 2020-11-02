@@ -10,7 +10,7 @@ import {
 import AuthService from "user/services/AuthService.js";
 
 export const signup = (username, email, password) => (dispatch) => {
-    return AuthService.register(username, email, password).then(
+    return AuthService.signup(username, email, password).then(
         (response) => {
             dispatch({
                 type: SIGNUP_SUCCESS
