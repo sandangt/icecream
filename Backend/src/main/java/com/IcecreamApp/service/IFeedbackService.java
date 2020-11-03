@@ -1,19 +1,21 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.IcecreamApp.DTO.FeedbackDTO;
+import com.IcecreamApp.entity.Feedback;
 
 public interface IFeedbackService {
 
-	FeedbackDTO create(FeedbackDTO feedbackDTO);
-
 	List<FeedbackDTO> readAll();
 
-	FeedbackDTO readById(long id);
+	Optional<FeedbackDTO> readById(long id);
+	
+	Feedback create(FeedbackDTO feedbackDTO);
 
-	FeedbackDTO update(long id, FeedbackDTO feedbackDTO);
+	Optional<Feedback> update(long id, FeedbackDTO feedbackDTO);
 
-	void delete(long id);
+	boolean delete(long id);
 	
 }

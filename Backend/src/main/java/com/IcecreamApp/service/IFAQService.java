@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.IcecreamApp.DTO.FAQDTO;
+import com.IcecreamApp.entity.FAQ;
 
 
 public interface IFAQService {
@@ -12,9 +13,9 @@ public interface IFAQService {
 
 	Optional<FAQDTO> readById(long id);
 
-	FAQDTO create(FAQDTO faqDTO);
+	FAQ create(FAQDTO faqDTO);
 
-	Optional<FAQDTO> update(long id, FAQDTO faqDTO);
+	Optional<FAQ> update(long id, FAQDTO faqDTO);
 
 	boolean delete(long id);
 }

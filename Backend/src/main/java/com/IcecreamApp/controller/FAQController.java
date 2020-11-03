@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.FAQDTO;
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.entity.FAQ;
 import com.IcecreamApp.service.IFAQService;
 
 @RestController
@@ -27,38 +28,39 @@ public class FAQController {
 	private IFAQService faqService;
 	
     @GetMapping
-    public ResponseEntity<List<FAQDTO>> getAllCategories() {        
+    public ResponseEntity<List<FAQDTO>> getAllFAQs() {        
     	
     	return ResponseEntity.ok().body(faqService.readAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<FAQDTO> getCategoryById(@PathVariable("id") Long id) {
+    public ResponseEntity<FAQDTO> getFAQById(@PathVariable("id") Long id) {
     	Optional<FAQDTO> currentEntityWrapper = faqService.readById(id);
-    	if (!currentEntityWrapper.isPresent()) {
-    		return new ResponseEntity<>(currentEntityWrapper.get(), HttpStatus.NOT_FOUND);
+    	if (currentEntityWrapper.isPresent()) {
+        	return ResponseEntity.ok().body(currentEntityWrapper.get());
     	}
-    	return ResponseEntity.ok().body(currentEntityWrapper.get());
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
-    public FAQDTO createCategory(@RequestBody FAQDTO faqDTO) {
-    	return this.faqService.create(faqDTO);
+    public ResponseEntity<MessageResponseDTO> createFAQ(@RequestBody FAQDTO faqDTO) {
+    	this.faqService.create(faqDTO);
+    	return ResponseEntity.ok().body(new MessageResponseDTO("Created new FAQ successfully"));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<FAQDTO> updateCategory(@PathVariable("id") Long id, @RequestBody FAQDTO faqDTO) {
-    	Optional<FAQDTO> currentEntityWrapper = this.faqService.update(id, faqDTO);
-    	if (!currentEntityWrapper.isPresent()) {
-    		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    public ResponseEntity<MessageResponseDTO> updateFAQ(@PathVariable("id") Long id, @RequestBody FAQDTO faqDTO) {
+    	Optional<FAQ> currentEntityWrapper = this.faqService.update(id, faqDTO);
+    	if (currentEntityWrapper.isPresent()) {
+        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated FAQ successfully"));
     	}
-    	return ResponseEntity.ok().body(currentEntityWrapper.get());
+		return new ResponseEntity<>(new MessageResponseDTO("Item not found"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<MessageResponseDTO> deleteCategory(@PathVariable("id") Long id) {
+    public ResponseEntity<MessageResponseDTO> deleteFAQ(@PathVariable("id") Long id) {
     	if (this.faqService.delete(id)) {
-    		return ResponseEntity.ok().body(new MessageResponseDTO("Item has been deleted successfully!"));
+    		return ResponseEntity.ok().body(new MessageResponseDTO("FAQ item has been deleted successfully!"));
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
