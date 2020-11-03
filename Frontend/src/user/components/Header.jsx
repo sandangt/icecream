@@ -1,7 +1,27 @@
 import React from "react";
 import {Link, NavLink} from "react-router-dom";
+import {connect} from "react-redux";
+import {logout} from "user/actions";
 
 class Header extends React.Component {
+	handleLogout = (e) => {
+		e.preventDefault();
+		this.props.logout();
+	}
+	renderAuthButton = () => {
+		let result = null;
+		if (this.props.isLoggedIn) {
+			return (
+				<button onClick={this.handleLogout} className="btn btn-outline-success my-2 my-sm-0" to="/logout">Logout</button>
+			);
+		}
+		return (
+			<div>		  
+				<Link className="btn btn-outline-success my-2 my-sm-0" to="/login">Login</Link>
+				<Link className="btn btn-outline-success my-2 my-sm-0" to="/signup">Signup</Link>
+			</div>
+		);
+	}
 	render() {
 		return (
 <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -15,7 +35,7 @@ class Header extends React.Component {
 				<NavLink className="nav-link" to="/">Home</NavLink>
 			</li>
 			<li className="nav-item">
-				<NavLink className="nav-link" to="/profile">Product</NavLink>
+				<NavLink className="nav-link" to="/admin">Product</NavLink>
 			</li>
 			<li className="nav-item dropdown">
 				<Link className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</Link>
@@ -26,17 +46,21 @@ class Header extends React.Component {
 				</div>
 			</li>
 		</ul>
-		<form className="form-inline my-2 my-lg-0">		  
-			<Link className="btn btn-outline-success my-2 my-sm-0" to="/login">Login</Link>
-			<Link className="btn btn-outline-success my-2 my-sm-0" to="/signup">Signup</Link>
-		</form>
+		{this.renderAuthButton()}
 	</div>
 </nav>
 		);
 	}
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+	console.log(state);
+    return {
+        isLoggedIn : state.auth.isLoggedIn,
+        message : state.message,
+    };
+};
+export default connect(mapStateToProps, {logout:logout})(Header);
 
 
 

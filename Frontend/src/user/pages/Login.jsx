@@ -1,58 +1,44 @@
 import React from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import { connect } from "react-redux";
-import { login } from "user/actions/auth.js";
+import { login } from "user/actions";
 
+import history from "user/history.js";
 import "./AuthenticationCard.css";
-
-const required = (value) => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.handleLogin = this.handleLogin.bind(this);
-        this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
-
         this.state = {
             username: "",
             password: "",
             loading: false,
         };
+       
     }
 
-    onChangeUsername(e) {
+    onChangeUsername = (e) => {
         this.setState({
             username: e.target.value,
         });
-    }
+    };
 
-    onChangePassword(e) {
+    onChangePassword = (e) => {
         this.setState({
             password: e.target.value,
         });
-    }
+    };
 
-    handleLogin(e) {
+    handleLogin = (e) => {
         e.preventDefault();
-
         this.setState({
             loading: true,
         });
-
         this.form.validateAll();
 
         const { dispatch, history } = this.props;
@@ -73,13 +59,14 @@ class Login extends React.Component {
                 loading: false,
             });
         }
-    }
+    };
 
     render() {
+        console.log(this.props.history);
         const { isLoggedIn, message } = this.props;
-
+        console.log(isLoggedIn);
         if (isLoggedIn) {
-            return <Redirect to="/profile" />;
+            return <Redirect to="/admin" />;
         }
 
         return (
@@ -90,7 +77,6 @@ class Login extends React.Component {
                         alt="profile-img"
                         className="profile-img-card"
                     />
-
                     <Form
                         onSubmit={this.handleLogin}
                         ref={(c) => {
@@ -164,5 +150,15 @@ function mapStateToProps(state) {
         message,
     };
 }
+
+const required = (value) => {
+    if (!value) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                This field is required!
+            </div>
+        );
+    }
+};
 
 export default connect(mapStateToProps)(Login);

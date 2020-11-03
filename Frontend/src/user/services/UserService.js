@@ -1,5 +1,5 @@
 import axios from "axios";
-import AuthHeader from "./AuthHeader.js";
+import authHeader from "./authHeader.js";
 
 const API_URL = "http://localhost:8080/auth/";
 
@@ -8,13 +8,13 @@ class UserService {
         return axios.get(API_URL + "all");
     };
     getUserBoard = () => {
-      return axios.get(API_URL + 'user', { headers: AuthHeader() });
+      return axios.get(API_URL + 'user', { headers: authHeader() });
     };
     getModeratorBoard = () => {
-      return axios.get(API_URL + 'staff', { headers: AuthHeader() });
+      return axios.get(API_URL + 'staff', { headers: authHeader() });
     };
     getAdminBoard = () => {
-      return axios.get(API_URL + 'admin', { headers: AuthHeader() });
+      return axios.get(API_URL + 'admin', { headers: authHeader() });
     };
 }
 

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
 import { connect } from "react-redux";
-import { signup } from "user/actions/auth.js";
+import { signup } from "user/actions";
 
 import "./AuthenticationCard.css";
 
@@ -49,7 +49,7 @@ const vpassword = (value) => {
     }
 };
 
-class Signup extends Component {
+class Signup extends React.Component {
     constructor(props) {
         super(props);
         this.handleRegister = this.handleRegister.bind(this);
@@ -205,10 +205,10 @@ class Signup extends Component {
     }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
     const { message } = state.message;
     return {
-        message,
+      message,
     };
 }
 

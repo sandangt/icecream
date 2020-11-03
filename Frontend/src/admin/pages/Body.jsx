@@ -2374,7 +2374,7 @@ class Body extends React.Component {
                                             <tr>
                                                 <th>
                                                     Domain
-                                                </th>
+                                                </th>d
                                                 <th>
                                                     Price
                                                 </th>
