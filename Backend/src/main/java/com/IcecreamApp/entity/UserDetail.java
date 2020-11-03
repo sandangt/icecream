@@ -96,7 +96,7 @@ public class UserDetail implements Serializable {
 		this.birthday = birthday;
 		this.avatar = avatar;
 		this.user = user;
-	}
+	}	
 
 	public String getFirstname() {
 		return firstname;

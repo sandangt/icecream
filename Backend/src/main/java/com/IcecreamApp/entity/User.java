@@ -52,7 +52,7 @@ public class User extends Base implements ForeignConnection<User> {
 	@JsonIgnoreProperties("user")
 	private UserDetail userDetail;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade= {CascadeType.PERSIST, CascadeType.REFRESH})
+	@ManyToMany(fetch = FetchType.EAGER, cascade= CascadeType.MERGE)
 	@JoinTable(name = "user_role", 
 				joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -72,6 +72,13 @@ public class User extends Base implements ForeignConnection<User> {
 	}
 	public User(Long id, String username, String email, String password, EStatus status, Set<Role> roles) {
 		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.status = status;
+		this.roles = roles;
+	}
+	public User(String username, String email, String password, EStatus status, Set<Role> roles) {
 		this.username = username;
 		this.email = email;
 		this.password = password;

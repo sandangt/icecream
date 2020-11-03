@@ -21,7 +21,7 @@ public class ApplicationUserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow( () -> new ResourceNotFoundException(String.format("user %s not found", username)));
-		 user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+//		 user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		ApplicationUser applicationUser = new ApplicationUser(user);
 		return applicationUser;
 	} 

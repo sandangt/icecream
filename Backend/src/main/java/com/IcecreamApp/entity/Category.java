@@ -37,6 +37,10 @@ public class Category extends Base implements ForeignConnection<Category> {
 		this.name = name;
 	}
 	
+	public Category(String name) {
+		this.name = name;
+	}
+	
 	public String getName() {
 		return name;
 	}
