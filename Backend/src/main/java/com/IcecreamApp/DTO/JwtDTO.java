@@ -7,13 +7,23 @@ public class JwtDTO {
 	private String token;
 	private String type;
 	private String username;
+	private String email;
 	private List<String> roles;
 
-	public JwtDTO(String accessToken, String type, String username, List<String> roles) {
-		this.token = accessToken;
+	public JwtDTO(String token, String type, String username, String email, List<String> roles) {
+		this.token = token;
 		this.type = type;
 		this.username = username;
+		this.email = email;
 		this.roles = roles;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getToken() {

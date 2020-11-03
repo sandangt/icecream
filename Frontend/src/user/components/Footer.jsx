@@ -1,48 +1,40 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 function Footer() {
 	return(  
 <footer className="page-footer font-small indigo">
-
 	<div className="container">
-
 		<div className="row text-center d-flex justify-content-center pt-5 mb-3">
-
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<a href="/">About us</a>
+					<Link to="/">About us</Link>
 				</h6>
 			</div>
-
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<a href="/">Products</a>
+					<Link to="/">Products</Link>
 				</h6>
 			</div>
-
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<a href="/">Awards</a>
+					<Link to="/">Awards</Link>
 				</h6>
 			</div>
-
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<a href="/">Help</a>
+					<Link to="/">Help</Link>
 				</h6>
 			</div>
-
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<a href="/">Contact</a>
+					<Link to="/">Contact</Link>
 				</h6>
 			</div>
-
 		</div>
 		<hr className="rgba-white-light" style={{margin: "0 15%;"}}/>
 
 		<div className="row d-flex text-center justify-content-center mb-md-0 mb-4">
-
 			<div className="col-md-8 col-12 mt-5">
 				<p style={{lineHeight: "1.7rem"}}>Sed perspiciatis ut unde omnis iste natus error sit voluptatem
 				accusantium doloremque laudantium, totam rem

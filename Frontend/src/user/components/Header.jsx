@@ -15,7 +15,7 @@ class Header extends React.Component {
 				<NavLink className="nav-link" to="/">Home</NavLink>
 			</li>
 			<li className="nav-item">
-				<NavLink className="nav-link" to="/product">Product</NavLink>
+				<NavLink className="nav-link" to="/profile">Product</NavLink>
 			</li>
 			<li className="nav-item dropdown">
 				<Link className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</Link>
