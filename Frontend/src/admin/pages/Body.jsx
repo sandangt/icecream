@@ -1,5 +1,5 @@
 import React from "react";
-import Breadcrum from "./Breadcrum.jsx";
+import Breadcrum from "admin/components/Breadcrum.jsx";
 
 class Body extends React.Component {
     render() {

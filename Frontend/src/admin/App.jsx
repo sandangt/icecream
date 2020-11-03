@@ -1,12 +1,12 @@
 import React from "react";
 import {BrowserRouter, Route, Redirect, Switch} from "react-router-dom";
 
-import Header from "admin/components/header/Header.jsx";
+import Header from "admin/components/Header.jsx";
 import Footer from "admin/components/Footer.jsx";
 import Sidebar from "admin/components/sidebar/Sidebar.jsx";
 import Body from "admin/pages/Body.jsx";
 
-class Home extends React.Component {
+class App extends React.Component {
     render() {
         return (
 <div>
@@ -27,4 +27,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default App;

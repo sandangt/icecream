@@ -25,11 +25,7 @@ function Footer() {
 			</div>
 		</div>
 	</div>
-	<a
-		href="#"
-		id="btn-scroll-up"
-		className="btn-scroll-up btn btn-sm btn-inverse"
-	>
+	<a href="#" id="btn-scroll-up" className="btn-scroll-up btn btn-sm btn-inverse">
 		<i className="ace-icon fa fa-angle-double-up icon-only bigger-110" />
 	</a>
 </div>

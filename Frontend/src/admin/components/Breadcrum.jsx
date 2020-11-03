@@ -15,7 +15,6 @@ function Breadcrum() {
             Simple &amp; Dynamic
         </li>
     </ul>
-    {/* /.breadcrumb */}
     <div className="nav-search" id="nav-search">
         <form className="form-search">
             <span className="input-icon">
@@ -30,7 +29,6 @@ function Breadcrum() {
             </span>
         </form>
     </div>
-    {/* /.nav-search */}
 </div>
     );
 }

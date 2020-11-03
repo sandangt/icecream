@@ -33,11 +33,5 @@ class App extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    let {user} = state.auth;
-    return {
-        user
-    }
-}
 
 export default App;
