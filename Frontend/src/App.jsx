@@ -9,6 +9,9 @@ import Login from "pages/Login.jsx";
 import Signup from "pages/Signup.jsx";
 import Profile from "pages/Profile.jsx";
 
+import ReadFAQ from "pages/admin/FAQ/ReadFAQ.jsx";
+import CreateFAQ from "pages/admin/FAQ/CreateFAQ.jsx";
+import UpdateFAQ from "pages/admin/FAQ/UpdateFAQ.jsx";
 
 import history from "history.js";
 
@@ -27,6 +30,9 @@ class App extends React.Component {
                 <Route exact path="/">
                     <Redirect to="/home" />
                 </Route>
+                <Route exact path="/admin/faq" component={ReadFAQ}/>
+                <Route exact path="/admin/faq/create" component={CreateFAQ}/>
+                <Route exact path="/admin/faq/update/:id" component={UpdateFAQ}/>
             </Switch>
             <Footer/>
         </div>

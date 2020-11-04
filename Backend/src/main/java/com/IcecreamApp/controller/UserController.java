@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.service.IUserService;
 import com.IcecreamApp.systemConstant.EStatus;
 
+@CrossOrigin
 @RestController
 @RequestMapping("users")
 public class UserController {

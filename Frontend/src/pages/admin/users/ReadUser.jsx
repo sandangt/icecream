@@ -1,6 +1,6 @@
 import React from "react";
 
-class UserCrud extends React.Component {
+class ReadUser extends React.Component {
     
     render() {
         return (

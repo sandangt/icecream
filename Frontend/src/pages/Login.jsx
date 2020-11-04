@@ -18,9 +18,7 @@ class Login extends React.Component {
             password: "",
             loading: false,
         };
-       
     }
-
     onChangeUsername = (e) => {
         this.setState({
             username: e.target.value,
