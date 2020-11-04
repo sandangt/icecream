@@ -18,7 +18,7 @@ export const readAllUser = () => async dispatch => {
         });
         dispatch({
             type: SET_MESSAGE,
-            payload: response.data
+            payload: response.data.message
         });
         return Promise.resolve();
     }, (error) => {
@@ -36,6 +36,29 @@ export const readAllUser = () => async dispatch => {
     });
 };
 
-export const readUserByIdService = (id) => async dispatch => {
-
+export const readUserById = (id) => async dispatch => {
+    return readUserByIdService().then( 
+    (response) => {
+        dispatch({
+            type: READ_USER,
+            payload: response.data
+        });
+        dispatch({
+            type: SET_MESSAGE,
+            payload: response.data.message
+        });
+        return Promise.resolve();
+    }, (error) => {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+            error.message ||
+            error.toString();
+        dispatch({
+            type: SET_MESSAGE,
+            payload: message,
+            });
+        return Promise.reject();
+    });
 };

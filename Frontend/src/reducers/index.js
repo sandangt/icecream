@@ -5,6 +5,6 @@ import users from "./userCrudReducer.js";
 
 export default combineReducers({
     auth : authReducer,
-    userCrud: users,
+    userList : users,
     message : messageReducer
 });
