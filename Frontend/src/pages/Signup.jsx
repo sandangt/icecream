@@ -3,9 +3,10 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import {Redirect} from "react-router-dom";
 
 import { connect } from "react-redux";
-import { signup } from "user/actions";
+import { signup } from "actions/auth.js";
 
 import "./AuthenticationCard.css";
 
@@ -115,8 +116,9 @@ class Signup extends React.Component {
     }
 
     render() {
-        const { message } = this.props;
-
+        if (this.props.isLoggedIn) {
+            return <Redirect to="/"/>
+        }
         return (
             <div className="col-md-12">
                 <div className="card card-container">
@@ -178,7 +180,7 @@ class Signup extends React.Component {
                             </div>
                         )}
 
-                        {message && (
+                        {this.props.message && (
                             <div className="form-group">
                                 <div
                                     className={
@@ -188,7 +190,7 @@ class Signup extends React.Component {
                                     }
                                     role="alert"
                                 >
-                                    {message}
+                                    {this.props.message}
                                 </div>
                             </div>
                         )}
@@ -206,9 +208,9 @@ class Signup extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    const { message } = state.message;
     return {
-      message,
+        isLoggedIn : state.auth.isLoggedIn,
+        message : state.message.message
     };
 }
 

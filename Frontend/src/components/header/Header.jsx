@@ -1,18 +1,28 @@
 import React from "react";
 import {Link, NavLink} from "react-router-dom";
 import {connect} from "react-redux";
-import {logout} from "user/actions";
+import {logout} from "actions/auth.js";
+
+import AdminNav from "./AdminNav.jsx";
+import UserNav from "./UserNav.jsx";
+import AnonimousNav from "./AnonimousNav.jsx";
 
 class Header extends React.Component {
 	handleLogout = (e) => {
 		e.preventDefault();
 		this.props.logout();
+		window.location.href="/";
+	}
+	renderNavBar = () => {
+		if (this.props.isLoggedIn) {
+			return this.props.user.roles.includes("ROLE_ADMIN") ? <AdminNav/> : <UserNav/>;
+		}
+		return <AnonimousNav/>;
 	}
 	renderAuthButton = () => {
-		let result = null;
 		if (this.props.isLoggedIn) {
 			return (
-				<button onClick={this.handleLogout} className="btn btn-outline-success my-2 my-sm-0" to="/logout">Logout</button>
+				<button onClick={this.handleLogout} className="btn btn-outline-success my-2 my-sm-0">Logout</button>
 			);
 		}
 		return (
@@ -30,22 +40,7 @@ class Header extends React.Component {
 		<span className="navbar-toggler-icon"></span>
 	</button>
 	<div className="collapse navbar-collapse" id="navbarsExampleDefault">
-		<ul className="navbar-nav mr-auto">
-			<li className="nav-item">
-				<NavLink className="nav-link" to="/">Home</NavLink>
-			</li>
-			<li className="nav-item">
-				<NavLink className="nav-link" to="/admin">Product</NavLink>
-			</li>
-			<li className="nav-item dropdown">
-				<Link className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</Link>
-				<div className="dropdown-menu" aria-labelledby="dropdown01">
-					<NavLink className="dropdown-item" to="/">Action</NavLink>
-					<NavLink className="dropdown-item" to="/">Another action</NavLink>
-					<NavLink className="dropdown-item" to="/">Something else here</NavLink>
-				</div>
-			</li>
-		</ul>
+		{this.renderNavBar()}
 		{this.renderAuthButton()}
 	</div>
 </nav>
@@ -54,10 +49,10 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log(state);
     return {
-        isLoggedIn : state.auth.isLoggedIn,
-        message : state.message,
+		isLoggedIn : state.auth.isLoggedIn,
+		user: state.auth.user,
+        message : state.message.message,
     };
 };
 export default connect(mapStateToProps, {logout:logout})(Header);

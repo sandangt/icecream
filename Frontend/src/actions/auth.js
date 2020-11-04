@@ -7,7 +7,7 @@ import {
     SET_MESSAGE
 } from "./type.js";
 
-import {loginService, signupService, logoutService} from "user/services/authService.js";
+import {loginService, signupService, logoutService} from "services/authService.js";
 
 export const signup = (username, email, password) => (dispatch) => {
     return signupService(username, email, password).then(

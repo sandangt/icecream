@@ -6,9 +6,8 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import { connect } from "react-redux";
-import { login } from "user/actions";
+import { login } from "actions/auth.js";
 
-import history from "user/history.js";
 import "./AuthenticationCard.css";
 
 class Login extends React.Component {
@@ -62,13 +61,9 @@ class Login extends React.Component {
     };
 
     render() {
-        console.log(this.props.history);
-        const { isLoggedIn, message } = this.props;
-        console.log(isLoggedIn);
-        if (isLoggedIn) {
-            return <Redirect to="/admin" />;
+        if (this.props.isLoggedIn) {
+            return <Redirect to="/"/>
         }
-
         return (
             <div className="col-md-12">
                 <div className="card card-container">
@@ -119,13 +114,13 @@ class Login extends React.Component {
                             </button>
                         </div>
 
-                        {message && (
+                        {this.props.message && (
                             <div className="form-group">
                                 <div
                                     className="alert alert-danger"
                                     role="alert"
                                 >
-                                    {message}
+                                    {this.props.message}
                                 </div>
                             </div>
                         )}
@@ -142,15 +137,6 @@ class Login extends React.Component {
     }
 }
 
-function mapStateToProps(state) {
-    const { isLoggedIn } = state.auth;
-    const { message } = state.message;
-    return {
-        isLoggedIn,
-        message,
-    };
-}
-
 const required = (value) => {
     if (!value) {
         return (
@@ -160,5 +146,13 @@ const required = (value) => {
         );
     }
 };
+
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        isLoggedIn : state.auth.isLoggedIn,
+        message : state.message.message
+    };
+}
 
 export default connect(mapStateToProps)(Login);

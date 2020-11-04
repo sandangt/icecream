@@ -2,17 +2,17 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-class ProfileAdmin extends React.Component {
+class ProfileUser extends React.Component {
     render() {
         const { user: currentUser } = this.props;
 
         if (!currentUser) {
             return <Redirect to="/login" />;
         }
+        console.log(currentUser);
         return (
             <div className="container">
                 <header className="jumbotron">
-                    <h1>This is admin page</h1>
                     <h3>
                         <strong>{currentUser.username}</strong> Profile
                     </h3>
@@ -41,10 +41,9 @@ class ProfileAdmin extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    const { user } = state.auth;
     return {
-        user,
+        user : state.auth.user
     };
 }
 
-export default connect(mapStateToProps)(ProfileAdmin);
+export default connect(mapStateToProps)(ProfileUser);

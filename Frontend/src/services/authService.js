@@ -1,9 +1,8 @@
-import axios from "axios";
+import baseUrl from "baseUrl.js";
 
-const API_URL = "http://localhost:8080/auth/";
 
 export const loginService = async (username, password) => {
-    const response = await axios.post(API_URL + "login", { username, password });
+    const response = await baseUrl.post("/auth/login", { username, password });
     if (response.data.token) {
         console.log(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
@@ -12,11 +11,11 @@ export const loginService = async (username, password) => {
 };
 export const logoutService = async () => {
     localStorage.removeItem("user");
-    const response = await axios.get(API_URL + "logout");
+    const response = await baseUrl.get("/auth/logout");
     return response.data;
 };
 export const signupService = (username, email, password) => {
-    return axios.post(API_URL + "signup", {
+    return baseUrl.post("/auth/signup", {
         username, email, password
     });
 };
