@@ -27,6 +27,10 @@ public class FAQ extends Base {
 		this.question = question;
 		this.answer = answer;
 	}
+	public FAQ(String question, String answer) {
+		this.question = question;
+		this.answer = answer;
+	}
 	
 	public String getQuestion() {
 		return question;
