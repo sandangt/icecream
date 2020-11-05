@@ -3,12 +3,12 @@ import {Link} from "react-router-dom";
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 
-class FAQTuple extends React.Component {
+class UserTuple extends React.Component {
     constructor(props) {
         super(props);
     }
     delete = () => {
-        baseUrl.delete(`/faq/${this.props.obj.id}`, {headers: authHeader()})
+        baseUrl.delete(`/users/${this.props.obj.id}`, {headers: authHeader()})
             .then(console.log('Deleted'))
             .catch(err => console.log(err));
         window.location.reload();
@@ -23,16 +23,19 @@ class FAQTuple extends React.Component {
         {this.props.obj.id}
     </td>
     <td>
-        {this.props.obj.question}
+        {this.props.obj.username}
     </td>
     <td>
-        {this.props.obj.answer}
+        {this.props.obj.email}
+    </td>
+    <td>
+        {this.props.obj.status}
     </td>
     <td>
         {this.props.obj.modifiedDate}
     </td>
     <td>
-        <Link to={`/admin/faq/update/${this.props.obj.id}`} className="btn btn-primary">Edit</Link>
+        <Link to={`/admin/users/update/${this.props.obj.id}`} className="btn btn-primary">Edit</Link>
     </td>
     <td>
         <button onClick={this.delete} className="btn btn-danger">Delete</button>
@@ -42,4 +45,4 @@ class FAQTuple extends React.Component {
     }
 }
 
-export default FAQTuple;
+export default UserTuple;

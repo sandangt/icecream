@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.converter.UserConverter;
@@ -106,12 +107,13 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public ResponseEntity<MessageResponseDTO> changePassword(long id, String[] passwords) {
+	public ResponseEntity<MessageResponseDTO> changePassword(long id, PasswordDTO passwords) {
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
-		if (!encoder.matches(passwords[0], user.getPassword())) 
+		if (!encoder.matches(passwords.getOldPassword(), user.getPassword())) 
 			return new ResponseEntity<>(new MessageResponseDTO("Incorrect password!"), HttpStatus.NOT_ACCEPTABLE);
-		user.setPassword(encoder.encode(passwords[1]));
+		user.setPassword(encoder.encode(passwords.getNewPassword()));
+		userRepository.save(user);
 		return new ResponseEntity<>(new MessageResponseDTO("Password updated successfully!"), HttpStatus.OK);
 	}
 

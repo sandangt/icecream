@@ -7,7 +7,7 @@ import {
     SET_MESSAGE
 } from "./type.js";
 
-import {loginService, signupService, logoutService} from "services/authService.js";
+import {loginService, signupService, logoutService, changePasswordService} from "services/authService.js";
 
 export const signup = (username, email, password) => (dispatch) => {
     return signupService(username, email, password).then(
@@ -20,8 +20,8 @@ export const signup = (username, email, password) => (dispatch) => {
                 payload: response.data.message,
               });
             return Promise.resolve();
-        },
-        (error) => {
+        })
+        .catch( (error) => {
             const message =
                 (error.response &&
                     error.response.data &&
@@ -48,8 +48,8 @@ export const login = (username, password) => (dispatch) => {
                 payload: {user : data}
             });
             return Promise.resolve();
-        },
-        (error) => {
+        })
+        .catch((error) => {
             const message =
                 (error.response &&
                     error.response.data &&
@@ -74,3 +74,4 @@ export const logout = () => (dispatch) => {
         type: LOGOUT
     });
 };
+

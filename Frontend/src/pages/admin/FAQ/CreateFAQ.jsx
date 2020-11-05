@@ -23,7 +23,8 @@ class CreateFAQ extends React.Component {
         super(props);
         this.state = {
             question: '',
-            answer: ''
+            answer: '',
+            successful: false
         }
     }
 
@@ -43,17 +44,22 @@ class CreateFAQ extends React.Component {
         e.preventDefault();
         this.form.validateAll();
 
-        const obj = {
+        const pkg = {
             question: this.state.question,
             answer: this.state.answer
         };
-        baseUrl.post('/faq', obj, {headers: authHeader()})
-            .then(response => console.log(response.data))
-            .catch(error => console.log(error));
-
+        
         if ( this.checkBtn.context._errors.length === 0 ) {
-            alert('success');
-        }
+
+            baseUrl.post('/faq', pkg, {headers: authHeader()})
+                .then(() => {
+                    this.setState({successful: true});
+                    alert("success");
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }
         this.props.history.push("/admin/faq");
     }
 

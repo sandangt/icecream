@@ -1,12 +1,15 @@
 package com.IcecreamApp.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.FAQDTO;
@@ -14,6 +17,7 @@ import com.IcecreamApp.converter.FAQConverter;
 import com.IcecreamApp.entity.FAQ;
 import com.IcecreamApp.repository.FAQRepository;
 import com.IcecreamApp.service.IFAQService;
+import com.google.common.collect.Maps;
 
 @Service
 public class FAQService implements IFAQService{
@@ -61,6 +65,13 @@ public class FAQService implements IFAQService{
 		}
 		logger.error(String.format("%s id %ld not found", entityName, id));
 		return false;
+	}
+
+	@Override
+	public Map.Entry<Long, List<FAQDTO>> readByPage(int pageNumber, int pageSize) {
+		Page<FAQ> pages = repository.findAll(PageRequest.of(pageNumber, pageSize));
+		Long totalEntities = repository.count();
+		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(FAQConverter::toDTO).collect(Collectors.toList()));
 	}
 
 }

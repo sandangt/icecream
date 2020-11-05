@@ -8,27 +8,12 @@ function Footer() {
 		<div className="row text-center d-flex justify-content-center pt-5 mb-3">
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<Link to="/">About us</Link>
+					<Link to="/about">About us</Link>
 				</h6>
 			</div>
 			<div className="col-md-2 mb-3">
 				<h6 className="text-uppercase font-weight-bold">
-					<Link to="/">Products</Link>
-				</h6>
-			</div>
-			<div className="col-md-2 mb-3">
-				<h6 className="text-uppercase font-weight-bold">
-					<Link to="/">Awards</Link>
-				</h6>
-			</div>
-			<div className="col-md-2 mb-3">
-				<h6 className="text-uppercase font-weight-bold">
-					<Link to="/">Help</Link>
-				</h6>
-			</div>
-			<div className="col-md-2 mb-3">
-				<h6 className="text-uppercase font-weight-bold">
-					<Link to="/">Contact</Link>
+					<Link to="/contact">Contact</Link>
 				</h6>
 			</div>
 		</div>
@@ -36,11 +21,12 @@ function Footer() {
 
 		<div className="row d-flex text-center justify-content-center mb-md-0 mb-4">
 			<div className="col-md-8 col-12 mt-5">
-				<p style={{lineHeight: "1.7rem"}}>Sed perspiciatis ut unde omnis iste natus error sit voluptatem
+				<p style={{lineHeight: "1.7rem"}}>
+				Sed perspiciatis ut unde omnis iste natus error sit voluptatem
 				accusantium doloremque laudantium, totam rem
 				aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
 				explicabo.
-				Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur.</p>
+				</p>
 			</div>
 		</div>
 		
@@ -80,7 +66,7 @@ function Footer() {
 	</div>
 
 	<div className="footer-copyright text-center py-3">© 2020 Copyright:
-		<a href="https://mdbootstrap.com/">MDBootstrap.com</a>
+		<a href="https://mdbootstrap.com/">Icecream</a>
 	</div>
 
 </footer>

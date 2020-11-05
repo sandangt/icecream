@@ -10,13 +10,23 @@ import { login } from "actions/auth.js";
 
 import "./AuthenticationCard.css";
 
+const required = (value) => {
+    if (!value) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                This field is required!
+            </div>
+        );
+    }
+};
+
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             username: "",
             password: "",
-            loading: false,
+            successful: false,
         };
     }
     onChangeUsername = (e) => {
@@ -34,26 +44,27 @@ class Login extends React.Component {
     handleLogin = (e) => {
         e.preventDefault();
         this.setState({
-            loading: true,
+            successful: true,
         });
         this.form.validateAll();
 
         const { dispatch, history } = this.props;
 
         if (this.checkBtn.context._errors.length === 0) {
-            dispatch(login(this.state.username, this.state.password))
+            // dispatch(login(this.state.username, this.state.password))
+            this.props.login(this.state.username, this.state.password)
                 .then(() => {
                     history.push("/profile");
                     window.location.reload();
                 })
                 .catch(() => {
                     this.setState({
-                        loading: false,
+                        successful: false,
                     });
                 });
         } else {
             this.setState({
-                loading: false,
+                successful: false,
             });
         }
     };
@@ -103,9 +114,9 @@ class Login extends React.Component {
                         <div className="form-group">
                             <button
                                 className="btn btn-primary btn-block"
-                                disabled={this.state.loading}
+                                disabled={this.state.successful}
                             >
-                                {this.state.loading && (
+                                {this.state.successful && (
                                     <span className="spinner-border spinner-border-sm"></span>
                                 )}
                                 <span>Login</span>
@@ -114,10 +125,7 @@ class Login extends React.Component {
 
                         {this.props.message && (
                             <div className="form-group">
-                                <div
-                                    className="alert alert-danger"
-                                    role="alert"
-                                >
+                                <div className="alert alert-danger" role="alert">
                                     {this.props.message}
                                 </div>
                             </div>
@@ -135,16 +143,6 @@ class Login extends React.Component {
     }
 }
 
-const required = (value) => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
-
 const mapStateToProps = (state) => {
     console.log(state);
     return {
@@ -153,4 +151,4 @@ const mapStateToProps = (state) => {
     };
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps, {login:login})(Login);

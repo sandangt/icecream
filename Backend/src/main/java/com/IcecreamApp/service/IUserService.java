@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.systemConstant.EStatus;
@@ -21,7 +22,7 @@ public interface IUserService {
 
 	void delete(long id);
 	
-	ResponseEntity<MessageResponseDTO> changePassword(long id, String[] passwords);
+	ResponseEntity<MessageResponseDTO> changePassword(long id, PasswordDTO passwords);
 	
 	ResponseEntity<MessageResponseDTO> updateProfile(long id, UserDetailDTO newProfile);
 	

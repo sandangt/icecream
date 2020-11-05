@@ -1,6 +1,7 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.IcecreamApp.DTO.FAQDTO;
@@ -18,4 +19,6 @@ public interface IFAQService {
 	Optional<FAQ> update(long id, FAQDTO faqDTO);
 
 	boolean delete(long id);
+	
+	Map.Entry<Long, List<FAQDTO>> readByPage(int pageNumber, int pageSize);
 }

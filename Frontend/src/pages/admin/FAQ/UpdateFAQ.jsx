@@ -2,7 +2,6 @@ import React from 'react';
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
 
-
 class UpdateFAQ extends React.Component {
     constructor(props) {
         super(props);

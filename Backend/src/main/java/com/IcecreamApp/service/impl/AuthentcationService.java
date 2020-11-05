@@ -64,7 +64,7 @@ public class AuthentcationService implements IAuthenticationService {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 	
-		return new ResponseEntity<JwtDTO>(new JwtDTO(jwtToken, jwtUtils.TOKEN_PREFIX, appUser.getUsername(), appUser.getEmail(), roles), HttpStatus.OK);
+		return new ResponseEntity<JwtDTO>(new JwtDTO(appUser.getId(), jwtToken, jwtUtils.TOKEN_PREFIX, appUser.getUsername(), appUser.getEmail(), roles), HttpStatus.OK);
 	}
 
 	@Override

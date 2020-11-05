@@ -5,13 +5,13 @@ function UserNav() {
     return (
 <ul className="navbar-nav mr-auto">
     <li className="nav-item">
-        <NavLink className="nav-link" to="/">Home</NavLink>
-    </li>
-    <li className="nav-item">
-        <NavLink className="nav-link" to="/">Product</NavLink>
+        <NavLink className="nav-link" to="/home">Home</NavLink>
     </li>
     <li className="nav-item">
         <NavLink className="nav-link" to="/profile">Profile</NavLink>
+    </li>
+    <li className="nav-item">
+        <NavLink className="nav-link" to="/about">About</NavLink>
     </li>
     <li className="nav-item dropdown">
         <a className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>

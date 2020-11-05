@@ -4,18 +4,24 @@ import java.util.List;
 
 public class JwtDTO {
 	
+	private Long id;
 	private String token;
 	private String type;
 	private String username;
 	private String email;
 	private List<String> roles;
 
-	public JwtDTO(String token, String type, String username, String email, List<String> roles) {
+	public JwtDTO(Long id, String token, String type, String username, String email, List<String> roles) {
+		this.id = id;
 		this.token = token;
 		this.type = type;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getEmail() {
@@ -57,5 +63,4 @@ public class JwtDTO {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	
 }

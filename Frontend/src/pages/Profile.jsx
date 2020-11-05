@@ -9,7 +9,6 @@ class ProfileUser extends React.Component {
         if (!currentUser) {
             return <Redirect to="/login" />;
         }
-        console.log(currentUser);
         return (
             <div className="container">
                 <header className="jumbotron">

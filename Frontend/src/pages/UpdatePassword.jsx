@@ -6,9 +6,11 @@ import { isEmail } from "validator";
 import {Redirect} from "react-router-dom";
 
 import { connect } from "react-redux";
-import { signup } from "actions/auth.js";
 
+import baseUrl from "baseUrl.js";
 import "./AuthenticationCard.css";
+import authHeader from "services/authHeader";
+import {logout} from "actions/auth.js";
 
 const required = (value) => {
     if (!value) {
@@ -50,37 +52,40 @@ const vpassword = (value) => {
     }
 };
 
-class Signup extends React.Component {
+class UpdatePassword extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            username: "",
-            email: "",
-            password: "",
+            oldPassword: "",
+            newPassword: "",
             successful: false,
         };
     }
 
-    onChangeUsername = (e) => {
+    onChangeOldPassword = (e) => {
         this.setState({
-            username: e.target.value,
+            oldPassword: e.target.value,
         });
     }
 
-    onChangeEmail = (e) => {
+    onChangeNewPassword = (e) => {
         this.setState({
-            email: e.target.value,
+            newPassword: e.target.value,
         });
     }
 
-    onChangePassword = (e) => {
-        this.setState({
-            password: e.target.value,
-        });
+    updatePassword = async (id) => {
+        const pkg = {
+            question: this.state.oldPassword,
+            answer: this.state.newPassword
+        };
+        await baseUrl.put(`/users/${id}/password`, pkg, {headers: authHeader()})
+        .then( response => console.log(response))
+        .catch( error => console.log(error));
     }
 
-    handleRegister = (e) => {
+    handleSubmit = (e) => {
         e.preventDefault();
 
         this.setState({
@@ -88,13 +93,10 @@ class Signup extends React.Component {
         });
 
         this.form.validateAll();
-
         if (this.checkBtn.context._errors.length === 0) {
-            this.props.signup(
-                        this.state.username,
-                        this.state.email,
-                        this.state.password
-                    )
+            this.updatePassword(this.props.user.id, this.state.oldPassword, this.state.newPassword);
+            this.props
+                .dispatch(logout())
                 .then(() => {
                     this.setState({
                         successful: true,
@@ -109,8 +111,8 @@ class Signup extends React.Component {
     }
 
     render() {
-        if (this.props.isLoggedIn) {
-            return <Redirect to="/"/>
+        if (!this.props.isLoggedIn) {
+            return <Redirect to="/login"/>
         }
         return (
             <div className="col-md-12">
@@ -122,7 +124,7 @@ class Signup extends React.Component {
                     />
 
                     <Form
-                        onSubmit={this.handleRegister}
+                        onSubmit={this.handleSubmit}
                         ref={(c) => {
                             this.form = c;
                         }}
@@ -130,44 +132,37 @@ class Signup extends React.Component {
                         {!this.state.successful && (
                             <div>
                                 <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <Input
-                                        type="text"
-                                        className="form-control"
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={this.onChangeUsername}
-                                        validations={[required, vusername]}
-                                    />
+                                    <p>Username:</p>
+                                    <h3>{this.props.user.username}</h3>
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="email">Email</label>
+                                    <label htmlFor="oldPassword">Enter password</label>
                                     <Input
-                                        type="text"
+                                        type="password"
                                         className="form-control"
-                                        name="email"
-                                        value={this.state.email}
-                                        onChange={this.onChangeEmail}
+                                        name="oldPassword"
+                                        value={this.state.odlPassword}
+                                        onChange={this.onChangeOldPassword}
                                         validations={[required, email]}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="newPassword">Enter new password</label>
                                     <Input
                                         type="password"
                                         className="form-control"
-                                        name="password"
-                                        value={this.state.password}
-                                        onChange={this.onChangePassword}
+                                        name="newPassword"
+                                        value={this.state.newPassword}
+                                        onChange={this.onChangeNewPassword}
                                         validations={[required, vpassword]}
                                     />
                                 </div>
 
                                 <div className="form-group">
                                     <button className="btn btn-primary btn-block">
-                                        Sign Up
+                                        Submit
                                     </button>
                                 </div>
                             </div>
@@ -201,10 +196,12 @@ class Signup extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state);
     return {
         isLoggedIn : state.auth.isLoggedIn,
+        user: state.auth.user,
         message : state.message.message
     };
 }
 
-export default connect(mapStateToProps, {signup:signup})(Signup);
+export default connect(mapStateToProps)(UpdatePassword);

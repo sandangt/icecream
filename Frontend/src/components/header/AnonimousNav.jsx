@@ -5,17 +5,17 @@ function AnonimousNav() {
     return (
 <ul className="navbar-nav mr-auto">
     <li className="nav-item">
-        <NavLink className="nav-link" to="/">Home</NavLink>
+        <NavLink className="nav-link" to="/home">Home</NavLink>
     </li>
     <li className="nav-item">
-        <NavLink className="nav-link" to="/admin">Product</NavLink>
+        <NavLink className="nav-link" to="/about">About</NavLink>
     </li>
     <li className="nav-item dropdown">
-        <Link className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</Link>
+        <a className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
         <div className="dropdown-menu" aria-labelledby="dropdown01">
-            <NavLink className="dropdown-item" to="/">Action</NavLink>
-            <NavLink className="dropdown-item" to="/">Another action</NavLink>
-            <NavLink className="dropdown-item" to="/">Something else here</NavLink>
+            <a className="dropdown-item" to="/">Action</a>
+            <a className="dropdown-item" to="/">Another action</a>
+            <a className="dropdown-item" to="/">Something else here</a>
         </div>
     </li>
 </ul>

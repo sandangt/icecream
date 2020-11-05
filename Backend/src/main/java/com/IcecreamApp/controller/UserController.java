@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.service.IUserService;
@@ -60,7 +61,7 @@ public class UserController {
     }
     
     @PutMapping(value="/{id}/password")
-    public ResponseEntity<MessageResponseDTO> changePassword(@PathVariable("id") long id, @RequestBody String[] passwords) {
+    public ResponseEntity<MessageResponseDTO> changePassword(@PathVariable("id") long id, @RequestBody PasswordDTO passwords) {
     	return this.userService.changePassword(id, passwords);
     }
 
