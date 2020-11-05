@@ -56,9 +56,9 @@ public class FAQController {
     public ResponseEntity<MessageResponseDTO> updateFAQ(@PathVariable("id") Long id, @RequestBody FAQDTO faqDTO) {
     	Optional<FAQ> currentEntityWrapper = this.faqService.update(id, faqDTO);
     	if (currentEntityWrapper.isPresent()) {
-        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated FAQ successfully"));
+        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated FAQ successfully!"));
     	}
-		return new ResponseEntity<>(new MessageResponseDTO("Item not found"), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{id}")

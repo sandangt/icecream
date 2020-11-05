@@ -3,10 +3,10 @@ package com.Icecream.service;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -43,6 +43,7 @@ public class FAQServiceTest {
 		assertEquals(1L, faqs.get(0).getId());
 		assertEquals(2L, faqs.get(1).getId());
 		assertEquals(3L, faqs.get(2).getId());
+		Mockito.verify(faqRepository, Mockito.times(1)).findAll();
 	}
 	@Test
 	public void readByIdTest() {
@@ -61,20 +62,28 @@ public class FAQServiceTest {
 		assertEquals("What to?", entity1.get().getQuestion());
 		assertEquals("no idea", entity2.get().getAnswer());
 		assertEquals(3L, entity3.get().getId());
+		Mockito.verify(faqRepository, Mockito.times(3)).findById(Mockito.any(Long.class));
 		
 	}
 	@Test
 	public void createTest() {
-		throw new NotYetImplementedException();
+		// Given
+		
+		// When
+		faqService.create(new FAQDTO(1L, new Date(0), "What to?", "no idea"));
+		faqService.create(new FAQDTO(2L, new Date(0), "Why to?", "no idea"));
+		faqService.create(new FAQDTO(3L, new Date(0), "How to?", "no idea"));
+		// Then
+		Mockito.verify(faqRepository, Mockito.times(3)).save(Mockito.any(FAQ.class));
 	}
 	@Test
 	public void updateTest() {
 		throw new NotYetImplementedException();
 	}
-	@Test
-	public void deleteTest() {
-		throw new NotYetImplementedException();
-	}
+//	@Test
+//	public void deleteTest() {
+//		throw new NotYetImplementedException();
+//	}
 
 //	Optional<FAQDTO> readById(long id);
 //

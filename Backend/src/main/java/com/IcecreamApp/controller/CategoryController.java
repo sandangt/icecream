@@ -53,9 +53,9 @@ public class CategoryController {
     public ResponseEntity<MessageResponseDTO> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDTO categoryDTO) {
     	Optional<Category> currentEntityWrapper = categoryService.update(id, categoryDTO);
     	if (currentEntityWrapper.isPresent()) {
-        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated Category successfully"));
+        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated Category successfully!"));
     	}
-		return new ResponseEntity<>(new MessageResponseDTO("Item not found"), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{id}")
