@@ -1,19 +1,21 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.IcecreamApp.DTO.UserDetailDTO;
+import com.IcecreamApp.entity.UserDetail;
 
 public interface IUserDetailService {
 
-	UserDetailDTO create(UserDetailDTO userDetailDTO);
-
 	List<UserDetailDTO> readAll();
 
-	UserDetailDTO readById(long id);
+	Optional<UserDetailDTO> readById(long id);
 
-	UserDetailDTO update(long id, UserDetailDTO userDetailDTO);
+	UserDetail create(UserDetailDTO userDetailDTO);
 
-	void delete(long id);
+	Optional<UserDetail> update(long id, UserDetailDTO userDetailDTO);
+
+	boolean delete(long id);
 
 }

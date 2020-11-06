@@ -1,16 +1,17 @@
 package com.IcecreamApp.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.converter.UserDetailConverter;
 import com.IcecreamApp.entity.UserDetail;
-import com.IcecreamApp.exception.ResourceNotFoundException;
 import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.service.IUserDetailService;
 
@@ -23,49 +24,44 @@ public class UserDetailService implements IUserDetailService {
 
 	private String entityName = "User detail";
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserDetailService.class);
+	
 	@Override
 	public List<UserDetailDTO> readAll() {
-		
-		List<UserDetailDTO> userDetails = new ArrayList<>();
-		for (UserDetail i : repository.findAll()) {
-			userDetails.add(UserDetailConverter.toDTO(i));
-		}
-    	return userDetails;
+    	return repository.findAll().stream().map(UserDetailConverter::toDTO).collect(Collectors.toList());
 	}
 
 	@Override
-	public UserDetailDTO readById(long id) {
-		
-		UserDetail userDetail = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
-		return UserDetailConverter.toDTO(userDetail);
+	public Optional<UserDetailDTO> readById(long id) {
+		UserDetail userDetail = repository.findById(id).get();
+		return Optional.ofNullable(UserDetailConverter.toDTO(userDetail));
 	}
 
 	@Override
-	public UserDetailDTO create(UserDetailDTO userDetailDTO) {
-		
-		repository.save(UserDetailConverter.toEntity(userDetailDTO));
-		return userDetailDTO;
+	public UserDetail create(UserDetailDTO userDetailDTO) {
+		return repository.save(UserDetailConverter.toEntity(userDetailDTO));
 	}
 
 	@Override
-	public UserDetailDTO update(long id, UserDetailDTO userDetailDTO) {
+	public Optional<UserDetail> update(long id, UserDetailDTO userDetailDTO) {
 
 		Optional<UserDetail> currentEntityWrapper = repository.findById(id);
-		if (!currentEntityWrapper.isPresent()) {
-			throw new ResourceNotFoundException(this.entityName, id);
+		if (currentEntityWrapper.isPresent()) {
+			return Optional.ofNullable(this.repository.save(UserDetailConverter.toEntity(userDetailDTO)));
 	    }
-		UserDetail userDetail = UserDetailConverter.toEntity(userDetailDTO);
-		this.repository.save(userDetail);
-		return userDetailDTO;
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override
-	public void delete(long id) {
-		repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
-		this.repository.deleteById(id);
+	public boolean delete(long id) {
+		Optional<UserDetail> currentEntityWrapper = repository.findById(id);
+		if (currentEntityWrapper.isPresent()) {
+			this.repository.deleteById(id);
+			return true;
+		}
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return false;
 	}
-	
-	
 	
 }
