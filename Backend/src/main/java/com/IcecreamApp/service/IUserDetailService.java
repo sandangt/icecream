@@ -12,7 +12,7 @@ public interface IUserDetailService {
 
 	Optional<UserDetailDTO> readById(long id);
 
-	UserDetail create(UserDetailDTO userDetailDTO);
+	Optional<UserDetail> create(UserDetailDTO userDetailDTO);
 
 	Optional<UserDetail> update(long id, UserDetailDTO userDetailDTO);
 

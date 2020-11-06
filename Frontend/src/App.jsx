@@ -5,12 +5,12 @@ import Header from "components/header/Header.jsx";
 import Footer from "components/footer/Footer.jsx";
 
 import Home from "pages/Home.jsx";
-import Login from "pages/Login.jsx";
-import Signup from "pages/Signup.jsx";
-import Profile from "pages/Profile.jsx";
+import Login from "pages/anonimous/Login.jsx";
+import Signup from "pages/anonimous/Signup.jsx";
+import Profile from "pages/logined/Profile.jsx";
 import AboutUs from "pages/AboutUs.jsx";
 import Contact from "pages/Contact.jsx";
-import UpdatePassword from "pages/UpdatePassword.jsx";
+import UpdatePassword from "pages/logined/UpdatePassword.jsx";
 import NotFound from "pages/NotFound.jsx";
 
 import ReadFAQ from "pages/admin/FAQ/ReadFAQ.jsx";

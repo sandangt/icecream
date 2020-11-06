@@ -7,7 +7,7 @@ class ProfileUser extends React.Component {
         const { user: currentUser } = this.props;
 
         if (!currentUser) {
-            return <Redirect to="/login" />;
+            return <Redirect to="/error" />;
         }
         return (
             <div className="container">

@@ -1,6 +1,7 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.IcecreamApp.DTO.PasswordDTO;
@@ -22,10 +23,14 @@ public interface IUserService {
 
 	boolean delete(long id);
 	
+	Map.Entry<Long, List<UserDTO>> readByPage(int pageNumber, int pageSize);
+	
 	boolean changePassword(long id, PasswordDTO passwords);
 	
 	Optional<UserDetail> updateProfile(long id, UserDetailDTO newProfile);
 	
 	boolean changeUserStatus(long id, EStatus newStatus);
+	
+	List<UserDTO> readAllByUsername(String username);
 	
 }

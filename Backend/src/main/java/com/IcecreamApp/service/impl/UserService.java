@@ -1,12 +1,15 @@
 package com.IcecreamApp.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
 import com.IcecreamApp.systemConstant.EStatus;
+import com.google.common.collect.Maps;
 
 @Service
 public class UserService implements IUserService {
@@ -117,6 +121,19 @@ public class UserService implements IUserService {
 		}
 		return false;
 //		return new ResponseEntity<>(new MessageResponseDTO("Update status successfully!"), HttpStatus.OK);
+	}
+
+	@Override
+	public Map.Entry<Long, List<UserDTO>> readByPage(int pageNumber, int pageSize) {
+
+		Page<User> pages = userRepository.findAll(PageRequest.of(pageNumber, pageSize));
+		Long totalEntities = userRepository.count();
+		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(UserConverter::toDTO).collect(Collectors.toList()));
+	}
+
+	@Override
+	public List<UserDTO> readAllByUsername(String username) {
+		return userRepository.searchUserByUsername(username).stream().map(UserConverter::toDTO).collect(Collectors.toList());
 	}
 	
 //	@Override

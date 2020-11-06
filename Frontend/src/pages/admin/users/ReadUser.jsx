@@ -15,7 +15,8 @@ class ReadUser extends React.Component {
             totalRecords: null,
             currentPage: null,
             totalPages: null,
-            pageLimit: 5
+            pageLimit: 5,
+            searchText: ""
         };
     }
 
@@ -24,11 +25,11 @@ class ReadUser extends React.Component {
     }
 
     getData = async() => {
-        // await baseUrl.get(`/users?number=0&size=${this.state.pageLimit}`, {headers: authHeader()})
-        await baseUrl.get(`/users`, {headers: authHeader()})
+        await baseUrl.get(`/users?number=0&size=${this.state.pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                users: response.data
+                users: Object.values(response.data)[0],
+                totalRecords: parseInt(Object.keys(response.data)[0])
             })
         })
         .catch( (error) => {
@@ -57,37 +58,61 @@ class ReadUser extends React.Component {
         });
     } 
     
+    onSearchSubmitForm = async () => {
+        // e.preventDefault();
+        const {searchText} = this.state;    
+        console.log(searchText);
+        await baseUrl.get(`/users?search=${searchText}`, {headers: authHeader()})
+        .then( (response) => {
+            this.setState({
+                users: response.data,
+                totalRecords: null
+            })
+          
+        });
+     
+    }
+
+    onSearchText = (e) => {
+        // e.preventDefault();
+        this.setState({searchText: e.target.value});
+    }
+    
     onHandlePageLimitSelection = async (e) => {
         e.preventDefault();
         this.setState({pageLimit: parseInt(e.target.value)});
     }
 
     render() {
-        const { totalRecords, pageLimit } = this.state;
+        const { totalRecords, pageLimit, searchText } = this.state;
         return (
-<main>
     <div className="container">
         
-        <div className="container text-center">
+        <div className="text-center">
             <div>
-                <h1 className="h1-view">FAQ</h1>
+                <h1 className="h1-view">User</h1>
             </div>
-            <p>
-                <input
-                    type="text"
-                    placeholder="Search FAQ by question..."
-                    name="searchtext"
-                />
-            </p>
-            <p>
-                <button
-                    id="search button"
-                    type="submit"
-                    className="btn btn-primary"
-                >
-                    Search
-                </button>
-            </p>
+            {/* <form onSubmit={this.onSearchForm} method="get" action="#"> */}
+                <p>
+                    <input
+                        type="text"
+                        placeholder="Search user by username..."
+                        // name="search"
+                        name="searchText"
+                        onChange={this.onSearchText}
+                    />
+                </p>
+                <p>
+                    <button
+                        // id="search button"
+                        // type="submit"
+                        onClick={()=>this.onSearchSubmitForm()}
+                        className="btn btn-primary"
+                    >
+                        Search
+                    </button>
+                </p>
+            {/* </form> */}
 
             {/* <div className="d-flex flex-row align-items-center">
                 Page size:
@@ -97,6 +122,7 @@ class ReadUser extends React.Component {
                     <option value="15">15</option>
                 </select>
             </div><br/> */}
+
             <div className="d-flex table-data">
                 <table className="table table-striped scrollTable center"
                     border={1}
@@ -104,12 +130,12 @@ class ReadUser extends React.Component {
                 >
                     <thead className="thead-dark">
                         <tr>
-                            <th>select</th>
+                            {/* <th>select</th> */}
                             <th>ID</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Status</th>
                             <th>Last modified date</th>
+                            <th>Status</th>
                             <th colSpan="2">Action</th>
                         </tr>
                     </thead>
@@ -118,27 +144,22 @@ class ReadUser extends React.Component {
                     </tbody>
                 </table>
             </div>
-            
             <div className="d-flex flex-row py-4 align-items-center">
-               {
-                   (totalRecords !== null) ?
-                   <Pagination 
+                   {totalRecords && <Pagination 
                    totalRecords={totalRecords} 
                    pageLimit={pageLimit} 
                    pageNeighbours={1} 
                    onPageChanged={this.onPageChanged}
-                    /> : null
-               }
+                    /> }
             </div>
-
+                <h1>{searchText}</h1>
             <div className="btn">
-                <Link className="btn btn-primary" to="/admin/users/create">
+                <Link className="btn btn-primary" to="/admin/faq/create">
                     Create new FAQ
                 </Link>
             </div>
         </div>
     </div>
-</main>
         );
     }
 }

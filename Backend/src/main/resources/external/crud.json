@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "be47038f-887a-43fb-aa95-9786b10d5ace",
+		"_postman_id": "89e36938-90dd-4d12-b85c-349c21122008",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -16,7 +16,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMwMzk5LCJleHAiOjE2MDQyMTY3OTl9.R84v38o-z75ZyGV_gNbf5eZDGxt7r1620_x4wlSzGzTCgtstVSZnpNrwSZAJwo_xZ42yTzxSfgzmQkudFxLtrQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjM3NDA1LCJleHAiOjE2MDQ3MjM4MDV9.iST_AMGP9rkvQDtew0yDA1ZoqByMdd01oIXDa-Sbnqp8sMCDCtRfwu2tVeO3Lgn3jeZlPYavD7AZQInho4mwRg",
 							"type": "string"
 						}
 					]
@@ -196,7 +196,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE2MTkwLCJleHAiOjE2MDQyMDI1OTB9.m6cKMXRm_JMmILZxxzMgiAi9NfKrMlhW28vsDqMG4c9KN79bSpedWaqo0VIxZnoD33rK_7VSlOLLwMINBsjb0w",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjM3NDA1LCJleHAiOjE2MDQ3MjM4MDV9.iST_AMGP9rkvQDtew0yDA1ZoqByMdd01oIXDa-Sbnqp8sMCDCtRfwu2tVeO3Lgn3jeZlPYavD7AZQInho4mwRg",
 							"type": "string"
 						}
 					]
@@ -236,7 +236,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTM5MDg3LCJleHAiOjE2MDQyMjU0ODd9.TZYnpza7mFBPjxGbxdULawK5QmmmbTnnNDlOfCTJRB_QYq_jfke_ZwDyn3TmK1QWrdolRKQW-4wi4C_JR6x0LQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjM3NDA1LCJleHAiOjE2MDQ3MjM4MDV9.iST_AMGP9rkvQDtew0yDA1ZoqByMdd01oIXDa-Sbnqp8sMCDCtRfwu2tVeO3Lgn3jeZlPYavD7AZQInho4mwRg",
 							"type": "string"
 						}
 					]
@@ -244,14 +244,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users",
+					"raw": "http://localhost:8080/users/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users"
+						"users",
+						"all"
 					]
 				},
 				"description": "read all user"
@@ -444,7 +445,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE2MTkwLCJleHAiOjE2MDQyMDI1OTB9.m6cKMXRm_JMmILZxxzMgiAi9NfKrMlhW28vsDqMG4c9KN79bSpedWaqo0VIxZnoD33rK_7VSlOLLwMINBsjb0w",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjM3NDA1LCJleHAiOjE2MDQ3MjM4MDV9.iST_AMGP9rkvQDtew0yDA1ZoqByMdd01oIXDa-Sbnqp8sMCDCtRfwu2tVeO3Lgn3jeZlPYavD7AZQInho4mwRg",
 							"type": "string"
 						}
 					]
@@ -461,7 +462,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/2",
+					"raw": "http://localhost:8080/users/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -469,7 +470,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"2"
+						"4"
 					]
 				},
 				"description": "delete user by id"
@@ -514,6 +515,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjUxNjczLCJleHAiOjE2MDQ3MzgwNzN9.CKlzYwkq-yl-ZIRTFXQaO6lwvg6sV8MjfdLivyohJmgg3HkH8IHXhRSe2IkJk-tLjRdRw-NxGZjWCFvhshJCaw",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -549,7 +560,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMwMzk5LCJleHAiOjE2MDQyMTY3OTl9.R84v38o-z75ZyGV_gNbf5eZDGxt7r1620_x4wlSzGzTCgtstVSZnpNrwSZAJwo_xZ42yTzxSfgzmQkudFxLtrQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjU0NzU3LCJleHAiOjE2MDQ3NDExNTd9.q4G_uN7N5pJj1HKHH4aBYr0QFDgG7l78qTX7mZt51kv6i_0Qmw3MzHu_PJNiCxgwF052x3kuZhznB-ccB_aXDw",
 							"type": "string"
 						}
 					]
@@ -558,7 +569,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\" : \"1\",\n    \"fullname\" : \"Dang Thai San\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"1\",\n    \"birthday\" : \"2020-01-01\",\n    \"avatar\" : \"/my/avatar\"\n}",
+					"raw": "{\n    \"id\" : \"1\",\n    \"firstname\":\"San\",\n    \"lastname\" :\"Dang\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"MALE\",\n    \"birthday\" : \"2020-01-01\",\n    \"avatar\" : \"/my/avatar\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -588,7 +599,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjUxMjc4LCJleHAiOjE2MDQ3Mzc2Nzh9.TFQt_SoLDediLPZruEX_s57N_X9_RwOyy0GDEh6pe1zs1xdvbiC1irUnPcSIqCfLItCSt2cxATgHNFWCEzppHQ",
 							"type": "string"
 						}
 					]
@@ -626,7 +637,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTMxNTgwLCJleHAiOjE2MDQyMTc5ODB9.b7x2NsTcoNmyWgE_8jZXdwrUht3_MmPOZx8husRpYkpoPjD9M7eIe4bN0YvosUHF30eSKDVSdsp2Ia8L740O8A",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjU0OTI3LCJleHAiOjE2MDQ3NDEzMjd9.nDg6sxk5ucsuv-rwo0liYPGKcrG3rZnctkLIcsfmNvXKbvKrYEMeYHhYObhGXax4Zq6zEiem5qnEnhBzgVnReQ",
 							"type": "string"
 						}
 					]
@@ -635,7 +646,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\":\"2\",\n    \"firstname\" : \"John\",\n    \"lastname\" : \"Doe\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"MALE\",\n    \"birthday\" : \"2020-01-02\",\n    \"avatar\" : \"/my/avatar3\"\n}",
+					"raw": "{\n    \"firstname\" : \"John\",\n    \"lastname\" : \"Doe\",\n    \"address\" : \"xyz str\",\n    \"gender\" : \"MALE\",\n    \"birthday\" : \"2020-01-02\",\n    \"avatar\" : \"/images/1.jpg\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1813,7 +1824,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNDEzOTQ1MCwiZXhwIjoxNjA0MjI1ODUwfQ.dtC8QtHDSP_ZToDff5BpMMDj_coZ25PXdAzplbFYEaBO4Cx1jcx-4BIRVwqt3mtGpS0b0W_vemgpYNlXOELAeg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZEJvd2llIiwiaWF0IjoxNjA0NTY5NTU3LCJleHAiOjE2MDQ2NTU5NTd9.YQ-13ZFUpCwGUW1DHFP0vNsirGDAhhouQ_zYLKwJf70ktY_ZLMmDnpRVHjtAVRIrRlxx9gy39BpuXNuh0f9ZjA",
 							"type": "string"
 						}
 					]
@@ -2032,6 +2043,193 @@
 					]
 				},
 				"description": "update faq"
+			},
+			"response": []
+		},
+		{
+			"name": "read all faq",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDU2MjI0LCJleHAiOjE2MDQxNDI2MjR9.G-FWTgZdV6_NFUGvRrLfRA9Wdiklr0cizyIv1SpYsy0beIj7rOVMjiRIFFjbe80ocgBEsGqOesFtnYs7E40qUA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/faq",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"faq"
+					]
+				},
+				"description": "read all faq"
+			},
+			"response": []
+		},
+		{
+			"name": "create faq",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NDgwMzMzLCJleHAiOjE2MDQ1NjY3MzN9.JnevdcU0lMt9AweSnxsPEtCe9gossKZQLX2127CkFYux9nFWRM1VBssq5L6-2Vb8vJJyt99enCqHspaC6BO8GA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\" : \"How to?\",\r\n    \"answer\" : \"csacsacascas sacascascascsac saa scsac \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/faq",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"faq"
+					]
+				},
+				"description": "create faq"
+			},
+			"response": []
+		},
+		{
+			"name": "create faq",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NDczNzI4LCJleHAiOjE2MDQ1NjAxMjh9.eLvt2A_Q2crM8e65-vAJvEso14tVDmLwHTAekLwvY9rXVMQuO9VrqnwyS73uoKfz7nY9v_7KmP4gFLpTN6Gf8w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\" : \"what to?\",\r\n    \"answer\" : \"csacsacascas sacascascascsac saa scsac ascascsacasdasca asca  asc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/faq",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"faq"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update faq by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NDgwMzMzLCJleHAiOjE2MDQ1NjY3MzN9.JnevdcU0lMt9AweSnxsPEtCe9gossKZQLX2127CkFYux9nFWRM1VBssq5L6-2Vb8vJJyt99enCqHspaC6BO8GA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : 4,\r\n    \"question\" : \"where to?\",\r\n    \"answer\" : \"111111111111111111111111111111111111111111111111111111111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/faq/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"faq",
+						"4"
+					]
+				},
+				"description": "update faq by id"
+			},
+			"response": []
+		},
+		{
+			"name": "read faq by page",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjU0OTI3LCJleHAiOjE2MDQ3NDEzMjd9.nDg6sxk5ucsuv-rwo0liYPGKcrG3rZnctkLIcsfmNvXKbvKrYEMeYHhYObhGXax4Zq6zEiem5qnEnhBzgVnReQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/faq?number=0&size=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"faq"
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				},
+				"description": "read faq by page"
 			},
 			"response": []
 		}

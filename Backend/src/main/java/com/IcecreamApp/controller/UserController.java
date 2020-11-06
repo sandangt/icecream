@@ -1,6 +1,7 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
@@ -79,6 +81,16 @@ public class UserController {
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Incorrect password!"), HttpStatus.NOT_ACCEPTABLE);
     }
+	
+    @GetMapping(params={"number","size"})
+    public ResponseEntity<Map.Entry<Long,List<UserDTO>>> getUsersByPage(@RequestParam int number, @RequestParam int size) {
+    	/**
+    	 * return key - value pair
+    	 * key is total tuples in the table in database
+    	 * value is list of tuples per page
+    	 */
+    	return ResponseEntity.ok().body(userService.readByPage(number, size));
+    }
 
     @PutMapping(value="/{id}/user-profile")
     public ResponseEntity<MessageResponseDTO> updateProfile(@PathVariable("id") long id, @RequestBody UserDetailDTO newProfile) {
@@ -95,6 +107,11 @@ public class UserController {
     		return new ResponseEntity<>(new MessageResponseDTO("Update status successfully!"), HttpStatus.OK);
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Update status failed!"), HttpStatus.NOT_ACCEPTABLE);
+    }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<UserDTO>> searchUsersByUsername(@RequestParam("search") String username) {
+    	return ResponseEntity.ok().body(userService.readAllByUsername(username));
     }
         
 }

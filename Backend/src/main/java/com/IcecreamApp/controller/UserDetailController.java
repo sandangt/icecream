@@ -46,8 +46,11 @@ public class UserDetailController {
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> createUserDetail(@RequestBody UserDetailDTO userDetailDTO) {
-    	this.userDetailService.create(userDetailDTO);
-    	return ResponseEntity.ok().body(new MessageResponseDTO("Created new FAQ successfully"));
+    	Optional<UserDetail> currentEntityWrapper = this.userDetailService.create(userDetailDTO);
+    	if (currentEntityWrapper.isPresent()) {
+    		return ResponseEntity.ok().body(new MessageResponseDTO("Created new user profile successfully"));
+    	}
+    	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(value = "/{id}")
@@ -55,7 +58,7 @@ public class UserDetailController {
 
     	Optional<UserDetail> currentEntityWrapper = this.userDetailService.update(id, userDetailDTO);
     	if (currentEntityWrapper.isPresent()) {
-        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated FAQ successfully!"));
+        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated user profile successfully!"));
     	}
 		return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
@@ -63,7 +66,7 @@ public class UserDetailController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<MessageResponseDTO> deleteUserDetail(@PathVariable("id") Long id) {
     	if (this.userDetailService.delete(id)) {
-    		return ResponseEntity.ok().body(new MessageResponseDTO("FAQ item has been deleted successfully!"));
+    		return ResponseEntity.ok().body(new MessageResponseDTO("item has been deleted successfully!"));
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }

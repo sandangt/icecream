@@ -65,7 +65,6 @@ class ReadFAQ extends React.Component {
     render() {
         const { totalRecords, pageLimit } = this.state;
         return (
-<main>
     <div className="container">
         
         <div className="container text-center">
@@ -129,13 +128,12 @@ class ReadFAQ extends React.Component {
             </div>
 
             <div className="btn">
-                <Link className="btn btn-primary" to="/admin/faq/create">
+                <Link className="btn btn-primary" to="/admin/users/create">
                     Create new FAQ
                 </Link>
             </div>
         </div>
     </div>
-</main>
         );
     }
 }

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "772f6ea0-81ac-44e0-b53d-e551a903cf44",
+		"_postman_id": "1083eb8f-0b42-4db0-b79d-ab69d4b9593f",
 		"name": "Customized Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -53,7 +53,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb25EYW5nIiwiaWF0IjoxNjA0MTQ3MDA0LCJleHAiOjE2MDQyMzM0MDR9.-S1D0QqabB5cz-kB9U9A2wclxkODDFuu3xyqr6F86wlD9D2SOZxPvg0NbeJzfWOFmJA0yhP6BLqSWMh3U3nKbA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZEJvd2llIiwiaWF0IjoxNjA0NTY5NTU3LCJleHAiOjE2MDQ2NTU5NTd9.YQ-13ZFUpCwGUW1DHFP0vNsirGDAhhouQ_zYLKwJf70ktY_ZLMmDnpRVHjtAVRIrRlxx9gy39BpuXNuh0f9ZjA",
 							"type": "string"
 						}
 					]
@@ -62,7 +62,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    \"1234\",\n    \"12345\"\n]",
+					"raw": "{\n    \"oldPassword\" : \"1234\",\n    \"newPassword\" : \"12345\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -70,7 +70,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/5/password",
+					"raw": "http://localhost:8080/users/4/password",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -78,11 +78,59 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"5",
+						"4",
 						"password"
 					]
 				},
 				"description": "Change password"
+			},
+			"response": []
+		},
+		{
+			"name": "Search user by username",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjQ4MTg4LCJleHAiOjE2MDQ3MzQ1ODh9.TYou8MnVQufcC_GBA9Emo7dNoJkU598rBjXzAQvEDMjTN6lGY_e8nR3pr6JjI4Jw6dObcJnCGANfI2DDbTnjvQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users?search=san",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "san"
+						}
+					]
+				},
+				"description": "Search user by username"
 			},
 			"response": []
 		}

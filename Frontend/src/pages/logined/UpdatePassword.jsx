@@ -108,7 +108,7 @@ class UpdatePassword extends React.Component {
     componentDidMount() {
     }
     render() {
-        if (!this.props.isLoggedIn) {
+        if (!this.props.user) {
             return <Redirect to="/error"/>;
         }
         return (
@@ -195,7 +195,6 @@ class UpdatePassword extends React.Component {
 const mapStateToProps = (state) => {
     console.log(state);
     return {
-        isLoggedIn : state.auth.isLoggedIn,
         user: state.auth.user,
         message : state.message.message
     };

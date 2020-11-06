@@ -16,9 +16,9 @@ class UserTuple extends React.Component {
     render() {
         return (
 <tr>
-    <td>
+    {/* <td>
         <input type="checkbox" />
-    </td>
+    </td> */}
     <td>
         {this.props.obj.id}
     </td>
@@ -29,10 +29,10 @@ class UserTuple extends React.Component {
         {this.props.obj.email}
     </td>
     <td>
-        {this.props.obj.status}
+        {this.props.obj.modifiedDate}
     </td>
     <td>
-        {this.props.obj.modifiedDate}
+        {this.props.obj.status}
     </td>
     <td>
         <Link to={`/admin/users/update/${this.props.obj.id}`} className="btn btn-primary">Edit</Link>
