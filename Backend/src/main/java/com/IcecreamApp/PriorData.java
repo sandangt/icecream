@@ -3,7 +3,6 @@ package com.IcecreamApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import com.IcecreamApp.entity.Category;
 import com.IcecreamApp.entity.Role;
@@ -15,7 +14,7 @@ import com.IcecreamApp.systemConstant.ERole;
 import com.IcecreamApp.systemConstant.EStatus;
 import com.google.common.collect.Sets;
 
-@Component
+//@Component
 public class PriorData implements CommandLineRunner {
 
     @Autowired

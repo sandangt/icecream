@@ -1,30 +1,31 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
-
-import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
+import com.IcecreamApp.entity.User;
+import com.IcecreamApp.entity.UserDetail;
 import com.IcecreamApp.systemConstant.EStatus;
 
 public interface IUserService {
 
-	UserDTO create(UserDTO userDTO);
-
 	List<UserDTO> readAll();
 
-	UserDTO readById(long id);
+	Optional<UserDTO> readById(long id);
 
-	UserDTO update(long id, UserDTO userDTO);
+	User create(UserDTO userDTO);
 
-	void delete(long id);
+	Optional<User> update(long id, UserDTO userDTO);
+
+	boolean delete(long id);
 	
-	ResponseEntity<MessageResponseDTO> changePassword(long id, PasswordDTO passwords);
+	boolean changePassword(long id, PasswordDTO passwords);
 	
-	ResponseEntity<MessageResponseDTO> updateProfile(long id, UserDetailDTO newProfile);
+	Optional<UserDetail> updateProfile(long id, UserDetailDTO newProfile);
 	
-	ResponseEntity<MessageResponseDTO> changeUserStatus(long id, EStatus newStatus);
+	boolean changeUserStatus(long id, EStatus newStatus);
+	
 }

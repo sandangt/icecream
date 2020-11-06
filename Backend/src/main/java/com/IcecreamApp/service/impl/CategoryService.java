@@ -46,7 +46,9 @@ public class CategoryService implements ICategoryService {
 	public Optional<Category> update(long id, CategoryDTO categoryDTO) {
 		Optional<Category> currentEntityWrapper = repository.findById(id);
 		if (currentEntityWrapper.isPresent()) {
-			return Optional.ofNullable(this.repository.save(CategoryConverter.toEntity(categoryDTO)));
+			Category category = CategoryConverter.toEntity(categoryDTO);
+			category.setForeignKey(currentEntityWrapper.get());
+			return Optional.ofNullable(this.repository.save(category));
 		}
 		logger.error(String.format("%s id %ld not found", entityName, id));
 		return Optional.empty();
