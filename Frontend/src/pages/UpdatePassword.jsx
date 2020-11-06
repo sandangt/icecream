@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import baseUrl from "baseUrl.js";
 import "./AuthenticationCard.css";
 import authHeader from "services/authHeader";
-import {logout} from "actions/auth.js";
+import {logout, changePassword} from "actions/auth.js";
 
 const required = (value) => {
     if (!value) {
@@ -22,27 +22,36 @@ const required = (value) => {
     }
 };
 
-const email = (value) => {
-    if (!isEmail(value)) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This is not a valid email.
-            </div>
-        );
-    }
-};
+// const vusername = (value) => {
+//     if (value.length < 3 || value.length > 20) {
+//         return (
+//             <div className="alert alert-danger" role="alert">
+//                 The username must be between 3 and 20 characters.
+//             </div>
+//         );
+//     }
+// };
 
-const vusername = (value) => {
-    if (value.length < 3 || value.length > 20) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The username must be between 3 and 20 characters.
-            </div>
-        );
-    }
-};
+// const validateOldPassword = (value) => {
+//     if (value.length < 6 || value.length > 40) {
+//         return (
+//             <div className="alert alert-danger" role="alert">
+//                 The password must be between 6 and 40 characters.
+//             </div>
+//         );
+//     }
+// };
+// const similarPassword = (value) => {
+//     if () {
+//         return (
+//             <div className="alert alert-danger" role="alert">
+//                 The password must be between 6 and 40 characters.
+//             </div>
+//         );
+//     }
+// };
 
-const vpassword = (value) => {
+const validateNewPassword = (value) => {
     if (value.length < 6 || value.length > 40) {
         return (
             <div className="alert alert-danger" role="alert">
@@ -74,45 +83,33 @@ class UpdatePassword extends React.Component {
             newPassword: e.target.value,
         });
     }
-
-    updatePassword = async (id) => {
-        const pkg = {
-            question: this.state.oldPassword,
-            answer: this.state.newPassword
-        };
-        await baseUrl.put(`/users/${id}/password`, pkg, {headers: authHeader()})
-        .then( response => console.log(response))
-        .catch( error => console.log(error));
-    }
-
     handleSubmit = (e) => {
         e.preventDefault();
 
         this.setState({
             successful: false,
         });
-
+        
         this.form.validateAll();
+
         if (this.checkBtn.context._errors.length === 0) {
-            this.updatePassword(this.props.user.id, this.state.oldPassword, this.state.newPassword);
-            this.props
-                .dispatch(logout())
-                .then(() => {
-                    this.setState({
-                        successful: true,
-                    });
-                })
-                .catch(() => {
-                    this.setState({
-                        successful: false,
-                    });
-                });
+            this.props.dispatch(changePassword(this.props.user.id, this.state.oldPassword, this.state.newPassword))
+            .then(() => {
+                this.setState({successful: true});
+                this.props.dispatch(logout());
+		        window.location.href="/";
+            })
+            .catch(() => {
+                this.setState({successful: false});
+            })
         }
     }
 
+    componentDidMount() {
+    }
     render() {
         if (!this.props.isLoggedIn) {
-            return <Redirect to="/login"/>
+            return <Redirect to="/error"/>;
         }
         return (
             <div className="col-md-12">
@@ -144,7 +141,7 @@ class UpdatePassword extends React.Component {
                                         name="oldPassword"
                                         value={this.state.odlPassword}
                                         onChange={this.onChangeOldPassword}
-                                        validations={[required, email]}
+                                        validations={[required]}
                                     />
                                 </div>
 
@@ -156,7 +153,7 @@ class UpdatePassword extends React.Component {
                                         name="newPassword"
                                         value={this.state.newPassword}
                                         onChange={this.onChangeNewPassword}
-                                        validations={[required, vpassword]}
+                                        validations={[required]}
                                     />
                                 </div>
 

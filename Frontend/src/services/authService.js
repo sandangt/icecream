@@ -1,4 +1,5 @@
 import baseUrl from "baseUrl.js";
+import authHeader from "services/authHeader.js";
 
 
 export const loginService = async (username, password) => {
@@ -19,3 +20,10 @@ export const signupService = (username, email, password) => {
         username, email, password
     });
 };
+
+export const changePasswordService = async (id, oldPassword, newPassword) => {
+    if (oldPassword === newPassword) {
+        return Promise.reject();
+    }
+    return baseUrl.put(`/users/${id}/password`, {id, oldPassword, newPassword}, {headers: authHeader()});
+}

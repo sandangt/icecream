@@ -4,7 +4,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-    SET_MESSAGE
+    SET_MESSAGE,
+    PASSWORD_CHANGED
 } from "./type.js";
 
 import {loginService, signupService, logoutService, changePasswordService} from "services/authService.js";
@@ -75,3 +76,30 @@ export const logout = () => (dispatch) => {
     });
 };
 
+export const changePassword = (id, oldPassword, newPassword) => (dispatch) => {
+    return changePasswordService(id, oldPassword, newPassword).then(
+        (response) => {
+            dispatch({
+                type: PASSWORD_CHANGED
+            });
+            dispatch({
+                type: SET_MESSAGE,
+                payload: response.data.message
+            })
+            return Promise.resolve();
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+              });
+            return Promise.reject();
+        }
+    );
+};

@@ -76,10 +76,10 @@ public class FAQServiceTest {
 		// Then
 		Mockito.verify(faqRepository, Mockito.times(3)).save(Mockito.any(FAQ.class));
 	}
-	@Test
-	public void updateTest() {
-		throw new NotYetImplementedException();
-	}
+//	@Test
+//	public void updateTest() {
+//		throw new NotYetImplementedException();
+//	}
 //	@Test
 //	public void deleteTest() {
 //		throw new NotYetImplementedException();

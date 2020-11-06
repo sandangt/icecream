@@ -70,8 +70,12 @@ public class FAQController {
     }
 	
     @GetMapping
-    public ResponseEntity<Map.Entry<Long,List<FAQDTO>>> getFAQByPage(@RequestParam int number, @RequestParam int size) {        
-    	
+    public ResponseEntity<Map.Entry<Long,List<FAQDTO>>> getFAQByPage(@RequestParam int number, @RequestParam int size) {
+    	/**
+    	 * return key - value pair
+    	 * key is total tuples in the table in database
+    	 * value is list of tuples per page
+    	 */
     	return ResponseEntity.ok().body(faqService.readByPage(number, size));
     }
 	

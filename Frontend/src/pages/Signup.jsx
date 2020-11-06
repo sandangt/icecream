@@ -110,7 +110,7 @@ class Signup extends React.Component {
 
     render() {
         if (this.props.isLoggedIn) {
-            return <Redirect to="/"/>
+            return <Redirect to="/home"/>
         }
         return (
             <div className="col-md-12">

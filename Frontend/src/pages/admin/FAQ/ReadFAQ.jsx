@@ -89,14 +89,15 @@ class ReadFAQ extends React.Component {
                 </button>
             </p>
 
-            <div className="d-flex flex-row align-items-center">
+            {/* <div className="d-flex flex-row align-items-center">
                 Page size:
                 <select defaultValue={pageLimit} onChange={this.onHandlePageLimitSelection}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                 </select>
-            </div><br/>
+            </div><br/> */}
+
             <div className="d-flex table-data">
                 <table className="table table-striped scrollTable center"
                     border={1}
@@ -119,15 +120,12 @@ class ReadFAQ extends React.Component {
             </div>
             
             <div className="d-flex flex-row py-4 align-items-center">
-               {
-                   (totalRecords !== null) ?
-                   <Pagination 
+                   {totalRecords && <Pagination 
                    totalRecords={totalRecords} 
                    pageLimit={pageLimit} 
                    pageNeighbours={1} 
                    onPageChanged={this.onPageChanged}
-                    /> : null
-               }
+                    /> }
             </div>
 
             <div className="btn">
@@ -135,7 +133,6 @@ class ReadFAQ extends React.Component {
                     Create new FAQ
                 </Link>
             </div>
-          
         </div>
     </div>
 </main>

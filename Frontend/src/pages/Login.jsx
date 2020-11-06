@@ -48,7 +48,7 @@ class Login extends React.Component {
         });
         this.form.validateAll();
 
-        const { dispatch, history } = this.props;
+        const { history } = this.props;
 
         if (this.checkBtn.context._errors.length === 0) {
             // dispatch(login(this.state.username, this.state.password))
@@ -71,7 +71,7 @@ class Login extends React.Component {
 
     render() {
         if (this.props.isLoggedIn) {
-            return <Redirect to="/"/>
+            return <Redirect to="/home"/>
         }
         return (
             <div className="col-md-12">

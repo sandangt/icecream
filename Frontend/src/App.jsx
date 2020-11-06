@@ -11,6 +11,7 @@ import Profile from "pages/Profile.jsx";
 import AboutUs from "pages/AboutUs.jsx";
 import Contact from "pages/Contact.jsx";
 import UpdatePassword from "pages/UpdatePassword.jsx";
+import NotFound from "pages/NotFound.jsx";
 
 import ReadFAQ from "pages/admin/FAQ/ReadFAQ.jsx";
 import CreateFAQ from "pages/admin/FAQ/CreateFAQ.jsx";
@@ -37,6 +38,7 @@ class App extends React.Component {
                 <Route exact path="/about" component={AboutUs}/>
                 <Route exact path="/contact" component={Contact}/>
                 <Route exact path="/update-password" component={UpdatePassword}/>
+                <Route exact path="/error" component={NotFound}/>
                 <Route exact path="/">
                     <Redirect to="/home" />
                 </Route>
@@ -48,6 +50,7 @@ class App extends React.Component {
                 <Route exact path="/admin/faq" component={ReadFAQ}/>
                 <Route exact path="/admin/faq/create" component={CreateFAQ}/>
                 <Route exact path="/admin/faq/update/:id" component={UpdateFAQ}/>
+
             </Switch>
             <Footer/>
         </div>

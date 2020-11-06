@@ -25,7 +25,7 @@ class Header extends React.Component {
 				// <button onClick={this.handleLogout} className="btn btn-outline-success my-2 my-sm-0">Logout</button>
 				<div class="btn-group dropleft">
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Hello {this.props.user.username}
+						{this.props.user.username}
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<Link class="dropdown-item" to="/update-password">Change password</Link>

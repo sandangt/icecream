@@ -57,6 +57,7 @@ class UpdateFAQ extends React.Component {
     }
 
     render() {
+        console.log(this.props.match);
         return (
         <div className="container">
             <div style={{ marginTop: 10 }}>
