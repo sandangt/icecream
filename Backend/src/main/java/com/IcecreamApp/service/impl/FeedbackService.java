@@ -32,8 +32,11 @@ public class FeedbackService implements IFeedbackService {
 
 	@Override
 	public Optional<FeedbackDTO> readById(long id) {
-		Feedback feedback = repository.findById(id).get();
-		return Optional.ofNullable(FeedbackConverter.toDTO(feedback));
+		Optional<Feedback> currentEntityWrapper = repository.findById(id);
+		if (currentEntityWrapper.isPresent())
+			return Optional.ofNullable(FeedbackConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override

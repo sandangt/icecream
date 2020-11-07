@@ -37,8 +37,11 @@ public class FAQService implements IFAQService{
 
 	@Override
 	public Optional<FAQDTO> readById(long id) {
-		FAQ faq = repository.findById(id).get();
-		return Optional.ofNullable(FAQConverter.toDTO(faq));
+		Optional<FAQ> currentEntityWrapper = repository.findById(id);
+		if (currentEntityWrapper.isPresent())
+			return Optional.ofNullable(FAQConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override

@@ -37,9 +37,8 @@ public class CategoryController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("id") Long id) {
     	Optional<CategoryDTO> currentEntityWrapper = categoryService.readById(id);
-    	if (currentEntityWrapper.isPresent()) {
+    	if (currentEntityWrapper.isPresent())
         	return ResponseEntity.ok().body(currentEntityWrapper.get());
-    	}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 

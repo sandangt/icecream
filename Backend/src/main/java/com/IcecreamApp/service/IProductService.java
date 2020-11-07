@@ -1,20 +1,21 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.IcecreamApp.DTO.ProductDTO;
+import com.IcecreamApp.entity.Product;
 
 public interface IProductService {
 
-	ProductDTO create(ProductDTO productDTO);
+	Product create(ProductDTO productDTO);
 
 	List<ProductDTO> readAll();
 
-	ProductDTO readById(long id);
+	Optional<ProductDTO> readById(long id);
 
-	ProductDTO update(long id, ProductDTO productDTO);
+	Optional<Product> update(long id, ProductDTO productDTO);
 
-	void delete(long id);
-
+	boolean delete(long id);
 
 }

@@ -1,19 +1,21 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.IcecreamApp.DTO.OrderDetailDTO;
+import com.IcecreamApp.entity.OrderDetail;
 
 public interface IOrderDetailService {
 
-	OrderDetailDTO create(OrderDetailDTO orderDetailDTO);
+	OrderDetail create(OrderDetailDTO orderDetailDTO);
 
 	List<OrderDetailDTO> readAll();
 
-	OrderDetailDTO readById(long id);
+	Optional<OrderDetailDTO> readById(long id);
 
-	OrderDetailDTO update(long id, OrderDetailDTO orderDetailDTO);
+	Optional<OrderDetail> update(long id, OrderDetailDTO orderDetailDTO);
 
-	void delete(long id);
+	boolean delete(long id);
 
 }

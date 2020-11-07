@@ -33,8 +33,11 @@ public class CategoryService implements ICategoryService {
 
 	@Override
 	public Optional<CategoryDTO> readById(long id) {
-		Category category = repository.findById(id).get();
-		return Optional.ofNullable(CategoryConverter.toDTO(category));
+		Optional<Category> currentEntityWrapper = repository.findById(id);
+		if (currentEntityWrapper.isPresent())
+			return Optional.ofNullable(CategoryConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override

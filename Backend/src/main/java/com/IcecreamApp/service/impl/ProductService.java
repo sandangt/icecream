@@ -1,8 +1,8 @@
 package com.IcecreamApp.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.converter.ProductConverter;
 import com.IcecreamApp.entity.Product;
-import com.IcecreamApp.exception.ResourceNotFoundException;
 import com.IcecreamApp.repository.ProductRepository;
 import com.IcecreamApp.service.IProductService;
 
@@ -22,49 +21,48 @@ public class ProductService implements IProductService {
 	@Autowired
 	private ProductRepository repository;
 	private String entityName = "Product";
-	Logger log = LoggerFactory.getLogger(CategoryService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 	
 	@Override
-	public List<ProductDTO> readAll() {
-		
-		List<ProductDTO> products = new ArrayList<>();
-		
-    	for (Product i : repository.findAll()) {
-    		products.add(ProductConverter.toDTO(i));
-    	}
-    	return products;
+	public List<ProductDTO> readAll() {    	
+    	return repository.findAll().stream().map(ProductConverter::toDTO).collect(Collectors.toList());
 	}
 
 	@Override
-	public ProductDTO readById(long id) {
-		Product product = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
-    	return ProductConverter.toDTO(product);
+	public Optional<ProductDTO> readById(long id) {
+		Optional<Product> currentEntityWrapper = repository.findById(id);
+		if (currentEntityWrapper.isPresent()) 
+			return Optional.ofNullable(ProductConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override
-	public ProductDTO create(ProductDTO productDTO) {
-		repository.save(ProductConverter.toEntity(productDTO));
-		return productDTO;
+	public Product create(ProductDTO productDTO) {
+		return repository.save(ProductConverter.toEntity(productDTO));
 	}	
 	
 	@Override
-	public ProductDTO update(long id, ProductDTO productDTO) {
+	public Optional<Product> update(long id, ProductDTO productDTO) {
 
 		Optional<Product> currentEntityWrapper = repository.findById(id);
-		if (!currentEntityWrapper.isPresent()) {
-			throw new ResourceNotFoundException(this.entityName, id);
+		if (currentEntityWrapper.isPresent()) {
+			Product product = ProductConverter.toEntity(productDTO);
+			product.setForeignKey(currentEntityWrapper.get());
+			return Optional.ofNullable(repository.save(product));
 	    }
-		Product product = ProductConverter.toEntity(productDTO);
-		product.setForeignKey(currentEntityWrapper.get());
-		this.repository.save(product);
-		return productDTO;
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 	
 	@Override
-	public void delete(long id) {
-		repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(this.entityName, id));
-		this.repository.deleteById(id);
+	public boolean delete(long id) {
+		Optional<Product> currentEntityWrapper = repository.findById(id);
+		if (currentEntityWrapper.isPresent()) {
+			this.repository.deleteById(id);
+			return true;
+		}
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return false;
 	}
-
 }

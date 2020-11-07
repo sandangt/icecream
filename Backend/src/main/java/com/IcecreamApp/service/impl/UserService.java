@@ -47,8 +47,11 @@ public class UserService implements IUserService {
 
 	@Override
 	public Optional<UserDTO> readById(long id) {
-    	User user = userRepository.findById(id).get();
-    	return Optional.ofNullable(UserConverter.toDTO(user));
+		Optional<User> currentEntityWrapper = userRepository.findById(id);
+		if (currentEntityWrapper.isPresent())
+			return Optional.ofNullable(UserConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s id %ld not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override

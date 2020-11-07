@@ -1,8 +1,11 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.OrderDTO;
+import com.IcecreamApp.entity.Order;
 import com.IcecreamApp.service.IOrderService;
 
 @CrossOrigin
@@ -25,27 +30,37 @@ public class OrderController {
 	private IOrderService orderService;
 	
 	@GetMapping
-	public List<OrderDTO> getAllOrders() {        
-		return orderService.readAll();
+	public ResponseEntity<List<OrderDTO>> getAllOrders() {        
+		return ResponseEntity.ok().body(orderService.readAll());
 	}
 
 	@GetMapping(value = "/{id}")
-	public OrderDTO getOrderById(@PathVariable("id") Long id) {
-		return orderService.readById(id);
+	public ResponseEntity<OrderDTO> getOrderById(@PathVariable("id") Long id) {		
+    	Optional<OrderDTO> currentEntityWrapper = orderService.readById(id);
+    	if (currentEntityWrapper.isPresent())
+        	return ResponseEntity.ok().body(currentEntityWrapper.get());
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping
-	public OrderDTO createOrder(@RequestBody OrderDTO orderDTO) {
-		return this.orderService.create(orderDTO);
+	public ResponseEntity<MessageResponseDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+		this.orderService.create(orderDTO);
+		return ResponseEntity.ok().body(new MessageResponseDTO("Created new Order successfully"));
 	}
 
 	@PutMapping(value = "/{id}")
-	public OrderDTO updateOrder(@PathVariable("id") Long id, @RequestBody OrderDTO orderDTO) {
-		return this.orderService.update(id, orderDTO);
+	public ResponseEntity<MessageResponseDTO> updateOrder(@PathVariable("id") Long id, @RequestBody OrderDTO orderDTO) {
+    	Optional<Order> currentEntityWrapper = orderService.update(id, orderDTO);
+    	if (currentEntityWrapper.isPresent()) {
+        	return ResponseEntity.ok().body(new MessageResponseDTO("Updated Order successfully!"));
+    	}
+		return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public void deleteOrder(@PathVariable("id") Long id) {
-		this.orderService.delete(id);
+	public ResponseEntity<MessageResponseDTO> deleteOrder(@PathVariable("id") Long id) {
+    	if (orderService.delete(id))
+    		return ResponseEntity.ok().body(new MessageResponseDTO("Order item has been deleted successfully!"));
+    	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
 	}
 }
