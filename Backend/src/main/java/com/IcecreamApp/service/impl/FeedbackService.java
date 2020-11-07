@@ -35,7 +35,7 @@ public class FeedbackService implements IFeedbackService {
 		Optional<Feedback> currentEntityWrapper = repository.findById(id);
 		if (currentEntityWrapper.isPresent())
 			return Optional.ofNullable(FeedbackConverter.toDTO(currentEntityWrapper.get()));
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 
@@ -51,7 +51,7 @@ public class FeedbackService implements IFeedbackService {
 		if (currentEntityWrapper.isPresent()) {
 			return Optional.ofNullable(this.repository.save(FeedbackConverter.toEntity(feedbackDTO)));
 		}
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 
@@ -62,7 +62,7 @@ public class FeedbackService implements IFeedbackService {
 			this.repository.deleteById(id);
 			return true;
 		}
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
 }

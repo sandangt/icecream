@@ -58,38 +58,80 @@ public class FAQServiceTest {
 		Optional<FAQDTO> entity1 = faqService.readById(1L);
 		Optional<FAQDTO> entity2 = faqService.readById(2L);
 		Optional<FAQDTO> entity3 = faqService.readById(3L);
+		Optional<FAQDTO> entity4 = faqService.readById(4L);
 		// Then
 		assertEquals("What to?", entity1.get().getQuestion());
 		assertEquals("no idea", entity2.get().getAnswer());
 		assertEquals(3L, entity3.get().getId());
-		Mockito.verify(faqRepository, Mockito.times(3)).findById(Mockito.any(Long.class));
-		
+		assertEquals(Optional.empty(), entity4);
+		Mockito.verify(faqRepository, Mockito.times(4)).findById(Mockito.any(Long.class));
 	}
+	
 	@Test
 	public void createTest() {
 		// Given
+		FAQDTO faqdto1 = new FAQDTO(1L, new Date(0), "What to?", "no idea");
+		FAQDTO faqdto2 = new FAQDTO(2L, new Date(0), "Why to?", "no idea");
+		FAQDTO faqdto3 = new FAQDTO(3L, new Date(0), "How to?", "no idea");
+//		FAQ faq1 = FAQConverter.toEntity(faqdto1);
+//		FAQ faq2 = FAQConverter.toEntity(faqdto2);
+//		FAQ faq3 = FAQConverter.toEntity(faqdto3);
+//		Mockito.when(faqRepository.save(faq1)).thenReturn(faq1);
+//		Mockito.when(faqRepository.save(faq2)).thenReturn(faq2);
+//		Mockito.when(faqRepository.save(faq3)).thenReturn(faq3);
 		
 		// When
-		faqService.create(new FAQDTO(1L, new Date(0), "What to?", "no idea"));
-		faqService.create(new FAQDTO(2L, new Date(0), "Why to?", "no idea"));
-		faqService.create(new FAQDTO(3L, new Date(0), "How to?", "no idea"));
+		FAQ faqTest1 = faqService.create(faqdto1);
+		FAQ faqTest2 = faqService.create(faqdto2);
+		FAQ faqTest3 = faqService.create(faqdto3);
+		// Then
+//		assertEquals(faq1.getAnswer(), faqTest1.getAnswer());
+//		assertEquals(faq2.getId(), faqTest2.getId());
+//		assertEquals(faq3.getQuestion(), faqTest3.getQuestion());
+		Mockito.verify(faqRepository, Mockito.times(3)).save(Mockito.any(FAQ.class));
+	}
+	@Test
+	public void updateTest() {
+		// Given
+		Mockito.when(faqRepository.findById(1L)).thenReturn(
+				Optional.ofNullable(new FAQ(1L, "What", "don't know")));
+		Mockito.when(faqRepository.findById(2L)).thenReturn(
+				Optional.ofNullable(new FAQ(2L, "Why", "don't know")));
+		Mockito.when(faqRepository.findById(3L)).thenReturn(
+				Optional.ofNullable(new FAQ(3L, "How", "don't know")));
+		Mockito.when(faqRepository.findById(4L)).thenReturn(
+				Optional.empty());
+		
+		// When
+		faqService.update(1L, new FAQDTO(1L, null, "What to?", "no idea"));
+		faqService.update(2L, new FAQDTO(2L, null, "Why to?", "no idea"));
+		faqService.update(3L, new FAQDTO(3L, null, "How to?", "no idea"));
+		faqService.update(4L, new FAQDTO(4L, null, "Where to?", "no idea"));
+		
 		// Then
 		Mockito.verify(faqRepository, Mockito.times(3)).save(Mockito.any(FAQ.class));
 	}
-//	@Test
-//	public void updateTest() {
-//		throw new NotYetImplementedException();
-//	}
-//	@Test
-//	public void deleteTest() {
-//		throw new NotYetImplementedException();
-//	}
-
-//	Optional<FAQDTO> readById(long id);
-//
-//	FAQ create(FAQDTO faqDTO);
-//
-//	Optional<FAQ> update(long id, FAQDTO faqDTO);
-//
-//	boolean delete(long id);
+	@Test
+	public void deleteTest() {
+		// Given
+		Mockito.when(faqRepository.findById(1L)).thenReturn(
+				Optional.ofNullable(new FAQ(1L, "What", "don't know")));
+		Mockito.when(faqRepository.findById(2L)).thenReturn(
+				Optional.ofNullable(new FAQ(2L, "Why", "don't know")));
+		Mockito.when(faqRepository.findById(3L)).thenReturn(
+				Optional.ofNullable(new FAQ(3L, "How", "don't know")));
+		Mockito.when(faqRepository.findById(4L)).thenReturn(
+				Optional.empty());
+		
+		// When
+		boolean result1 = faqService.delete(1L);
+		faqService.delete(2L);
+		faqService.delete(3L);
+		boolean result4 = faqService.delete(4L);
+		
+		// Then
+		assertEquals(result1, true);
+		assertEquals(result4, false);
+		Mockito.verify(faqRepository, Mockito.times(3)).deleteById(Mockito.any(Long.class));
+	}
 }

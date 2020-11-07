@@ -50,7 +50,7 @@ public class UserService implements IUserService {
 		Optional<User> currentEntityWrapper = userRepository.findById(id);
 		if (currentEntityWrapper.isPresent())
 			return Optional.ofNullable(UserConverter.toDTO(currentEntityWrapper.get()));
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 
@@ -68,7 +68,7 @@ public class UserService implements IUserService {
 			user.setForeignKey(currentEntityWrapper.get());
 			return Optional.ofNullable(this.userRepository.save(user));
 	    }
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 	
@@ -83,7 +83,7 @@ public class UserService implements IUserService {
 			userRepository.deleteById(id);
 			return true;
 	    }
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
 
@@ -97,7 +97,7 @@ public class UserService implements IUserService {
 					userRepository.save(user);
 					return true;
 			}
-			logger.error(String.format("%s id %ld not found", entityName, id));
+			logger.error(String.format("%s id %d not found", entityName, id));
 		}
 		return false;
 	}
@@ -109,7 +109,7 @@ public class UserService implements IUserService {
 			newProfile.setId(id);
 			return Optional.ofNullable(userDetailRepository.save(UserDetailConverter.toEntity(newProfile)));
 	    }
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 

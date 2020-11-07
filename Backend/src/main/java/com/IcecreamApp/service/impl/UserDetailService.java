@@ -47,7 +47,7 @@ public class UserDetailService implements IUserDetailService {
 		if (currentEntityWrapper.isPresent()) {
 			return Optional.ofNullable(userDetailRepository.save(UserDetailConverter.toEntity(userDetailDTO)));
 		}
-		logger.error(String.format("%s id %ld not found", entityName, userDetailDTO.getId()));
+		logger.error(String.format("%s id %d not found", entityName, userDetailDTO.getId()));
 		return Optional.empty();
 	}
 
@@ -59,7 +59,7 @@ public class UserDetailService implements IUserDetailService {
 			userDetailDTO.setId(id);
 			return Optional.ofNullable(this.userDetailRepository.save(UserDetailConverter.toEntity(userDetailDTO)));
 	    }
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 
@@ -70,7 +70,7 @@ public class UserDetailService implements IUserDetailService {
 			this.userDetailRepository.deleteById(id);
 			return true;
 		}
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
 	

@@ -36,7 +36,7 @@ public class OrderService implements IOrderService {
 		Optional<Order> currentEntityWrapper = repository.findById(id);
 		if (currentEntityWrapper.isPresent()) 
 			return Optional.ofNullable(OrderConverter.toDTO(currentEntityWrapper.get()));
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 
@@ -54,7 +54,7 @@ public class OrderService implements IOrderService {
 			order.setForeignKey(currentEntityWrapper.get());
 			return Optional.ofNullable(this.repository.save(order));
 	    }
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 	
@@ -65,7 +65,7 @@ public class OrderService implements IOrderService {
 			this.repository.deleteById(id);
 			return true;
 		}
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
 }

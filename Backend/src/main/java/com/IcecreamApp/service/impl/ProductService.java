@@ -33,7 +33,7 @@ public class ProductService implements IProductService {
 		Optional<Product> currentEntityWrapper = repository.findById(id);
 		if (currentEntityWrapper.isPresent()) 
 			return Optional.ofNullable(ProductConverter.toDTO(currentEntityWrapper.get()));
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 
@@ -51,7 +51,7 @@ public class ProductService implements IProductService {
 			product.setForeignKey(currentEntityWrapper.get());
 			return Optional.ofNullable(repository.save(product));
 	    }
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
 	
@@ -62,7 +62,7 @@ public class ProductService implements IProductService {
 			this.repository.deleteById(id);
 			return true;
 		}
-		logger.error(String.format("%s id %ld not found", entityName, id));
+		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
 }
