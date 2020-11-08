@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "89e36938-90dd-4d12-b85c-349c21122008",
+		"_postman_id": "33dd1322-cf35-41f4-af38-df55b0b3657d",
 		"name": "Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -236,7 +236,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjM3NDA1LCJleHAiOjE2MDQ3MjM4MDV9.iST_AMGP9rkvQDtew0yDA1ZoqByMdd01oIXDa-Sbnqp8sMCDCtRfwu2tVeO3Lgn3jeZlPYavD7AZQInho4mwRg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NzYwMTY3LCJleHAiOjE2MDQ4NDY1Njd9.DZLxIGR8QgohRB61eKCTFR1vqLVdLlimVyF3XKYFdlLh0As_xLLhKaLeUrvPhdMVSBr_Ln1RgvM9kTYz3ZO_LA",
 							"type": "string"
 						}
 					]
@@ -244,15 +244,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users/all",
+					"raw": "http://localhost:8080/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users",
-						"all"
+						"users"
 					]
 				},
 				"description": "read all user"
@@ -267,7 +266,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZEJvd2llIiwiaWF0IjoxNjAzOTAyMjc1LCJleHAiOjE2MDM5ODg2NzV9.ml4a59WIOHBNAQKocFaDMvqq6KbIpMot-9Oon53nPcKClfdiQAmQ3aWs7DUz5lDTtSKtPiDDl6-csiIAiSnqPg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0ODU0MTYwLCJleHAiOjE2MDQ5NDA1NjB9.KA4nGcElOt4Ko-cIVbJVToEoJSixxye3bODoGe589XyRhqQ-wbUzO77OimdY8KUhWQexLBZsuQdGbTUWjxNnFg",
 							"type": "string"
 						}
 					]
@@ -275,7 +274,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users/4",
+					"raw": "http://localhost:8080/users/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -283,7 +282,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"4"
+						"6"
 					]
 				},
 				"description": "read user by id"
@@ -2054,7 +2053,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MDU2MjI0LCJleHAiOjE2MDQxNDI2MjR9.G-FWTgZdV6_NFUGvRrLfRA9Wdiklr0cizyIv1SpYsy0beIj7rOVMjiRIFFjbe80ocgBEsGqOesFtnYs7E40qUA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NzE0MTE4LCJleHAiOjE2MDQ4MDA1MTh9.ccBksn7qosC4MCSBNvgD3ahA-2pleh3FJBg0umwhQUG_yY-SSHwMIc_s8KuZ0e3RPtc093t6uoB1IloEWXPLNQ",
 							"type": "string"
 						}
 					]
@@ -2062,14 +2061,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/faq",
+					"raw": "http://localhost:8080/faq/51",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"faq"
+						"faq",
+						"51"
 					]
 				},
 				"description": "read all faq"
@@ -2084,7 +2084,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NDgwMzMzLCJleHAiOjE2MDQ1NjY3MzN9.JnevdcU0lMt9AweSnxsPEtCe9gossKZQLX2127CkFYux9nFWRM1VBssq5L6-2Vb8vJJyt99enCqHspaC6BO8GA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NzE0OTczLCJleHAiOjE2MDQ4MDEzNzN9.I2aNbRQNg_Q7XlCqxa4NcCvr8ASXkB7CDgPcVhH0vj6Z7Plo9rUkIKHu8D2P6TJUm6NsNKVJr5qWHAsVi5eKvQ",
 							"type": "string"
 						}
 					]
@@ -2201,7 +2201,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjU0OTI3LCJleHAiOjE2MDQ3NDEzMjd9.nDg6sxk5ucsuv-rwo0liYPGKcrG3rZnctkLIcsfmNvXKbvKrYEMeYHhYObhGXax4Zq6zEiem5qnEnhBzgVnReQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0ODA4MjgxLCJleHAiOjE2MDQ4OTQ2ODF9.S2smra6DmxHpfPLZOPCxo0vJOSG8sAcP650qWbtU9G-_852O-xsSOZ3ddBVNBggJQ5_YqjwfYIUMhs2McHye_w",
 							"type": "string"
 						}
 					]

@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.PasswordDTO;
+import com.IcecreamApp.DTO.RolesAndStatusDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.entity.UserDetail;
 import com.IcecreamApp.service.IUserService;
-import com.IcecreamApp.systemConstant.EStatus;
 
 @CrossOrigin
 @RestController
@@ -92,7 +92,7 @@ public class UserController {
     	return ResponseEntity.ok().body(userService.readByPage(page, offset));
     }
 
-    @PutMapping(value="/{id}/user-profile")
+    @PutMapping(value="/{id}/profile")
     public ResponseEntity<MessageResponseDTO> updateProfile(@PathVariable("id") long id, @RequestBody UserDetailDTO newProfile) {
     	Optional<UserDetail> currentEntityWrapper = this.userService.updateProfile(id, newProfile); 
     	if (currentEntityWrapper.isPresent()) {
@@ -101,12 +101,12 @@ public class UserController {
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     	
     }
-    @PutMapping(value="/{id}/user-status")
-    public ResponseEntity<MessageResponseDTO> changeStatus(@PathVariable("id") long id, @RequestBody EStatus newStatus) {
-    	if (this.userService.changeUserStatus(id, newStatus)) {
-    		return new ResponseEntity<>(new MessageResponseDTO("Update status successfully!"), HttpStatus.OK);
+    @PutMapping(value="/{id}/roles-status")
+    public ResponseEntity<MessageResponseDTO> updateRolesAndStatus(@PathVariable("id") long id, @RequestBody RolesAndStatusDTO rolesNstatus) {
+    	if (this.userService.updateRolesAndStatus(id, rolesNstatus).isPresent()) {
+    		return new ResponseEntity<>(new MessageResponseDTO("Update status and roles successfully!"), HttpStatus.OK);
     	}
-    	return new ResponseEntity<>(new MessageResponseDTO("Update status failed!"), HttpStatus.NOT_ACCEPTABLE);
+    	return new ResponseEntity<>(new MessageResponseDTO("Update failed!"), HttpStatus.NOT_ACCEPTABLE);
     }
     
     @GetMapping(params="search")

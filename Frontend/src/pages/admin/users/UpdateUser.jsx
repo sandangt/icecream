@@ -1,4 +1,7 @@
 import React from 'react';
+import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
+
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
 
@@ -8,73 +11,93 @@ class UpdateUser extends React.Component {
         this.state = {
             username: "",
             email: "",
-            status: "",
+            status: 1,
+            roles: [],
             profile: {},
-            loading: false
+            getloading: false,
+            postloading: false
         }
-
+        this.inputCheckboxList= [];
+        this.inputStatus = "";
     }
 
     componentDidMount() {
         this.getData();
+        // if (this.checkboxList.current !== null) {
+        //     this.checkboxList.current.childNodes.forEach( (value) => {
+        //         if (value.name === this.states.roles.name)
+        //     });
+        // }
     }
-
+    componentDidUpdate(){
+        setTimeout(() => this.setState({postloading: false}), 5000);
+      }
     getData = async () => {
         await baseUrl.get(`/users/${this.props.match.params.id}`, {headers: authHeader()})
             .then(response => {
                 this.setState ({
                 username : response.data.username,
                 email: response.data.email,
-                status: response.data.status
+                status: response.data.status,
+                roles: response.data.roles,
+                profile: response.data.userDetail,
+                getloading:true
                 });
             })
             .catch( error => {
                 console.log(error);
             });
-        await baseUrl.get(`/user-details/${this.props.match.params.id}`, {headers: authHeader()})
-        .then(response => {
-            this.setState({
-                profile: response.data,
-                loading:true
-            });
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    }
-    onChangeQuestion = (e) => {
-        this.setState({
-            question: e.target.value
-        });
-    }
-    onChangeAnswer = (e) => {
-        this.setState({
-            answer: e.target.value
-        })
     }
 
-    onSubmit = (e) => {
-        e.preventDefault();
-        const obj = {
-            id: this.props.match.params.id,
-            question: this.state.question,
-            answer: this.state.answer
-        };
-        baseUrl.put(`/faq/${this.props.match.params.id}`, obj, {headers: authHeader()})
-            .then(response => console.log(response.data))
-            .catch(error => console.log(error));
-
-        this.props.history.push('/admin/faq');
+    renderRoles = () => {
+        return this.state.roles.map((value) => <li>{value.name}</li>);
     }
 
     backButtonHandle = (e) => {
         e.preventDefault();
-        this.props.history.push("/admin/faq");
+        this.props.history.push("/admin/users");
     }
 
+    onSelectStatus = (e) => {
+        // this.setState({
+        //     status: e.target.value
+        // });
+        this.inputStatus = e.target.value;
+    }
+
+    onCheckBox = (e) => {
+        let obj = {
+            id : e.target.value.split(" ")[0],
+            name : e.target.value.split(" ")[1]
+        }
+        if (e.target.checked) {
+
+            this.inputCheckboxList.push(obj);
+        }
+        else {
+            this.inputCheckboxList.pop(obj);
+        }
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        const pkg = {
+            status: this.inputStatus,
+            roles: this.inputCheckboxList
+        };
+        // console.log(pkg);
+        baseUrl.put(`/users/${this.props.match.params.id}/roles-status`, pkg, {headers: authHeader()})
+            .then(() => this.setState({ postloading: true}))
+            .catch(error => console.log(error));
+    }
+
+
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
+            return <Redirect to="/error"/>;
+        }
         return (
-    <div className="container">
+    <div>
         <div className="row">
             <div className="col-12">
                 <div className="card">
@@ -82,22 +105,19 @@ class UpdateUser extends React.Component {
                         <div className="card-title mb-4">
                             <div className="d-flex justify-content-start">
                                 <div className="image-container">
-                                    <img src={this.state.profile.avatar} class="avatar img-circle img-thumbnail" alt="avatar" height="200" width="200"/>
-                                    <h6>Upload a different photo...</h6>
-                                    <input type="file" class="text-center center-block file-upload"></input>
+                                    {this.state.profile && <img src={this.state.profile.avatar} class="avatar img-circle img-thumbnail" alt="avatar" height="200" width="200"/>}
+                                    {/* <h6>Upload a different photo...</h6>
+                                    <input type="file" class="text-center center-block file-upload"></input> */}
                                 </div>
                                 <div className="userData ml-3">
-                                    <h2
-                                        className="d-block"
-                                        style={{
-                                            fontSize: "1.5rem",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        <a href="javascript:void(0);">
-                                            {this.state.username}
-                                        </a>
+                                    <h2 className="d-block" style={{fontSize: "1.5rem", fontWeight: "bold",}}>
+                                        username: {this.state.username}<br/>
                                     </h2>
+                                    {this.state.roles && (
+                                    <ul>
+                                        {this.renderRoles()}
+                                    </ul>
+                                    )}
                                 </div>
                                 <div className="ml-auto">
                                     <input
@@ -139,14 +159,11 @@ class UpdateUser extends React.Component {
                                             aria-controls="connectedServices"
                                             aria-selected="false"
                                         >
-                                            Connected Services
+                                            Update user's role and status
                                         </a>
                                     </li>
                                 </ul>
-                                <div
-                                    className="tab-content ml-1"
-                                    id="myTabContent"
-                                >
+                                <div className="tab-content ml-1" id="myTabContent">
                                     <div
                                         className="tab-pane fade show active"
                                         id="basicInfo"
@@ -155,33 +172,46 @@ class UpdateUser extends React.Component {
                                     >
                                         <div className="row">
                                             <div className="col-sm-3 col-md-2 col-5">
-                                                <label
-                                                    style={{
-                                                        fontWeight:
-                                                            "bold",
-                                                    }}
-                                                >
+                                                <label style={{ fontWeight: "bold",}}>
+                                                    Email
+                                                </label>
+                                            </div>
+                                            <div className="col-md-8 col-6">
+                                                {this.state.email}
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div className="row">
+                                            <div className="col-sm-3 col-md-2 col-5">
+                                                <label style={{ fontWeight:"bold",}}>
                                                     Full Name
                                                 </label>
                                             </div>
                                             <div className="col-md-8 col-6">
-                                                Jamshaid Kamran
+                                                {this.state.profile !== null ? this.state.profile.fullname : null}
                                             </div>
                                         </div>
                                         <hr />
                                         <div className="row">
                                             <div className="col-sm-3 col-md-2 col-5">
-                                                <label
-                                                    style={{
-                                                        fontWeight:
-                                                            "bold",
-                                                    }}
-                                                >
+                                                <label style={{ fontWeight:"bold",}}>
                                                     Birth Date
                                                 </label>
                                             </div>
                                             <div className="col-md-8 col-6">
-                                                March 22, 1994.
+                                            {this.state.profile !== null ? this.state.profile.birthday : null}
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-sm-3 col-md-2 col-5">
+                                                <label
+                                                    style={{ fontWeight: "bold",}}>
+                                                    Gender
+                                                </label>
+                                            </div>
+                                            <div className="col-md-8 col-6">
+                                            {this.state.profile !== null ? this.state.profile.gender : null}
                                             </div>
                                         </div>
                                         <hr />
@@ -193,43 +223,11 @@ class UpdateUser extends React.Component {
                                                             "bold",
                                                     }}
                                                 >
-                                                    Something
+                                                    Address
                                                 </label>
                                             </div>
                                             <div className="col-md-8 col-6">
-                                                Something
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                            <div className="col-sm-3 col-md-2 col-5">
-                                                <label
-                                                    style={{
-                                                        fontWeight:
-                                                            "bold",
-                                                    }}
-                                                >
-                                                    Something
-                                                </label>
-                                            </div>
-                                            <div className="col-md-8 col-6">
-                                                Something
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                            <div className="col-sm-3 col-md-2 col-5">
-                                                <label
-                                                    style={{
-                                                        fontWeight:
-                                                            "bold",
-                                                    }}
-                                                >
-                                                    Something
-                                                </label>
-                                            </div>
-                                            <div className="col-md-8 col-6">
-                                                Something
+                                            {this.state.profile !== null ? this.state.profile.address : null}
                                             </div>
                                         </div>
                                         <hr />
@@ -240,20 +238,66 @@ class UpdateUser extends React.Component {
                                         role="tabpanel"
                                         aria-labelledby="ConnectedServices-tab"
                                     >
-                                        Facebook, Google, Twitter
-                                        Account that are connected to
-                                        this account
+                                    <div className="row">
+                                        <div className="col-sm-3 col-md-2 col-5">
+                                            <label
+                                                style={{ fontWeight: "bold",}}>
+                                                Status
+                                            </label>
+                                        </div>
+                                        <div className="col-md-8 col-6">
+                                            <div className="d-flex flex-row align-items-center">
+                                                <select defaultValue={this.state.status} onChange={this.onSelectStatus}>
+                                                <option value=""></option>
+                                                    <option value="1">AVAILABLE</option>
+                                                    <option value="0">UNAVAILABLE</option>
+                                                </select>
+                                            </div><br/>
+                                        </div>
                                     </div>
+                                    <hr />
+                                    <div className="row">
+                                        <div className="col-sm-3 col-md-2 col-5">
+                                            <label style={{fontWeight:"bold",}}>
+                                                Roles
+                                            </label>
+                                        </div>
+                                        <div className="col-md-8 col-6">
+                                            <input type="checkbox" name="ROLE_ADMIN" value="1 ROLE_ADMIN" onChange={this.onCheckBox} />
+                                            ROLE_ADMIN
+                                            <br/>
+                                            <input type="checkbox" name="ROLE_STAFF" value="2 ROLE_STAFF" onChange={this.onCheckBox}/>
+                                            ROLE_STAFF
+                                            <br/>
+                                            <input type="checkbox" name="ROLE_USER" value="3 ROLE_USER" onChange={this.onCheckBox}/>
+                                            ROLE_USER
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <button onClick={this.onSubmit} className="btn btn-primary">Submit</button>
+                                    {this.state.postloading && (
+                                <div className="alert alert-success" role="alert" >
+                                    Post data successfully
+                                </div>
+                                )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
         </div>
     </div>
+</div>
         );
     }
 }
 
-export default UpdateUser;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    }
+}
+export default connect(mapStateToProps)(UpdateUser);

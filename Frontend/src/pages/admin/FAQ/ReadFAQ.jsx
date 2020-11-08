@@ -1,5 +1,6 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
@@ -63,6 +64,9 @@ class ReadFAQ extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn) {
+            return <Redirect to="/error"/>
+        }
         const { totalRecords, pageLimit } = this.state;
         return (
     <div className="container">
@@ -138,4 +142,10 @@ class ReadFAQ extends React.Component {
     }
 }
 
-export default ReadFAQ;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn
+    };
+}
+export default connect(mapStateToProps)(ReadFAQ);
+

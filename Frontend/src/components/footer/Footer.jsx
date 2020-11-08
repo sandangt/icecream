@@ -37,27 +37,27 @@ function Footer() {
 					<div className="col-md-12">
 						<div className="mb-5 flex-center">
 							<a className="fb-ic" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-								<i className="fab fa-facebook-f fa-lg white-text mr-4">
+								<i className="fa fa-facebook-f fa-lg white-text mr-4">
 									{" "}
 								</i>
 							</a>
 							<a className="tw-ic" href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-								<i className="fab fa-twitter fa-lg white-text mr-4">
+								<i className="fa fa-twitter fa-lg white-text mr-4">
 									{" "}
 								</i>
 							</a>
 							<a className="gplus-ic" href="https://www.google.com" target="_blank" rel="noopener noreferrer">
-								<i className="fab fa-google-plus-g fa-lg white-text mr-4">
+								<i className="fa fa-google fa-lg white-text mr-4">
 									{" "}
 								</i>
 							</a>
 							<a className="li-ic" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-								<i className="fab fa-linkedin-in fa-lg white-text mr-4">
+								<i className="fa fa-linkedin fa-lg white-text mr-4">
 									{" "}
 								</i>
 							</a>
 							<a className="ins-ic" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-								<i className="fab fa-instagram fa-lg white-text mr-4">
+								<i className="fa fa-instagram fa-lg white-text mr-4">
 									{" "}
 								</i>
 							</a>

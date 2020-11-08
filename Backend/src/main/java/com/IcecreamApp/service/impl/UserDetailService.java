@@ -37,8 +37,11 @@ public class UserDetailService implements IUserDetailService {
 
 	@Override
 	public Optional<UserDetailDTO> readById(long id) {
-		UserDetail userDetail = userDetailRepository.findById(id).get();
-		return Optional.ofNullable(UserDetailConverter.toDTO(userDetail));
+		Optional<UserDetail> currentEntityWrapper = userDetailRepository.findById(id);
+		if (currentEntityWrapper.isPresent())
+			return Optional.ofNullable(UserDetailConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s id %d not found", entityName, id));
+		return Optional.empty();
 	}
 
 	@Override

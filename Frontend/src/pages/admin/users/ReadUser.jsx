@@ -1,10 +1,12 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
 import UserTuple from "components/tuples/UserTuple.jsx";
 import Pagination from "components/pagination/Pagination.jsx";
+
 
 class ReadUser extends React.Component {
 
@@ -21,11 +23,11 @@ class ReadUser extends React.Component {
     }
 
     componentDidMount() {
-      this.getData();
+      this.getDataByPage(this.state.currentPage, this.state.pageLimit);
     }
 
-    getData = async() => {
-        await baseUrl.get(`/users?page=1&offset=${this.state.pageLimit}`, {headers: authHeader()})
+    getDataByPage = async (currentPage, pageLimit) => {
+        await baseUrl.get(`/users?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
                 users: Object.values(response.data)[0],
@@ -37,78 +39,74 @@ class ReadUser extends React.Component {
         });
     }
 
-    renderTuples = () => {
-        return this.state.users.map( (value, index) => {
-            return <UserTuple obj={value} key={index}/>
-        });
-    }
-
-    onPageChanged = data => {
-        const { currentPage, pageLimit } = data;
-        this.setState({ currentPage, pageLimit });
-        baseUrl.get(`/users?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
-        .then( (response) => {
-            this.setState({
-                users: Object.values(response.data)[0],
-                totalRecords: parseInt(Object.keys(response.data)[0])
-            })
-        })
-        .catch( (error) => {
-            console.log(error);
-        });
-    } 
-    
-    onSearchSubmitForm = async () => {
-        // e.preventDefault();
-        const {searchText} = this.state;    
-        console.log(searchText);
+    getSearchData = async(searchText) => {
         await baseUrl.get(`/users?search=${searchText}`, {headers: authHeader()})
         .then( (response) => {
             this.setState({
                 users: response.data,
                 totalRecords: null
             })
-          
+        })
+        .catch( (error) => {
+            console.log(error);
         });
-     
     }
 
-    onSearchText = (e) => {
-        // e.preventDefault();
+    renderTuples = (currentUserId) => {
+        return this.state.users.map( (value, index) => {
+            return <UserTuple obj={value} key={index} currentUserId={currentUserId}/>
+        });
+    }
+
+    onPageChanged = data => {
+        const { currentPage, pageLimit } = data;
+        this.setState({ currentPage, pageLimit });
+        this.getDataByPage(currentPage, pageLimit);
+    } 
+    
+    onSearchButton = async (e) => {
+        e.preventDefault();
+        const {searchText} = this.state;
+        if (searchText === "") {
+            this.getDataByPage(1, this.state.pageLimit);
+        }   
+        else {
+            this.getSearchData(searchText);
+        }
+    }
+
+    onSearchBar = (e) => {
+        e.preventDefault();
         this.setState({searchText: e.target.value});
     }
     
-    onHandlePageLimitSelection = async (e) => {
-        e.preventDefault();
-        this.setState({pageLimit: parseInt(e.target.value)});
-    }
+    // onHandlePageLimitSelection = async (e) => {
+    //     e.preventDefault();
+    //     this.setState({pageLimit: parseInt(e.target.value)});
+    // }
 
     render() {
-        const { totalRecords, pageLimit, searchText } = this.state;
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
+            return <Redirect to="/error"/>;
+        }
+
+        const { totalRecords, pageLimit} = this.state;
         return (
-    <div className="container">
-        
+    <div>
         <div className="text-center">
             <div>
                 <h1 className="h1-view">User</h1>
             </div>
-            {/* <form onSubmit={this.onSearchForm} method="get" action="#"> */}
                 <p>
                     <input
                         type="text"
                         placeholder="Search user by username..."
-                        // name="search"
                         name="searchText"
-                        onChange={this.onSearchText}
+                        onChange={this.onSearchBar}
                     />
                 </p>
                 <p>
-                    <button
-                        // id="search button"
-                        // type="submit"
-                        onClick={()=>this.onSearchSubmitForm()}
-                        className="btn btn-primary"
-                    >
+                    <button onClick={this.onSearchButton} className="btn btn-primary">
                         Search
                     </button>
                 </p>
@@ -140,7 +138,7 @@ class ReadUser extends React.Component {
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        {this.renderTuples()}
+                        {this.renderTuples(this.props.user.id)}
                     </tbody>
                 </table>
             </div>
@@ -152,15 +150,21 @@ class ReadUser extends React.Component {
                    onPageChanged={this.onPageChanged}
                     /> }
             </div>
-            <div className="btn">
-                <Link className="btn btn-primary" to="/admin/faq/create">
-                    Create new FAQ
+            {/* <div className="btn">
+                <Link className="btn btn-primary" to="/admin/users/create">
+                    Create new User
                 </Link>
-            </div>
+            </div> */}
         </div>
     </div>
         );
     }
 }
 
-export default ReadUser;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    };
+}
+export default connect(mapStateToProps)(ReadUser);

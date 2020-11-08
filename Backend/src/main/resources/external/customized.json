@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1083eb8f-0b42-4db0-b79d-ab69d4b9593f",
+		"_postman_id": "ffc1eab1-ef29-47c4-9cde-6e2d68c83fd1",
 		"name": "Customized Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -97,7 +97,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NjQ4MTg4LCJleHAiOjE2MDQ3MzQ1ODh9.TYou8MnVQufcC_GBA9Emo7dNoJkU598rBjXzAQvEDMjTN6lGY_e8nR3pr6JjI4Jw6dObcJnCGANfI2DDbTnjvQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0NzYwMTY3LCJleHAiOjE2MDQ4NDY1Njd9.DZLxIGR8QgohRB61eKCTFR1vqLVdLlimVyF3XKYFdlLh0As_xLLhKaLeUrvPhdMVSBr_Ln1RgvM9kTYz3ZO_LA",
 							"type": "string"
 						}
 					]
@@ -131,6 +131,47 @@
 					]
 				},
 				"description": "Search user by username"
+			},
+			"response": []
+		},
+		{
+			"name": "update roles and status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0ODQ1MzQ5LCJleHAiOjE2MDQ5MzE3NDl9.PYUOq61-1p1iNqzB5kk96rD6-vu_n4QIVU9M1wkm77wVebnbcVnHHUP0UXSOCg4jd9RIczKbA7c4Nthd3HQrFA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"0\",\n    \"roles\": [\n        {\n            \"id\": 1,\n            \"name\": \"ROLE_ADMIN\"\n        },\n        {\n            \"id\": 2,\n            \"name\":\"ROLE_STAFF\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/6/roles-status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"6",
+						"roles-status"
+					]
+				},
+				"description": "update roles and status"
 			},
 			"response": []
 		}

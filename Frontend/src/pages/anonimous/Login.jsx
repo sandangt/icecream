@@ -1,11 +1,11 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
-import { connect } from "react-redux";
 import { login } from "actions/auth.js";
 
 import "./AuthenticationCard.css";
@@ -144,7 +144,6 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         isLoggedIn : state.auth.isLoggedIn,
         message : state.message.message

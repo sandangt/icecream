@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.IcecreamApp.DTO.PasswordDTO;
+import com.IcecreamApp.DTO.RolesAndStatusDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.entity.UserDetail;
-import com.IcecreamApp.systemConstant.EStatus;
 
 public interface IUserService {
 
@@ -29,8 +29,8 @@ public interface IUserService {
 	
 	Optional<UserDetail> updateProfile(long id, UserDetailDTO newProfile);
 	
-	boolean changeUserStatus(long id, EStatus newStatus);
-	
 	List<UserDTO> searchUsersByUsername(String username);
+
+	Optional<User> updateRolesAndStatus(long id, RolesAndStatusDTO rolesNstatus);
 	
 }

@@ -3,6 +3,7 @@ package com.IcecreamApp.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -14,16 +15,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.PasswordDTO;
+import com.IcecreamApp.DTO.RolesAndStatusDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
+import com.IcecreamApp.converter.RoleConverter;
 import com.IcecreamApp.converter.UserConverter;
 import com.IcecreamApp.converter.UserDetailConverter;
+import com.IcecreamApp.entity.Role;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.entity.UserDetail;
 import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
-import com.IcecreamApp.systemConstant.EStatus;
 import com.google.common.collect.Maps;
 
 @Service
@@ -114,19 +117,6 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public boolean changeUserStatus(long id, EStatus newStatus) {
-		Optional<User> currentEntityWrapper = userRepository.findById(id);
-		if (currentEntityWrapper.isPresent()) {
-			User user = currentEntityWrapper.get();
-			user.setStatus(newStatus);
-			userRepository.save(user);
-			return true;
-		}
-		return false;
-//		return new ResponseEntity<>(new MessageResponseDTO("Update status successfully!"), HttpStatus.OK);
-	}
-
-	@Override
 	public Map.Entry<Long, List<UserDTO>> readByPage(int pageNumber, int pageSize) {
 		Page<User> pages = userRepository.findAll(PageRequest.of(--pageNumber, pageSize));
 		Long totalEntities = userRepository.count();
@@ -153,4 +143,18 @@ public class UserService implements IUserService {
 //		currentUser.set		
 //		
 //	}
+
+	@Override
+	public Optional<User> updateRolesAndStatus(long id, RolesAndStatusDTO rolesNstatus) {
+		Optional<User> currentEntityWrapper = userRepository.findById(id);
+		if (currentEntityWrapper.isPresent()) {
+			User user = currentEntityWrapper.get();
+			user.setStatus(rolesNstatus.getStatus());
+			Set<Role> roles = rolesNstatus.getRoles().stream().map(RoleConverter::toEntity).collect(Collectors.toSet());
+			user.setRoles(roles);
+			return Optional.ofNullable(userRepository.save(user));
+		}
+		logger.error(String.format("%s id %d not found", entityName, id));
+		return Optional.empty();
+	}
 }

@@ -6,15 +6,15 @@ public class JwtDTO {
 	
 	private Long id;
 	private String token;
-	private String type;
+	private String tokenPrefix;
 	private String username;
 	private String email;
 	private List<String> roles;
 
-	public JwtDTO(Long id, String token, String type, String username, String email, List<String> roles) {
+	public JwtDTO(Long id, String token, String tokenPrefix, String username, String email, List<String> roles) {
 		this.id = id;
 		this.token = token;
-		this.type = type;
+		this.tokenPrefix = tokenPrefix;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
@@ -40,12 +40,12 @@ public class JwtDTO {
 		this.token = token;
 	}
 
-	public String getType() {
-		return type;
+	public String getTokenPrefix() {
+		return tokenPrefix;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTokenPrefix(String tokenPrefix) {
+		this.tokenPrefix = tokenPrefix;
 	}
 
 	public String getUsername() {

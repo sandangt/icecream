@@ -10,6 +10,21 @@ class UserTuple extends React.Component {
             .catch(err => console.log(err));
         window.location.reload();
     }
+    renderActionButton = ()  => {
+        if (this.props.obj.id !== this.props.currentUserId) {
+            return (
+        <div>
+            <td>
+                <Link to={`/admin/users/update/${this.props.obj.id}`} className="btn btn-primary">Edit</Link>
+            </td>
+            <td>
+                <button onClick={this.delete} className="btn btn-danger">Delete</button>
+            </td> 
+        </div>
+            );
+        }
+        return null;
+    }
     render() {
         return (
 <tr>
@@ -31,12 +46,7 @@ class UserTuple extends React.Component {
     <td>
         {this.props.obj.status}
     </td>
-    <td>
-        <Link to={`/admin/users/update/${this.props.obj.id}`} className="btn btn-primary">Edit</Link>
-    </td>
-    <td>
-        <button onClick={this.delete} className="btn btn-danger">Delete</button>
-    </td>
+    {this.renderActionButton()}
 </tr>
         );
     }

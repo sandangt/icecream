@@ -20,8 +20,8 @@ insert into user_role (user_id, role_id) values ("2", "1");
 insert into user_role (user_id, role_id) values ("3", "3");
 insert into user_role (user_id, role_id) values ("4", "2");
 
-insert into user_details (id, firstname, lastname, address, gender, birthday, avatar, user_id) values ("1", "Dang", "San", "xyz str", "MALE","2020-01-01", "/my/avatar","1");
-insert into user_details (id, firstname, lastname, address, gender, birthday, avatar, user_id) values ("2", "Jane", "Doe", "xyz str", "FEMALE","2020-01-01","/my/avatar2","2");
+insert into user_details (id, firstname, lastname, address, gender, birthday, avatar, user_id) values ("1", "Dang", "San", "xyz str", "MALE","2020-01-01", "/images/user1.jpg","1");
+insert into user_details (id, firstname, lastname, address, gender, birthday, avatar, user_id) values ("2", "Jane", "Doe", "xyz str", "FEMALE","2020-01-01","/images/user1.jpg","2");
 
 insert into products (description, image, name, price, status, category_id) values ("Operating system book","/my/image","3 simple pieces of Operating system","3.6","1","1");
 

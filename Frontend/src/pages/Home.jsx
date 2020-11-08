@@ -6,7 +6,7 @@ class Home extends React.Component {
     render() {
         
         return (
-<div className="container">
+<div>
     <div className="row align-items-center my-5">
         <div className="col-lg-7">
             <img

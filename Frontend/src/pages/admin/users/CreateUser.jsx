@@ -1,11 +1,14 @@
 import React from 'react';
-import baseUrl from 'baseUrl.js';
-import authHeader from "services/authHeader.js";
-
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {isEmpty} from 'validator';
+import {Redirect} from "react-router-dom";
+
+import {connect} from "react-redux";
+
+import baseUrl from 'baseUrl.js';
+import authHeader from "services/authHeader.js";
 
 
 const required = (value) => {
@@ -63,8 +66,11 @@ class CreateUser extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
+            return <Redirect to="/error"/>;
+        }
         return (
-        <div className="container">
+        <div>
             <div style={{marginTop: 10}}>
                 <h3>Add New FAQ</h3>
                 <Form onSubmit={e => this.onSubmit(e)} ref={c => { this.form = c }}>
@@ -99,5 +105,11 @@ class CreateUser extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    }
+}
 
-export default CreateUser;
+export default connect(mapStateToProps)(CreateUser);
