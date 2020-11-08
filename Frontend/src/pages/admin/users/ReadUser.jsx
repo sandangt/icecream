@@ -13,7 +13,7 @@ class ReadUser extends React.Component {
         this.state = {
             users: [],
             totalRecords: null,
-            currentPage: null,
+            currentPage: 1,
             totalPages: null,
             pageLimit: 5,
             searchText: ""
@@ -25,7 +25,7 @@ class ReadUser extends React.Component {
     }
 
     getData = async() => {
-        await baseUrl.get(`/users?number=0&size=${this.state.pageLimit}`, {headers: authHeader()})
+        await baseUrl.get(`/users?page=1&offset=${this.state.pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
                 users: Object.values(response.data)[0],
@@ -46,7 +46,7 @@ class ReadUser extends React.Component {
     onPageChanged = data => {
         const { currentPage, pageLimit } = data;
         this.setState({ currentPage, pageLimit });
-        baseUrl.get(`/users?number=${currentPage-1}&size=${pageLimit}`, {headers: authHeader()})
+        baseUrl.get(`/users?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
         .then( (response) => {
             this.setState({
                 users: Object.values(response.data)[0],
@@ -152,7 +152,6 @@ class ReadUser extends React.Component {
                    onPageChanged={this.onPageChanged}
                     /> }
             </div>
-                <h1>{searchText}</h1>
             <div className="btn">
                 <Link className="btn btn-primary" to="/admin/faq/create">
                     Create new FAQ

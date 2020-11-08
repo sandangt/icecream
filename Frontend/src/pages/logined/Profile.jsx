@@ -4,33 +4,33 @@ import { connect } from "react-redux";
 
 class ProfileUser extends React.Component {
     render() {
-        const { user: currentUser } = this.props;
+        const { user } = this.props;
 
-        if (!currentUser) {
+        if (!user) {
             return <Redirect to="/error" />;
         }
         return (
             <div className="container">
                 <header className="jumbotron">
                     <h3>
-                        <strong>{currentUser.username}</strong> Profile
+                        <strong>{user.username}</strong> Profile
                     </h3>
                 </header>
                 <p>
-                    <strong>Token:</strong> {currentUser.token.substring(0, 20)}{" "}
+                    <strong>Token:</strong> {user.token.substring(0, 20)}{" "}
                     ...{" "}
-                    {currentUser.token.substr(currentUser.token.length - 20)}
+                    {user.token.substr(user.token.length - 20)}
                 </p>
                 <p>
-                    <strong>Id:</strong> {currentUser.id}
+                    <strong>Id:</strong> {user.id}
                 </p>
                 <p>
-                    <strong>Email:</strong> {currentUser.email}
+                    <strong>Email:</strong> {user.email}
                 </p>
                 <strong>Authorities:</strong>
                 <ul>
-                    {currentUser.roles &&
-                        currentUser.roles.map((role, index) => (
+                    {user.roles &&
+                        user.roles.map((role, index) => (
                             <li key={index}>{role}</li>
                         ))}
                 </ul>

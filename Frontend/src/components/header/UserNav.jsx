@@ -1,14 +1,11 @@
 import React from "react";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 function UserNav() {
     return (
 <ul className="navbar-nav mr-auto">
     <li className="nav-item">
         <NavLink className="nav-link" to="/home">Home</NavLink>
-    </li>
-    <li className="nav-item">
-        <NavLink className="nav-link" to="/profile">Profile</NavLink>
     </li>
     <li className="nav-item">
         <NavLink className="nav-link" to="/about">About</NavLink>

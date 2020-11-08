@@ -14,7 +14,7 @@ import com.IcecreamApp.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
 	@Query(value="SELECT * FROM users WHERE username LIKE CONCAT('%',:username,'%')", nativeQuery = true)
-	List<User> searchUserByUsername(@Param("username") String username);
+	List<User> searchUsersByUsername(@Param("username") String username);
 	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);
 }

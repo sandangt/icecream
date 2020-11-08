@@ -1,7 +1,7 @@
 import React from "react";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
-function AnonimousNav() {
+function PublicNav() {
     return (
 <ul className="navbar-nav mr-auto">
     <li className="nav-item">
@@ -13,13 +13,13 @@ function AnonimousNav() {
     <li className="nav-item dropdown">
         <a className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
         <div className="dropdown-menu" aria-labelledby="dropdown01">
-            <a className="dropdown-item" to="/">Action</a>
-            <a className="dropdown-item" to="/">Another action</a>
-            <a className="dropdown-item" to="/">Something else here</a>
+            <NavLink className="dropdown-item" to="/">Action</NavLink>
+            <NavLink className="dropdown-item" to="/">Another action</NavLink>
+            <NavLink className="dropdown-item" to="/">Something else here</NavLink>
         </div>
     </li>
 </ul>
     );
 }
 
-export default AnonimousNav;
+export default PublicNav;

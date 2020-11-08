@@ -2,14 +2,11 @@ import React from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
 import {Redirect} from "react-router-dom";
 
 import { connect } from "react-redux";
 
-import baseUrl from "baseUrl.js";
 import "./AuthenticationCard.css";
-import authHeader from "services/authHeader";
 import {logout, changePassword} from "actions/auth.js";
 
 const required = (value) => {
@@ -21,35 +18,6 @@ const required = (value) => {
         );
     }
 };
-
-// const vusername = (value) => {
-//     if (value.length < 3 || value.length > 20) {
-//         return (
-//             <div className="alert alert-danger" role="alert">
-//                 The username must be between 3 and 20 characters.
-//             </div>
-//         );
-//     }
-// };
-
-// const validateOldPassword = (value) => {
-//     if (value.length < 6 || value.length > 40) {
-//         return (
-//             <div className="alert alert-danger" role="alert">
-//                 The password must be between 6 and 40 characters.
-//             </div>
-//         );
-//     }
-// };
-// const similarPassword = (value) => {
-//     if () {
-//         return (
-//             <div className="alert alert-danger" role="alert">
-//                 The password must be between 6 and 40 characters.
-//             </div>
-//         );
-//     }
-// };
 
 const validateNewPassword = (value) => {
     if (value.length < 6 || value.length > 40) {
@@ -69,6 +37,7 @@ class UpdatePassword extends React.Component {
             oldPassword: "",
             newPassword: "",
             successful: false,
+            areSamePassword: false
         };
     }
 
@@ -79,6 +48,7 @@ class UpdatePassword extends React.Component {
     }
 
     onChangeNewPassword = (e) => {
+        e.preventDefault();
         this.setState({
             newPassword: e.target.value,
         });
@@ -87,30 +57,32 @@ class UpdatePassword extends React.Component {
         e.preventDefault();
 
         this.setState({
-            successful: false,
+            successful: false
         });
         
         this.form.validateAll();
-
-        if (this.checkBtn.context._errors.length === 0) {
-            this.props.dispatch(changePassword(this.props.user.id, this.state.oldPassword, this.state.newPassword))
-            .then(() => {
-                this.setState({successful: true});
-                this.props.dispatch(logout());
-		        window.location.href="/";
-            })
-            .catch(() => {
-                this.setState({successful: false});
-            })
+        if (this.state.oldPassword !== this.state.newPassword) {
+            if (this.checkBtn.context._errors.length === 0) {
+                this.props.dispatch(changePassword(this.props.user.id, this.state.oldPassword, this.state.newPassword))
+                .then(() => {
+                    this.setState({successful: true});
+                    this.props.dispatch(logout());
+                    window.location.href="/home";
+                })
+                .catch(() => {
+                    this.setState({successful: false});
+                })
+            }
+        }
+        else {
+            this.setState({areSamePassword:true});
         }
     }
 
-    componentDidMount() {
-    }
     render() {
-        if (!this.props.user) {
+        if (!this.props.isLoggedIn)
             return <Redirect to="/error"/>;
-        }
+        const {areSamePassword} = this.state;
         return (
             <div className="col-md-12">
                 <div className="card card-container">
@@ -144,7 +116,6 @@ class UpdatePassword extends React.Component {
                                         validations={[required]}
                                     />
                                 </div>
-
                                 <div className="form-group">
                                     <label htmlFor="newPassword">Enter new password</label>
                                     <Input
@@ -153,7 +124,7 @@ class UpdatePassword extends React.Component {
                                         name="newPassword"
                                         value={this.state.newPassword}
                                         onChange={this.onChangeNewPassword}
-                                        validations={[required]}
+                                        validations={[required, validateNewPassword]}
                                     />
                                 </div>
 
@@ -164,7 +135,13 @@ class UpdatePassword extends React.Component {
                                 </div>
                             </div>
                         )}
-
+                        {areSamePassword && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert" >
+                                    New password must not be the same as old password
+                                </div>
+                            </div>
+                        )}
                         {this.props.message && (
                             <div className="form-group">
                                 <div
@@ -195,6 +172,7 @@ class UpdatePassword extends React.Component {
 const mapStateToProps = (state) => {
     console.log(state);
     return {
+        isLoggedIn: state.auth.isLoggedIn,
         user: state.auth.user,
         message : state.message.message
     };

@@ -51,10 +51,9 @@ class Login extends React.Component {
         const { history } = this.props;
 
         if (this.checkBtn.context._errors.length === 0) {
-            // dispatch(login(this.state.username, this.state.password))
             this.props.login(this.state.username, this.state.password)
                 .then(() => {
-                    history.push("/profile");
+                    history.push("/home");
                     window.location.reload();
                 })
                 .catch(() => {
@@ -73,6 +72,7 @@ class Login extends React.Component {
         if (this.props.isLoggedIn) {
             return <Redirect to="/home"/>
         }
+        console.log(window.location.pathname);
         return (
             <div className="col-md-12">
                 <div className="card card-container">

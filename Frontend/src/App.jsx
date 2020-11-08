@@ -1,5 +1,5 @@
 import React from "react";
-import {Router, Route, Redirect, Switch} from "react-router-dom";
+import {Router, Route, Switch, Redirect, BrowserRouter} from "react-router-dom";
 
 import Header from "components/header/Header.jsx";
 import Footer from "components/footer/Footer.jsx";
@@ -29,30 +29,35 @@ class App extends React.Component {
 <div className="container">
     <Router history={history}>
         <div>
-            <Header/>
-            <Switch>
-                <Route exact path="/home" component={Home}/>
-                <Route exact path="/profile" component={Profile}/>
-                <Route exact path="/login" component={Login}/>
-                <Route exact path="/signup" component={Signup}/>
-                <Route exact path="/about" component={AboutUs}/>
-                <Route exact path="/contact" component={Contact}/>
-                <Route exact path="/update-password" component={UpdatePassword}/>
-                <Route exact path="/error" component={NotFound}/>
-                <Route exact path="/">
-                    <Redirect to="/home" />
+            <Route>
+                <Header/>
+                <Switch>
+                    <Route exact path="/home" component={Home}/>
+                    <Route exact path="/profile" component={Profile}/>
+                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/signup" component={Signup}/>
+                    <Route exact path="/about" component={AboutUs}/>
+                    <Route exact path="/contact" component={Contact}/>
+                    <Route exact path="/update-password" component={UpdatePassword}/>
+                    <Route exact path="/">
+                        <Redirect to="/home" />
+                    </Route>
+                    
+                    <Route exact path="/admin/users" component={ReadUser}/>
+                    <Route exact path="/admin/users/create" component={CreateUser}/>
+                    <Route exact path="/admin/users/update/:id" component={UpdateUser}/>
+
+                    <Route exact path="/admin/faq" component={ReadFAQ}/>
+                    <Route exact path="/admin/faq/create" component={CreateFAQ}/>
+                    <Route exact path="/admin/faq/update/:id" component={UpdateFAQ}/>
+
+                    <Route exact path="/error" component={NotFound}/>
+                    <Route>
+                        <Redirect to="/error"/>
+                    </Route>
+                </Switch>
+                <Footer/>
                 </Route>
-
-                <Route exact path="/admin/users" component={ReadUser}/>
-                <Route exact path="/admin/users/create" component={CreateUser}/>
-                <Route exact path="/admin/users/update/:id" component={UpdateUser}/>
-
-                <Route exact path="/admin/faq" component={ReadFAQ}/>
-                <Route exact path="/admin/faq/create" component={CreateFAQ}/>
-                <Route exact path="/admin/faq/update/:id" component={UpdateFAQ}/>
-
-            </Switch>
-            <Footer/>
         </div>
     </Router>
 </div>

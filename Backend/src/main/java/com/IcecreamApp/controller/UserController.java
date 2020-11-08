@@ -35,7 +35,7 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-    @GetMapping(value="/all")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUser() {           
 		return ResponseEntity.ok().body(userService.readAll());     
     }
@@ -82,14 +82,14 @@ public class UserController {
     	return new ResponseEntity<>(new MessageResponseDTO("Incorrect password!"), HttpStatus.NOT_ACCEPTABLE);
     }
 	
-    @GetMapping(params={"number","size"})
-    public ResponseEntity<Map.Entry<Long,List<UserDTO>>> getUsersByPage(@RequestParam int number, @RequestParam int size) {
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<Map.Entry<Long,List<UserDTO>>> getUsersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
     	/**
     	 * return key - value pair
     	 * key is total tuples in the table in database
     	 * value is list of tuples per page
     	 */
-    	return ResponseEntity.ok().body(userService.readByPage(number, size));
+    	return ResponseEntity.ok().body(userService.readByPage(page, offset));
     }
 
     @PutMapping(value="/{id}/user-profile")
@@ -111,7 +111,7 @@ public class UserController {
     
     @GetMapping(params="search")
     public ResponseEntity<List<UserDTO>> searchUsersByUsername(@RequestParam("search") String username) {
-    	return ResponseEntity.ok().body(userService.readAllByUsername(username));
+    	return ResponseEntity.ok().body(userService.searchUsersByUsername(username));
     }
         
 }

@@ -1,14 +1,11 @@
 import React from "react";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 function AdminNav() {
     return (
 <ul className="navbar-nav mr-auto">
     <li className="nav-item">
         <NavLink className="nav-link" to="/home">Home</NavLink>
-    </li>
-    <li className="nav-item">
-        <NavLink className="nav-link" to="/profile">Profile</NavLink>
     </li>
     <li className="nav-item">
         <NavLink className="nav-link" to="/admin/users">User</NavLink>
@@ -18,9 +15,6 @@ function AdminNav() {
     </li>
     <li className="nav-item">
         <NavLink className="nav-link" to="/admin/orders">Order</NavLink>
-    </li>
-    <li className="nav-item">
-        <NavLink className="nav-link" to="/admin/categories">Category</NavLink>
     </li>
     <li className="nav-item">
         <NavLink className="nav-link" to="/admin/faq">FAQ</NavLink>

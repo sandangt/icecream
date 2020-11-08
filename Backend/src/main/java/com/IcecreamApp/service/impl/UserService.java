@@ -128,15 +128,14 @@ public class UserService implements IUserService {
 
 	@Override
 	public Map.Entry<Long, List<UserDTO>> readByPage(int pageNumber, int pageSize) {
-
-		Page<User> pages = userRepository.findAll(PageRequest.of(pageNumber, pageSize));
+		Page<User> pages = userRepository.findAll(PageRequest.of(--pageNumber, pageSize));
 		Long totalEntities = userRepository.count();
 		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(UserConverter::toDTO).collect(Collectors.toList()));
 	}
 
 	@Override
-	public List<UserDTO> readAllByUsername(String username) {
-		return userRepository.searchUserByUsername(username).stream().map(UserConverter::toDTO).collect(Collectors.toList());
+	public List<UserDTO> searchUsersByUsername(String username) {
+		return userRepository.searchUsersByUsername(username).stream().map(UserConverter::toDTO).collect(Collectors.toList());
 	}
 	
 //	@Override

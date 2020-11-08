@@ -31,6 +31,6 @@ public interface IUserService {
 	
 	boolean changeUserStatus(long id, EStatus newStatus);
 	
-	List<UserDTO> readAllByUsername(String username);
+	List<UserDTO> searchUsersByUsername(String username);
 	
 }

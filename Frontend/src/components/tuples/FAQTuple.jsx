@@ -4,9 +4,6 @@ import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 
 class FAQTuple extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     delete = () => {
         baseUrl.delete(`/faq/${this.props.obj.id}`, {headers: authHeader()})
             .then(console.log('Deleted'))

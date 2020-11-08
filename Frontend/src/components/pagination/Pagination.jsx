@@ -26,28 +26,22 @@ class Pagination extends React.Component {
     constructor(props) {
         super(props);
         const {
-            totalRecords = null,
-            pageLimit = 30,
-            pageNeighbours = 0,
+            totalRecords,
+            pageLimit,
+            pageNeighbours,
         } = props;
         this.pageLimit = typeof pageLimit === "number" ? pageLimit : 30;
         this.totalRecords = typeof totalRecords === "number" ? totalRecords : 0;
-
         // pageNeighbours can be: 0, 1 or 2
-        this.pageNeighbours =
-            typeof pageNeighbours === "number"
-                ? Math.max(0, Math.min(pageNeighbours, 2))
-                : 0;
-
+        this.pageNeighbours = typeof pageNeighbours === "number" ? Math.max(0, Math.min(pageNeighbours, 2)) : 0;
         this.totalPages = Math.ceil(this.totalRecords / this.pageLimit);
-
         this.state = { currentPage: 1 };
     }
+
     fetchPageNumbers = () => {
         const totalPages = this.totalPages;
         const currentPage = this.state.currentPage;
         const pageNeighbours = this.pageNeighbours;
-
         /**
          * totalNumbers: the total page numbers to show on the control
          * totalBlocks: totalNumbers + 2 to cover for the left(<) and right(>) controls
@@ -57,10 +51,7 @@ class Pagination extends React.Component {
 
         if (totalPages > totalBlocks) {
             const startPage = Math.max(2, currentPage - pageNeighbours);
-            const endPage = Math.min(
-                totalPages - 1,
-                currentPage + pageNeighbours
-            );
+            const endPage = Math.min(totalPages - 1,currentPage + pageNeighbours);
             let pages = range(startPage, endPage);
 
             /**
@@ -112,7 +103,7 @@ class Pagination extends React.Component {
     }
 
     gotoPage = (page) => {
-        const { onPageChanged = (f) => f } = this.props;
+        const { onPageChanged } = this.props;
         const currentPage = Math.max(0, Math.min(page, this.totalPages));
         const paginationData = {
             currentPage,
@@ -129,8 +120,8 @@ class Pagination extends React.Component {
         this.gotoPage(page);
     };
 
-    handleMoveLeft = (evt) => {
-        evt.preventDefault();
+    handleMoveLeft = (e) => {
+        e.preventDefault();
         this.gotoPage(this.state.currentPage - this.pageNeighbours * 2 - 1);
     };
 
@@ -145,66 +136,62 @@ class Pagination extends React.Component {
         const pages = this.fetchPageNumbers();
 
         return (
-            <React.Fragment>
-                <ul className="pagination">
-                    {pages.map((page, index) => {
-                        if (page === LEFT_PAGE)
-                            return (
-                                <li key={index} className="page-item">
-                                    <a
-                                        className="page-link"
-                                        href="#"
-                                        aria-label="Previous"
-                                        onClick={this.handleMoveLeft}
-                                    >
-                                        <span aria-hidden="true">
-                                            &laquo;
-                                        </span>
-                                        <span className="sr-only">
-                                            Previous
-                                        </span>
-                                    </a>
-                                </li>
-                            );
+<React.Fragment>
+    <ul className="pagination">
+        {pages.map((page, index) => {
+            if (page === LEFT_PAGE)
+                return (
+                    <li key={index} className="page-item">
+                        <a
+                            className="page-link"
+                            href="#"
+                            aria-label="Previous"
+                            onClick={this.handleMoveLeft}
+                        >
+                            <span aria-hidden="true">
+                                &laquo;
+                            </span>
+                            <span className="sr-only">
+                                Previous
+                            </span>
+                        </a>
+                    </li>
+                );
 
-                        if (page === RIGHT_PAGE)
-                            return (
-                                <li key={index} className="page-item">
-                                    <a
-                                        className="page-link"
-                                        href="#"
-                                        aria-label="Next"
-                                        onClick={this.handleMoveRight}
-                                    >
-                                        <span aria-hidden="true">
-                                            &raquo;
-                                        </span>
-                                        <span className="sr-only">
-                                            Next
-                                        </span>
-                                    </a>
-                                </li>
-                            );
+            if (page === RIGHT_PAGE)
+                return (
+                    <li key={index} className="page-item">
+                        <a
+                            className="page-link"
+                            href="#"
+                            aria-label="Next"
+                            onClick={this.handleMoveRight}
+                        >
+                            <span aria-hidden="true">
+                                &raquo;
+                            </span>
+                            <span className="sr-only">
+                                Next
+                            </span>
+                        </a>
+                    </li>
+                );
 
-                        return (
-                            <li
-                                key={index}
-                                className={`page-item${
-                                    currentPage === page ? " active" : ""
-                                }`}
-                            >
-                                <a
-                                    className="page-link"
-                                    href="#"
-                                    onClick={this.handleClick(page)}
-                                >
-                                    {page}
-                                </a>
-                            </li>
-                        );
-                    })}
-                </ul>
-            </React.Fragment>
+            return (
+                <li
+                    key={index}
+                    className={`page-item${
+                        currentPage === page ? " active" : ""
+                    }`}
+                >
+                    <a className="page-link" href="#" onClick={this.handleClick(page)}>
+                        {page}
+                    </a>
+                </li>
+            );
+        })}
+    </ul>
+</React.Fragment>
         );
     }
 }
