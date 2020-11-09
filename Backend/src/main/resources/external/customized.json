@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ffc1eab1-ef29-47c4-9cde-6e2d68c83fd1",
+		"_postman_id": "3bd884b0-621d-4c77-8be5-0f87f53ad48c",
 		"name": "Customized Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,7 +13,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb25EYW5nIiwiaWF0IjoxNjA0MTQ1MDkwLCJleHAiOjE2MDQyMzE0OTB9.0F61xBO2ORXJ_qh87dIae0JuzUQyEfFL7YFVwb6NVQmKzgKAgoF9-NorTDEgwzm9eWukXgZzqVzD4e61RGormQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0ODkzOTU4LCJleHAiOjE2MDQ5ODAzNTh9.5zb6p_ZYy4-9SOuzGWd3RqtgGsjA9sgH17oUkFSUBHNL_Oa5wKQIKBjtQWceE9iBRqTqSfnZwWcvosuI6iXLBw",
 							"type": "string"
 						}
 					]
@@ -30,7 +30,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/5/user-profile",
+					"raw": "http://localhost:8080/users/5/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,7 +39,7 @@
 					"path": [
 						"users",
 						"5",
-						"user-profile"
+						"profile"
 					]
 				}
 			},
@@ -172,6 +172,53 @@
 					]
 				},
 				"description": "update roles and status"
+			},
+			"response": []
+		},
+		{
+			"name": "update account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0ODg4Njc2LCJleHAiOjE2MDQ5NzUwNzZ9.kUFugesjzUhMCmeSw8A6sU4XN8Tkh3RUw284ngs4jy87v-q23FHWUiegt6fDBqAzas-W2BHMR4jt6zm2oWakqA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Autho",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"SanTDang\",\n    \"email\" : \"sandang@yahoo.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/1/account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1",
+						"account"
+					]
+				},
+				"description": "update account (username and password)"
 			},
 			"response": []
 		}

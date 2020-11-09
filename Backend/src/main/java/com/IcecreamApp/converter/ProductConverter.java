@@ -23,8 +23,6 @@ public class ProductConverter {
 		}
 		
 		String categoryName = entity.getCategory() != null ? entity.getCategory().getName() : null;
-		System.out.println(entity.getCategory().getId());
-		System.out.println(entity.getCategory().getName());
 	    
 		return new ProductDTO(entity.getId(), 
 				entity.getModifiedDate(), 

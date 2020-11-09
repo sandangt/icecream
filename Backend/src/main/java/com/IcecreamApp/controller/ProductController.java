@@ -1,6 +1,7 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
@@ -61,6 +63,22 @@ public class ProductController {
     	if (productService.delete(id))
     		return ResponseEntity.ok().body(new MessageResponseDTO("Product item has been deleted successfully!"));
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
+    }
+
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<Map.Entry<Long,List<ProductDTO>>> getProductsByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	/**
+    	 * return key - value pair
+    	 * key is total tuples in the table in database
+    	 * value is list of tuples per page
+    	 */
+    	return ResponseEntity.ok().body(productService.readByPage(page, offset));
+    }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<ProductDTO>> searchUsersByUsername(@RequestParam("search") String username) {
+    	return ResponseEntity.ok().body(productService.searchProductsByName(username));
     }
 
 }

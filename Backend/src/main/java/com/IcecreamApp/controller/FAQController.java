@@ -69,14 +69,14 @@ public class FAQController {
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
 	
-    @GetMapping
-    public ResponseEntity<Map.Entry<Long,List<FAQDTO>>> getFAQByPage(@RequestParam int number, @RequestParam int size) {
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<Map.Entry<Long,List<FAQDTO>>> getFAQByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
     	/**
     	 * return key - value pair
     	 * key is total tuples in the table in database
     	 * value is list of tuples per page
     	 */
-    	return ResponseEntity.ok().body(faqService.readByPage(number, size));
+    	return ResponseEntity.ok().body(faqService.readByPage(page, offset));
     }
 	
 }

@@ -9,7 +9,6 @@ class UpdateFAQ extends React.Component {
             question: '',
             answer: ''
         }
-
     }
 
     componentDidMount() {

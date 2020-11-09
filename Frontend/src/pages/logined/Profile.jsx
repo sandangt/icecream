@@ -232,9 +232,9 @@ class ProfileUser extends React.Component {
                                                 e.preventDefault();
                                                 this.setState({gender:e.target.value})
                                             }}>
-                                                    <option value="MALE">male</option>
-                                                    <option value="FEMALE">female</option>
-                                                </select>
+                                                <option value="MALE">male</option>
+                                                <option value="FEMALE">female</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <hr />

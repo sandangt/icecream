@@ -4,19 +4,21 @@ import {connect} from "react-redux";
 
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
-import FAQTuple from "components/tuples/FAQTuple.jsx";
 import Pagination from "components/pagination/Pagination.jsx";
 
-class ReadFAQ extends React.Component {
+import ProductTuple from "components/tuples/ProductTuple.jsx";
+
+class ReadProduct extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            faqs: [],
+            products: [],
             totalRecords: null,
             currentPage: 1,
             totalPages: null,
-            pageLimit: 5
+            pageLimit: 5,
+            searchText: ""
         };
     }
 
@@ -26,10 +28,10 @@ class ReadFAQ extends React.Component {
 
     
     getDataByPage = async (currentPage, pageLimit) => {
-        await baseUrl.get(`/faq?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
+        await baseUrl.get(`/products?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                faqs: Object.values(response.data)[0],
+                products: Object.values(response.data)[0],
                 totalRecords: parseInt(Object.keys(response.data)[0])
             })
         })
@@ -38,22 +40,22 @@ class ReadFAQ extends React.Component {
         });
     }
 
-    // getData = async() => {
-    //     await baseUrl.get(`/faq?number=0&size=${this.state.pageLimit}`, {headers: authHeader()})
-    //     .then( (response) => {  
-    //         this.setState({
-    //             faqs: Object.values(response.data)[0],
-    //             totalRecords: parseInt(Object.keys(response.data)[0])
-    //         })
-    //     })
-    //     .catch( (error) => {
-    //         console.log(error);
-    //     });
-    // }
+    getSearchData = async(searchText) => {
+        await baseUrl.get(`/products?search=${searchText}`, {headers: authHeader()})
+        .then( (response) => {
+            this.setState({
+                products: response.data,
+                totalRecords: null
+            })
+        })
+        .catch( (error) => {
+            console.log(error);
+        });
+    }
 
     renderTuples = () => {
-        return this.state.faqs.map( (value, index) => {
-            return <FAQTuple obj={value} key={index}/>
+        return this.state.products.map( (value, index) => {
+            return <ProductTuple obj={value} key={index}/>
         });
     }
 
@@ -63,11 +65,21 @@ class ReadFAQ extends React.Component {
         this.getDataByPage(currentPage, pageLimit);
     } 
     
-    onHandlePageLimitSelection = async (e) => {
+    onSearchButton = async (e) => {
         e.preventDefault();
-        this.setState({pageLimit: parseInt(e.target.value)});
+        const {searchText} = this.state;
+        if (searchText === "") {
+            this.getDataByPage(1, this.state.pageLimit);
+        }   
+        else {
+            this.getSearchData(searchText);
+        }
     }
-
+    onSearchBar = (e) => {
+        e.preventDefault();
+        this.setState({searchText: e.target.value});
+    }
+    
     render() {
         if (!this.props.isLoggedIn) {
             return <Redirect to="/error"/>
@@ -78,13 +90,14 @@ class ReadFAQ extends React.Component {
         
         <div className="container text-center">
             <div>
-                <h1 className="h1-view">FAQ</h1>
+                <h1 className="h1-view">Product</h1>
             </div>
             <p>
                 <input
                     type="text"
-                    placeholder="Search FAQ by question..."
+                    placeholder="Search Product by name..."
                     name="searchtext"
+                    onChange={this.onSearchBar}
                 />
             </p>
             <p>
@@ -92,19 +105,11 @@ class ReadFAQ extends React.Component {
                     id="search button"
                     type="submit"
                     className="btn btn-primary"
+                    onClick={this.onSearchButton}
                 >
                     Search
                 </button>
             </p>
-
-            {/* <div className="d-flex flex-row align-items-center">
-                Page size:
-                <select defaultValue={pageLimit} onChange={this.onHandlePageLimitSelection}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
-            </div><br/> */}
 
             <div className="d-flex table-data">
                 <table className="table table-striped scrollTable center"
@@ -115,8 +120,10 @@ class ReadFAQ extends React.Component {
                         <tr>
                             {/* <th>select</th> */}
                             <th>ID</th>
-                            <th>Question</th>
-                            <th>Answer</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Status</th>
                             <th>Last modified date</th>
                             <th colSpan="2">Action</th>
                         </tr>
@@ -137,8 +144,8 @@ class ReadFAQ extends React.Component {
             </div>
 
             <div className="btn">
-                <Link className="btn btn-primary" to="/admin/users/create">
-                    Create new FAQ
+                <Link className="btn btn-primary" to="/admin/products/create">
+                    Create new product
                 </Link>
             </div>
         </div>
@@ -152,5 +159,5 @@ const mapStateToProps = (state) => {
         isLoggedIn: state.auth.isLoggedIn
     };
 }
-export default connect(mapStateToProps)(ReadFAQ);
+export default connect(mapStateToProps)(ReadProduct);
 

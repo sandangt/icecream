@@ -8,10 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.IcecreamApp.entity.Category;
+import com.IcecreamApp.entity.Product;
 import com.IcecreamApp.entity.Role;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.entity.UserDetail;
 import com.IcecreamApp.repository.CategoryRepository;
+import com.IcecreamApp.repository.ProductRepository;
 import com.IcecreamApp.repository.RoleRepository;
 import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.repository.UserRepository;
@@ -31,6 +33,8 @@ public class PriorData implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private UserDetailRepository userDetailRepository;
+    @Autowired
+    private ProductRepository productRepository;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -67,5 +71,11 @@ public class PriorData implements CommandLineRunner {
     	user2.setId(4L);    	
     	userDetailRepository.save(new UserDetail(3L, "Friedrich", "Nietzsche", "xyz abc", EGender.MALE, new Date(0,0,1), "/images/users/user1.jpg", user1));
     	userDetailRepository.save(new UserDetail(4L, "Karl", "Jung", "asc ghb", EGender.MALE, new Date(0,0,2), "/images/users/user2.jpg", user2));
+    	
+    	productRepository.deleteAll();
+    	productRepository.save(new Product("Introduction to Algorithms", "Data structures and algorithms", "/images/products/CLRS.jpg", 3.58, EStatus.AVAILABLE, 
+    			new Category(3L, "Computer science")));
+    	productRepository.save(new Product("Three easy pieces of OS", "Operating system", "/images/products/3easypieces.jpg", 4.32, EStatus.AVAILABLE, 
+    			new Category(3L, "Computer science")));    	
     }
 }

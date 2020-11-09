@@ -18,8 +18,11 @@ import CreateFAQ from "pages/admin/FAQ/CreateFAQ.jsx";
 import UpdateFAQ from "pages/admin/FAQ/UpdateFAQ.jsx";
 
 import ReadUser from "pages/admin/users/ReadUser.jsx";
-import CreateUser from "pages/admin/users/CreateUser.jsx";
 import UpdateUser from "pages/admin/users/UpdateUser.jsx";
+
+import ReadProduct from "pages/admin/products/ReadProduct.jsx";
+import CreateProduct from "pages/admin/products/CreateProduct.jsx";
+import UpdateProduct from "pages/admin/products/UpdateProduct.jsx";
 
 import history from "history.js";
 
@@ -44,12 +47,15 @@ class App extends React.Component {
                     </Route>
                     
                     <Route exact path="/admin/users" component={ReadUser}/>
-                    <Route exact path="/admin/users/create" component={CreateUser}/>
                     <Route exact path="/admin/users/update/:id" component={UpdateUser}/>
 
                     <Route exact path="/admin/faq" component={ReadFAQ}/>
                     <Route exact path="/admin/faq/create" component={CreateFAQ}/>
                     <Route exact path="/admin/faq/update/:id" component={UpdateFAQ}/>
+
+                    <Route exact path="/admin/products" component={ReadProduct}/>
+                    <Route exact path="/admin/products/create" component={CreateProduct}/>
+                    <Route exact path="/admin/products/update/:id" component={UpdateProduct}/>
 
                     <Route exact path="/error" component={NotFound}/>
                     <Route>

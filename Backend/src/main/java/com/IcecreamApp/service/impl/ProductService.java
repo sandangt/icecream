@@ -1,12 +1,15 @@
 package com.IcecreamApp.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.ProductDTO;
@@ -14,6 +17,7 @@ import com.IcecreamApp.converter.ProductConverter;
 import com.IcecreamApp.entity.Product;
 import com.IcecreamApp.repository.ProductRepository;
 import com.IcecreamApp.service.IProductService;
+import com.google.common.collect.Maps;
 
 @Service
 public class ProductService implements IProductService {
@@ -64,5 +68,18 @@ public class ProductService implements IProductService {
 		}
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
+	}
+
+	@Override
+	public Map.Entry<Long, List<ProductDTO>> readByPage(int pageNumber, int pageSize) {
+		Page<Product> pages = repository.findAll(PageRequest.of(--pageNumber, pageSize));
+		Long totalEntities = repository.count();
+		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(ProductConverter::toDTO).collect(Collectors.toList()));
+	}
+
+	@Override
+	public List<ProductDTO> searchProductsByName(String productname) {
+		return repository.searchProductsByName(productname).stream().map(ProductConverter::toDTO).collect(Collectors.toList());
+		
 	}
 }

@@ -72,7 +72,7 @@ public class FAQService implements IFAQService{
 
 	@Override
 	public Map.Entry<Long, List<FAQDTO>> readByPage(int pageNumber, int pageSize) {
-		Page<FAQ> pages = repository.findAll(PageRequest.of(pageNumber, pageSize));
+		Page<FAQ> pages = repository.findAll(PageRequest.of(--pageNumber, pageSize));
 		Long totalEntities = repository.count();
 		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(FAQConverter::toDTO).collect(Collectors.toList()));
 	}
