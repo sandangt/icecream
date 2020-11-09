@@ -123,6 +123,7 @@ class ReadProduct extends React.Component {
                             <th>Name</th>
                             <th>Price</th>
                             <th>Description</th>
+                            <th>Category</th>
                             <th>Status</th>
                             <th>Last modified date</th>
                             <th colSpan="2">Action</th>

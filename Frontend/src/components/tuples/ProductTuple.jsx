@@ -28,6 +28,9 @@ class ProductTuple extends React.Component {
         {this.props.obj.description}
     </td>
     <td>
+        {this.props.obj.categoryName}
+    </td>
+    <td>
         {this.props.obj.status}
     </td>
     <td>

@@ -16,7 +16,7 @@ class UpdateProduct extends React.Component {
             image: "",
             categoryList: [],
             categoryName: "",
-            categoryId: 0,
+            categoryId: "",
             getloading: false,
             postloading: false
         }
@@ -67,14 +67,13 @@ class UpdateProduct extends React.Component {
             description: this.state.description,
             price: this.state.price,
             status: this.state.status,
-            image: this.state.image
+            image: this.state.image,
+            categoryId: this.state.categoryId
         };
-        // baseUrl.put(`/products/${this.props.match.params.id}`, pkg, {headers: authHeader()})
-        //     .then(() => this.setState({ postloading: true}))
-        //     .catch(error => console.log(error));
-        console.log(pkg);
+        baseUrl.put(`/products/${this.props.match.params.id}`, pkg, {headers: authHeader()})
+            .then(() => this.setState({ postloading: true}))
+            .catch(error => console.log(error));
     }
-
 
     render() {
         if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
@@ -186,12 +185,29 @@ class UpdateProduct extends React.Component {
                                                 </label>
                                             </div>
                                             <div className="col-md-8 col-6">
-                                                <select value={this.state.status} onChange={ (e) => {
+                                                <select defaultValue={this.state.status} onChange={ (e) => {
                                                     e.preventDefault();
                                                     this.setState({status:e.target.value})
                                                 }}>
                                                     <option value="0">UNAVAILABLE</option>
                                                     <option value="1">AVAILABLE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-sm-3 col-md-2 col-5">
+                                                <label style={{ fontWeight: "bold",}}>
+                                                    Category
+                                                </label>
+                                            </div>
+                                            <div className="col-md-8 col-6">
+                                                <select defaultValue={this.state.categoryId} onChange={ (e) => {
+                                                    e.preventDefault();
+                                                    this.setState({categoryId:e.target.value})
+                                                }}>
+                                                    <option value=""></option>
+                                                    {this.state.categoryList.map( value => <option value={value.id}>{value.name}</option>)}
                                                 </select>
                                             </div>
                                         </div>
