@@ -85,7 +85,6 @@ class UpdateUser extends React.Component {
             status: this.inputStatus,
             roles: this.inputCheckboxList
         };
-        // console.log(pkg);
         baseUrl.put(`/users/${this.props.match.params.id}/roles-status`, pkg, {headers: authHeader()})
             .then(() => this.setState({ postloading: true}))
             .catch(error => console.log(error));

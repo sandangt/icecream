@@ -33,4 +33,6 @@ public interface IUserService {
 
 	Optional<User> updateRolesAndStatus(long id, RolesAndStatusDTO rolesNstatus);
 	
+	Optional<User> updateUsernameAndEmail(long id, UserDTO userDTO);
+	
 }

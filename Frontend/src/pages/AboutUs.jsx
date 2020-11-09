@@ -1,6 +1,11 @@
 import React from "react";
+import { compose } from "redux";
 
-function AboutUs() {
+class AboutUs extends React.Component{
+	componentDidMount() {
+		window.scrollTo(0,0);
+	}
+	render() {
     return (
 <div>
 	<div className="bg-light">
@@ -253,6 +258,7 @@ function AboutUs() {
 		</div>
 	</div>
 </div>
-    );
+	);
+	}
 }
 export default AboutUs;

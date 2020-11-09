@@ -108,6 +108,14 @@ public class UserController {
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Update failed!"), HttpStatus.NOT_ACCEPTABLE);
     }
+
+    @PutMapping(value="/{id}/account")
+    public ResponseEntity<MessageResponseDTO> updateUsernameAndEmail(@PathVariable("id") long id, @RequestBody UserDTO usernameNemail) {
+    	if (this.userService.updateUsernameAndEmail(id, usernameNemail).isPresent()) {
+    		return new ResponseEntity<>(new MessageResponseDTO("Update username and email successfully!"), HttpStatus.OK);
+    	}
+    	return new ResponseEntity<>(new MessageResponseDTO("Update failed!"), HttpStatus.NOT_ACCEPTABLE);
+    }
     
     @GetMapping(params="search")
     public ResponseEntity<List<UserDTO>> searchUsersByUsername(@RequestParam("search") String username) {

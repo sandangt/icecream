@@ -157,4 +157,18 @@ public class UserService implements IUserService {
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 	}
+
+	@Override
+	public Optional<User> updateUsernameAndEmail(long id, UserDTO userDTO) {
+		Optional<User> currentEntityWrapper = userRepository.findById(id);
+		if (currentEntityWrapper.isPresent()) {
+			User user = currentEntityWrapper.get();
+			user.setUserName(userDTO.getUsername());
+			user.setEmail(userDTO.getEmail());
+			return Optional.ofNullable(userRepository.save(user));
+		}
+		logger.error(String.format("%s id %d not found", entityName, id));
+		return Optional.empty();
+		
+	}
 }

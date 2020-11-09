@@ -65,7 +65,7 @@ public class PriorData implements CommandLineRunner {
     	user1.setId(3L);
     	User user2 = new User();
     	user2.setId(4L);    	
-    	userDetailRepository.save(new UserDetail(3L, "Friedrich", "Nietzsche", "xyz abc", EGender.MALE, new Date(0,0,1), "/images/user1.jpg", user1));
-    	userDetailRepository.save(new UserDetail(4L, "Karl", "Jung", "asc ghb", EGender.MALE, new Date(0,0,2), "/images/user2.jpg", user2));
+    	userDetailRepository.save(new UserDetail(3L, "Friedrich", "Nietzsche", "xyz abc", EGender.MALE, new Date(0,0,1), "/images/users/user1.jpg", user1));
+    	userDetailRepository.save(new UserDetail(4L, "Karl", "Jung", "asc ghb", EGender.MALE, new Date(0,0,2), "/images/users/user2.jpg", user2));
     }
 }
