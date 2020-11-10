@@ -22,5 +22,4 @@ public interface IProductService {
 	Map.Entry<Long, List<ProductDTO>> readByPage(int pageNumber, int pageSize);
 	
 	List<ProductDTO> searchProductsByName(String productname);
-
 }

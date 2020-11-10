@@ -1,6 +1,7 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.CategoryDTO;
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.entity.Category;
 import com.IcecreamApp.service.ICategoryService;
 
@@ -69,5 +71,21 @@ public class CategoryController {
     @GetMapping(params="search")
     public ResponseEntity<List<CategoryDTO>> searchCategoriesByName(@RequestParam("search") String categoryname) {
     	return ResponseEntity.ok().body(categoryService.searchCategoriesByName(categoryname));
+    }
+    
+    @GetMapping(value="/name")
+    public ResponseEntity<List<CategoryDTO>> getAllCategoryName() {
+    	return ResponseEntity.ok().body(categoryService.readAllNameAndId());
+    }
+    
+    @GetMapping(value="/{id}/products")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("id") Long id) {
+    	return ResponseEntity.ok().body(categoryService.readAllProductsByCategory(id));
+    }
+    
+    @GetMapping(value="/{id}/products", params={"page","offset"})
+    public ResponseEntity<Map.Entry<Long,List<ProductDTO>>> getProductsByCategoryWithPage(@PathVariable("id") Long id, 
+    		@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(categoryService.readAllProductsByCategoryWithPage(id, page, offset));
     }
 }

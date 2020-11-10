@@ -76,6 +76,7 @@ public class PriorData implements CommandLineRunner {
     	productRepository.save(new Product("Introduction to Algorithms", "Data structures and algorithms", "/images/products/CLRS.jpg", 3.58, EStatus.AVAILABLE, 
     			new Category(3L, "Computer science")));
     	productRepository.save(new Product("Three easy pieces of OS", "Operating system", "/images/products/3easypieces.jpg", 4.32, EStatus.AVAILABLE, 
-    			new Category(3L, "Computer science")));    	
+    			new Category(3L, "Computer science")));    
+    	System.out.println("Prior data loaded");
     }
 }

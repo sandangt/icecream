@@ -13,7 +13,7 @@ function Footer() {
 				</div>
 				<div className="col-md-2 mb-3">
 					<h6 className="text-uppercase font-weight-bold">
-						<Link to="/contact">Contact</Link>
+						<Link to="/contact">I feel lucky</Link>
 					</h6>
 				</div>
 			</div>

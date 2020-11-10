@@ -28,7 +28,7 @@ class Pagination extends React.Component {
         const {
             totalRecords,
             pageLimit,
-            pageNeighbours,
+            pageNeighbours
         } = props;
         this.pageLimit = typeof pageLimit === "number" ? pageLimit : 30;
         this.totalRecords = typeof totalRecords === "number" ? totalRecords : 0;

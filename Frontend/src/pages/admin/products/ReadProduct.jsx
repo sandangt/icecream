@@ -84,7 +84,7 @@ class ReadProduct extends React.Component {
         if (!this.props.isLoggedIn) {
             return <Redirect to="/error"/>
         }
-        const { totalRecords, pageLimit } = this.state;
+        const { totalRecords, pageLimit, currentPage } = this.state;
         return (
     <div>
         
@@ -141,7 +141,7 @@ class ReadProduct extends React.Component {
                    pageLimit={pageLimit} 
                    pageNeighbours={1} 
                    onPageChanged={this.onPageChanged}
-                    /> }
+                    />}
             </div>
 
             <div className="btn">

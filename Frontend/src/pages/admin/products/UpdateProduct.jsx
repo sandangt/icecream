@@ -29,7 +29,7 @@ class UpdateProduct extends React.Component {
         setTimeout(() => this.setState({postloading: false}), 5000);
       }
     getData = async () => {
-        await baseUrl.get(`/categories`, {headers:authHeader()})
+        await baseUrl.get(`/categories/name`, {headers:authHeader()})
             .then(response => {
                 this.setState({
                     categoryList: response.data

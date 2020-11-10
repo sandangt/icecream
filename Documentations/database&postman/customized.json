@@ -221,6 +221,147 @@
 				"description": "update account (username and password)"
 			},
 			"response": []
+		},
+		{
+			"name": "read all categories name and id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNDk4OTU4NywiZXhwIjoxNjA1MDc1OTg3fQ.vLRuavJB0SCXRtuoQkSTcH7GPAzyIdahdrzuTQa5lkThiOYcm1ILaoXBtAafOcBAbKUfzGkqf-8Drz04EnVwYQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories/name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories",
+						"name"
+					]
+				},
+				"description": "read all categories name and id"
+			},
+			"response": []
+		},
+		{
+			"name": "read all products by category id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNDk5MTc3OCwiZXhwIjoxNjA1MDc4MTc4fQ.CFwHFkgEzJtZOkoYD9ELd-NumCx95NYh67wctzLnT-V3dRUJSYMBCEYYCHbk-4e2U3mArt6KiHWCHD4SF39Erw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories/3/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories",
+						"3",
+						"products"
+					]
+				},
+				"description": "read all products by category id"
+			},
+			"response": []
+		},
+		{
+			"name": "read all products by category id with pagination",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNTAwMDUwOCwiZXhwIjoxNjA1MDg2OTA4fQ.F7HrIsJehWiYCq2DhRuTRKhhA23lI9wSQDf-H_v0zjmfiqA6D4Th1BvNKdkb9DOEsUNB7cSM_q74c2SeOm1kdA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/categories/1/products?page=1&offset=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories",
+						"1",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "offset",
+							"value": "5"
+						}
+					]
+				},
+				"description": "read all products by category id with pagination"
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
