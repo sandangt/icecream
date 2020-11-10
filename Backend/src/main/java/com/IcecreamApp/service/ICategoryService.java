@@ -18,4 +18,6 @@ public interface ICategoryService {
 
 	boolean delete(long id);
 	
+	List<CategoryDTO> searchCategoriesByName(String categoryname);
+	
 }

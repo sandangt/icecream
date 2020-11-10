@@ -14,13 +14,16 @@ function AdminNav() {
         <NavLink className="nav-link" to="/admin/products">Product</NavLink>
     </li>
     <li className="nav-item">
+        <NavLink className="nav-link" to="/admin/categories">Category</NavLink>
+    </li>
+    <li className="nav-item">
         <NavLink className="nav-link" to="/admin/orders">Order</NavLink>
     </li>
     <li className="nav-item">
-        <NavLink className="nav-link" to="/admin/faq">FAQ</NavLink>
+        <NavLink className="nav-link" to="/admin/feedbacks">Feedback</NavLink>
     </li>
     <li className="nav-item">
-        <NavLink className="nav-link" to="/admin/feedbacks">Feedback</NavLink>
+        <NavLink className="nav-link" to="/admin/faq">FAQ</NavLink>
     </li>
     {/* <li className="nav-item dropdown">
         <Link className="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</Link>

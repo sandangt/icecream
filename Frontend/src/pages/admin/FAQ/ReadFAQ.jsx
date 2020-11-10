@@ -61,11 +61,6 @@ class ReadFAQ extends React.Component {
         const { currentPage, pageLimit } = data;
         this.setState({ currentPage, pageLimit });
         this.getDataByPage(currentPage, pageLimit);
-    } 
-    
-    onHandlePageLimitSelection = async (e) => {
-        e.preventDefault();
-        this.setState({pageLimit: parseInt(e.target.value)});
     }
 
     render() {
@@ -74,9 +69,8 @@ class ReadFAQ extends React.Component {
         }
         const { totalRecords, pageLimit } = this.state;
         return (
-    <div className="container">
-        
-        <div className="container text-center">
+    <div>
+        <div className="text-center">
             <div>
                 <h1 className="h1-view">FAQ</h1>
             </div>

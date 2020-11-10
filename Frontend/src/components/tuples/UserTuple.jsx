@@ -13,17 +13,20 @@ class UserTuple extends React.Component {
     renderActionButton = ()  => {
         if (this.props.obj.id !== this.props.currentUserId) {
             return (
-        <div>
+        <React.Fragment>
             <td>
                 <Link to={`/admin/users/update/${this.props.obj.id}`} className="btn btn-primary">Edit</Link>
             </td>
             <td>
                 <button onClick={this.delete} className="btn btn-danger">Delete</button>
             </td> 
-        </div>
+        </React.Fragment>
             );
         }
-        return null;
+        return (<React.Fragment>
+            <td></td>
+            <td></td>
+        </React.Fragment>);
     }
     render() {
         return (
@@ -39,6 +42,11 @@ class UserTuple extends React.Component {
     </td>
     <td>
         {this.props.obj.email}
+    </td>
+    <td>
+        <select>
+            {this.props.obj.roles.map( value => <option>{value.name}</option>)}
+        </select>
     </td>
     <td>
         {this.props.obj.modifiedDate}

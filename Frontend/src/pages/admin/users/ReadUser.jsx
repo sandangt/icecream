@@ -132,6 +132,7 @@ class ReadUser extends React.Component {
                             <th>ID</th>
                             <th>Username</th>
                             <th>Email</th>
+                            <th>Roles</th>
                             <th>Last modified date</th>
                             <th>Status</th>
                             <th colSpan="2">Action</th>

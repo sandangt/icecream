@@ -77,8 +77,8 @@ public class ProductController {
     }
     
     @GetMapping(params="search")
-    public ResponseEntity<List<ProductDTO>> searchUsersByUsername(@RequestParam("search") String username) {
-    	return ResponseEntity.ok().body(productService.searchProductsByName(username));
+    public ResponseEntity<List<ProductDTO>> seearchProductsByName(@RequestParam("search") String productname) {
+    	return ResponseEntity.ok().body(productService.searchProductsByName(productname));
     }
 
 }

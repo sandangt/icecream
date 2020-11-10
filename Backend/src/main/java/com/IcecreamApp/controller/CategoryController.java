@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.CategoryDTO;
@@ -63,5 +64,10 @@ public class CategoryController {
     		return ResponseEntity.ok().body(new MessageResponseDTO("Category item has been deleted successfully!"));
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<CategoryDTO>> searchCategoriesByName(@RequestParam("search") String categoryname) {
+    	return ResponseEntity.ok().body(categoryService.searchCategoriesByName(categoryname));
     }
 }

@@ -67,4 +67,9 @@ public class CategoryService implements ICategoryService {
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
+
+	@Override
+	public List<CategoryDTO> searchCategoriesByName(String categoryname) {
+		return repository.searchCategoriesByName(categoryname).stream().map(CategoryConverter::toDTO).collect(Collectors.toList());		
+	}
 }

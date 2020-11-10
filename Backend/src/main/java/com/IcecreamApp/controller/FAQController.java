@@ -31,7 +31,7 @@ public class FAQController {
 	@Autowired
 	private IFAQService faqService;
 	
-    @GetMapping(value="/all")
+    @GetMapping
     public ResponseEntity<List<FAQDTO>> getAllFAQs() {        
     	
     	return ResponseEntity.ok().body(faqService.readAll());

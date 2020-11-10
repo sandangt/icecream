@@ -4,35 +4,27 @@ import {connect} from "react-redux";
 
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
-import Pagination from "components/pagination/Pagination.jsx";
+import CategoryTuple from "components/tuples/CategoryTuple.jsx";
 
-import ProductTuple from "components/tuples/ProductTuple.jsx";
-
-class ReadProduct extends React.Component {
+class ReadCategory extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            products: [],
-            totalRecords: null,
-            currentPage: 1,
-            totalPages: null,
-            pageLimit: 5,
+            categories: [],
             searchText: ""
         };
     }
 
     componentDidMount() {
-        this.getDataByPage(this.state.currentPage, this.state.pageLimit);
+        this.getData();
     }
 
-    
-    getDataByPage = async (currentPage, pageLimit) => {
-        await baseUrl.get(`/products?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
+    getData = async () => {
+        await baseUrl.get(`/categories`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                products: Object.values(response.data)[0],
-                totalRecords: parseInt(Object.keys(response.data)[0])
+                categories: response.data
             })
         })
         .catch( (error) => {
@@ -40,12 +32,11 @@ class ReadProduct extends React.Component {
         });
     }
 
-    getSearchData = async(searchText) => {
-        await baseUrl.get(`/products?search=${searchText}`, {headers: authHeader()})
+    getSearchData = async (searchText) => {
+        await baseUrl.get(`/categories?search=${searchText}`, {headers: authHeader()})
         .then( (response) => {
             this.setState({
-                products: response.data,
-                totalRecords: null
+                categories: response.data
             })
         })
         .catch( (error) => {
@@ -53,51 +44,42 @@ class ReadProduct extends React.Component {
         });
     }
 
-    renderTuples = () => {
-        return this.state.products.map( (value, index) => {
-            return <ProductTuple obj={value} key={index}/>
-        });
-    }
-
-    onPageChanged = data => {
-        const { currentPage, pageLimit } = data;
-        this.setState({ currentPage, pageLimit });
-        this.getDataByPage(currentPage, pageLimit);
-    } 
-    
     onSearchButton = (e) => {
         e.preventDefault();
         const {searchText} = this.state;
         if (searchText === "") {
-            this.getDataByPage(1, this.state.pageLimit);
+            this.getData();
         }   
         else {
             this.getSearchData(searchText);
         }
     }
-    onSearchBar = (e) => {
-        e.preventDefault();
-        this.setState({searchText: e.target.value});
+
+    renderTuples = () => {
+        return this.state.categories.map( (value, index) => {
+            return <CategoryTuple obj={value} key={index}/>
+        });
     }
     
     render() {
         if (!this.props.isLoggedIn) {
             return <Redirect to="/error"/>
         }
-        const { totalRecords, pageLimit } = this.state;
         return (
     <div>
-        
         <div className="text-center">
             <div>
-                <h1 className="h1-view">Product</h1>
+                <h1 className="h1-view">Category</h1>
             </div>
             <p>
                 <input
                     type="text"
-                    placeholder="Search Product by name..."
+                    placeholder="Search Category by name..."
                     name="searchtext"
-                    onChange={this.onSearchBar}
+                    onChange={(e) => {
+                        e.preventDefault();
+                        this.setState({searchText: e.target.value});
+                    }}
                 />
             </p>
             <p>
@@ -118,13 +100,8 @@ class ReadProduct extends React.Component {
                 >
                     <thead className="thead-dark">
                         <tr>
-                            {/* <th>select</th> */}
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Description</th>
                             <th>Category</th>
-                            <th>Status</th>
                             <th>Last modified date</th>
                             <th colSpan="2">Action</th>
                         </tr>
@@ -135,18 +112,9 @@ class ReadProduct extends React.Component {
                 </table>
             </div>
             
-            <div className="d-flex flex-row py-4 align-items-center">
-                   {totalRecords && <Pagination 
-                   totalRecords={totalRecords} 
-                   pageLimit={pageLimit} 
-                   pageNeighbours={1} 
-                   onPageChanged={this.onPageChanged}
-                    /> }
-            </div>
-
             <div className="btn">
-                <Link className="btn btn-primary" to="/admin/products/create">
-                    Create new product
+                <Link className="btn btn-primary" to="/admin/categories/create">
+                    Create new Category
                 </Link>
             </div>
         </div>
@@ -160,5 +128,5 @@ const mapStateToProps = (state) => {
         isLoggedIn: state.auth.isLoggedIn
     };
 }
-export default connect(mapStateToProps)(ReadProduct);
+export default connect(mapStateToProps)(ReadCategory);
 

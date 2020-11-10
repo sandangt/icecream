@@ -24,6 +24,10 @@ import ReadProduct from "pages/admin/products/ReadProduct.jsx";
 import CreateProduct from "pages/admin/products/CreateProduct.jsx";
 import UpdateProduct from "pages/admin/products/UpdateProduct.jsx";
 
+import ReadCategory from "pages/admin/categories/ReadCategory.jsx";
+import CreateCategory from "pages/admin/categories/CreateCategory.jsx";
+import UpdateCategory from "pages/admin/categories/UpdateCategory.jsx";
+
 import history from "history.js";
 
 class App extends React.Component {
@@ -56,6 +60,10 @@ class App extends React.Component {
                     <Route exact path="/admin/products" component={ReadProduct}/>
                     <Route exact path="/admin/products/create" component={CreateProduct}/>
                     <Route exact path="/admin/products/update/:id" component={UpdateProduct}/>
+
+                    <Route exact path="/admin/categories" component={ReadCategory}/>
+                    <Route exact path="/admin/categories/create" component={CreateCategory}/>
+                    <Route exact path="/admin/categories/update/:id" component={UpdateCategory}/>
 
                     <Route exact path="/error" component={NotFound}/>
                     <Route>
