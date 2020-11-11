@@ -11,6 +11,7 @@ class OrderDetailTuple extends React.Component {
         window.location.reload();
     }
     render() {
+        const { onClickCheck, obj} = this.props;
         return (
             <tr>
                 {/* <td>
@@ -20,7 +21,9 @@ class OrderDetailTuple extends React.Component {
                     {this.props.obj.id}
                 </td>
                 <td>
-                    <button></button>{this.props.obj.quantity}
+                    <button onClick={() => onClickCheck({id:obj.id,data:obj.quantity+=1})}>+</button>
+                        {this.props.obj.quantity}
+                    <button onClick={()=> this.props.obj.quantity-=1}>-</button>
                 </td>
                 <td>
                     {this.props.obj.name}

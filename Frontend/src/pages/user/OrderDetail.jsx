@@ -23,20 +23,45 @@ class OrderDetail extends React.Component {
     getData = () => {
         if (localStorage.getItem("cart") !== null) {
             const currentCart = JSON.parse(localStorage.getItem("cart"));
-            let result = 0;
             this.setState({orders: currentCart});
-            currentCart.forEach(value => {
-                result += value.price * value.quantity;
-            });
-            this.setState({
-                totalPrice: result
-            })
+            // currentCart.forEach(value => {
+            //     result += value.price * value.quantity;
+            // });
+            // this.setState({
+            //     totalPrice: result
+            // });
+            this.calculateTotalPrice(currentCart);
         }
+    }
+
+    calculateTotalPrice = (cart) => {
+        const result = cart.reduce( (result, item) => {
+            return (result + item.price * item.quantity);
+        });
+        this.setState({
+            totalPrice: result
+        });
+    }
+
+    onClickCheck = (data) => {
+        const {orders} = this.state
+        let arr=[];
+        orders.forEach( value =>{
+            if(value.id===data.id){
+                arr.push({
+                    ... value,
+                    quantity:data.data
+                })
+            }else{
+                arr.push(value);
+            }
+        });
+        this.setState({orders:arr});
     }
 
     renderTuples = () => {
         return this.state.orders.map( (value, index) => {
-            return <OrderDetailTuple obj={value} key={index}/>
+            return <OrderDetailTuple obj={value} key={index} onClickCheck={this.onClickCheck}/>
         });
     }
 
@@ -55,6 +80,7 @@ class OrderDetail extends React.Component {
                 id: this.props.user.id
             }
         };
+
         await baseUrl.post(`/orders`, orderPkg, {headers: authHeader()})
         .then(() => this.setState({postOrderList: true}))
         .catch(error => console.log(error));
