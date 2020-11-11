@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.OrderDTO;
+import com.IcecreamApp.DTO.OrderDetailDTO;
 import com.IcecreamApp.entity.Order;
 import com.IcecreamApp.service.IOrderService;
 
@@ -71,5 +72,10 @@ public class OrderController {
     	if (currentEntityWrapper.isPresent())
         	return ResponseEntity.ok().body(currentEntityWrapper.get());
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping(value="/{id}/order-details")
+	public ResponseEntity<List<OrderDetailDTO>> getOrderDetailByOrder(@PathVariable("id") long id) {
+		return ResponseEntity.ok().body(orderService.readOrderDetailsByOrder(id));
 	}
 }

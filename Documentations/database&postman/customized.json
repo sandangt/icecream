@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3bd884b0-621d-4c77-8be5-0f87f53ad48c",
+		"_postman_id": "67d50346-777b-4a96-a23b-48bb21ad2492",
 		"name": "Customized Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -480,6 +480,38 @@
 					]
 				},
 				"description": "read all orders by user"
+			},
+			"response": []
+		},
+		{
+			"name": "read order detail by order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNTA5MTAzMCwiZXhwIjoxNjA1MTc3NDMwfQ.0kACnD2iQS9pKKbVY5E4NZavHhZkmn7SxEXMmC9Jwq0XqiFxlHj_EGV4fgezNMw1SCMtRwkc0BGIzZmG5Dve6A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/orders/1/order-details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1",
+						"order-details"
+					]
+				},
+				"description": "read order detail by order"
 			},
 			"response": []
 		}

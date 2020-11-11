@@ -1,15 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {removeItemFromCartService} from "services/cartService.js";
 
-class OrderDetailTuple extends React.Component {
-    delete = () => {
-        // baseUrl.delete(`/faq/${this.props.obj.id}`, {headers: authHeader()})
-        //     .then(console.log('Deleted'))
-        //     .catch(err => console.log(err));
-        removeItemFromCartService(this.props.obj);
-        window.location.reload();
-    }
+class OrderTuple extends React.Component {
     render() {
         return (
             <tr>
@@ -26,17 +18,17 @@ class OrderDetailTuple extends React.Component {
                     {this.props.obj.user.username}
                 </td>
                 <td>
-                    {this.props.obj.totalPrice}
+                    {this.props.obj.totalPrice.toFixed(3)}
                 </td>
                 <td>
                     {this.props.obj.modifiedDate}
                 </td>
                 <td>
-                    <button onClick={this.delete} className="btn btn-primary">View Detail</button>
+                    <Link to={`/order/detail/${this.props.obj.id}`} className="btn btn-primary">View Detail</Link>
                 </td>
             </tr>
         );
     }
 }
 
-export default OrderDetailTuple;
+export default OrderTuple;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.IcecreamApp.DTO.OrderDTO;
+import com.IcecreamApp.DTO.OrderDetailDTO;
 import com.IcecreamApp.entity.Order;
 
 public interface IOrderService {
@@ -19,5 +20,7 @@ public interface IOrderService {
 	boolean delete(long id);
 	
 	Optional<OrderDTO> readByCode(String code);
+	
+	List<OrderDetailDTO> readOrderDetailsByOrder(long id);
 
 }

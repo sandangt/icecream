@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.IcecreamApp.DTO.FeedbackDTO;
 import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.ProductDTO;
@@ -72,8 +73,13 @@ public class ProductController {
     }
     
     @GetMapping(params="search")
-    public ResponseEntity<List<ProductDTO>> seearchProductsByName(@RequestParam("search") String productname) {
+    public ResponseEntity<List<ProductDTO>> searchProductsByName(@RequestParam("search") String productname) {
     	return ResponseEntity.ok().body(productService.searchProductsByName(productname));
+    }
+    
+    @GetMapping(value="/{id}/feedbacks")
+    public ResponseEntity<List<FeedbackDTO>> getFeedbacksByProduct(@PathVariable("id") long id) {
+    	return ResponseEntity.ok().body(productService.readFeedbacksByProduct(id));
     }
 
 }

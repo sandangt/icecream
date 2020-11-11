@@ -30,6 +30,7 @@ function ProductCard(props) {
                 onClick={ async (e) => {
                     e.preventDefault();
                     addItemToCartService(props);
+                    props.addToCart(props.cart);
                 }}>
                     Buy
                 </button>) : null}

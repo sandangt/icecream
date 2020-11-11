@@ -1,4 +1,6 @@
 import React from "react";
+import {connect} from "react-redux";
+
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 
@@ -8,7 +10,10 @@ class ProductDetail extends React.Component {
         super(props);
         this.state = {
             product: {},
-            getloading: false
+            getloading: false,
+            postloading: false,
+            title: "",
+            content: ""
         };
     }
     componentDidMount() {
@@ -16,11 +21,11 @@ class ProductDetail extends React.Component {
     }
 
     getData = async () => {
-        baseUrl.get(`/products/${this.props.match.params.id}`, {headers: authHeader()})
+        await baseUrl.get(`/products/${this.props.match.params.id}`, {headers: authHeader()})
         .then( (response) => {
             this.setState({
                 product: response.data,
-                getloading: true
+                getloading: true,
             });
         })
         .catch( (error) => {
@@ -31,6 +36,27 @@ class ProductDetail extends React.Component {
     backButtonHandle = (e) => {
         e.preventDefault();
         this.props.history.push("/shop");
+    }
+
+    onSubmitFeedback = async (e) => {
+        e.preventDefault();
+        const pkg = {
+            content: this.state.content,
+            title: this.state.title,
+            productId: this.state.product.id,
+            user: {
+                id: this.props.user.id
+            }
+        };
+        await baseUrl.post(`/feedbacks`, pkg, {headers: authHeader()})
+        .then( () => {
+            this.setState({
+                postloading: true
+            });
+        })
+        .catch( (error) => {
+            console.log(error);
+        });
     }
 
     render() {
@@ -61,7 +87,7 @@ class ProductDetail extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-12">
+                    <div className="col-8">
                         <div className="tab-content ml-1" id="myTabContent">
                             <div className="tab-pane fade show active" id="basicInfo"
                                 role="tabpanel"
@@ -133,9 +159,50 @@ class ProductDetail extends React.Component {
                                     </div>
                                 </div>
                                 <hr/>
+                                <div className="row">
+                                    <div className="col-sm-3 col-md-2 col-5">
+                                        <label style={{ fontWeight: "bold",}}>
+                                            Feedback
+                                        </label>
+                                    </div>
+                                    <div className="col-md-8 col-6">
+                                        <input type="text" onChange={(e) => {
+                                            e.preventDefault();
+                                            this.setState({
+                                                title: e.target.value
+                                            });
+                                        }}/>
+                                        <textarea rows="5" cols="45" onChange={ (e) => {
+                                            e.preventDefault();
+                                            this.setState({
+                                                content: e.target.value
+                                            });
+                                        }}>                                            
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <button className="btn btn-primary" onClick={this.onSubmitFeedback}>submit</button>
+                        </div>
+                                {this.state.postloading && (
+                                <div className="alert alert-success" role="alert" >
+                                    Create order detail list successfully
+                                </div>)}
+                    </div>
+                    </div>
+                    <div className="col-4">
+                        <div class="listWrapper">
+                            <ul>
+                                { this.state.product.feedbacks && this.state.product.feedbacks.map(value => {
+                                    return (<li>
+                                        <p>title: {value.title}</p>
+                                        <p>posted by: {value.user.username}</p>
+                                        <p>{value.content}</p>
+                                    </li>);
+                                })}
+                            </ul>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -149,4 +216,11 @@ class ProductDetail extends React.Component {
         }
 }
 
-export default ProductDetail;
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+        isLoggedIn: state.auth.isLoggedIn
+    };
+}
+
+export default connect(mapStateToProps)(ProductDetail);

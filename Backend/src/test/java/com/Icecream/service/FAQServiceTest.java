@@ -81,9 +81,9 @@ public class FAQServiceTest {
 //		Mockito.when(faqRepository.save(faq3)).thenReturn(faq3);
 		
 		// When
-		FAQ faqTest1 = faqService.create(faqdto1);
-		FAQ faqTest2 = faqService.create(faqdto2);
-		FAQ faqTest3 = faqService.create(faqdto3);
+		faqService.create(faqdto1);
+		faqService.create(faqdto2);
+		faqService.create(faqdto3);
 		// Then
 //		assertEquals(faq1.getAnswer(), faqTest1.getAnswer());
 //		assertEquals(faq2.getId(), faqTest2.getId());

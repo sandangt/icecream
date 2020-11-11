@@ -30,8 +30,9 @@ import UpdateCategory from "pages/admin/categories/UpdateCategory.jsx";
 
 import Shop from "pages/user/Shop.jsx";
 import ProductDetail from "pages/user/ProductDetail.jsx";
+import Order from "pages/user/Order.jsx";
+import OrderHistory from "pages/user/OrderHistory.jsx";
 import OrderDetail from "pages/user/OrderDetail.jsx";
-import History from "pages/user/History.jsx";
 
 import history from "history.js";
 
@@ -72,8 +73,9 @@ class App extends React.Component {
 
                     <Route exact path="/shop" component={Shop}/>
                     <Route exact path="/product/:id" component={ProductDetail}/>
-                    <Route exact path="/order" component={OrderDetail}/>
-                    <Route exact path="/history" component={History}/>
+                    <Route exact path="/order" component={Order}/>
+                    <Route exact path="/order/detail/:id" component={OrderDetail}/>
+                    <Route exact path="/history" component={OrderHistory}/>
 
                     <Route exact path="/error" component={NotFound}/>
                     <Route>

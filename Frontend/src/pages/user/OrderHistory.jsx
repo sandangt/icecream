@@ -6,7 +6,7 @@ import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
 import OrderTuple from "components/tuples/OrderTuple.jsx";
 
-class History extends React.Component {
+class OrderHistory extends React.Component {
 
     constructor(props) {
         super(props);
@@ -82,5 +82,5 @@ const mapStateToProps = (state) => {
         user: state.auth.user
     };
 }
-export default connect(mapStateToProps)(History);
+export default connect(mapStateToProps)(OrderHistory);
 

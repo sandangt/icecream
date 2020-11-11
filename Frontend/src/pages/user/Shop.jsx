@@ -17,7 +17,8 @@ class Shop extends React.Component {
             pageLimit: 6,
             categoryType: 0,
             searchText: "",
-            getloading: false
+            getloading: false,
+            cart: 0
         };
     }
     
@@ -68,6 +69,9 @@ class Shop extends React.Component {
         });
     }
 
+    addToCart = (cart) => {
+        this.setState({cart: cart+=1});
+    }
     renderProductCardGrid = () => {
         return (
             this.state.products.map( value => {
@@ -78,6 +82,8 @@ class Shop extends React.Component {
                     description={value.description}
                     price={value.price}
                     status={value.status}
+                    cart={this.state.cart}
+                    addToCart={this.addToCart}
                     />);
             })
         );
@@ -104,10 +110,8 @@ class Shop extends React.Component {
                     this.setState({
                         categoryType:0,
                         currentPage: 1
-                    })
-                    this.getPaginatedProductDataByCategory(0, this.state.currentPage, this.state.pageLimit);
-                }}
-                >
+                    });
+                    this.getPaginatedProductDataByCategory(0, this.state.currentPage, this.state.pageLimit);}}>
                     all
                 </button>
                 {this.state.categories.map((value) => {
@@ -127,6 +131,7 @@ class Shop extends React.Component {
                         </button>
                     );
                 })}
+                <h2>Cart: {this.state.cart}</h2>
             </div>
         </div>
         <div className="col-lg-9">
