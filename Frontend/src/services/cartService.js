@@ -9,21 +9,21 @@ export const addItemToCartService = (product) => {
         createCartService();
     }
     const currentCart = JSON.parse(localStorage.getItem("cart"));
-    let itemExist = false;
 
-    if (currentCart.length === 0) {
-        currentCart.push({...product, quantity: 1});
-    }
-    else { 
-        currentCart.some(value => {
-            if (value.id === product.id) {
-                value.quantity += 1;
-                return true;
-            }
-            currentCart.push({...product, quantity: 1});
-            return false;
-        });
-    }
+    // if (currentCart.length === 0) {
+    //     currentCart.push({...product, quantity: 1});
+    // }
+    // else { 
+    //     currentCart.some(value => {
+    //         if (value.id === product.id) {
+    //             value.quantity += 1;
+    //             return true;
+    //         }
+    //         currentCart.push({...product, quantity: 1});
+    //         return false;
+    //     });
+    // }
+    currentCart.push(product);
     localStorage.setItem("cart", JSON.stringify(currentCart));   
 }
 
@@ -37,7 +37,3 @@ export const destroyCartService = () => {
         localStorage.removeItem("cart");
     }
 }
-
-// export const testCartService = () => {
-//     console.log(localStorage.getItem("Hello"));
-// }

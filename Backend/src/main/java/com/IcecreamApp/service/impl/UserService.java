@@ -1,5 +1,6 @@
 package com.IcecreamApp.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,17 +14,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.IcecreamApp.DTO.OrderDTO;
 import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.RolesAndStatusDTO;
 import com.IcecreamApp.DTO.UserDTO;
 import com.IcecreamApp.DTO.UserDetailDTO;
+import com.IcecreamApp.converter.OrderConverter;
 import com.IcecreamApp.converter.RoleConverter;
 import com.IcecreamApp.converter.UserConverter;
 import com.IcecreamApp.converter.UserDetailConverter;
 import com.IcecreamApp.entity.Role;
 import com.IcecreamApp.entity.User;
 import com.IcecreamApp.entity.UserDetail;
+import com.IcecreamApp.repository.OrderRepository;
 import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
@@ -35,6 +39,8 @@ public class UserService implements IUserService {
 	private UserRepository userRepository;
 	@Autowired
 	private UserDetailRepository userDetailRepository;
+	@Autowired
+	private OrderRepository orderRepository;
 	@Autowired
 	private PasswordEncoder encoder;
 	
@@ -127,22 +133,6 @@ public class UserService implements IUserService {
 		return userRepository.searchUsersByUsername(username).stream().map(UserConverter::toDTO).collect(Collectors.toList());
 	}
 	
-//	@Override
-//	public String changePassword(long id, String[] passwords) {
-//		Optional<User> currentUserWrapper = repository.findById(id);
-//		if (!currentUserWrapper.isPresent()) {
-//			throw new ResourceNotFoundException(this.entityName, id);
-//	    }
-//		User currentUser = currentUserWrapper.get();
-//		String oldPassword = currentUserWrapper.get().getPassword();
-//		String inputOldpassword = encoder.encode(passwords[0].getBytes());
-//		if (!oldPassword.equals(encoderpasswords[0])) {
-//			return "Unsuccessful";
-//		}
-//		currentUser.set		
-//		
-//	}
-
 	@Override
 	public Optional<User> updateRolesAndStatus(long id, RolesAndStatusDTO rolesNstatus) {
 		Optional<User> currentEntityWrapper = userRepository.findById(id);
@@ -169,5 +159,15 @@ public class UserService implements IUserService {
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
 		
+	}
+
+	@Override
+	public List<OrderDTO> readAllOrdersByUser(long id) {
+		Optional<User> currentEntityWrapper = userRepository.findById(id);
+		if (currentEntityWrapper.isPresent()) {
+			return orderRepository.findByUserId(id).stream().map(OrderConverter::toDTO).collect(Collectors.toList());
+		}
+		logger.error(String.format("%s id %d not found", entityName, id));
+		return new ArrayList<>();
 	}
 }

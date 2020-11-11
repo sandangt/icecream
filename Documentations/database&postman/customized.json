@@ -391,7 +391,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders?code=Hello",
+					"raw": "http://localhost:8080/orders?code=1605088339012_user_Socrates",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -403,7 +403,7 @@
 					"query": [
 						{
 							"key": "code",
-							"value": "Hello"
+							"value": "1605088339012_user_Socrates"
 						}
 					]
 				},
@@ -428,7 +428,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"quantity\" : 100,\r\n    \"orderCode\" : \"hello\",\r\n    \"product\" : {\r\n        \"id\" : 1\r\n    }\r\n}",
+					"raw": "{\r\n    \"quantity\" : 1,\r\n    \"orderCode\" : \"1605088339012_user_Socrates\",\r\n    \"product\" : {\r\n        \"id\" : 2\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -448,6 +448,38 @@
 					]
 				},
 				"description": "create order detail with order code"
+			},
+			"response": []
+		},
+		{
+			"name": "read all orders by user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNTA5MTAzMCwiZXhwIjoxNjA1MTc3NDMwfQ.0kACnD2iQS9pKKbVY5E4NZavHhZkmn7SxEXMmC9Jwq0XqiFxlHj_EGV4fgezNMw1SCMtRwkc0BGIzZmG5Dve6A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/3/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3",
+						"orders"
+					]
+				},
+				"description": "read all orders by user"
 			},
 			"response": []
 		}

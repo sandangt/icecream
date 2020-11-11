@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.OrderDTO;
 import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.RolesAndStatusDTO;
@@ -115,6 +116,11 @@ public class UserController {
     @GetMapping(params="search")
     public ResponseEntity<List<UserDTO>> searchUsersByUsername(@RequestParam("search") String username) {
     	return ResponseEntity.ok().body(userService.searchUsersByUsername(username));
+    }
+    
+    @GetMapping(value="{id}/orders")
+    public ResponseEntity<List<OrderDTO>> getOrdersByUser(@PathVariable("id") long id) {
+    	return ResponseEntity.ok().body(userService.readAllOrdersByUser(id));
     }
         
 }
