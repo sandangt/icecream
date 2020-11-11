@@ -31,8 +31,8 @@ class ReadProduct extends React.Component {
         await baseUrl.get(`/products?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                products: Object.values(response.data)[0],
-                totalRecords: parseInt(Object.keys(response.data)[0])
+                products: response.data.itemList,
+                totalRecords: response.data.totalItems
             })
         })
         .catch( (error) => {

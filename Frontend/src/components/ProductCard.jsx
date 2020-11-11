@@ -1,5 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import authHeader from "services/authHeader.js";
+import baseUrl from "baseUrl.js";
 
 function ProductCard(props) {
     return (
@@ -23,9 +25,15 @@ function ProductCard(props) {
                 </p>
             </div>
             <div className="card-footer row">
-                <button className="btn btn-primary col">
+                {props.status === "AVAILABLE" ? (<button className="btn btn-primary col"
+                onChange={ async (e) => {
+                    e.preventDefault();
+                    await baseUrl.post(``
+
+                    })
+                }}>
                     Buy
-                </button>
+                </button>) : null}
                 <div className="col">
                     {props.status}
                 </div>

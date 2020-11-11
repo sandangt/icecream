@@ -30,8 +30,8 @@ class ReadUser extends React.Component {
         await baseUrl.get(`/users?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                users: Object.values(response.data)[0],
-                totalRecords: parseInt(Object.keys(response.data)[0])
+                users: response.data.itemList,
+                totalRecords: response.data.totalItems
             })
         })
         .catch( (error) => {

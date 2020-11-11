@@ -1,7 +1,6 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.FAQDTO;
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.entity.FAQ;
 import com.IcecreamApp.service.IFAQService;
 
@@ -70,12 +70,7 @@ public class FAQController {
     }
 	
     @GetMapping(params={"page","offset"})
-    public ResponseEntity<Map.Entry<Long,List<FAQDTO>>> getFAQByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	/**
-    	 * return key - value pair
-    	 * key is total tuples in the table in database
-    	 * value is list of tuples per page
-    	 */
+    public ResponseEntity<PageDTO<FAQDTO>> getFAQByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
     	return ResponseEntity.ok().body(faqService.readByPage(page, offset));
     }
 	

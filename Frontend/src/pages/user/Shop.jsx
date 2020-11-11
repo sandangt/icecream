@@ -58,8 +58,8 @@ class Shop extends React.Component {
         await baseUrl.get(url, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                products: Object.values(response.data)[0],
-                totalRecords: parseInt(Object.keys(response.data)[0]),
+                products: response.data.itemList,
+                totalRecords: response.data.totalItems,
                 getloading:true
             })
         })

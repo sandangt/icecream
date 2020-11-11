@@ -2,7 +2,6 @@ package com.IcecreamApp.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -14,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.CategoryDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.converter.CategoryConverter;
 import com.IcecreamApp.converter.ProductConverter;
@@ -22,7 +22,6 @@ import com.IcecreamApp.entity.Product;
 import com.IcecreamApp.repository.CategoryRepository;
 import com.IcecreamApp.repository.ProductRepository;
 import com.IcecreamApp.service.ICategoryService;
-import com.google.common.collect.Maps;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -103,13 +102,13 @@ public class CategoryService implements ICategoryService {
 	}
 
 	@Override
-	public Map.Entry<Long, List<ProductDTO>> readAllProductsByCategoryWithPage(long id, int pageNumber, int pageSize) {
+	public PageDTO<ProductDTO> readAllProductsByCategoryWithPage(long id, int pageNumber, int pageSize) {
 		Optional<Category> currentEntityWrapper = categoryRepository.findById(id);
 		if (currentEntityWrapper.isPresent()) {
 			int totalItem = currentEntityWrapper.get().getProducts().size();
-			Page<Product> pages = productRepository.getPaginatedProductsByCategory(id, PageRequest.of(pageNumber, pageSize));
-			return Maps.immutableEntry((long) totalItem, pages.getContent().stream().map(ProductConverter::toDTO).collect(Collectors.toList()));
+			Page<Product> pages = productRepository.getPaginatedProductsByCategory(id, PageRequest.of(--pageNumber, pageSize));
+			return new PageDTO<>((long) totalItem, pages.getContent().stream().map(ProductConverter::toDTO).collect(Collectors.toList()));
 		}
-		return Maps.immutableEntry(0L, new ArrayList<>());
+		return new PageDTO<>(0L, new ArrayList<>());
 	}
 }

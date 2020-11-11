@@ -1,9 +1,9 @@
 package com.IcecreamApp.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.entity.Product;
 
@@ -19,7 +19,7 @@ public interface IProductService {
 
 	boolean delete(long id);
 	
-	Map.Entry<Long, List<ProductDTO>> readByPage(int pageNumber, int pageSize);
+	PageDTO<ProductDTO> readByPage(int pageNumber, int pageSize);
 	
 	List<ProductDTO> searchProductsByName(String productname);
 }

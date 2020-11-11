@@ -1,7 +1,6 @@
 package com.IcecreamApp.service.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -13,11 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.FAQDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.converter.FAQConverter;
 import com.IcecreamApp.entity.FAQ;
 import com.IcecreamApp.repository.FAQRepository;
 import com.IcecreamApp.service.IFAQService;
-import com.google.common.collect.Maps;
 
 @Service
 public class FAQService implements IFAQService{
@@ -71,10 +70,10 @@ public class FAQService implements IFAQService{
 	}
 
 	@Override
-	public Map.Entry<Long, List<FAQDTO>> readByPage(int pageNumber, int pageSize) {
+	public PageDTO<FAQDTO> readByPage(int pageNumber, int pageSize) {
 		Page<FAQ> pages = repository.findAll(PageRequest.of(--pageNumber, pageSize));
 		Long totalEntities = repository.count();
-		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(FAQConverter::toDTO).collect(Collectors.toList()));
+		return new PageDTO<FAQDTO>(totalEntities, pages.getContent().stream().map(FAQConverter::toDTO).collect(Collectors.toList()));
 	}
 
 }

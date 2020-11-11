@@ -1,7 +1,6 @@
 package com.IcecreamApp.service.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,12 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.converter.ProductConverter;
 import com.IcecreamApp.entity.Product;
 import com.IcecreamApp.repository.ProductRepository;
 import com.IcecreamApp.service.IProductService;
-import com.google.common.collect.Maps;
 
 @Service
 public class ProductService implements IProductService {
@@ -71,10 +70,10 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Map.Entry<Long, List<ProductDTO>> readByPage(int pageNumber, int pageSize) {
+	public PageDTO<ProductDTO> readByPage(int pageNumber, int pageSize) {
 		Page<Product> pages = repository.findAll(PageRequest.of(--pageNumber, pageSize));
 		Long totalEntities = repository.count();
-		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(ProductConverter::toDTO).collect(Collectors.toList()));
+		return new PageDTO<>(totalEntities, pages.getContent().stream().map(ProductConverter::toDTO).collect(Collectors.toList()));
 	}
 
 	@Override

@@ -29,8 +29,8 @@ class ReadFAQ extends React.Component {
         await baseUrl.get(`/faq?page=${currentPage}&offset=${pageLimit}`, {headers: authHeader()})
         .then( (response) => {  
             this.setState({
-                faqs: Object.values(response.data)[0],
-                totalRecords: parseInt(Object.keys(response.data)[0])
+                faqs: response.data.itemList,
+                totalRecords: response.data.totalItems
             })
         })
         .catch( (error) => {

@@ -1,7 +1,6 @@
 package com.IcecreamApp.service.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.RolesAndStatusDTO;
 import com.IcecreamApp.DTO.UserDTO;
@@ -27,7 +27,6 @@ import com.IcecreamApp.entity.UserDetail;
 import com.IcecreamApp.repository.UserDetailRepository;
 import com.IcecreamApp.repository.UserRepository;
 import com.IcecreamApp.service.IUserService;
-import com.google.common.collect.Maps;
 
 @Service
 public class UserService implements IUserService {
@@ -117,10 +116,10 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public Map.Entry<Long, List<UserDTO>> readByPage(int pageNumber, int pageSize) {
+	public PageDTO<UserDTO> readByPage(int pageNumber, int pageSize) {
 		Page<User> pages = userRepository.findAll(PageRequest.of(--pageNumber, pageSize));
 		Long totalEntities = userRepository.count();
-		return Maps.immutableEntry(totalEntities, pages.getContent().stream().map(UserConverter::toDTO).collect(Collectors.toList()));
+		return new PageDTO<>(totalEntities, pages.getContent().stream().map(UserConverter::toDTO).collect(Collectors.toList()));
 	}
 
 	@Override

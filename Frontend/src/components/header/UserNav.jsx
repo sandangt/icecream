@@ -14,7 +14,10 @@ function UserNav() {
         <NavLink className="nav-link" to="/shop">Shop</NavLink>
     </li>
     <li className="nav-item">
-        <NavLink className="nav-link" to="/check">Checkout</NavLink>
+        <NavLink className="nav-link" to="/order">Order</NavLink>
+    </li>
+    <li className="nav-item">
+        <NavLink className="nav-link" to="/history">History</NavLink>
     </li>
 </ul>
     );

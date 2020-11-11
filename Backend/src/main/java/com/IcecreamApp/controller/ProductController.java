@@ -1,7 +1,6 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.ProductDTO;
 import com.IcecreamApp.entity.Product;
 import com.IcecreamApp.service.IProductService;
@@ -67,12 +67,7 @@ public class ProductController {
 
 	
     @GetMapping(params={"page","offset"})
-    public ResponseEntity<Map.Entry<Long,List<ProductDTO>>> getProductsByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	/**
-    	 * return key - value pair
-    	 * key is total tuples in the table in database
-    	 * value is list of tuples per page
-    	 */
+    public ResponseEntity<PageDTO<ProductDTO>> getProductsByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
     	return ResponseEntity.ok().body(productService.readByPage(page, offset));
     }
     

@@ -1,7 +1,6 @@
 package com.IcecreamApp.controller;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.DTO.PasswordDTO;
 import com.IcecreamApp.DTO.RolesAndStatusDTO;
 import com.IcecreamApp.DTO.UserDTO;
@@ -83,12 +83,7 @@ public class UserController {
     }
 	
     @GetMapping(params={"page","offset"})
-    public ResponseEntity<Map.Entry<Long,List<UserDTO>>> getUsersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	/**
-    	 * return key - value pair
-    	 * key is total tuples in the table in database
-    	 * value is list of tuples per page
-    	 */
+    public ResponseEntity<PageDTO<UserDTO>> getUsersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
     	return ResponseEntity.ok().body(userService.readByPage(page, offset));
     }
 
