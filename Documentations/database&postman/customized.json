@@ -362,6 +362,94 @@
 				"description": "read all products by category id with pagination"
 			},
 			"response": []
+		},
+		{
+			"name": "read order by code",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA1MDcxNDY3LCJleHAiOjE2MDUxNTc4Njd9.MM1nCW3lnW65KUoKdRc1gL9tlcRou4DxOrJkbYh1xdmQu486jTO2nWlPAu_PnzbsStxNHpgV8e4v4A19c1fJaQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders?code=Hello",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "Hello"
+						}
+					]
+				},
+				"description": "read order by code"
+			},
+			"response": []
+		},
+		{
+			"name": "create order detail with order code",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA1MDcxNDY3LCJleHAiOjE2MDUxNTc4Njd9.MM1nCW3lnW65KUoKdRc1gL9tlcRou4DxOrJkbYh1xdmQu486jTO2nWlPAu_PnzbsStxNHpgV8e4v4A19c1fJaQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"quantity\" : 100,\r\n    \"orderCode\" : \"hello\",\r\n    \"product\" : {\r\n        \"id\" : 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/order-details/code",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order-details",
+						"code"
+					]
+				},
+				"description": "create order detail with order code"
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}

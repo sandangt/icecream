@@ -11,15 +11,19 @@ import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.OrderDetailDTO;
 import com.IcecreamApp.converter.OrderDetailConverter;
+import com.IcecreamApp.entity.Order;
 import com.IcecreamApp.entity.OrderDetail;
 import com.IcecreamApp.repository.OrderDetailRepository;
+import com.IcecreamApp.repository.OrderRepository;
 import com.IcecreamApp.service.IOrderDetailService;
 
 @Service
 public class OrderDetailService implements IOrderDetailService {
 	
 	@Autowired
-	private OrderDetailRepository repository;
+	private OrderDetailRepository orderDetailRepository;
+	@Autowired
+	private OrderRepository orderRepository;
 
 	private String entityName = "Order detail";
 	
@@ -27,12 +31,12 @@ public class OrderDetailService implements IOrderDetailService {
 	
 	@Override
 	public List<OrderDetailDTO> readAll() {
-    	return repository.findAll().stream().map(OrderDetailConverter::toDTO).collect(Collectors.toList());
+    	return orderDetailRepository.findAll().stream().map(OrderDetailConverter::toDTO).collect(Collectors.toList());
 	}
 
 	@Override
 	public Optional<OrderDetailDTO> readById(long id) {
-		Optional<OrderDetail> currentEntityWrapper = repository.findById(id);
+		Optional<OrderDetail> currentEntityWrapper = orderDetailRepository.findById(id);
 		if (currentEntityWrapper.isPresent())
 			return Optional.ofNullable(OrderDetailConverter.toDTO(currentEntityWrapper.get()));
 		logger.error(String.format("%s id %d not found", entityName, id));
@@ -41,15 +45,15 @@ public class OrderDetailService implements IOrderDetailService {
 
 	@Override
 	public OrderDetail create(OrderDetailDTO orderDetailDTO) {
-		return repository.save(OrderDetailConverter.toEntity(orderDetailDTO));
+		return orderDetailRepository.save(OrderDetailConverter.toEntity(orderDetailDTO));
 	}
 
 	@Override
 	public Optional<OrderDetail> update(long id, OrderDetailDTO orderDetailDTO) {
 
-		Optional<OrderDetail> currentEntityWrapper = repository.findById(id);
+		Optional<OrderDetail> currentEntityWrapper = orderDetailRepository.findById(id);
 		if (currentEntityWrapper.isPresent()) {
-			return Optional.ofNullable(this.repository.save(OrderDetailConverter.toEntity(orderDetailDTO)));
+			return Optional.ofNullable(this.orderDetailRepository.save(OrderDetailConverter.toEntity(orderDetailDTO)));
 	    }
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return Optional.empty();
@@ -57,13 +61,24 @@ public class OrderDetailService implements IOrderDetailService {
 
 	@Override
 	public boolean delete(long id) {
-		Optional<OrderDetail> currentEntityWrapper = repository.findById(id);
+		Optional<OrderDetail> currentEntityWrapper = orderDetailRepository.findById(id);
 		if (currentEntityWrapper.isPresent()) {
-			this.repository.deleteById(id);
+			this.orderDetailRepository.deleteById(id);
 			return true;
 		}
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
+	}
+	
+	@Override
+	public OrderDetail createWithOrderCode(OrderDetailDTO orderDetailDTO) {
+		Optional<Order> currentOrderWrapper = orderRepository.findByCode(orderDetailDTO.getOrderCode());
+		if (currentOrderWrapper.isPresent()) {
+			orderDetailDTO.setOrderId(currentOrderWrapper.get().getId());
+			return orderDetailRepository.save(OrderDetailConverter.toEntity(orderDetailDTO));
+		}
+		logger.error("order not found");
+		return null;
 	}
 
 }

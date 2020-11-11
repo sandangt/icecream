@@ -18,4 +18,6 @@ public interface IOrderDetailService {
 
 	boolean delete(long id);
 
+	OrderDetail createWithOrderCode(OrderDetailDTO orderDetailDTO);
+
 }

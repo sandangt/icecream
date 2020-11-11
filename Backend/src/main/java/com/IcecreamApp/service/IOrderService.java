@@ -17,5 +17,7 @@ public interface IOrderService {
 	Optional<Order> update(long id, OrderDTO orderDTO);
 
 	boolean delete(long id);
+	
+	Optional<OrderDTO> readByCode(String code);
 
 }

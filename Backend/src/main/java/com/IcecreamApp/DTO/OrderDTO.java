@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.IcecreamApp.systemConstant.EStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class OrderDTO extends BaseDTO {
 
@@ -68,7 +67,7 @@ public class OrderDTO extends BaseDTO {
 		this.orderDetails = orderDetails;
 	}
 	
-	@JsonIgnore
+//	@JsonIgnore
 	public double getTotalPrice() {
 		double result = 0.0;
 		for (OrderDetailDTO i : this.orderDetails) {

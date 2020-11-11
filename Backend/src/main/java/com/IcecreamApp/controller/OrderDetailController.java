@@ -63,6 +63,13 @@ public class OrderDetailController {
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
+    
+    @PostMapping(value="/code")
+    public ResponseEntity<MessageResponseDTO> createOrderDetailWithOrderCode(@RequestBody OrderDetailDTO orderDetailDTO) {
+    	if (orderDetailService.createWithOrderCode(orderDetailDTO) != null)
+    		return ResponseEntity.ok().body(new MessageResponseDTO("Created new Order detail successfully"));
+		return new ResponseEntity<>(new MessageResponseDTO("Order not found!"), HttpStatus.NOT_FOUND);
+    }
 
 }
 

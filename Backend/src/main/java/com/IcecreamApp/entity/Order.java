@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -28,8 +26,8 @@ public class Order extends Base implements ForeignConnection<Order>{
 	 */
 	private static final long serialVersionUID = -5185509684141990101L;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="code", columnDefinition = "VARCHAR(250)")
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="code", columnDefinition = "VARCHAR(250)", unique = true)
 	private String code;
 	
 	@Column(name="payment_method", columnDefinition="VARCHAR(100)")

@@ -45,6 +45,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/users/{userId}/**").access("hasRole('ADMIN') or @WebFilter.checkUserId(authentication,#userId)")
 		.antMatchers(HttpMethod.GET, "/products/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers(HttpMethod.GET, "/categories/**").hasAnyRole("ADMIN", "USER")
+		.antMatchers(HttpMethod.GET, "/orders/**").hasAnyRole("ADMIN", "USER")
+		.antMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/users/**").hasRole("ADMIN")
 		.antMatchers("/faq/**").hasRole("ADMIN")
 		.antMatchers("/categories/**").hasRole("ADMIN")

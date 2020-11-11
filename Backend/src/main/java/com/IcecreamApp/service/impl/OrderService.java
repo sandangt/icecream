@@ -68,4 +68,13 @@ public class OrderService implements IOrderService {
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
 	}
+
+	@Override
+	public Optional<OrderDTO> readByCode(String code) {
+		Optional<Order> currentEntityWrapper = repository.findByCode(code);
+		if (currentEntityWrapper.isPresent()) 
+			return Optional.ofNullable(OrderConverter.toDTO(currentEntityWrapper.get()));
+		logger.error(String.format("%s with code %s not found", entityName, code));
+		return Optional.empty();
+	}
 }

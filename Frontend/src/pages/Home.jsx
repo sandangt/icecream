@@ -4,7 +4,6 @@ import "./Home.css";
 
 class Home extends React.Component {
     render() {
-        
         return (
 <div>
     <div className="row align-items-center my-5">

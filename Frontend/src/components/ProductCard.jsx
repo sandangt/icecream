@@ -2,6 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
+import {createCartService, destroyCartService, addItemToCartService} from "services/cartService.js";
 
 function ProductCard(props) {
     return (
@@ -26,11 +27,9 @@ function ProductCard(props) {
             </div>
             <div className="card-footer row">
                 {props.status === "AVAILABLE" ? (<button className="btn btn-primary col"
-                onChange={ async (e) => {
+                onClick={ async (e) => {
                     e.preventDefault();
-                    await baseUrl.post(``
-
-                    })
+                    addItemToCartService(props);
                 }}>
                     Buy
                 </button>) : null}

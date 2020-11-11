@@ -90,6 +90,7 @@ class Shop extends React.Component {
     }
 
     render() {
+        console.log(localStorage);
         return (
 <div>
     <div className="row">

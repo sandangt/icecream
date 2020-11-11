@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.MessageResponseDTO;
@@ -62,5 +63,13 @@ public class OrderController {
     	if (orderService.delete(id))
     		return ResponseEntity.ok().body(new MessageResponseDTO("Order item has been deleted successfully!"));
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
+	}
+
+	@GetMapping(params="code")
+	public ResponseEntity<OrderDTO> getOrderByCode(@RequestParam("code") String code) {		
+    	Optional<OrderDTO> currentEntityWrapper = orderService.readByCode(code);
+    	if (currentEntityWrapper.isPresent())
+        	return ResponseEntity.ok().body(currentEntityWrapper.get());
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 }
