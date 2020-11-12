@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
 
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
@@ -99,6 +100,9 @@ class Order extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_USER")) {
+            return <Redirect to="/error"/>
+        }
         return (
     <div>
         <div className="text-center">

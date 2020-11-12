@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.FeedbackDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.converter.FeedbackConverter;
 import com.IcecreamApp.entity.Feedback;
 import com.IcecreamApp.repository.FeedbackRepository;
@@ -64,5 +67,12 @@ public class FeedbackService implements IFeedbackService {
 		}
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return false;
+	}
+
+	@Override
+	public PageDTO<FeedbackDTO> readByPage(int pageNumber, int pageSize) {
+		Page<Feedback> pages = repository.findAll(PageRequest.of(--pageNumber, pageSize));
+		Long totalEntities = repository.count();
+		return new PageDTO<>(totalEntities, pages.getContent().stream().map(FeedbackConverter::toDTO).collect(Collectors.toList()));
 	}
 }

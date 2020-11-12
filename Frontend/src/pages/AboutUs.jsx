@@ -1,5 +1,6 @@
 import React from "react";
-import { compose } from "redux";
+import faker, { lorem } from "faker";
+import {Link} from "react-router-dom";
 
 class AboutUs extends React.Component{
 	componentDidMount() {
@@ -12,19 +13,15 @@ class AboutUs extends React.Component{
 		<div className="container py-5">
 			<div className="row h-100 align-items-center py-5">
 				<div className="col-lg-6">
-					<h1 className="display-4">About us page</h1>
+					<h1 className="display-4">{faker.lorem.sentence}</h1>
 					<p className="lead text-muted mb-0">
-						Create a minimal about us page using
-						Bootstrap 4.
+						{faker.lorem.paragraph()}
 					</p>
 					<p className="lead text-muted">
 						Snippet by{" "}
-						<a
-							href="https://bootstrapious.com/snippets"
-							className="text-muted"
-						>
-							<u>Bootstrapious</u>
-						</a>
+						<Link to="/about" className="text-muted">
+							<u>{faker.lorem.words()}</u>
+						</Link>
 					</p>
 				</div>
 				<div className="col-lg-6 d-none d-lg-block">
@@ -43,19 +40,14 @@ class AboutUs extends React.Component{
 				<div className="col-lg-6 order-2 order-lg-1">
 					<i className="fa fa-bar-chart fa-2x mb-3 text-primary" />
 					<h2 className="font-weight-light">
-						Lorem ipsum dolor sit amet
+						{faker.lorem.sentence()}
 					</h2>
 					<p className="font-italic text-muted mb-4">
-						Lorem ipsum dolor sit amet, consectetur
-						adipisicing elit, sed do eiusmod tempor
-						incididunt ut labore et dolore magna aliqua.
+						{faker.lorem.paragraph()}
 					</p>
-					<a
-						href="#"
-						className="btn btn-light px-5 rounded-pill shadow-sm"
-					>
+					<Link to="/about" className="btn btn-light px-5 rounded-pill shadow-sm">
 						Learn More
-					</a>
+					</Link>
 				</div>
 				<div className="col-lg-5 px-5 mx-auto order-1 order-lg-2">
 					<img
@@ -76,19 +68,14 @@ class AboutUs extends React.Component{
 				<div className="col-lg-6">
 					<i className="fa fa-leaf fa-2x mb-3 text-primary" />
 					<h2 className="font-weight-light">
-						Lorem ipsum dolor sit amet
+						{faker.lorem.sentence()}
 					</h2>
 					<p className="font-italic text-muted mb-4">
-						Lorem ipsum dolor sit amet, consectetur
-						adipisicing elit, sed do eiusmod tempor
-						incididunt ut labore et dolore magna aliqua.
+						{faker.lorem.paragraph()}
 					</p>
-					<a
-						href="#"
-						className="btn btn-light px-5 rounded-pill shadow-sm"
-					>
+					<Link to="/about" className="btn btn-light px-5 rounded-pill shadow-sm">
 						Learn More
-					</a>
+					</Link>
 				</div>
 			</div>
 		</div>
@@ -101,13 +88,11 @@ class AboutUs extends React.Component{
 						Our team
 					</h2>
 					<p className="font-italic text-muted">
-						Lorem ipsum dolor sit amet, consectetur
-						adipisicing elit.
+						{faker.lorem.paragraph()}
 					</p>
 				</div>
 			</div>
 			<div className="row text-center">
-				{/* Team item*/}
 				<div className="col-xl-3 col-sm-6 mb-5">
 					<div className="bg-white rounded shadow-sm py-5 px-4">
 						<img
@@ -116,9 +101,9 @@ class AboutUs extends React.Component{
 							width={100}
 							className="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"
 						/>
-						<h5 className="mb-0">Manuella Nevoresky</h5>
+						<h5 className="mb-0">{faker.name.findName()}</h5>
 						<span className="small text-uppercase text-muted">
-							CEO - Founder
+						{faker.lorem.word()} - founder
 						</span>
 						<ul className="social mb-0 list-inline mt-3">
 							<li className="list-inline-item">
@@ -152,9 +137,9 @@ class AboutUs extends React.Component{
 							width={100}
 							className="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"
 						/>
-						<h5 className="mb-0">Samuel Hardy</h5>
+						<h5 className="mb-0">{faker.name.findName()}</h5>
 						<span className="small text-uppercase text-muted">
-							CEO - Founder
+						{faker.lorem.word()} - founder
 						</span>
 						<ul className="social mb-0 list-inline mt-3">
 							<li className="list-inline-item">
@@ -180,8 +165,6 @@ class AboutUs extends React.Component{
 						</ul>
 					</div>
 				</div>
-				{/* End*/}
-				{/* Team item*/}
 				<div className="col-xl-3 col-sm-6 mb-5">
 					<div className="bg-white rounded shadow-sm py-5 px-4">
 						<img
@@ -190,9 +173,9 @@ class AboutUs extends React.Component{
 							width={100}
 							className="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"
 						/>
-						<h5 className="mb-0">Tom Sunderland</h5>
+						<h5 className="mb-0">{faker.name.findName()}</h5>
 						<span className="small text-uppercase text-muted">
-							CEO - Founder
+						{faker.lorem.word()} - founder
 						</span>
 						<ul className="social mb-0 list-inline mt-3">
 							<li className="list-inline-item">
@@ -226,9 +209,9 @@ class AboutUs extends React.Component{
 							width={100}
 							className="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"
 						/>
-						<h5 className="mb-0">John Tarly</h5>
+						<h5 className="mb-0">{faker.name.findName()}</h5>
 						<span className="small text-uppercase text-muted">
-							CEO - Founder
+						{faker.lorem.word()} - Founder
 						</span>
 						<ul className="social mb-0 list-inline mt-3">
 							<li className="list-inline-item">

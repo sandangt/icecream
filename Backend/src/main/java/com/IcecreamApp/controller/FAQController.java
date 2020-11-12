@@ -73,5 +73,9 @@ public class FAQController {
     public ResponseEntity<PageDTO<FAQDTO>> getFAQByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
     	return ResponseEntity.ok().body(faqService.readByPage(page, offset));
     }
-	
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<FAQDTO>> searchFAQByQuestion(@RequestParam("search") String question) {
+    	return ResponseEntity.ok().body(faqService.searchFAQByQuestion(question));
+    }
 }

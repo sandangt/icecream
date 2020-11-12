@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.IcecreamApp.DTO.FeedbackDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.entity.Feedback;
 
 public interface IFeedbackService {
@@ -17,5 +18,7 @@ public interface IFeedbackService {
 	Optional<Feedback> update(long id, FeedbackDTO feedbackDTO);
 
 	boolean delete(long id);
+
+	PageDTO<FeedbackDTO> readByPage(int pageNumber, int pageSize);
 	
 }

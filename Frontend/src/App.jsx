@@ -28,11 +28,16 @@ import ReadCategory from "pages/admin/categories/ReadCategory.jsx";
 import CreateCategory from "pages/admin/categories/CreateCategory.jsx";
 import UpdateCategory from "pages/admin/categories/UpdateCategory.jsx";
 
+import ReadOrder from "pages/admin/orders/ReadOrder.jsx";
+
+import ReadFeedback from "pages/admin/feedbacks/ReadFeedback.jsx";
+
 import Shop from "pages/user/Shop.jsx";
 import ProductDetail from "pages/user/ProductDetail.jsx";
 import Order from "pages/user/Order.jsx";
 import OrderHistory from "pages/user/OrderHistory.jsx";
 import OrderDetail from "pages/user/OrderDetail.jsx";
+import UpdateFeedback from "pages/user/UpdateFeedback.jsx";
 
 import history from "history.js";
 
@@ -70,9 +75,14 @@ class App extends React.Component {
                     <Route exact path="/admin/categories" component={ReadCategory}/>
                     <Route exact path="/admin/categories/create" component={CreateCategory}/>
                     <Route exact path="/admin/categories/update/:id" component={UpdateCategory}/>
+                    
+                    <Route exact path="/admin/orders" component={ReadOrder}/>
+
+                    <Route exact path="/admin/feedbacks" component={ReadFeedback}/>
 
                     <Route exact path="/shop" component={Shop}/>
                     <Route exact path="/product/:id" component={ProductDetail}/>
+                    <Route exact path="/feedback/:id" component={UpdateFeedback}/>
                     <Route exact path="/order" component={Order}/>
                     <Route exact path="/order/detail/:id" component={OrderDetail}/>
                     <Route exact path="/history" component={OrderHistory}/>

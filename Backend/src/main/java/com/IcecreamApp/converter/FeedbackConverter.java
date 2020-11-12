@@ -15,7 +15,8 @@ public class FeedbackConverter {
 				entity.getTitle(), 
 				entity.getContent(), 
 				UserConverter.toDTO(entity.getUser()), 
-				entity.getProduct().getName());
+				entity.getProduct().getName(),
+				entity.getProduct().getId());
 	}
 	
 	public static Feedback toEntity(FeedbackDTO dto) {

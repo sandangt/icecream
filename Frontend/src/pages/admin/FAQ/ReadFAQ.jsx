@@ -37,6 +37,19 @@ class ReadFAQ extends React.Component {
             console.log(error);
         });
     }
+    
+    getSearchData = async(searchText) => {
+        await baseUrl.get(`/faq?search=${searchText}`, {headers: authHeader()})
+        .then( (response) => {
+            this.setState({
+                faqs: response.data,
+                totalRecords: null
+            })
+        })
+        .catch( (error) => {
+            console.log(error);
+        });
+    }
 
     // getData = async() => {
     //     await baseUrl.get(`/faq?number=0&size=${this.state.pageLimit}`, {headers: authHeader()})
@@ -56,12 +69,28 @@ class ReadFAQ extends React.Component {
             return <FAQTuple obj={value} key={index}/>
         });
     }
+    
+    onSearchButton = async (e) => {
+        e.preventDefault();
+        const {searchText} = this.state;
+        if (searchText === "") {
+            this.getDataByPage(1, this.state.pageLimit);
+        }   
+        else {
+            this.getSearchData(searchText);
+        }
+    }
+
+    onSearchBar = (e) => {
+        e.preventDefault();
+        this.setState({searchText: e.target.value});
+    }
 
     onPageChanged = data => {
         const { currentPage, pageLimit } = data;
         this.setState({ currentPage, pageLimit });
         this.getDataByPage(currentPage, pageLimit);
-    }
+    } 
 
     render() {
         if (!this.props.isLoggedIn) {
@@ -79,6 +108,10 @@ class ReadFAQ extends React.Component {
                     type="text"
                     placeholder="Search FAQ by question..."
                     name="searchtext"
+                    onChange={(e) => {
+                        e.preventDefault();
+                        this.setState({searchText: e.target.value});
+                    }}
                 />
             </p>
             <p>
@@ -86,6 +119,7 @@ class ReadFAQ extends React.Component {
                     id="search button"
                     type="submit"
                     className="btn btn-primary"
+                    onClick={this.onSearchButton}
                 >
                     Search
                 </button>

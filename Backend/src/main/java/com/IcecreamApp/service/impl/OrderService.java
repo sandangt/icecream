@@ -8,10 +8,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.IcecreamApp.DTO.OrderDTO;
 import com.IcecreamApp.DTO.OrderDetailDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.converter.OrderConverter;
 import com.IcecreamApp.converter.OrderDetailConverter;
 import com.IcecreamApp.entity.Order;
@@ -92,5 +95,12 @@ public class OrderService implements IOrderService {
 		}
 		logger.error(String.format("%s id %d not found", entityName, id));
 		return new ArrayList<>();
+	}
+
+	@Override
+	public PageDTO<OrderDTO> readByPage(int pageNumber, int pageSize) {
+		Page<Order> pages = orderRepository.findAll(PageRequest.of(--pageNumber, pageSize));
+		Long totalEntities = orderRepository.count();
+		return new PageDTO<>(totalEntities, pages.getContent().stream().map(OrderConverter::toDTO).collect(Collectors.toList()));
 	}
 }

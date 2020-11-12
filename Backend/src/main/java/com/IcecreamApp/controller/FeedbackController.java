@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.IcecreamApp.DTO.FeedbackDTO;
 import com.IcecreamApp.DTO.MessageResponseDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.entity.Feedback;
 import com.IcecreamApp.service.IFeedbackService;
 
@@ -65,6 +67,11 @@ public class FeedbackController {
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
 	}
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<FeedbackDTO>> getOrdersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(feedbackService.readByPage(page, offset));
+    }
 }
 
 

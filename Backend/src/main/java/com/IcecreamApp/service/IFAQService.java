@@ -21,4 +21,6 @@ public interface IFAQService {
 	boolean delete(long id);
 	
 	PageDTO<FAQDTO> readByPage(int pageNumber, int pageSize);
+	
+	List<FAQDTO> searchFAQByQuestion(String question);
 }

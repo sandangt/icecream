@@ -1,4 +1,7 @@
 import React from "react";
+import faker from "faker";
+import {Link} from "react-router-dom";
+import {connect} from "react-redux";
 
 import "./Home.css";
 
@@ -10,108 +13,85 @@ class Home extends React.Component {
         <div className="col-lg-7">
             <img
                 className="img-fluid rounded mb-4 mb-lg-0"
-                src="http://placehold.it/900x400"
+                src={faker.image.image()}
                 alt=""
             />
         </div>
         <div className="col-lg-5">
             <h1 className="font-weight-light">
-                Business Name or Tagline
+                {faker.lorem.words()}
             </h1>
             <p>
-                This is a template that is great for small
-                businesses. It doesn't have too much fancy flare
-                to it, but it makes a great use of the standard
-                Bootstrap core components. Feel free to use this
-                template for any project you want!
+                {faker.lorem.paragraph()}
             </p>
-            <a className="btn btn-primary" href="#">
-                Call to Action!
-            </a>
-        </div>
-    </div>
-
-    <div className="card text-white bg-secondary my-5 py-4 text-center">
-        <div className="card-body">
-            <p className="text-white m-0">
-                This call to action card is a great place to
-                showcase some important information or display a
-                clever tagline!
-            </p>
+            <Link className="btn btn-primary" to="/about">
+                About us!
+            </Link>
         </div>
     </div>
     <div className="row">
+
         <div className="col-md-4 mb-5">
             <div className="card h-100">
+                <img src={faker.random.image()} height="300" width="300"/>
                 <div className="card-body">
-                    <h2 className="card-title">Card One</h2>
+                    <h2 className="card-title">{faker.lorem.words()}</h2>
                     <p className="card-text">
-                        Lorem ipsum dolor sit amet, consectetur
-                        adipisicing elit. Rem magni quas ex
-                        numquam, maxime minus quam molestias
-                        corporis quod, ea minima accusamus.
+                        {faker.lorem.paragraph()}
                     </p>
                 </div>
                 <div className="card-footer">
-                    <a
-                        href="#"
-                        className="btn btn-primary btn-sm"
-                    >
+                    <Link to="/home" className="btn btn-primary btn-sm">
                         More Info
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
 
         <div className="col-md-4 mb-5">
             <div className="card h-100">
+                <img src={faker.random.image()} height="300" width="300"/>
                 <div className="card-body">
-                    <h2 className="card-title">Card Two</h2>
+                    <h2 className="card-title">{faker.lorem.words()}</h2>
                     <p className="card-text">
-                        Lorem ipsum dolor sit amet, consectetur
-                        adipisicing elit. Quod tenetur ex natus
-                        at dolorem enim! Nesciunt pariatur
-                        voluptatem sunt quam eaque, vel, non in
-                        id dolore voluptates quos eligendi
-                        labore.
+                        {faker.lorem.paragraph()}
                     </p>
                 </div>
                 <div className="card-footer">
-                    <a
-                        href="#"
-                        className="btn btn-primary btn-sm"
-                    >
+                    <Link to="/home" className="btn btn-primary btn-sm">
                         More Info
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
 
         <div className="col-md-4 mb-5">
             <div className="card h-100">
+                <img src={faker.random.image()} height="300" width="300"/>
                 <div className="card-body">
-                    <h2 className="card-title">Card Three</h2>
+                    <h2 className="card-title">{faker.lorem.words()}</h2>
                     <p className="card-text">
-                        Lorem ipsum dolor sit amet, consectetur
-                        adipisicing elit. Rem magni quas ex
-                        numquam, maxime minus quam molestias
-                        corporis quod, ea minima accusamus.
+                        {faker.lorem.paragraph()}
                     </p>
                 </div>
                 <div className="card-footer">
-                    <a
-                        href="#"
-                        className="btn btn-primary btn-sm"
-                    >
+                    <Link to="/home" className="btn btn-primary btn-sm">
                         More Info
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
         );
     }
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    }
+}
+export default connect(mapStateToProps)(Home);

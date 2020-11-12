@@ -76,4 +76,8 @@ public class FAQService implements IFAQService{
 		return new PageDTO<FAQDTO>(totalEntities, pages.getContent().stream().map(FAQConverter::toDTO).collect(Collectors.toList()));
 	}
 
+	@Override
+	public List<FAQDTO> searchFAQByQuestion(String question) {
+		return repository.searchFAQByQuestion(question).stream().map(FAQConverter::toDTO).collect(Collectors.toList());
+	}
 }

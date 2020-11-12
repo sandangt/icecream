@@ -62,7 +62,7 @@ class ReadCategory extends React.Component {
     }
     
     render() {
-        if (!this.props.isLoggedIn) {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
             return <Redirect to="/error"/>
         }
         return (
@@ -125,7 +125,8 @@ class ReadCategory extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoggedIn: state.auth.isLoggedIn
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
     };
 }
 export default connect(mapStateToProps)(ReadCategory);

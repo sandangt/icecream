@@ -1,5 +1,8 @@
 import baseUrl from "baseUrl";
 import React from "react";
+import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
+
 import authHeader from "services/authHeader";
 import ProductCard from "components/ProductCard.jsx";
 import Pagination from "components/pagination/Pagination.jsx";
@@ -96,7 +99,9 @@ class Shop extends React.Component {
     }
 
     render() {
-        console.log(localStorage);
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_USER")) {
+            return <Redirect to="/error"/>
+        }
         return (
 <div>
     <div className="row">
@@ -153,4 +158,11 @@ class Shop extends React.Component {
     }
 }
 
-export default Shop;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    };
+}
+
+export default connect(mapStateToProps)(Shop);

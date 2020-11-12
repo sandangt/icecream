@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.OrderDTO;
 import com.IcecreamApp.DTO.OrderDetailDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.entity.Order;
 import com.IcecreamApp.service.IOrderService;
 
@@ -78,4 +79,9 @@ public class OrderController {
 	public ResponseEntity<List<OrderDetailDTO>> getOrderDetailByOrder(@PathVariable("id") long id) {
 		return ResponseEntity.ok().body(orderService.readOrderDetailsByOrder(id));
 	}
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<OrderDTO>> getOrdersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(orderService.readByPage(page, offset));
+    }
 }

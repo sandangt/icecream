@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {Redirect, Link} from "react-router-dom";
 
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
@@ -59,7 +60,17 @@ class ProductDetail extends React.Component {
         });
     }
 
+    onDeleteButton = (id) => {
+        baseUrl.delete(`/feedbacks/${id}`, {headers: authHeader()})
+            .then(console.log('Deleted'))
+            .catch(err => console.log(err));
+        window.location.reload();
+    }
+
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_USER")) {
+            return <Redirect to="/error"/>
+        }
     return(
 <div>
 <div className="row">
@@ -87,7 +98,7 @@ class ProductDetail extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-8">
+                    <div className="col-9">
                         <div className="tab-content ml-1" id="myTabContent">
                             <div className="tab-pane fade show active" id="basicInfo"
                                 role="tabpanel"
@@ -190,7 +201,7 @@ class ProductDetail extends React.Component {
                                 </div>)}
                     </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-3">
                         <div class="listWrapper">
                             <ul>
                                 { this.state.product.feedbacks && this.state.product.feedbacks.map(value => {
@@ -198,6 +209,20 @@ class ProductDetail extends React.Component {
                                         <p>title: {value.title}</p>
                                         <p>posted by: {value.user.username}</p>
                                         <p>{value.content}</p>
+                                        { value.user.id === this.props.user.id ? (
+                                        <React.Fragment>
+                                        <Link className="btn btn-primary" to={`/feedback/${value.id}`}>Edit</Link>
+                                        <button className="btn btn-danger" onClick={ async (e) => {
+                                            e.preventDefault();
+                                            await baseUrl.delete(`/feedbacks/${value.id}`, {headers: authHeader()})
+                                            .then(console.log('Deleted'))
+                                            .catch(err => console.log(err));
+                                            window.location.reload();
+                                        }}>
+                                            Delete
+                                        </button>
+                                        </React.Fragment>
+                                        ) : null}   
                                     </li>);
                                 })}
                             </ul>

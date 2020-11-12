@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.IcecreamApp.DTO.OrderDTO;
 import com.IcecreamApp.DTO.OrderDetailDTO;
+import com.IcecreamApp.DTO.PageDTO;
 import com.IcecreamApp.entity.Order;
 
 public interface IOrderService {
@@ -23,4 +24,5 @@ public interface IOrderService {
 	
 	List<OrderDetailDTO> readOrderDetailsByOrder(long id);
 
+	PageDTO<OrderDTO> readByPage(int pageNumber, int pageSize);
 }

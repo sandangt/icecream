@@ -71,7 +71,12 @@ class OrderDetail extends React.Component {
             </div>
             <button className="btn btn-primary" onClick={(e) => {
                 e.preventDefault();
-                this.props.history.push("/history");
+                if (this.props.user.roles.includes("ROLE_ADMIN")) {
+                    this.props.history.push("/admin/orders");
+                }
+                else {
+                    this.props.history.push("/history");
+                }
             }}>
                 Back
             </button>
