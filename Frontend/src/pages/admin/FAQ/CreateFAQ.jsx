@@ -1,7 +1,9 @@
 import React from 'react';
+import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
+
 import baseUrl from 'baseUrl.js';
 import authHeader from "services/authHeader.js";
-
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -69,6 +71,9 @@ class CreateFAQ extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
+            return <Redirect to="/error"/>
+        }        
         return (
         <div className="container">
             <div style={{marginTop: 10}}>
@@ -105,5 +110,10 @@ class CreateFAQ extends React.Component {
     }
 }
 
-
-export default CreateFAQ;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    };
+}
+export default connect(mapStateToProps)(CreateFAQ);

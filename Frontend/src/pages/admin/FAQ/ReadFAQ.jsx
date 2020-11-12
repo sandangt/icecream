@@ -51,19 +51,6 @@ class ReadFAQ extends React.Component {
         });
     }
 
-    // getData = async() => {
-    //     await baseUrl.get(`/faq?number=0&size=${this.state.pageLimit}`, {headers: authHeader()})
-    //     .then( (response) => {  
-    //         this.setState({
-    //             faqs: Object.values(response.data)[0],
-    //             totalRecords: parseInt(Object.keys(response.data)[0])
-    //         })
-    //     })
-    //     .catch( (error) => {
-    //         console.log(error);
-    //     });
-    // }
-
     renderTuples = () => {
         return this.state.faqs.map( (value, index) => {
             return <FAQTuple obj={value} key={index}/>
@@ -93,7 +80,7 @@ class ReadFAQ extends React.Component {
     } 
 
     render() {
-        if (!this.props.isLoggedIn) {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
             return <Redirect to="/error"/>
         }
         const { totalRecords, pageLimit } = this.state;
@@ -177,7 +164,8 @@ class ReadFAQ extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoggedIn: state.auth.isLoggedIn
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
     };
 }
 export default connect(mapStateToProps)(ReadFAQ);

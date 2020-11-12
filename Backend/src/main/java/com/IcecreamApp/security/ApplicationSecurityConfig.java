@@ -51,6 +51,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.POST, "/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers(HttpMethod.PUT, "/feedbacks/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers(HttpMethod.DELETE, "/feedbacks/**").hasAnyRole("ADMIN", "USER")
+		.antMatchers(HttpMethod.GET, "/faq/**").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/users/**").hasRole("ADMIN")
 		.antMatchers("/faq/**").hasRole("ADMIN")
 		.antMatchers("/categories/**").hasRole("ADMIN")

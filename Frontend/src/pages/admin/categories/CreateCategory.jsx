@@ -1,4 +1,7 @@
 import React from 'react';
+import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
+
 import baseUrl from 'baseUrl.js';
 import authHeader from "services/authHeader.js";
 
@@ -55,6 +58,9 @@ class CreateCategory extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
+            return <Redirect to="/error"/>
+        }
         return (
         <div className="container">
             <div style={{marginTop: 10}}>
@@ -88,5 +94,10 @@ class CreateCategory extends React.Component {
     }
 }
 
-
-export default CreateCategory;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    };
+}
+export default connect(mapStateToProps)(CreateCategory);

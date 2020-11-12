@@ -19,7 +19,7 @@ export const signup = (username, email, password) => (dispatch) => {
             dispatch({
                 type: SET_MESSAGE,
                 payload: response.data.message,
-              });
+            });
             return Promise.resolve();
         })
         .catch( (error) => {

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "67d50346-777b-4a96-a23b-48bb21ad2492",
+		"_postman_id": "3bd884b0-621d-4c77-8be5-0f87f53ad48c",
 		"name": "Customized Icecream",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -484,34 +484,60 @@
 			"response": []
 		},
 		{
-			"name": "read order detail by order",
+			"name": "read orders by page",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTb2NyYXRlcyIsImlhdCI6MTYwNTA5MTAzMCwiZXhwIjoxNjA1MTc3NDMwfQ.0kACnD2iQS9pKKbVY5E4NZavHhZkmn7SxEXMmC9Jwq0XqiFxlHj_EGV4fgezNMw1SCMtRwkc0BGIzZmG5Dve6A",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA1MTQ5ODY3LCJleHAiOjE2MDUyMzYyNjd9.Lksu3yV8vxbLWmxZ4wlPrr2LkXedVf3zyf_eVZzZkNUKMkLkSZxlWuW9XaXANToFbPVnCSrbl0H6XvLrNG_8gw",
 							"type": "string"
 						}
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Autho",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/orders/1/order-details",
+					"raw": "http://localhost:8080/orders?page=1&offset=6",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"orders",
-						"1",
-						"order-details"
+						"orders"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "offset",
+							"value": "6"
+						}
 					]
 				},
-				"description": "read order detail by order"
+				"description": "read orders by page"
 			},
 			"response": []
 		}

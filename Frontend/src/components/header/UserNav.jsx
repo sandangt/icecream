@@ -19,6 +19,9 @@ function UserNav() {
     <li className="nav-item">
         <NavLink className="nav-link" to="/history">History</NavLink>
     </li>
+    <li className="nav-item">
+        <NavLink className="nav-link" to="/faq">FAQ</NavLink>
+    </li>
 </ul>
     );
 }

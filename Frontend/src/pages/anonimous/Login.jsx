@@ -29,17 +29,6 @@ class Login extends React.Component {
             successful: false,
         };
     }
-    onChangeUsername = (e) => {
-        this.setState({
-            username: e.target.value,
-        });
-    };
-
-    onChangePassword = (e) => {
-        this.setState({
-            password: e.target.value,
-        });
-    };
 
     handleLogin = (e) => {
         e.preventDefault();
@@ -47,13 +36,10 @@ class Login extends React.Component {
             successful: true,
         });
         this.form.validateAll();
-
-        const { history } = this.props;
-
         if (this.checkBtn.context._errors.length === 0) {
             this.props.login(this.state.username, this.state.password)
                 .then(() => {
-                    history.push("/home");
+                    this.props.history.push("/home");
                     window.location.reload();
                 })
                 .catch(() => {
@@ -61,7 +47,8 @@ class Login extends React.Component {
                         successful: false,
                     });
                 });
-        } else {
+        } 
+        else {
             this.setState({
                 successful: false,
             });
@@ -72,20 +59,15 @@ class Login extends React.Component {
         if (this.props.isLoggedIn) {
             return <Redirect to="/home"/>
         }
-        console.log(window.location.pathname);
         return (
             <div className="col-md-12">
                 <div className="card card-container">
-                    <img
-                        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                    <img src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
                         alt="profile-img"
-                        className="profile-img-card"
-                    />
+                        className="profile-img-card"/>
                     <Form
                         onSubmit={this.handleLogin}
-                        ref={(c) => {
-                            this.form = c;
-                        }}
+                        ref={(c) => {this.form = c;}}
                     >
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
@@ -94,7 +76,7 @@ class Login extends React.Component {
                                 className="form-control"
                                 name="username"
                                 value={this.state.username}
-                                onChange={this.onChangeUsername}
+                                onChange={(e) => this.setState({username: e.target.value})}
                                 validations={[required]}
                             />
                         </div>
@@ -106,16 +88,13 @@ class Login extends React.Component {
                                 className="form-control"
                                 name="password"
                                 value={this.state.password}
-                                onChange={this.onChangePassword}
+                                onChange={(e) => {this.setState({password: e.target.value,})}}
                                 validations={[required]}
                             />
                         </div>
 
                         <div className="form-group">
-                            <button
-                                className="btn btn-primary btn-block"
-                                disabled={this.state.successful}
-                            >
+                            <button className="btn btn-primary btn-block" disabled={this.state.successful}>
                                 {this.state.successful && (
                                     <span className="spinner-border spinner-border-sm"></span>
                                 )}
@@ -130,12 +109,7 @@ class Login extends React.Component {
                                 </div>
                             </div>
                         )}
-                        <CheckButton
-                            style={{ display: "none" }}
-                            ref={(c) => {
-                                this.checkBtn = c;
-                            }}
-                        />
+                        <CheckButton style={{ display: "none" }} ref={(c) => {this.checkBtn = c;}}/>
                     </Form>
                 </div>
             </div>

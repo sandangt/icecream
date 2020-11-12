@@ -1,10 +1,10 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Redirect, Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
-import OrderTuple from "components/tuples/OrderTuple.jsx";
+import AdminOrderTuple from "components/tuples/AdminOrderTuple.jsx";
 import Pagination from "components/pagination/Pagination.jsx";
  
 class Order extends React.Component {
@@ -37,7 +37,7 @@ class Order extends React.Component {
 
     renderTuples = () => {
         return this.state.orders.map( (value, index) => {
-            return <OrderTuple obj={value} key={index} onClickCheck={this.onClickCheck}/>
+            return <AdminOrderTuple obj={value} key={index} onClickCheck={this.onClickCheck}/>
         });
     }
 
@@ -89,12 +89,6 @@ class Order extends React.Component {
                    pageNeighbours={1} 
                    onPageChanged={this.onPageChanged}
                     /> }
-            </div>
-
-            <div className="btn">
-                <Link className="btn btn-primary" to="/admin/users/create">
-                    Create new FAQ
-                </Link>
             </div>
         </div>
     </div>

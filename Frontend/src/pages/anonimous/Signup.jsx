@@ -123,9 +123,7 @@ class Signup extends React.Component {
 
                     <Form
                         onSubmit={this.handleRegister}
-                        ref={(c) => {
-                            this.form = c;
-                        }}
+                        ref={(c) => {this.form = c;}}
                     >
                         {!this.state.successful && (
                             <div>
@@ -187,12 +185,7 @@ class Signup extends React.Component {
                                 </div>
                             </div>
                         )}
-                        <CheckButton
-                            style={{ display: "none" }}
-                            ref={(c) => {
-                                this.checkBtn = c;
-                            }}
-                        />
+                        <CheckButton style={{ display: "none" }} ref={(c) => { this.checkBtn = c; }}/>
                     </Form>
                 </div>
             </div>

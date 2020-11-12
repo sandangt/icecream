@@ -1,4 +1,7 @@
 import React from 'react';
+import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
+
 import baseUrl from "baseUrl.js";
 import authHeader from "services/authHeader.js";
 
@@ -56,9 +59,11 @@ class UpdateFAQ extends React.Component {
     }
 
     render() {
-        console.log(this.props.match);
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
+            return <Redirect to="/error"/>
+        }
         return (
-        <div className="container">
+        <div>
             <div style={{ marginTop: 10 }}>
                 <h3 align="center">Update FAQ</h3>
                 <form onSubmit={this.onSubmit}>
@@ -92,4 +97,10 @@ class UpdateFAQ extends React.Component {
     }
 }
 
-export default UpdateFAQ;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    };
+}
+export default connect(mapStateToProps)(UpdateFAQ);

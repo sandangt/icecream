@@ -134,12 +134,12 @@ class CreateProduct extends React.Component {
                                                 </label>
                                             </div>
                                             <div className="col-md-8 col-6">
-                                                <input type="text"
+                                                <textarea
                                                 value={this.state.description}
                                                 onChange={(e) => {
                                                     e.preventDefault();
                                                     this.setState({description: e.target.value});
-                                                }}/>
+                                                }} rows="3" cols="40"></textarea>
                                             </div>
                                         </div>
                                         <hr />
@@ -187,7 +187,6 @@ class CreateProduct extends React.Component {
                                                     e.preventDefault();
                                                     this.setState({categoryId:e.target.value})
                                                 }}>
-                                                    <option value=""></option>
                                                     {this.state.categoryList.map( value => <option value={value.id}>{value.name}</option>)}
                                                 </select>
                                             </div>

@@ -11,27 +11,22 @@ class UpdateUser extends React.Component {
         this.state = {
             username: "",
             email: "",
-            status: 1,
+            status: "1",
             roles: [],
             profile: {},
             getloading: false,
             postloading: false
         }
-        this.inputCheckboxList= [];
-        this.inputStatus = "";
+        this.inputRoles= [];
+        this.inputStatus = "1";
     }
 
     componentDidMount() {
         this.getData();
-        // if (this.checkboxList.current !== null) {
-        //     this.checkboxList.current.childNodes.forEach( (value) => {
-        //         if (value.name === this.states.roles.name)
-        //     });
-        // }
     }
     componentDidUpdate(){
         setTimeout(() => this.setState({postloading: false}), 5000);
-      }
+    }
     getData = async () => {
         await baseUrl.get(`/users/${this.props.match.params.id}`, {headers: authHeader()})
             .then(response => {
@@ -59,6 +54,7 @@ class UpdateUser extends React.Component {
     }
 
     onSelectStatus = (e) => {
+        // e.preventDefault();
         // this.setState({
         //     status: e.target.value
         // });
@@ -71,11 +67,10 @@ class UpdateUser extends React.Component {
             name : e.target.value.split(" ")[1]
         }
         if (e.target.checked) {
-
-            this.inputCheckboxList.push(obj);
+            this.inputRoles.push(obj);
         }
         else {
-            this.inputCheckboxList.pop(obj);
+            this.inputRoles.pop(obj);
         }
     }
 
@@ -83,7 +78,7 @@ class UpdateUser extends React.Component {
         e.preventDefault();
         const pkg = {
             status: this.inputStatus,
-            roles: this.inputCheckboxList
+            roles: this.inputRoles
         };
         baseUrl.put(`/users/${this.props.match.params.id}/roles-status`, pkg, {headers: authHeader()})
             .then(() => this.setState({ postloading: true}))
@@ -105,8 +100,6 @@ class UpdateUser extends React.Component {
                             <div className="d-flex justify-content-start">
                                 <div className="image-container">
                                     {this.state.profile && <img src={this.state.profile.avatar} class="avatar img-circle img-thumbnail" alt="avatar" height="200" width="200"/>}
-                                    {/* <h6>Upload a different photo...</h6>
-                                    <input type="file" class="text-center center-block file-upload"></input> */}
                                 </div>
                                 <div className="userData ml-3">
                                     <h2 className="d-block" style={{fontSize: "1.5rem", fontWeight: "bold",}}>
@@ -247,7 +240,6 @@ class UpdateUser extends React.Component {
                                         <div className="col-md-8 col-6">
                                             <div className="d-flex flex-row align-items-center">
                                                 <select defaultValue={this.state.status} onChange={this.onSelectStatus}>
-                                                <option value=""></option>
                                                     <option value="1">AVAILABLE</option>
                                                     <option value="0">UNAVAILABLE</option>
                                                 </select>

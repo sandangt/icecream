@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 
-class OrderTuple extends React.Component {
+class AdminOrderTuple extends React.Component {
     delete = () => {
         baseUrl.delete(`/orders/${this.props.obj.id}`, {headers: authHeader()})
             .then(() => console.log('Deleted'))
@@ -35,10 +35,14 @@ class OrderTuple extends React.Component {
                 </td>             
                 <td>
                     <Link to={`/order/detail/${this.props.obj.id}`} className="btn btn-primary">Detail</Link>
-                </td> 
+                </td>
+                <td>
+                    <button className="btn btn-danger" onClick={this.delete}>Delete</button>
+                </td>
             </tr>
         );
     }
 }
 
-export default OrderTuple;
+
+export default AdminOrderTuple;

@@ -79,11 +79,6 @@ class ReadUser extends React.Component {
         e.preventDefault();
         this.setState({searchText: e.target.value});
     }
-    
-    // onHandlePageLimitSelection = async (e) => {
-    //     e.preventDefault();
-    //     this.setState({pageLimit: parseInt(e.target.value)});
-    // }
 
     render() {
         if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
@@ -110,16 +105,6 @@ class ReadUser extends React.Component {
                         Search
                     </button>
                 </p>
-            {/* </form> */}
-
-            {/* <div className="d-flex flex-row align-items-center">
-                Page size:
-                <select defaultValue={pageLimit} onChange={this.onHandlePageLimitSelection}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
-            </div><br/> */}
 
             <div className="d-flex table-data">
                 <table className="table table-striped scrollTable center"
@@ -128,7 +113,6 @@ class ReadUser extends React.Component {
                 >
                     <thead className="thead-dark">
                         <tr>
-                            {/* <th>select</th> */}
                             <th>ID</th>
                             <th>Username</th>
                             <th>Email</th>
@@ -151,11 +135,6 @@ class ReadUser extends React.Component {
                    onPageChanged={this.onPageChanged}
                     /> }
             </div>
-            {/* <div className="btn">
-                <Link className="btn btn-primary" to="/admin/users/create">
-                    Create new User
-                </Link>
-            </div> */}
         </div>
     </div>
         );

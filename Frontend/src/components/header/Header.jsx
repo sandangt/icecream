@@ -8,6 +8,13 @@ import UserNav from "./UserNav.jsx";
 import PublicNav from "./PublicNav.jsx";
 
 class Header extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			view: 0
+		};
+	}
+
 	handleLogout = (e) => {
 		e.preventDefault();
 		this.props.logout();
@@ -15,7 +22,13 @@ class Header extends React.Component {
 	}
 	renderNavBar = () => {
 		if (this.props.isLoggedIn) {
-			return this.props.user.roles.includes("ROLE_ADMIN") ? <AdminNav/> : <UserNav/>;
+			if (this.props.user.roles.includes("ROLE_ADMIN") && this.props.user.roles.includes("ROLE_USER")) {
+				return this.state.view === 1 ? <UserNav/> : <AdminNav/>;
+			}
+			else if (this.props.user.roles.includes("ROLE_USER")) {
+				return <UserNav/>;
+			}
+			return <AdminNav/>;
 		}
 		return <PublicNav/>;
 	}
@@ -27,9 +40,20 @@ class Header extends React.Component {
 					{this.props.user.username}
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<Link class="dropdown-item" to="/profile">Profile</Link>
-					<Link class="dropdown-item" to="/update-password">Change password</Link>
-					<button class="dropdown-item" onClick={this.handleLogout}>Logout</button>
+					{ this.props.user.roles.includes("ROLE_ADMIN") && this.props.user.roles.includes("ROLE_USER") ?
+					(<React.Fragment>
+						<button className="dropdown-item" onClick={(e) => {
+							e.preventDefault();
+							this.setState({view:0});
+						}}>Admin's view</button>
+						<button className="dropdown-item" onClick={(e) => {
+							e.preventDefault();
+							this.setState({view:1});
+						}}>User's view</button>
+					</React.Fragment>) : null }
+					<Link className="dropdown-item" to="/profile">Profile</Link>
+					<Link className="dropdown-item" to="/update-password">Change password</Link>
+					<button className="dropdown-item" onClick={this.handleLogout}>Logout</button>
 				</div>
 			</div>
 			);

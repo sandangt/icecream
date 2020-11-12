@@ -1097,6 +1097,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA1MTQ5ODY3LCJleHAiOjE2MDUyMzYyNjd9.Lksu3yV8vxbLWmxZ4wlPrr2LkXedVf3zyf_eVZzZkNUKMkLkSZxlWuW9XaXANToFbPVnCSrbl0H6XvLrNG_8gw",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -1241,7 +1251,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA0MTE4NTA1LCJleHAiOjE2MDQyMDQ5MDV9.QzHaQQHw03YBbfhjTXVoRDKFDv90D5aGX7XZBTWAjwTEF61T_cgEFkazv1mLTWikpD9_Apb2kQzl5uI_iS4Btw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTYW5EYW5nIiwiaWF0IjoxNjA1MTQ5ODY3LCJleHAiOjE2MDUyMzYyNjd9.Lksu3yV8vxbLWmxZ4wlPrr2LkXedVf3zyf_eVZzZkNUKMkLkSZxlWuW9XaXANToFbPVnCSrbl0H6XvLrNG_8gw",
 							"type": "string"
 						}
 					]

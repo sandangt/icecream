@@ -1,5 +1,5 @@
 import React from "react";
-import {Router, Route, Switch, Redirect, BrowserRouter} from "react-router-dom";
+import {Router, Route, Switch, Redirect} from "react-router-dom";
 
 import Header from "components/header/Header.jsx";
 import Footer from "components/footer/Footer.jsx";
@@ -38,6 +38,7 @@ import Order from "pages/user/Order.jsx";
 import OrderHistory from "pages/user/OrderHistory.jsx";
 import OrderDetail from "pages/user/OrderDetail.jsx";
 import UpdateFeedback from "pages/user/UpdateFeedback.jsx";
+import FAQ from "pages/user/FAQ.jsx";
 
 import history from "history.js";
 
@@ -86,6 +87,7 @@ class App extends React.Component {
                     <Route exact path="/order" component={Order}/>
                     <Route exact path="/order/detail/:id" component={OrderDetail}/>
                     <Route exact path="/history" component={OrderHistory}/>
+                    <Route exact path="/faq" component={FAQ}/>
 
                     <Route exact path="/error" component={NotFound}/>
                     <Route>

@@ -14,7 +14,7 @@ class ProfileUser extends React.Component {
             firstname : "",
             lastname : "",
             address : "",
-            gender : "",
+            gender : "MALE",
             birthday : null,
             avatar : "/images/users/default.png",
             getloading: false,
@@ -25,6 +25,11 @@ class ProfileUser extends React.Component {
     componentDidMount() {
         this.getData();
     }
+
+    componentDidUpdate(){
+        setTimeout(() => this.setState({postAccountLoading: false, postProfileLoading: false}), 7500);
+    }
+
     getData = async () => {
         await baseUrl.get(`/users/${this.props.user.id}`, {headers: authHeader()})
             .then(response => {
