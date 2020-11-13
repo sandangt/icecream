@@ -4,21 +4,6 @@ import {Redirect} from "react-router-dom";
 
 import baseUrl from 'baseUrl.js';
 import authHeader from "services/authHeader.js";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import {isEmpty} from 'validator';
-
-
-const required = (value) => {
-    if (isEmpty(value)) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
 
 class CreateFAQ extends React.Component {
     constructor(props) {
@@ -30,39 +15,27 @@ class CreateFAQ extends React.Component {
         }
     }
 
-    onChangeQuestion = (e) => {
-        this.setState({
-            question: e.target.value
-        });
+    componentDidUpdate(){
+        setTimeout(() => this.setState({successful: false}), 7500);
     }
 
-    onChangeAnswer = (e) => {
-        this.setState({
-            answer: e.target.value
-        });
-    }
-
-    onSubmit = (e) => {
+    submitButtonHandle = async (e) => {
         e.preventDefault();
-        this.form.validateAll();
-
         const pkg = {
             question: this.state.question,
             answer: this.state.answer
         };
-        
-        if ( this.checkBtn.context._errors.length === 0 ) {
-
-            baseUrl.post('/faq', pkg, {headers: authHeader()})
-                .then(() => {
-                    this.setState({successful: true});
-                    alert("success");
-                })
-                .catch(error => {
-                    console.log(error);
+        await baseUrl.post('/faq', pkg, {headers: authHeader()})
+            .then(() => {
+                this.setState({
+                    successful: true,
+                    question: '',
+                    answer: '',
                 });
-            }
-        this.props.history.push("/admin/faq");
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     backButtonHandle = (e) => {
@@ -78,32 +51,38 @@ class CreateFAQ extends React.Component {
         <div className="container">
             <div style={{marginTop: 10}}>
                 <h3>Add New FAQ</h3>
-                <Form onSubmit={e => this.onSubmit(e)} ref={c => { this.form = c }}>
                     <div className="form-group">
                         <label>Question: </label>
-                        <Input type="text" className="form-control"
+                        <input type="text" className="form-control"
                                 value={this.state.question}
-                                onChange={this.onChangeQuestion}
-                                validations={[required]}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    this.setState({
+                                        question: e.target.value
+                                    });
+                                }}
                         />
                     </div>
                     <div className="form-group">
                         <label>Answer: </label>
-                        <Input type="text" className="form-control" 
+                        <input type="text" className="form-control" 
                             value={this.state.answer}
-                            onChange={this.onChangeAnswer}
-                            validations={[required]}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    answer: e.target.value
+                                });
+                            }}
                         />
                     </div>
-                    <div className="form-group">
-                        <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
-                        <Input type="submit" value="Submit" 
-                            className="btn btn-primary"
-                            validations={[required]}
-                        />
-                    </div>
-                    <CheckButton style={{ display: 'none' }} ref={c => { this.checkBtn = c }}/>
-                </Form>
+                <div class="btn-group">
+                    <button onClick={this.backButtonHandle} className="btn btn-primary">&laquo; Back</button>
+                    <button  className="btn btn-primary" onClick={this.submitButtonHandle}>Submit &raquo;</button>
+                </div>
+                {this.state.successful && (
+                <div className="alert alert-success" role="alert" >
+                    Post data successfully
+                </div>)}
             </div>
         </div>
         );

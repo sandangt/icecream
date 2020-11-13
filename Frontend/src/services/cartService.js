@@ -1,12 +1,12 @@
 
 
-export const createCartService = () => {
+const createCart = () => {
     localStorage.setItem("cart", JSON.stringify([]));
 }
 
 export const addItemToCartService = (product) => {
     if (localStorage.getItem("cart") === null) {
-        createCartService();
+        createCart();
     }
     const currentCart = JSON.parse(localStorage.getItem("cart"));
 

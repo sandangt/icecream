@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Redirect} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
@@ -140,10 +140,13 @@ class Order extends React.Component {
                 </select>
             </div>
 
-            <div className="btn row">
+            <div className="btn-group">
+                <Link className="btn btn-primary" to="/shop">
+                        Continue shopping
+                </Link>
                 {this.state.orders.length !== 0 ? (
                     <React.Fragment>
-                <button className="btn btn-primary" onClick={(e) => {
+                <button className="btn btn-danger" onClick={(e) => {
                     e.preventDefault();
                     destroyCartService();
                     window.location.reload();

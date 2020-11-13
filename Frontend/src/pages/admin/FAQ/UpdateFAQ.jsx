@@ -10,7 +10,9 @@ class UpdateFAQ extends React.Component {
         super(props);
         this.state = {
             question: '',
-            answer: ''
+            answer: '',
+            getloading: false,
+            postloading: false
         }
     }
 
@@ -19,7 +21,8 @@ class UpdateFAQ extends React.Component {
             .then(response => {
                 this.setState ({
                 question : response.data.question,
-                answer : response.data.answer
+                answer : response.data.answer,
+                getloading: true
                 });
             })
             .catch( error => {
@@ -27,30 +30,27 @@ class UpdateFAQ extends React.Component {
             });
             
     }
+    componentDidUpdate(){
+        setTimeout(() => this.setState({postloading: false}), 7500);
+    }
 
     onChangeQuestion = (e) => {
-        this.setState({
-            question: e.target.value
-        });
     }
     onChangeAnswer = (e) => {
-        this.setState({
-            answer: e.target.value
-        })
     }
 
-    onSubmit = (e) => {
+    submitButtonHandle = async (e) => {
         e.preventDefault();
         const obj = {
             id: this.props.match.params.id,
             question: this.state.question,
             answer: this.state.answer
         };
-        baseUrl.put(`/faq/${this.props.match.params.id}`, obj, {headers: authHeader()})
-            .then(response => console.log(response.data))
+        await baseUrl.put(`/faq/${this.props.match.params.id}`, obj, {headers: authHeader()})
+            .then(() => {
+                this.setState({postloading:true});
+            })
             .catch(error => console.log(error));
-
-        this.props.history.push('/admin/faq');
     }
 
     backButtonHandle = (e) => {
@@ -66,31 +66,41 @@ class UpdateFAQ extends React.Component {
         <div>
             <div style={{ marginTop: 10 }}>
                 <h3 align="center">Update FAQ</h3>
-                <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Question: </label>
                         <input
                             type="text"
                             className="form-control"
-                            onChange={this.onChangeQuestion}
                             value={this.state.question}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    question: e.target.value
+                                });
+                            }}
                         />
                     </div>
                     <div className="form-group">
                         <label>Answer: </label>
                         <input type="text"
                             className="form-control"
-                            onChange={this.onChangeAnswer}
                             value={this.state.answer}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    answer: e.target.value
+                                });
+                            }}
                         />
                     </div>
-                    <div className="form-group">
-                        <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
-                        <input type="submit"
-                            value="Update FAQ"
-                            className="btn btn-primary"/>
+                    <div class="btn-group">
+                        <button onClick={this.backButtonHandle} className="btn btn-primary">&laquo; Back</button>
+                        <button  className="btn btn-primary" onClick={this.submitButtonHandle}>Submit &raquo;</button>
                     </div>
-                </form>
+                    {this.state.postloading && (
+                    <div className="alert alert-success" role="alert" >
+                        Post data successfully
+                    </div>)}
             </div>
         </div>
         )

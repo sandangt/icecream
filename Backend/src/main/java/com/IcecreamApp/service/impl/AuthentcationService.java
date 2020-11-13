@@ -2,12 +2,15 @@ package com.IcecreamApp.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,13 +50,14 @@ public class AuthentcationService implements IAuthenticationService {
 	@Autowired
 	private JwtUtils jwtUtils;
 	
+	private static final Logger logger = LoggerFactory.getLogger(AuthentcationService.class);
+	
 	@Override
 	public ResponseEntity<JwtDTO> login(LoginRequestDTO loginRequest, HttpServletResponse response) {
 
 	    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 	    		loginRequest.getUsername(),
-	    		loginRequest.getPassword(),
-	            new HashSet<>());
+	    		loginRequest.getPassword());
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 	
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -81,49 +85,19 @@ public class AuthentcationService implements IAuthenticationService {
 					.body(new MessageResponseDTO("Error: Email is already in use!"));
 		}
 
-
-//		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
-//
-//		if (strRoles == null) {
-//			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//			roles.add(userRole);
-//		} 
-//		else {
-//			strRoles.forEach(role -> {
-//				switch (role) {
-//				case "ADMIN":
-//					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(adminRole);
-//
-//					break;
-//				case "STAFF":
-//					Role modRole = roleRepository.findByName(ERole.ROLE_STAFF)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(modRole);
-//
-//					break;
-//				default:
-//					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(userRole);
-//					break;
-//				}
-//			});
-//		}
 
-		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-		roles.add(userRole);
-		User user = new User(null, signupRequest.getUsername(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()),
-				EStatus.AVAILABLE,new HashSet<Role>());
-		
-		user.setRoles(roles);
-		userRepository.save(user);
-
-		return new ResponseEntity<MessageResponseDTO>(new MessageResponseDTO("User registered successfully!"), HttpStatus.OK);
+		Optional<Role> roleWrapper = roleRepository.findByName(ERole.ROLE_USER);
+		if (roleWrapper.isPresent()) {
+			roles.add(roleWrapper.get());
+			User user = new User(null, signupRequest.getUsername(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()),
+					EStatus.AVAILABLE,new HashSet<Role>());
+			user.setRoles(roles);
+			userRepository.save(user);
+			return new ResponseEntity<MessageResponseDTO>(new MessageResponseDTO("User registered successfully!"), HttpStatus.OK);
+		}
+		logger.error("Invalid role");
+		return new ResponseEntity<MessageResponseDTO>(new MessageResponseDTO("Signup failed!"), HttpStatus.NOT_FOUND);
 	}
 
 	@Override
@@ -134,7 +108,7 @@ public class AuthentcationService implements IAuthenticationService {
             new SecurityContextLogoutHandler().logout(request, response, auth);
             return new ResponseEntity<MessageResponseDTO>(new MessageResponseDTO("Logout successfully!"), HttpStatus.OK);
         }
-        return new ResponseEntity<MessageResponseDTO>(new MessageResponseDTO("Logout unsuccessfully"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<MessageResponseDTO>(new MessageResponseDTO("Logout unsuccessfully!"), HttpStatus.NOT_FOUND);
 	}
 
 }

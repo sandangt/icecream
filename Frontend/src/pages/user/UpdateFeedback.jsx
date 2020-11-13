@@ -9,7 +9,8 @@ class UpdateFeedback extends React.Component {
             title: '',
             content: '',
             productId: 0, 
-            user: {}
+            user: {},
+            postloading: false
         }
     }
 
@@ -26,21 +27,12 @@ class UpdateFeedback extends React.Component {
             .catch( error => {
                 console.log(error);
             });
-            
+    }
+    componentDidUpdate(){
+        setTimeout(() => this.setState({postloading: false}), 7500);
     }
 
-    onChangeTitle = (e) => {
-        this.setState({
-            title: e.target.value
-        });
-    }
-    onChangeContent = (e) => {
-        this.setState({
-            content: e.target.value
-        })
-    }
-
-    onSubmit = async (e) => {
+    submitButtonHandle = async (e) => {
         e.preventDefault();
         const pkg = {
             id: this.props.match.params.id,
@@ -52,10 +44,9 @@ class UpdateFeedback extends React.Component {
             }
         };
         await baseUrl.put(`/feedbacks/${this.props.match.params.id}`, pkg, {headers: authHeader()})
-            .then(response => console.log(response.data))
+            .then(() => this.setState({postloading: true}))
             .catch(error => console.log(error));
 
-        this.props.history.push(`/product/${this.state.productId}`);
     }
 
     backButtonHandle = (e) => {
@@ -69,13 +60,17 @@ class UpdateFeedback extends React.Component {
         <div className="container">
             <div style={{ marginTop: 10 }}>
                 <h3 align="center">Update FAQ</h3>
-                <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Title: </label>
                         <input
                             type="text"
                             className="form-control"
-                            onChange={this.onChangeTitle}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    title: e.target.value
+                                });
+                            }}
                             value={this.state.title}
                         />
                     </div>
@@ -83,17 +78,23 @@ class UpdateFeedback extends React.Component {
                         <label>Content: </label>
                         <input type="text"
                             className="form-control"
-                            onChange={this.onChangeContent}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    content: e.target.value
+                                });
+                            }}
                             value={this.state.content}
                         />
                     </div>
-                    <div className="form-group">
-                        <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
-                        <input type="submit"
-                            value="Update feedback"
-                            className="btn btn-primary"/>
-                    </div>
-                </form>
+                <div class="btn-group">
+                    <button onClick={this.backButtonHandle} className="btn btn-primary">&laquo; Back</button>
+                    <button  className="btn btn-primary" onClick={this.submitButtonHandle}>Submit &raquo;</button>
+                </div>
+                {this.state.postloading && (
+                <div className="alert alert-success" role="alert" >
+                    Update data successfully
+                </div>)}
             </div>
         </div>
         )

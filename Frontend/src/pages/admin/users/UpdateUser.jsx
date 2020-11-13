@@ -25,7 +25,7 @@ class UpdateUser extends React.Component {
         this.getData();
     }
     componentDidUpdate(){
-        setTimeout(() => this.setState({postloading: false}), 5000);
+        setTimeout(() => this.setState({postloading: false}), 7500);
     }
     getData = async () => {
         await baseUrl.get(`/users/${this.props.match.params.id}`, {headers: authHeader()})
@@ -54,10 +54,6 @@ class UpdateUser extends React.Component {
     }
 
     onSelectStatus = (e) => {
-        // e.preventDefault();
-        // this.setState({
-        //     status: e.target.value
-        // });
         this.inputStatus = e.target.value;
     }
 
@@ -85,7 +81,6 @@ class UpdateUser extends React.Component {
             .catch(error => console.log(error));
     }
 
-
     render() {
         if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_ADMIN")) {
             return <Redirect to="/error"/>;
@@ -96,29 +91,19 @@ class UpdateUser extends React.Component {
             <div className="col-12">
                 <div className="card">
                     <div className="card-body">
-                        <div className="card-title mb-4">
-                            <div className="d-flex justify-content-start">
-                                <div className="image-container">
-                                    {this.state.profile && <img src={this.state.profile.avatar} class="avatar img-circle img-thumbnail" alt="avatar" height="200" width="200"/>}
-                                </div>
-                                <div className="userData ml-3">
-                                    <h2 className="d-block" style={{fontSize: "1.5rem", fontWeight: "bold",}}>
-                                        username: {this.state.username}<br/>
-                                    </h2>
-                                    {this.state.roles && (
-                                    <ul>
-                                        {this.renderRoles()}
-                                    </ul>
-                                    )}
-                                </div>
-                                <div className="ml-auto">
-                                    <input
-                                        type="button"
-                                        className="btn btn-primary d-none"
-                                        id="btnDiscard"
-                                        defaultValue="Discard Changes"
-                                    />
-                                </div>
+                        <div className="d-flex justify-content-center">
+                            <div className="image-container">
+                                {this.state.profile && <img src={this.state.profile.avatar} class="avatar img-circle img-thumbnail" alt="avatar" height="200" width="200"/>}
+                            </div>
+                            <div className="userData ml-3">
+                                <h2 className="d-block" style={{fontSize: "1.5rem", fontWeight: "bold",}}>
+                                    username: {this.state.username}<br/>
+                                </h2>
+                                {this.state.roles && (
+                                <ul>
+                                    {this.renderRoles()}
+                                </ul>
+                                )}
                             </div>
                         </div>
                         <div className="row">
@@ -257,9 +242,9 @@ class UpdateUser extends React.Component {
                                             <input type="checkbox" name="ROLE_ADMIN" value="1 ROLE_ADMIN" onChange={this.onCheckBox} />
                                             ROLE_ADMIN
                                             <br/>
-                                            <input type="checkbox" name="ROLE_STAFF" value="2 ROLE_STAFF" onChange={this.onCheckBox}/>
+                                            {/* <input type="checkbox" name="ROLE_STAFF" value="2 ROLE_STAFF" onChange={this.onCheckBox}/>
                                             ROLE_STAFF
-                                            <br/>
+                                            <br/> */}
                                             <input type="checkbox" name="ROLE_USER" value="3 ROLE_USER" onChange={this.onCheckBox}/>
                                             ROLE_USER
                                         </div>

@@ -21,6 +21,10 @@ class ProductDetail extends React.Component {
         this.getData();
     }
 
+    componentDidUpdate(){
+        setTimeout(() => this.setState({postloading: false}), 7500);
+    }
+
     getData = async () => {
         await baseUrl.get(`/products/${this.props.match.params.id}`, {headers: authHeader()})
         .then( (response) => {
@@ -52,12 +56,15 @@ class ProductDetail extends React.Component {
         await baseUrl.post(`/feedbacks`, pkg, {headers: authHeader()})
         .then( () => {
             this.setState({
+                title: "",
+                content: "",
                 postloading: true
             });
         })
         .catch( (error) => {
             console.log(error);
         });
+        this.getData();
     }
 
     onDeleteButton = (id) => {
@@ -72,7 +79,6 @@ class ProductDetail extends React.Component {
             return <Redirect to="/error"/>
         }
     return(
-<div>
 <div className="row">
     <div className="col-12">
         <div className="card">
@@ -197,7 +203,7 @@ class ProductDetail extends React.Component {
                         </div>
                                 {this.state.postloading && (
                                 <div className="alert alert-success" role="alert" >
-                                    Create order detail list successfully
+                                    Post feedback successfully
                                 </div>)}
                     </div>
                     </div>
@@ -206,11 +212,11 @@ class ProductDetail extends React.Component {
                             <ul>
                                 { this.state.product.feedbacks && this.state.product.feedbacks.map(value => {
                                     return (<li>
-                                        <p>title: {value.title}</p>
-                                        <p>posted by: {value.user.username}</p>
+                                        <strong>title: {value.title}</strong><br/>
+                                        <i>posted by: {value.user.username}</i><br/>
                                         <p>{value.content}</p>
                                         { value.user.id === this.props.user.id ? (
-                                        <React.Fragment>
+                                        <div className="btn-group">
                                         <Link className="btn btn-primary" to={`/feedback/${value.id}`}>Edit</Link>
                                         <button className="btn btn-danger" onClick={ async (e) => {
                                             e.preventDefault();
@@ -221,7 +227,7 @@ class ProductDetail extends React.Component {
                                         }}>
                                             Delete
                                         </button>
-                                        </React.Fragment>
+                                        </div>
                                         ) : null}   
                                     </li>);
                                 })}
@@ -233,9 +239,6 @@ class ProductDetail extends React.Component {
     </div>
     <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
 </div>
-</div>
-
-
 </div>
 );
         }

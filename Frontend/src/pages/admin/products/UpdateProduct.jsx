@@ -26,7 +26,7 @@ class UpdateProduct extends React.Component {
         this.getData();
     }
     componentDidUpdate(){
-        setTimeout(() => this.setState({postloading: false}), 5000);
+        setTimeout(() => this.setState({postloading: false}), 7500);
       }
     getData = async () => {
         await baseUrl.get(`/categories/name`, {headers:authHeader()})

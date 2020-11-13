@@ -1,8 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import authHeader from "services/authHeader.js";
-import baseUrl from "baseUrl.js";
-import {createCartService, destroyCartService, addItemToCartService} from "services/cartService.js";
+import {addItemToCartService} from "services/cartService.js";
 
 function ProductCard(props) {
     return (
@@ -30,7 +28,7 @@ function ProductCard(props) {
                 onClick={ async (e) => {
                     e.preventDefault();
                     addItemToCartService(props);
-                    props.addToCart(props.cart);
+                    props.countCart(props.cart);
                 }}>
                     Buy
                 </button>) : null}

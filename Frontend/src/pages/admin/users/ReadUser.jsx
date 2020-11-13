@@ -38,7 +38,6 @@ class ReadUser extends React.Component {
             console.log(error);
         });
     }
-
     getSearchData = async(searchText) => {
         await baseUrl.get(`/users?search=${searchText}`, {headers: authHeader()})
         .then( (response) => {

@@ -68,11 +68,6 @@ class ReadFAQ extends React.Component {
         }
     }
 
-    onSearchBar = (e) => {
-        e.preventDefault();
-        this.setState({searchText: e.target.value});
-    }
-
     onPageChanged = data => {
         const { currentPage, pageLimit } = data;
         this.setState({ currentPage, pageLimit });
@@ -128,7 +123,6 @@ class ReadFAQ extends React.Component {
                 >
                     <thead className="thead-dark">
                         <tr>
-                            {/* <th>select</th> */}
                             <th>ID</th>
                             <th>Question</th>
                             <th>Answer</th>
@@ -152,7 +146,7 @@ class ReadFAQ extends React.Component {
             </div>
 
             <div className="btn">
-                <Link className="btn btn-primary" to="/admin/users/create">
+                <Link className="btn btn-primary" to="/admin/faq/create">
                     Create new FAQ
                 </Link>
             </div>

@@ -5,22 +5,6 @@ import {Redirect} from "react-router-dom";
 import baseUrl from 'baseUrl.js';
 import authHeader from "services/authHeader.js";
 
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import {isEmpty} from 'validator';
-
-
-const required = (value) => {
-    if (isEmpty(value)) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
-
 class CreateCategory extends React.Component {
     constructor(props) {
         super(props);
@@ -30,26 +14,26 @@ class CreateCategory extends React.Component {
         }
     }
 
-    onSubmit = async (e) => {
+    componentDidUpdate(){
+        setTimeout(() => this.setState({successful: false}), 5000);
+      }
+    submitButtonHandle = async (e) => {
         e.preventDefault();
-        this.form.validateAll();
 
         const pkg = {
             name: this.state.name
         };
         
-        if ( this.checkBtn.context._errors.length === 0 ) {
-
-            await baseUrl.post('/categories', pkg, {headers: authHeader()})
-                .then(() => {
-                    this.setState({successful: true});
-                    alert("success");
-                })
-                .catch(error => {
-                    console.log(error);
+        await baseUrl.post('/categories', pkg, {headers: authHeader()})
+            .then(() => {
+                this.setState({
+                    successful: true,
+                    name:""
                 });
-            }
-        this.props.history.push("/admin/categories");
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     backButtonHandle = (e) => {
@@ -65,29 +49,25 @@ class CreateCategory extends React.Component {
         <div className="container">
             <div style={{marginTop: 10}}>
                 <h3>Add New FAQ</h3>
-                <Form onSubmit={e => this.onSubmit(e)} ref={c => { this.form = c }}>
                     <div className="form-group">
                         <label>Category name: </label>
-                        <Input type="text" className="form-control"
-                                value={this.state.name}
-                                onChange={(e) => {
-                                    e.preventDefault();
-                                    this.setState({
-                                        name: e.target.value
-                                    })
-                                }}
-                                validations={[required]}
+                        <input type="text" className="form-control"
+                            value={this.state.name}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    name: e.target.value
+                                })}}
                         />
                     </div>
-                    <div className="form-group">
-                        <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
-                        <Input type="submit" value="Submit" 
-                            className="btn btn-primary"
-                            validations={[required]}
-                        />
+                    <div class="btn-group">
+                        <button onClick={this.backButtonHandle} className="btn btn-primary">&laquo; Back</button>
+                        <button  className="btn btn-primary" onClick={this.submitButtonHandle}>Submit &raquo;</button>
                     </div>
-                    <CheckButton style={{ display: 'none' }} ref={c => { this.checkBtn = c }}/>
-                </Form>
+                    {this.state.successful && (
+                    <div className="alert alert-success" role="alert" >
+                        Post data successfully
+                    </div>)}
             </div>
         </div>
         );

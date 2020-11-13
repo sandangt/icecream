@@ -26,14 +26,13 @@ class UpdateCategory extends React.Component {
             .catch( error => {
                 console.log(error);
             });
-            
     }
 
     componentDidUpdate(){
         setTimeout(() => this.setState({postloading: false}), 7500);
     }
 
-    onSubmit = (e) => {
+    submitButtonHandle = (e) => {
         e.preventDefault();
         const pkg = {
             id: this.props.match.params.id,
@@ -45,7 +44,6 @@ class UpdateCategory extends React.Component {
             })
             .catch(error => console.log(error));
     }
-
     backButtonHandle = (e) => {
         e.preventDefault();
         this.props.history.push("/admin/categories");
@@ -74,11 +72,9 @@ class UpdateCategory extends React.Component {
                             }}
                         />
                     </div>
-                    <div className="form-group">
-                        <button onClick={this.backButtonHandle} className="btn btn-primary">Back</button>
-                        <input type="submit"
-                            value="Update category"
-                            className="btn btn-primary"/>
+                    <div class="btn-group">
+                        <button onClick={this.backButtonHandle} className="btn btn-primary">&laquo; Back</button>
+                        <button  className="btn btn-primary" onClick={this.submitButtonHandle}>Submit &raquo;</button>
                     </div>
                     {this.state.postloading && (
                     <div className="alert alert-success" role="alert" >

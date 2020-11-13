@@ -59,7 +59,7 @@ class Header extends React.Component {
 			);
 		}
 		return (
-		<div>		  
+		<div class="btn-group"> 
 			<Link className="btn btn-outline-success my-2 my-sm-0" to="/login">Login</Link>
 			<Link className="btn btn-outline-success my-2 my-sm-0" to="/signup">Signup</Link>
 		</div>
