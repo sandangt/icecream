@@ -44,6 +44,21 @@ public class ProductController {
         	return ResponseEntity.ok().body(currentEntityWrapper.get());
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<ProductDTO>> getProductsByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(productService.readByPage(page, offset));
+    }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<ProductDTO>> searchProductsByName(@RequestParam("search") String productname) {
+    	return ResponseEntity.ok().body(productService.searchProductsByName(productname));
+    }
+    
+    @GetMapping(value="/{id}/feedbacks")
+    public ResponseEntity<List<FeedbackDTO>> getFeedbacksByProduct(@PathVariable("id") long id) {
+    	return ResponseEntity.ok().body(productService.readFeedbacksByProduct(id));
+    }
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> createProduct(@RequestBody ProductDTO productDTO) {
@@ -64,22 +79,6 @@ public class ProductController {
     	if (productService.delete(id))
     		return ResponseEntity.ok().body(new MessageResponseDTO("Product item has been deleted successfully!"));
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
-    }
-
-	
-    @GetMapping(params={"page","offset"})
-    public ResponseEntity<PageDTO<ProductDTO>> getProductsByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	return ResponseEntity.ok().body(productService.readByPage(page, offset));
-    }
-    
-    @GetMapping(params="search")
-    public ResponseEntity<List<ProductDTO>> searchProductsByName(@RequestParam("search") String productname) {
-    	return ResponseEntity.ok().body(productService.searchProductsByName(productname));
-    }
-    
-    @GetMapping(value="/{id}/feedbacks")
-    public ResponseEntity<List<FeedbackDTO>> getFeedbacksByProduct(@PathVariable("id") long id) {
-    	return ResponseEntity.ok().body(productService.readFeedbacksByProduct(id));
     }
 
 }

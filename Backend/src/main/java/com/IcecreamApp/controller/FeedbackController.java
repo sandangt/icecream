@@ -31,11 +31,13 @@ public class FeedbackController {
 	@Autowired
 	private IFeedbackService feedbackService;
 	
+	// Admin, User
 	@GetMapping
 	public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks() {        
 		return ResponseEntity.ok().body(feedbackService.readAll());
 	}
 
+	// Admin, User
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<FeedbackDTO> getFeedbackById(@PathVariable("id") Long id) {
     	Optional<FeedbackDTO> currentEntityWrapper = feedbackService.readById(id);
@@ -44,13 +46,21 @@ public class FeedbackController {
     	}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
+	
+	// Admin, User
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<FeedbackDTO>> getOrdersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(feedbackService.readByPage(page, offset));
+    }
 
+	// Admin, User
 	@PostMapping
 	public ResponseEntity<MessageResponseDTO> createFeedback(@RequestBody FeedbackDTO feedbackDTO) {
     	this.feedbackService.create(feedbackDTO);
     	return ResponseEntity.ok().body(new MessageResponseDTO("Created new Feedback successfully"));
 	}
 
+	// Admin, particular User
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<MessageResponseDTO> updateFeedback(@PathVariable("id") Long id, @RequestBody FeedbackDTO feedbackDTO) {
     	Optional<Feedback> currentEntityWrapper = feedbackService.update(id, feedbackDTO);
@@ -60,6 +70,7 @@ public class FeedbackController {
 		return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
 	}
 
+	// Admin, particular User
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<MessageResponseDTO> deleteFeedback(@PathVariable("id") Long id) {
     	if (feedbackService.delete(id)) {
@@ -67,11 +78,6 @@ public class FeedbackController {
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
 	}
-	
-    @GetMapping(params={"page","offset"})
-    public ResponseEntity<PageDTO<FeedbackDTO>> getOrdersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	return ResponseEntity.ok().body(feedbackService.readByPage(page, offset));
-    }
 }
 
 

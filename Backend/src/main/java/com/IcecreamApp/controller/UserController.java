@@ -49,6 +49,21 @@ public class UserController {
     	}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<UserDTO>> searchUsersByUsername(@RequestParam("search") String username) {
+    	return ResponseEntity.ok().body(userService.searchUsersByUsername(username));
+    }
+    
+    @GetMapping(value="{id}/orders")
+    public ResponseEntity<List<OrderDTO>> getOrdersByUser(@PathVariable("id") long id) {
+    	return ResponseEntity.ok().body(userService.readAllOrdersByUser(id));
+    }
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<UserDTO>> getUsersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(userService.readByPage(page, offset));
+    }
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> createUser(@RequestBody UserDTO userDTO) {
@@ -66,28 +81,6 @@ public class UserController {
 		return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = "/{id}")	
-//    @PreAuthorize("hasAuthority('USER_WRITE')")
-    public ResponseEntity<MessageResponseDTO> deleteUser(@PathVariable("id") long id) {
-    	if (userService.delete(id)) {
-    		return ResponseEntity.ok().body(new MessageResponseDTO("User has been deleted successfully!"));
-    	}
-    	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
-    }
-    
-    @PutMapping(value="/{id}/password")
-    public ResponseEntity<MessageResponseDTO> changePassword(@PathVariable("id") long id, @RequestBody PasswordDTO passwords) {
-    	if (this.userService.changePassword(id, passwords)) {
-    		return new ResponseEntity<>(new MessageResponseDTO("Password updated successfully!"), HttpStatus.OK);
-    	}
-    	return new ResponseEntity<>(new MessageResponseDTO("Incorrect password!"), HttpStatus.NOT_ACCEPTABLE);
-    }
-	
-    @GetMapping(params={"page","offset"})
-    public ResponseEntity<PageDTO<UserDTO>> getUsersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	return ResponseEntity.ok().body(userService.readByPage(page, offset));
-    }
-
     @PutMapping(value="/{id}/profile")
     public ResponseEntity<MessageResponseDTO> updateProfile(@PathVariable("id") long id, @RequestBody UserDetailDTO newProfile) {
     	Optional<UserDetail> currentEntityWrapper = this.userService.updateProfile(id, newProfile); 
@@ -97,6 +90,7 @@ public class UserController {
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     	
     }
+    
     @PutMapping(value="/{id}/roles-status")
     public ResponseEntity<MessageResponseDTO> updateRolesAndStatus(@PathVariable("id") long id, @RequestBody RolesAndStatusDTO rolesNstatus) {
     	if (this.userService.updateRolesAndStatus(id, rolesNstatus).isPresent()) {
@@ -113,14 +107,21 @@ public class UserController {
     	return new ResponseEntity<>(new MessageResponseDTO("Update failed!"), HttpStatus.NOT_ACCEPTABLE);
     }
     
-    @GetMapping(params="search")
-    public ResponseEntity<List<UserDTO>> searchUsersByUsername(@RequestParam("search") String username) {
-    	return ResponseEntity.ok().body(userService.searchUsersByUsername(username));
+    @PutMapping(value="/{id}/password")
+    public ResponseEntity<MessageResponseDTO> changePassword(@PathVariable("id") long id, @RequestBody PasswordDTO passwords) {
+    	if (this.userService.changePassword(id, passwords)) {
+    		return new ResponseEntity<>(new MessageResponseDTO("Password updated successfully!"), HttpStatus.OK);
+    	}
+    	return new ResponseEntity<>(new MessageResponseDTO("Incorrect password!"), HttpStatus.NOT_ACCEPTABLE);
     }
-    
-    @GetMapping(value="{id}/orders")
-    public ResponseEntity<List<OrderDTO>> getOrdersByUser(@PathVariable("id") long id) {
-    	return ResponseEntity.ok().body(userService.readAllOrdersByUser(id));
+
+    @DeleteMapping(value = "/{id}")	
+//    @PreAuthorize("hasAuthority('USER_WRITE')")
+    public ResponseEntity<MessageResponseDTO> deleteUser(@PathVariable("id") long id) {
+    	if (userService.delete(id)) {
+    		return ResponseEntity.ok().body(new MessageResponseDTO("User has been deleted successfully!"));
+    	}
+    	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
     }
         
 }

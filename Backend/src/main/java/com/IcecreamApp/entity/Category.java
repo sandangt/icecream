@@ -26,7 +26,7 @@ public class Category extends Base implements ForeignConnection<Category> {
 	/**
 	 * Foreign key section
 	 */
-	@OneToMany(mappedBy = "category", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "category", cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JsonManagedReference(value="product-category")
     private List<Product> products = new ArrayList<>();
 	

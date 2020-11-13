@@ -2,8 +2,12 @@ package com.IcecreamApp;
 
 import java.util.Date;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +40,8 @@ public class PriorData implements CommandLineRunner {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private DataSource dataSource;
+    @Autowired
     private PasswordEncoder encoder;
 
     @SuppressWarnings("deprecation")
@@ -62,7 +68,9 @@ public class PriorData implements CommandLineRunner {
     	userRepository.save(new User("Zeno", "zeno@hotmail.com", encoder.encode("1234"), EStatus.AVAILABLE, 
     			Sets.newHashSet(new Role(3L, ERole.ROLE_USER))));
     	userRepository.save(new User("DavidBowie", "Bowie@gmail.com", encoder.encode("1234"), EStatus.AVAILABLE, 
-    			Sets.newHashSet(new Role(2L, ERole.ROLE_STAFF))));
+    			Sets.newHashSet(new Role(3L, ERole.ROLE_USER))));
+    	userRepository.save(new User("Hegelian", "georghegel@yahoo.com", encoder.encode("1234"), EStatus.AVAILABLE, 
+    			Sets.newHashSet(new Role(1L, ERole.ROLE_ADMIN))));
     
     	userDetailRepository.deleteAll();
     	User user1 = new User();
@@ -73,10 +81,18 @@ public class PriorData implements CommandLineRunner {
     	userDetailRepository.save(new UserDetail(4L, "Karl", "Jung", "asc ghb", EGender.MALE, new Date(0,0,2), "/images/users/user2.jpg", user2));
     	
     	productRepository.deleteAll();
-    	productRepository.save(new Product("Introduction to Algorithms", "Data structures and algorithms", "/images/products/CLRS.jpg", 3.58, EStatus.AVAILABLE, 
+    	productRepository.save(new Product("Introduction to Algorithms", "Introduction for Data structures and algorithms", "/images/products/CLRS.jpg", 3.58, EStatus.AVAILABLE, 
     			new Category(3L, "Computer science")));
-    	productRepository.save(new Product("Three easy pieces of OS", "Operating system", "/images/products/3easypieces.jpg", 4.32, EStatus.AVAILABLE, 
+    	productRepository.save(new Product("Three easy pieces of OS", "Operating system made easy", "/images/products/3easypieces.jpg", 4.32, EStatus.AVAILABLE, 
     			new Category(3L, "Computer science")));    
+    	productRepository.save(new Product("Computer network: system approach", "Advanced computer network book", "/images/products/ComputerNetwork.jpg", 5.17, EStatus.AVAILABLE, 
+    			new Category(3L, "Computer science")));    
+    	productRepository.save(new Product("Cryptography and security", "Crypto and cyber sec", "/images/products/Crypto.jpg", 3.42, EStatus.AVAILABLE, 
+    			new Category(3L, "Computer science")));    
+    	
+    	ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/mass.sql"));
+    	resourceDatabasePopulator.execute(dataSource);
+    	
     	System.out.println("Prior data loaded");
     }
 }

@@ -45,6 +45,16 @@ public class FAQController {
     	}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<FAQDTO>> getFAQByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(faqService.readByPage(page, offset));
+    }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<FAQDTO>> searchFAQByQuestion(@RequestParam("search") String question) {
+    	return ResponseEntity.ok().body(faqService.searchFAQByQuestion(question));
+    }
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> createFAQ(@RequestBody FAQDTO faqDTO) {
@@ -67,15 +77,5 @@ public class FAQController {
     		return ResponseEntity.ok().body(new MessageResponseDTO("FAQ item has been deleted successfully!"));
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
-    }
-	
-    @GetMapping(params={"page","offset"})
-    public ResponseEntity<PageDTO<FAQDTO>> getFAQByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	return ResponseEntity.ok().body(faqService.readByPage(page, offset));
-    }
-    
-    @GetMapping(params="search")
-    public ResponseEntity<List<FAQDTO>> searchFAQByQuestion(@RequestParam("search") String question) {
-    	return ResponseEntity.ok().body(faqService.searchFAQByQuestion(question));
     }
 }

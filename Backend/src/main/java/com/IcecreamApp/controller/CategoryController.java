@@ -44,6 +44,27 @@ public class CategoryController {
         	return ResponseEntity.ok().body(currentEntityWrapper.get());
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+    
+    @GetMapping(params="search")
+    public ResponseEntity<List<CategoryDTO>> searchCategoriesByName(@RequestParam("search") String categoryname) {
+    	return ResponseEntity.ok().body(categoryService.searchCategoriesByName(categoryname));
+    }
+    
+    @GetMapping(value="/name")
+    public ResponseEntity<List<CategoryDTO>> getAllCategoryName() {
+    	return ResponseEntity.ok().body(categoryService.readAllNameAndId());
+    }
+    
+    @GetMapping(value="/{id}/products")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("id") Long id) {
+    	return ResponseEntity.ok().body(categoryService.readAllProductsByCategory(id));
+    }
+    
+    @GetMapping(value="/{id}/products", params={"page","offset"})
+    public ResponseEntity<PageDTO<ProductDTO>> getProductsByCategoryWithPage(@PathVariable("id") Long id, 
+    		@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(categoryService.readAllProductsByCategoryWithPage(id, page, offset));
+    }
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
@@ -66,26 +87,5 @@ public class CategoryController {
     		return ResponseEntity.ok().body(new MessageResponseDTO("Category item has been deleted successfully!"));
     	}
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
-    }
-    
-    @GetMapping(params="search")
-    public ResponseEntity<List<CategoryDTO>> searchCategoriesByName(@RequestParam("search") String categoryname) {
-    	return ResponseEntity.ok().body(categoryService.searchCategoriesByName(categoryname));
-    }
-    
-    @GetMapping(value="/name")
-    public ResponseEntity<List<CategoryDTO>> getAllCategoryName() {
-    	return ResponseEntity.ok().body(categoryService.readAllNameAndId());
-    }
-    
-    @GetMapping(value="/{id}/products")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("id") Long id) {
-    	return ResponseEntity.ok().body(categoryService.readAllProductsByCategory(id));
-    }
-    
-    @GetMapping(value="/{id}/products", params={"page","offset"})
-    public ResponseEntity<PageDTO<ProductDTO>> getProductsByCategoryWithPage(@PathVariable("id") Long id, 
-    		@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	return ResponseEntity.ok().body(categoryService.readAllProductsByCategoryWithPage(id, page, offset));
     }
 }

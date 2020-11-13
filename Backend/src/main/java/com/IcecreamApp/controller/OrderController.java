@@ -45,6 +45,24 @@ public class OrderController {
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
+	@GetMapping(params="code")
+	public ResponseEntity<OrderDTO> getOrderByCode(@RequestParam("code") String code) {		
+    	Optional<OrderDTO> currentEntityWrapper = orderService.readByCode(code);
+    	if (currentEntityWrapper.isPresent())
+        	return ResponseEntity.ok().body(currentEntityWrapper.get());
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping(value="/{id}/order-details")
+	public ResponseEntity<List<OrderDetailDTO>> getOrderDetailByOrder(@PathVariable("id") long id) {
+		return ResponseEntity.ok().body(orderService.readOrderDetailsByOrder(id));
+	}
+	
+    @GetMapping(params={"page","offset"})
+    public ResponseEntity<PageDTO<OrderDTO>> getOrdersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
+    	return ResponseEntity.ok().body(orderService.readByPage(page, offset));
+    }
+
 	@PostMapping
 	public ResponseEntity<MessageResponseDTO> createOrder(@RequestBody OrderDTO orderDTO) {
 		this.orderService.create(orderDTO);
@@ -66,22 +84,4 @@ public class OrderController {
     		return ResponseEntity.ok().body(new MessageResponseDTO("Order item has been deleted successfully!"));
     	return new ResponseEntity<>(new MessageResponseDTO("Item not found!"), HttpStatus.NOT_FOUND);
 	}
-
-	@GetMapping(params="code")
-	public ResponseEntity<OrderDTO> getOrderByCode(@RequestParam("code") String code) {		
-    	Optional<OrderDTO> currentEntityWrapper = orderService.readByCode(code);
-    	if (currentEntityWrapper.isPresent())
-        	return ResponseEntity.ok().body(currentEntityWrapper.get());
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-	}
-	
-	@GetMapping(value="/{id}/order-details")
-	public ResponseEntity<List<OrderDetailDTO>> getOrderDetailByOrder(@PathVariable("id") long id) {
-		return ResponseEntity.ok().body(orderService.readOrderDetailsByOrder(id));
-	}
-	
-    @GetMapping(params={"page","offset"})
-    public ResponseEntity<PageDTO<OrderDTO>> getOrdersByPage(@RequestParam("page") int page, @RequestParam("offset") int offset) {
-    	return ResponseEntity.ok().body(orderService.readByPage(page, offset));
-    }
 }
