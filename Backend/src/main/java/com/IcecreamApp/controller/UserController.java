@@ -116,7 +116,6 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")	
-//    @PreAuthorize("hasAuthority('USER_WRITE')")
     public ResponseEntity<MessageResponseDTO> deleteUser(@PathVariable("id") long id) {
     	if (userService.delete(id)) {
     		return ResponseEntity.ok().body(new MessageResponseDTO("User has been deleted successfully!"));

@@ -1,5 +1,3 @@
-
-
 const createCart = () => {
     localStorage.setItem("cart", JSON.stringify([]));
 }
@@ -32,6 +30,11 @@ export const removeItemFromCartService = (product) => {
     currentCart.pop(product);
     localStorage.setItem("cart", JSON.stringify(currentCart));   
 }
+
+export const countItemInCartService = () => {
+    return localStorage.getItem("cart") === null ? 0 : JSON.parse(localStorage.getItem("cart")).length;
+}
+
 export const destroyCartService = () => {
     if (localStorage.getItem("cart") !== null) {
         localStorage.removeItem("cart");

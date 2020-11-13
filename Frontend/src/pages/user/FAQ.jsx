@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 
 import baseUrl from "baseUrl.js";
@@ -87,6 +87,9 @@ class FAQ extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_USER")) {
+            return <Redirect to="/error"/>
+        }
         const { totalRecords, pageLimit } = this.state;
         return (
 <div>
@@ -134,4 +137,10 @@ class FAQ extends React.Component {
     }
 }
 
-export default FAQ;
+const mapStateToProps = (state) => {
+    return({
+        isLoggedIn: state.auth.isLoggedIn,
+        user: state.auth.user
+    })
+}
+export default connect(mapStateToProps)(FAQ);

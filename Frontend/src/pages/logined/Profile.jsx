@@ -23,7 +23,8 @@ class ProfileUser extends React.Component {
         }
     }
     componentDidMount() {
-        this.getData();
+        if (this.props.isLoggedIn)
+            this.getData();
     }
 
     componentDidUpdate(){

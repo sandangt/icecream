@@ -7,6 +7,8 @@ import authHeader from "services/authHeader";
 import ProductCard from "components/ProductCard.jsx";
 import Pagination from "components/pagination/Pagination.jsx";
 
+import {countItemInCartService} from "services/cartService.js";
+
 class Shop extends React.Component {
 
     constructor(props) {
@@ -21,7 +23,7 @@ class Shop extends React.Component {
             categoryType: 0,
             searchText: "",
             getloading: false,
-            cart: 0
+            cart: countItemInCartService()
         };
     }
     
