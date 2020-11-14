@@ -36,3 +36,7 @@ $ npm start
 |  5  | DavidBowie | 1234   | USER  |
 |  6  | Hegelian   | 1234   | ADMIN |
 
+## Documentation:
+- Các file postman: Documentations/postman (import postman)
+- Database diagram: Documentations/UML/database_diagram.drawio ([import drawio](https://app.diagrams.net/))
+

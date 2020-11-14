@@ -65,7 +65,7 @@ class UpdateFeedback extends React.Component {
         return (
         <div className="container">
             <div style={{ marginTop: 10 }}>
-                <h3 align="center">Update FAQ</h3>
+                <h3 align="center">Update Feedback</h3>
                     <div className="form-group">
                         <label>Title: </label>
                         <input
