@@ -93,6 +93,6 @@ public class PriorData implements CommandLineRunner {
     	ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/mass.sql"));
     	resourceDatabasePopulator.execute(dataSource);
     	
-    	System.out.println("Prior data loaded");
+    	System.out.println("Core data loaded");
     }
 }
