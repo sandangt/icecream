@@ -65,7 +65,7 @@ class CreateFAQ extends React.Component {
                     </div>
                     <div className="form-group">
                         <label>Answer: </label>
-                        <input type="text" className="form-control" 
+                        <textarea className="form-control" 
                             value={this.state.answer}
                             onChange={(e) => {
                                 e.preventDefault();

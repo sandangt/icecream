@@ -82,7 +82,7 @@ class UpdateFAQ extends React.Component {
                     </div>
                     <div className="form-group">
                         <label>Answer: </label>
-                        <input type="text"
+                        <textarea
                             className="form-control"
                             value={this.state.answer}
                             onChange={(e) => {

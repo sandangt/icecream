@@ -3,6 +3,7 @@ package com.IcecreamApp.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.IcecreamApp.DTO.CartDTO;
 import com.IcecreamApp.DTO.OrderDetailDTO;
 import com.IcecreamApp.entity.OrderDetail;
 
@@ -18,6 +19,6 @@ public interface IOrderDetailService {
 
 	boolean delete(long id);
 
-	OrderDetail createWithOrderCode(OrderDetailDTO orderDetailDTO);
+	boolean createWithOrderCode(CartDTO cartDTO);
 
 }

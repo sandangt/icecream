@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.IcecreamApp.DTO.CartDTO;
 import com.IcecreamApp.DTO.MessageResponseDTO;
 import com.IcecreamApp.DTO.OrderDetailDTO;
 import com.IcecreamApp.entity.OrderDetail;
@@ -49,8 +50,8 @@ public class OrderDetailController {
     }
     
     @PostMapping(value="/code")
-    public ResponseEntity<MessageResponseDTO> createOrderDetailWithOrderCode(@RequestBody OrderDetailDTO orderDetailDTO) {
-    	if (orderDetailService.createWithOrderCode(orderDetailDTO) != null)
+    public ResponseEntity<MessageResponseDTO> createOrderDetailWithOrderCode(@RequestBody CartDTO cartDTO) {
+    	if (orderDetailService.createWithOrderCode(cartDTO))
     		return ResponseEntity.ok().body(new MessageResponseDTO("Created new Order detail successfully"));
 		return new ResponseEntity<>(new MessageResponseDTO("Order not found!"), HttpStatus.NOT_FOUND);
     }

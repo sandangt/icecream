@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.IcecreamApp.DTO.CartDTO;
 import com.IcecreamApp.DTO.OrderDetailDTO;
 import com.IcecreamApp.converter.OrderDetailConverter;
 import com.IcecreamApp.entity.Order;
@@ -71,14 +72,17 @@ public class OrderDetailService implements IOrderDetailService {
 	}
 	
 	@Override
-	public OrderDetail createWithOrderCode(OrderDetailDTO orderDetailDTO) {
-		Optional<Order> currentOrderWrapper = orderRepository.findByCode(orderDetailDTO.getOrderCode());
+	public boolean createWithOrderCode(CartDTO cartDTO) {
+		Optional<Order> currentOrderWrapper = orderRepository.findByCode(cartDTO.getOrderCode());
 		if (currentOrderWrapper.isPresent()) {
-			orderDetailDTO.setOrderId(currentOrderWrapper.get().getId());
-			return orderDetailRepository.save(OrderDetailConverter.toEntity(orderDetailDTO));
+			for (OrderDetailDTO i : cartDTO.getItemList()) {
+				i.setOrderId(currentOrderWrapper.get().getId());
+				orderDetailRepository.save(OrderDetailConverter.toEntity(i));
+			}
+			return true;
 		}
 		logger.error("order not found");
-		return null;
+		return false;
 	}
 
 }

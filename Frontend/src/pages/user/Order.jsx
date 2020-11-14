@@ -5,7 +5,10 @@ import {Redirect, Link} from "react-router-dom";
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 import BuyTuple from "components/tuples/BuyTuple.jsx";
-import {removeItemFromCartService, destroyCartService} from "services/cartService.js";
+import {removeItemFromCartService, 
+    destroyCartService, 
+    setNewCartService, 
+    costOfCartService} from "services/cartService.js";
  
 class Order extends React.Component {
     constructor(props) {
@@ -28,36 +31,63 @@ class Order extends React.Component {
     getData = () => {
         if (localStorage.getItem("cart") !== null) {
             const currentCart = JSON.parse(localStorage.getItem("cart"));
-            this.setState({orders: currentCart});
-            let result = 0;
-            currentCart.forEach(value => {
-                result += value.price;
-            });
             this.setState({
-                totalPrice: result.toFixed(3)
+                orders: currentCart,
+                totalPrice: costOfCartService()
             });
         }
     }
 
-    // onClickCheck = (data) => {
-    //     const {orders} = this.state
-    //     let arr=[];
-    //     orders.forEach( value =>{
-    //         if(value.id===data.id){
-    //             arr.push({
-    //                 ... value,
-    //                 quantity:data.data
-    //             })
-    //         }else{
-    //             arr.push(value);
-    //         }
-    //     });
-    //     this.setState({orders:arr});
-    // }
+    handleIncreaseQuantityButton = (data) => {
+        let arr=[];
+        this.state.orders.forEach( value => {
+            if (value.id === data.id) {
+                arr.push({
+                    ... value,
+                    quantity: data.quantity
+                });
+            }
+            else {
+                arr.push(value);
+            }
+        });
+        setNewCartService(arr);
+        this.setState({
+            orders:arr,
+            totalPrice: arr.map(value=>(value.price*value.quantity)).reduce((accumulator, currentVal) => {
+                return accumulator+currentVal;
+            }).toFixed(3)
+        });
+    }
+
+    handleDecreaseQuantityButton = (data) => {
+        let arr=[];
+        this.state.orders.forEach( value => {
+            if (value.id === data.id) {
+                arr.push({
+                    ... value,
+                    quantity: data.quantity
+                });
+            }
+            else {
+                arr.push(value);
+            }
+        });
+        setNewCartService(arr);
+        this.setState({
+            orders:arr,
+            totalPrice: arr.map(value=>(value.price*value.quantity)).reduce((accumulator, currentVal) => {
+                return accumulator+currentVal;
+            }).toFixed(3)
+        });
+    }
 
     renderTuples = () => {
         return this.state.orders.map( (value, index) => {
-            return <BuyTuple obj={value} key={index} onClickCheck={this.onClickCheck}/>
+            return <BuyTuple obj={value} key={index} 
+            increaseQuantity={this.handleIncreaseQuantityButton}
+            decreaseQuantity={this.handleDecreaseQuantityButton}
+            />
         });
     }
 
@@ -76,27 +106,33 @@ class Order extends React.Component {
                 id: this.props.user.id
             }
         };
+        let cartPkg = {
+            orderCode: "",
+            itemList : []
+        }
         await baseUrl.post(`/orders`, orderPkg, {headers: authHeader()})
-        .then(() => {
+        .then( async () => {
             this.setState({postOrder:true});
-            this.state.orders.forEach( async (productElement) => {
+            cartPkg.orderCode = this.state.code;
+            this.state.orders.forEach( (productElement) => {
                 const orderDetailPkg = {
-                    quantity: 1,
+                    quantity: productElement.quantity,
                     orderCode: this.state.code,
                     product: {
                         id: productElement.id
                     }
                 }
-                await baseUrl.post(`/order-details/code`, orderDetailPkg, {headers: authHeader()})
-                .then( () => {
-                    removeItemFromCartService(productElement);
-                })
-                .catch( error => console.log(error));
+                cartPkg.itemList.push(orderDetailPkg);
+                removeItemFromCartService(productElement);
             });
-            this.setState({postOrderList:true});
-            this.props.history.push("/history");
+            await baseUrl.post(`/order-details/code`, cartPkg, {headers: authHeader()})
+            .then( () => {
+                this.setState({postOrderList:true});
+                this.props.history.push("/history");
             })
-            .catch(error => console.log(error));
+            .catch( error => console.log(error));
+            })
+        .catch(error => console.log(error));
     }
 
     render() {
@@ -118,6 +154,7 @@ class Order extends React.Component {
                         <tr>
                             <th>ID</th>
                             <th>Product's name</th>
+                            <th>Quantity</th>
                             <th>Product's price</th>
                             <th>Product's description</th>
                             <th colSpan="1">Action</th>
@@ -153,7 +190,7 @@ class Order extends React.Component {
                 }}>
                     Destroy cart
                 </button>
-                <button className="btn btn-primary" onClick={this.onCheckButton}>
+                <button className="btn btn-success" onClick={this.onCheckButton}>
                     Check
                 </button>
                 </React.Fragment>) : null

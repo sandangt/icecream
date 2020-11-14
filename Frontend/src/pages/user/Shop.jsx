@@ -31,9 +31,10 @@ class Shop extends React.Component {
         this.getCategoryData();
         this.getAllProductDataByPage(this.state.currentPage, this.state.pageLimit);
     }
+
     componentDidUpdate(){
         setTimeout(() => this.setState({getloading: false}), 7500);
-      }
+    }
     
     getCategoryData = async() => {
         await baseUrl.get(`/categories/name`,{headers: authHeader()})

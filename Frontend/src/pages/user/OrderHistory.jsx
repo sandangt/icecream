@@ -1,5 +1,5 @@
 import React from "react";
-import {Redirect} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import {connect} from "react-redux";
 
 import baseUrl from "baseUrl.js";
@@ -71,6 +71,9 @@ class OrderHistory extends React.Component {
                     </tbody>
                 </table>
             </div>
+                <Link className="btn btn-primary" to="/shop">
+                        Continue shopping
+                </Link>
         </div>
     </div>
         );

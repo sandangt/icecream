@@ -39,7 +39,7 @@ class OrderDetail extends React.Component {
     }
 
     render() {
-        if (!this.props.isLoggedIn || !this.props.user.roles.includes("ROLE_USER")) {
+        if (!this.props.isLoggedIn) {
             return <Redirect to="/error"/>;
         }
         console.log(this.state.order_details);
@@ -60,6 +60,7 @@ class OrderDetail extends React.Component {
                             <th>Order's code name</th>
                             <th>Product's name</th>
                             <th>Product's description</th>
+                            <th>Quantity</th>
                             <th>Price</th>
                             <th>Last modified date</th>
                         </tr>

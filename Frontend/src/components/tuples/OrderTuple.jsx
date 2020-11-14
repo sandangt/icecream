@@ -1,6 +1,5 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
 
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
@@ -8,9 +7,8 @@ import baseUrl from "baseUrl.js";
 class OrderTuple extends React.Component {
     delete = () => {
         baseUrl.delete(`/orders/${this.props.obj.id}`, {headers: authHeader()})
-            .then(() => console.log('Deleted'))
+            .then(() => window.location.reload())
             .catch(err => console.log(err));
-        window.location.reload();
     }
     render() {
         return (

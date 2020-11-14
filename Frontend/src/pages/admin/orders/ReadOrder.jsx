@@ -28,7 +28,7 @@ class Order extends React.Component {
             this.setState({
                 orders: response.data.itemList,
                 totalRecords: response.data.totalItems
-            }, () => console.log(this.state.orders))
+            })
         })
         .catch( (error) => {
             console.log(error);
@@ -53,7 +53,6 @@ class Order extends React.Component {
             return <Redirect to="/error"/>
         }
         const { totalRecords, pageLimit } = this.state;
-        console.log(this.state.orders);
         return (
     <div>
         <div className="text-center">

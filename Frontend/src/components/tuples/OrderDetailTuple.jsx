@@ -4,6 +4,7 @@ import {Link} from "react-router-dom"
 
 class OrderDetailTuple extends React.Component {
     render() {
+        console.log(this.props);
         return (
             <tr>
                 <td>
@@ -17,6 +18,9 @@ class OrderDetailTuple extends React.Component {
                 </td>
                 <td>
                     {this.props.obj.product.description}
+                </td>
+                <td>
+                    {this.props.obj.quantity}
                 </td>
                 <td>
                     {this.props.obj.totalPrice}
