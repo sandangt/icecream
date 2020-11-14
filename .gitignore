@@ -6,7 +6,7 @@
 !/Backend/README.md
 !/Backend/src
 !/Frontend/package.json
-!/Frontend/.env
+!/Frontend/jsconfig.json
 !/Frontend/README.md
 !/Frontend/src
 !/Frontend/public
