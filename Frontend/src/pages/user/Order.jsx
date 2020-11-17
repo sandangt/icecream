@@ -54,9 +54,7 @@ class Order extends React.Component {
         setNewCartService(arr);
         this.setState({
             orders:arr,
-            totalPrice: arr.map(value=>(value.price*value.quantity)).reduce((accumulator, currentVal) => {
-                return accumulator+currentVal;
-            }).toFixed(3)
+            totalPrice: costOfCartService()
         });
     }
 
@@ -76,9 +74,7 @@ class Order extends React.Component {
         setNewCartService(arr);
         this.setState({
             orders:arr,
-            totalPrice: arr.map(value=>(value.price*value.quantity)).reduce((accumulator, currentVal) => {
-                return accumulator+currentVal;
-            }).toFixed(3)
+            totalPrice: costOfCartService()
         });
     }
 
