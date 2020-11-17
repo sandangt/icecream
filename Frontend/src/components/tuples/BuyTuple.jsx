@@ -5,7 +5,6 @@ class BuyTuple extends React.Component {
     delete = () => {
         removeItemFromCartService(this.props.obj);
         window.location.reload();
-        // console.log(this.props.obj);
     }
     render() {
         const {increaseQuantity, decreaseQuantity, obj} = this.props;

@@ -195,14 +195,10 @@ class Order extends React.Component {
                 </button>
                 </React.Fragment>) : null
                 }   
-                {this.state.postOrder && (
+                { this.state.postOrder && this.state.postOrderList && (
                 <div className="alert alert-success" role="alert" >
                     Create order successfully
-                </div>)}
-                {this.state.postOrderList && (
-                <div className="alert alert-success" role="alert" >
-                    Create order detail list successfully
-                </div>)}
+                </div>) }
             </div>
         </div>
     </div>

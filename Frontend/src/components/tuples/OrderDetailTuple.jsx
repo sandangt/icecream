@@ -1,7 +1,5 @@
 import React from "react";
 
-import {Link} from "react-router-dom"
-
 class OrderDetailTuple extends React.Component {
     render() {
         console.log(this.props);
