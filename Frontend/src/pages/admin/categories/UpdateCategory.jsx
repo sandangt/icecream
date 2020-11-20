@@ -11,7 +11,8 @@ class UpdateCategory extends React.Component {
         this.state = {
             name: '',
             postloading: false,
-            getloading:false
+            getloading:false,
+            warning:false
         }
     }
 
@@ -29,7 +30,7 @@ class UpdateCategory extends React.Component {
     }
 
     componentDidUpdate(){
-        setTimeout(() => this.setState({postloading: false}), 7500);
+        setTimeout(() => this.setState({postloading: false, warning: false}), 7500);
     }
 
     submitButtonHandle = (e) => {
@@ -38,11 +39,17 @@ class UpdateCategory extends React.Component {
             id: this.props.match.params.id,
             name: this.state.name
         };
+
+        if(this.state.name.length<200 || this.state.name.length>2){
         baseUrl.put(`/categories/${this.props.match.params.id}`, pkg, {headers: authHeader()})
             .then(() => {
                 this.setState({postloading:true});
             })
             .catch(error => console.log(error));
+        }
+        else {
+            this.setState({warning:true});
+        }
     }
     backButtonHandle = (e) => {
         e.preventDefault();
@@ -79,6 +86,10 @@ class UpdateCategory extends React.Component {
                     {this.state.postloading && (
                     <div className="alert alert-success" role="alert" >
                         Post data successfully
+                    </div>)}
+                    {this.state.warning && (
+                    <div className="alert alert-danger" role="alert" >
+                        String qualified
                     </div>)}
                 </form>
             </div>
