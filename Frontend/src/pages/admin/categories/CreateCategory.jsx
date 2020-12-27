@@ -54,7 +54,7 @@ class CreateCategory extends React.Component {
         return (
         <div className="container">
             <div style={{marginTop: 10}}>
-                <h3>Add New FAQ</h3>
+                <h3>Add New Category</h3>
                     <div className="form-group">
                         <label>Category name: </label>
                         <input type="text" className="form-control"
