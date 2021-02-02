@@ -1,9 +1,8 @@
-version: '2'
+version: '3'
 services:
-  mysql:
-    image: mysql:8.0 
-    container_name: mysql 
-    command: mysqld --default-authentication-plugin=mysql_native_password
+  icecream_database:
+    image: mysql:8.0
+    container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 1234
@@ -14,15 +13,23 @@ services:
       MYSQL_PASSWORD: 1234
     ports:
       - "3306:3306"
+    networks:
+      icecream_app_net:
+        ipv4_address: 172.13.243.1
+    volumes:
+      - /home/sania/Workspace/Storage/mysql/data:/var/lib/mysql
   icecream-backend:
     build: ./Backend/
     container_name: icecream-backend
-    environment:
-      - spring.datasource.url=jdbc:mysql://localhost:3306/Icecream
     depends_on:
-      - mysql 
+      - icecream_database 
     ports:
       - "8080:8080"
+    volumes:
+      - icecream_backend: /usr/app/Icecream-backend
+    networks:
+      icecream_app_net:
+        ipv4_address: 172.13.243.0
   # icecream-frontend:
   #   build: ./Frontend/
   #   container_name: icecream-frontend
@@ -175,4 +182,14 @@ services:
   #     MYSQL_DATABASE_CONNECTION: 'mysql:3306'
   #     KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
   #     REDIS_SERVER: 'redis:6379'
-
+networks:
+  icecream_app_net:
+    driver: bridge
+    ipam:
+      config:
+        - driver: default
+          subnet: 172.13.243.0/21
+          ip_range: 172.13.243.0/24
+          gateway: 172.13.243.0
+volumes:
+  "icecream_backend: /usr/app/Icecream-backend"
