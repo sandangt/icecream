@@ -80,9 +80,6 @@ export const changePassword = (id, oldPassword, newPassword) => (dispatch) => {
     return changePasswordService(id, oldPassword, newPassword).then(
         (response) => {
             dispatch({
-                type: PASSWORD_CHANGED
-            });
-            dispatch({
                 type: SET_MESSAGE,
                 payload: response.data.message
             })

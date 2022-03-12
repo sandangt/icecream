@@ -40,6 +40,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         // add jwt filters (1. authentication, 2. authorization)
         .authorizeRequests()
+        .antMatchers("/swagger-ui/**").permitAll()
         .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 		.antMatchers("/users/{userId}/**").access("hasRole('ADMIN') or @WebFilter.checkUserId(authentication,#userId)")

@@ -101,6 +101,7 @@ insert into user_role (user_id, role_id) values ("52","3");
 insert into user_role (user_id, role_id) values ("53","3");
 insert into user_role (user_id, role_id) values ("54","3");
 insert into user_role (user_id, role_id) values ("55","3");
+insert into user_role (user_id, role_id) values ("56","3");
 
 insert into faq (question, answer) values ("Question 0 asked?", "Answer: 0");
 insert into faq (question, answer) values ("Question 1 asked?", "Answer: 1");

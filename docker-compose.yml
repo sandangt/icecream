@@ -1,0 +1,195 @@
+version: '3'
+services:
+  icecream_database:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_HOST: localhost
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: Icecream
+      MYSQL_USER: SanDang
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    networks:
+      icecream_app_net:
+        ipv4_address: 172.13.243.1
+    volumes:
+      - /home/sania/Workspace/Storage/mysql/data:/var/lib/mysql
+  icecream-backend:
+    build: ./Backend/
+    container_name: icecream-backend
+    depends_on:
+      - icecream_database 
+    ports:
+      - "8080:8080"
+    volumes:
+      - icecream_backend: /usr/app/Icecream-backend
+    networks:
+      icecream_app_net:
+        ipv4_address: 172.13.243.0
+  # icecream-frontend:
+  #   build: ./Frontend/
+  #   container_name: icecream-frontend
+  #   ports:
+  #     - "9001:9001"
+  # control-center:
+  #   image: confluentinc/cp-enterprise-control-center:5.2.1
+  #   hostname: control-center
+  #   container_name: control-center
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #     - schema-registry
+  #     - kafka-connect
+  #     # - ksql-server
+  #   ports:
+  #     - "9021:9021"
+  #   environment:
+  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:29092'
+  #     CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+  #     CONTROL_CENTER_CONNECT_CLUSTER: 'kafka-connect:28083'
+  #     # CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
+  #     # CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://localhost:8088"
+  #     CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
+  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+  #     CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+  #     PORT: 9021
+
+  # kafka-connect:
+  #   image: confluentinc/cp-kafka-connect:5.2.1
+  #   hostname: kafka-connect
+  #   container_name: kafka-connect
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #     - schema-registry
+  #     - postgres
+  #   ports:
+  #     - "28083:28083"
+  #   volumes:
+  #     - "/tmp/docker-kafkaconnect/file:/tmp/docker-kafkaconnect"
+  #     - "/tmp/docker-kafkaconnect/jars:/etc/kafka-connect/jars"
+  #   environment:
+  #     CONNECT_BOOTSTRAP_SERVERS: 'kafka:29092'
+  #     CONNECT_REST_PORT: 28083
+  #     CONNECT_GROUP_ID: 'docker-kafkaconnect'
+  #     CONNECT_CONFIG_STORAGE_TOPIC: 'docker-kafkaconnect-config'
+  #     CONNECT_OFFSET_STORAGE_TOPIC: 'docker-kafkaconnect-offsets'
+  #     CONNECT_STATUS_STORAGE_TOPIC: 'docker-kafkaconnect-status'
+  #     CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.storage.StringConverter'
+  #     CONNECT_VALUE_CONVERTER: 'io.confluent.connect.avro.AvroConverter'
+  #     CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+  #     CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+  #     CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+  #     CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+  #     CONNECT_REST_ADVERTISED_HOST_NAME: 'kafka-connect'
+  #     CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+  #     CONNECT_PLUGIN_PATH: /usr/share/java,/etc/kafka-connect/jars
+  # ksql-server:
+  #   image: confluentinc/cp-ksql-server:5.2.1
+  #   hostname: ksql-server
+  #   container_name: ksql-server
+  #   links:
+  #     - kafka
+  #   ports:
+  #     - "8088:8088"
+  #   environment:
+  #     KSQL_CONFIG_DIR: "/etc/ksql"
+  #     KSQL_LOG4J_OPTS: "-Dlog4j.configuration=file:/etc/ksql/log4j-rolling.properties"
+  #     KSQL_BOOTSTRAP_SERVERS: "kafka:29092"
+  #     KSQL_HOST_NAME: ksql-server
+  #     KSQL_APPLICATION_ID: "cp-all-in-one"
+  #     KSQL_LISTENERS: "http://0.0.0.0:8088"
+  #     KSQL_CACHE_MAX_BYTES_BUFFERING: 0
+  #     # KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+  #     KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+  #     KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+  # issue-scanner:
+  #   build: ../../../issue-scanner
+  #   container_name: issue-scanner
+  #   command: java -Xmx400m -Xms400m  -jar issue-scanner.jar
+  #   depends_on:
+  #     - redis
+  #     - kafka
+  #   environment:
+  #     SPRING_KAFKA_BOOTSTRAPSERVERS: 'kafka:29092'
+  #     REDIS_SERVER: 'redis:6379'
+  #   ports:
+  #     - "8080:8080"
+  # issue-scanner-jobtask:
+  #   build: ../../../issue-scanner
+  #   container_name: issue-scanner-jobtask
+  #   command: java -cp issue-scanner.jar -Dloader.main=com.unified.platform.scanner.ScannerApp org.springframework.boot.loader.PropertiesLauncher kafka:29092 redis:6379
+  #   depends_on:
+  #     - kafka
+  #     - redis
+  #     - mysql
+  #   environment:
+  #     SPRING_KAFKA_BOOTSTRAPSERVERS: 'kafka:29092'
+  #     REDIS_SERVER: 'redis:6379'
+  # collection-engine-generator:
+  #   build: ../../../Collection-Engine/
+  #   command: java -cp collection-engine.jar com.unified.platform.collectionengine.RunTaskGenerator
+  #   depends_on:
+  #     - kafka
+  #     - redis
+  #     - mysql
+  #   environment:
+  #     MYSQL_DATABASE_CONNECTION: 'mysql:3306'
+  #     KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
+  #     REDIS_SERVER: 'redis:6379'
+  # collection-engine-consumer-generator:
+  #   build: ../../../Collection-Engine/
+  #   container_name: collection-engine-consumer-generator
+  #   command: java -cp collection-engine.jar com.unified.platform.collectionengine.RunConsumingTaskGenerator
+  #   depends_on:
+  #     - kafka
+  #     - redis
+  #     - mysql
+  #   environment:
+  #     MYSQL_DATABASE_CONNECTION: 'mysql:3306'
+  #     KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
+  #     REDIS_SERVER: 'redis:6379'
+  # collection-engine-executor:
+  #   build: ../../../Collection-Engine/
+  #   container_name: collection-engine-executor
+  #   command: java -DsplitEvents=true -cp collection-engine.jar com.unified.platform.collectionengine.RunTaskExecutor
+  #   depends_on:
+  #     - kafka
+  #     - redis
+  #     - mysql
+  #   environment:
+  #     MYSQL_DATABASE_CONNECTION: 'mysql:3306'
+  #     KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
+  #     REDIS_SERVER: 'redis:6379'
+  # collection-engine-deferer:
+  #   build: ../../../Collection-Engine/
+  #   container_name: collection-engine-deferer
+  #   command: java -DsplitEvents=true -cp collection-engine.jar com.unified.platform.collectionengine.RunDeferredTaskMonitor
+  #   depends_on:
+  #     - kafka
+  #     - redis
+  #     - mysql
+  #   environment:
+  #     MYSQL_DATABASE_CONNECTION: 'mysql:3306'
+  #     KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
+  #     REDIS_SERVER: 'redis:6379'
+networks:
+  icecream_app_net:
+    driver: bridge
+    ipam:
+      config:
+        - driver: default
+          subnet: 172.13.243.0/21
+          ip_range: 172.13.243.0/24
+          gateway: 172.13.243.0
+volumes:
+  "icecream_backend: /usr/app/Icecream-backend"

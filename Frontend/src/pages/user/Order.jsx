@@ -54,9 +54,7 @@ class Order extends React.Component {
         setNewCartService(arr);
         this.setState({
             orders:arr,
-            totalPrice: arr.map(value=>(value.price*value.quantity)).reduce((accumulator, currentVal) => {
-                return accumulator+currentVal;
-            }).toFixed(3)
+            totalPrice: costOfCartService()
         });
     }
 
@@ -76,9 +74,7 @@ class Order extends React.Component {
         setNewCartService(arr);
         this.setState({
             orders:arr,
-            totalPrice: arr.map(value=>(value.price*value.quantity)).reduce((accumulator, currentVal) => {
-                return accumulator+currentVal;
-            }).toFixed(3)
+            totalPrice: costOfCartService()
         });
     }
 
@@ -195,14 +191,10 @@ class Order extends React.Component {
                 </button>
                 </React.Fragment>) : null
                 }   
-                {this.state.postOrder && (
+                { this.state.postOrder && this.state.postOrderList && (
                 <div className="alert alert-success" role="alert" >
                     Create order successfully
-                </div>)}
-                {this.state.postOrderList && (
-                <div className="alert alert-success" role="alert" >
-                    Create order detail list successfully
-                </div>)}
+                </div>) }
             </div>
         </div>
     </div>

@@ -5,8 +5,8 @@ import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 
 class OrderTuple extends React.Component {
-    delete = () => {
-        baseUrl.delete(`/orders/${this.props.obj.id}`, {headers: authHeader()})
+    delete = async () => {
+        await baseUrl.delete(`/orders/${this.props.obj.id}`, {headers: authHeader()})
             .then(() => window.location.reload())
             .catch(err => console.log(err));
     }

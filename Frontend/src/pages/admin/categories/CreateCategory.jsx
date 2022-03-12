@@ -10,12 +10,13 @@ class CreateCategory extends React.Component {
         super(props);
         this.state = {
             name: '',
-            successful: false
+            successful: false,
+            warning:false
         }
     }
 
     componentDidUpdate(){
-        setTimeout(() => this.setState({successful: false}), 5000);
+        setTimeout(() => this.setState({successful: false, warning: false}), 7500);
       }
     submitButtonHandle = async (e) => {
         e.preventDefault();
@@ -23,17 +24,22 @@ class CreateCategory extends React.Component {
         const pkg = {
             name: this.state.name
         };
+        if(this.state.name.length<200 || this.state.name.length>2){
         
-        await baseUrl.post('/categories', pkg, {headers: authHeader()})
-            .then(() => {
-                this.setState({
-                    successful: true,
-                    name:""
+            await baseUrl.post('/categories', pkg, {headers: authHeader()})
+                .then(() => {
+                    this.setState({
+                        successful: true,
+                        name:""
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
                 });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        }
+        else {
+            this.setState({warning:true});
+        }
     }
 
     backButtonHandle = (e) => {
@@ -48,7 +54,7 @@ class CreateCategory extends React.Component {
         return (
         <div className="container">
             <div style={{marginTop: 10}}>
-                <h3>Add New FAQ</h3>
+                <h3>Add New Category</h3>
                     <div className="form-group">
                         <label>Category name: </label>
                         <input type="text" className="form-control"
@@ -67,6 +73,10 @@ class CreateCategory extends React.Component {
                     {this.state.successful && (
                     <div className="alert alert-success" role="alert" >
                         Post data successfully
+                    </div>)}
+                    {this.state.warning && (
+                    <div className="alert alert-danger" role="alert" >
+                        String not qualified
                     </div>)}
             </div>
         </div>

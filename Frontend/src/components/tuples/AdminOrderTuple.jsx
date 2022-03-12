@@ -1,13 +1,12 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
 
 import authHeader from "services/authHeader.js";
 import baseUrl from "baseUrl.js";
 
 class AdminOrderTuple extends React.Component {
-    delete = () => {
-        baseUrl.delete(`/orders/${this.props.obj.id}`, {headers: authHeader()})
+    delete = async () => {
+        await baseUrl.delete(`/orders/${this.props.obj.id}`, {headers: authHeader()})
             .then(() => console.log('Deleted'))
             .catch(err => console.log(err));
         window.location.reload();
