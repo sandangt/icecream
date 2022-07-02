@@ -17,21 +17,17 @@ HELP.md
 # Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-
 # OS X - Desktop Services Store
-# =============================
 .DS_Store
 .mvn/
+.gradle/
 
 # IDE - Eclipse
-# =============
 .settings/
 .classpath
 .project
 
-
 # IDE - IntelliJ
-# ==============
 .idea/
 *.iws
 *.iml
@@ -45,7 +41,6 @@ hs_err_pid*
 .settings/
 .springBeans
 .sts4-cache
-
 
 ### NetBeans ###
 /nbproject/private/
@@ -61,9 +56,6 @@ build/
 .vscode/
 .apt_generated/
 .apt_generated_tests/
-
-# Others
-# ======
 
 # Backup folder
 .bak/
