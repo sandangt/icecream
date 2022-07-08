@@ -1,0 +1,69 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Folders
+_obj
+_test
+/src
+/bin
+/pkg
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+_testmain.go
+
+*.test
+*.prof
+
+# Vim
+*.swp
+
+# Vagrant
+.vagrant
+/Vagrantfile
+
+# IntelliJ Ignores
+.idea/
+atlassian-ide-plugin.xml
+*.iml
+
+# Apple ignores
+.DS_Store
+
+supervisor.conf-local
+
+# Vim Stuff
+/tags
+*.un~
+
+# Debugging Stuff
+/debug
+/.dbg_history
+
+# Golang test coverage files
+lint.txt
+*.coverprofile
+*.coverprofile.*
+coverage.raw
+coverage.xml
+coverage.html
+
+# JUnit test report files
+*.xml
+
+# Visual Studio code
+.vscode/
+
+vendor/
+
+# Graphql Ignores
+_resolverTemplate.go
