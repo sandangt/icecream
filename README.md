@@ -2,7 +2,7 @@
 ## Technologies and frameworks:
 - Frontend: 
 	- ReactJS 18
-	- NodeJS v18
+	- NodeJS v16.15.1
 - Backend: 
 	- Java 17
 	- GoLang 1.18

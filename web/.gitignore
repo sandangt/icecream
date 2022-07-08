@@ -11,6 +11,7 @@ build/
 /public/css/
 /public/fonts/
 .env
+.envrc
 .eslintcache
 .nyc_output
 .nvmrc
