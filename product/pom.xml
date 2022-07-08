@@ -1,137 +1,154 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.NashTech</groupId>
-  <artifactId>Icecream</artifactId>
-  <version>1.0</version>
-  
-	  <parent>
-	   <groupId>org.springframework.boot</groupId>
-	   <artifactId>spring-boot-starter-parent</artifactId>
-	   <version>2.4.0</version>
-	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.icecream</groupId>
+	<artifactId>ProductService</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
 
 	<properties>
-	   <java.version>1.8</java.version>
-	   <junit.version>4.13.1</junit.version>
-	   <springfox.version>3.0.0</springfox.version>
-	   <openapi.version>1.5.2</openapi.version>
+		<java.version>17</java.version>
+		<springframework.version>2.7.1</springframework.version>
+		<log4j.version>2.17.2</log4j.version>
+		<postgresql.version>42.4.0</postgresql.version>
+		<guava.version>31.1-jre</guava.version>
+		<gson.version>2.9.0</gson.version>
+		<jjwt.version>0.9.1</jjwt.version>
+		<flyway.version>8.5.13</flyway.version>
 	</properties>
 
-	<dependencies>
+  	<parent>
+	   <groupId>org.springframework.boot</groupId>
+	   <artifactId>spring-boot-starter-parent</artifactId>
+	   <version>2.7.1</version>
+		<relativePath/>
+	</parent>
 
+	<!--  ====================================================================================================  -->
+	<!--                                                DEPENDENCY                                              -->
+	<!--  ====================================================================================================  -->
+	<dependencies>
+		<!--  *************************  -->
+		<!--  SPRING BOOT                -->
+		<!--  *************************  -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat</groupId>
+					<artifactId>tomcat-jdbc</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<!--  *************************  -->
+		<!--  3RD			             -->
+		<!--  *************************  -->
 		<dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava</artifactId>
-		    <version>30.0-jre</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
-		
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-        </dependency>
-        
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
+			<version>${jjwt.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
 		<dependency>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>hamcrest</artifactId>
-		    <scope>test</scope>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>${flyway.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+		<!--  *************************  -->
+		<!--  TEST                       -->
+		<!--  *************************  -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-data-redis</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
-		<dependency>
-		    <groupId>redis.clients</groupId>
-		    <artifactId>jedis</artifactId>
-	    </dependency>
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
-		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
-		    <scope>test</scope>
-		    <version>${junit.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
-		<dependency>
-		    <groupId>org.springdoc</groupId>
-		    <artifactId>springdoc-openapi-ui</artifactId>
-		    <version>${openapi.version}</version>
-		</dependency>
-		
-	
 	</dependencies>
-
+	<!--  ====================================================================================================  -->
+	<!--                                                BUILD                                                	-->
+	<!--  ====================================================================================================  -->
 	<build>
 	   <plugins>
-		      <plugin>
-		         <groupId>org.springframework.boot</groupId>
-		         <artifactId>spring-boot-maven-plugin</artifactId>
-		      </plugin>
+		   <plugin>
+			   <groupId>org.springframework.boot</groupId>
+			   <artifactId>spring-boot-maven-plugin</artifactId>
+			   <version>${springframework.version}</version>
+		   </plugin>
 	        <plugin>
 	          <groupId>org.apache.maven.plugins</groupId>
 	          <artifactId>maven-surefire-plugin</artifactId>
 	        </plugin>
 	   </plugins>
 	</build>
-
     <!--  ====================================================================================================  -->
     <!--                                                PROFILES                                                -->
     <!--  ====================================================================================================  -->
-
     <profiles>
-
-        <profile>
-            <id>docker</id>
-            <properties>
-                <profile.name>docker</profile.name>
-            </properties>
-        </profile>
-
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<profile.name>dev</profile.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>stage</id>
+			<properties>
+				<profile.name>stage</profile.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profile.name>prod</profile.name>
+			</properties>
+		</profile>
     </profiles>
-	
 </project>

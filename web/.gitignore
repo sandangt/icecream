@@ -23,22 +23,9 @@ package-*
 # Vim temp files
 *~
 
-
 # OS X - Desktop Services Store
 # =============================
 .DS_Store
-
-
-# IDE - IntelliJ
-# ==============
-.bak/
-.idea/
-*.iml
-
-
-# IDE - TernJS
-# ============
-.tern-project
 
 # IDE - VSCode
 # ============
