@@ -5,5 +5,5 @@ insert_final_newline = true
 charset = utf-8
 indent_style = tab
 indent_size = 4
-[{*.md, *.yml, *.properties, *.json}]
+[{*.md, *.yml,*.yaml, *.properties, *.json}]
 indent_size = 2

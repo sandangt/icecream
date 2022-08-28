@@ -1,20 +1,21 @@
 version: '3'
 
 volumes:
-  postgresql_volume:
+  icecream-postgresql-volume:
 
 networks:
   icecream-network:
 
 services:
   icecream-postgresql:
-    image: postgres:14.4
     container_name: icecream-postgresql
+    build:
+      context: .
+      dockerfile: postgresql/Dockerfile
     ports:
       - ${ICECREAM_POSTGRESQL_PORT}:5432
     volumes:            
-      - postgresql_volume:/var/lib/postgresql/data
-      - ./postgresql:/docker-entrypoint-initdb.d
+      - icecream-postgresql-volume:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${ICECREAM_POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${ICECREAM_POSTGRESQL_PASSWORD} 
