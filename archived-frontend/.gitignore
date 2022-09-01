@@ -10,6 +10,8 @@ build/
 /node_modules/
 /public/css/
 /public/fonts/
+.env
+.envrc
 .eslintcache
 .nyc_output
 .nvmrc
@@ -18,7 +20,6 @@ linter
 npm-*
 yarn-*
 package-*
-.envrc
 
 # Vim temp files
 *~

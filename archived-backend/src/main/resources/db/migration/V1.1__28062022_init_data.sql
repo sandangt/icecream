@@ -7,10 +7,10 @@ insert into categories (name) values ('Mathematics');
 insert into categories (name) values ('Computer science');
 insert into categories (name) values ('Economics');
 
-insert into users (username, email, password, status) values ('SanDang', 'sandang@hotmail.com', '1234', '1');
-insert into users (username, email, password, status) values ('JohnDoe', 'johndoe@gmail.com', '1234', '1');
-insert into users (username, email, password, status) values ('Socrates', 'socrates@yahoo.com', '1234', '1');
-insert into users (username, email, password, status) values ('DavidBowie', 'Bowie@gmail.com', '1234', '1');
+insert into users (username, email, password, status) values ('SanDang', 'sandang@hotmail.com', '$2a$12$HIJkysemyI0QeVx3Qu4kdOQcdxe3p5hUo3WhGxXtNpy8W18kqgVLi', '1');
+insert into users (username, email, password, status) values ('JohnDoe', 'johndoe@gmail.com', '$2a$12$HIJkysemyI0QeVx3Qu4kdOQcdxe3p5hUo3WhGxXtNpy8W18kqgVLi', '1');
+insert into users (username, email, password, status) values ('Socrates', 'socrates@yahoo.com', '$2a$12$HIJkysemyI0QeVx3Qu4kdOQcdxe3p5hUo3WhGxXtNpy8W18kqgVLi', '1');
+insert into users (username, email, password, status) values ('DavidBowie', 'Bowie@gmail.com', '$2a$12$HIJkysemyI0QeVx3Qu4kdOQcdxe3p5hUo3WhGxXtNpy8W18kqgVLi', '1');
 
 insert into user_role (user_id, role_id) values ('1', '1');
 insert into user_role (user_id, role_id) values ('1', '2');
