@@ -27,10 +27,6 @@ _testmain.go
 # Vim
 *.swp
 
-# Vagrant
-.vagrant
-/Vagrantfile
-
 # IntelliJ Ignores
 .idea/
 atlassian-ide-plugin.xml
@@ -67,3 +63,7 @@ vendor/
 
 # Graphql Ignores
 _resolverTemplate.go
+
+# Project
+!doc/**
+/gateway

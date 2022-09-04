@@ -1,0 +1,23 @@
+server:
+  port: ${PRODUCT_PORT:8080}
+
+spring:
+  application:
+    name: icecream product service
+  datasource:
+    url: jdbc:postgresql://${ICECREAM_POSTGRESQL_HOST}:${ICECREAM_POSTGRESQL_PORT}/${ICECREAM_POSTGRESQL_PRODUCT_DB}
+    username: ${ICECREAM_POSTGRESQL_USER}
+    password: ${ICECREAM_POSTGRESQL_PASSWORD}
+    driverClassName: org.postgresql.Driver
+    spring:
+      jpa:
+        hibernate:
+          ddl-auto: true
+        properties:
+          show_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          format_sql: true
+  security:
+    user:
+      name: sandang
+      password: sandang

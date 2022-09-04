@@ -1,0 +1,55 @@
+{
+  "name": "icecream_storefront",
+  "version": "1.0.0",
+  "author": "SanDang",
+  "description": "Icecream web store",
+  "main": "./src/index.js",
+  "scripts": {
+    "format-all": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint": "eslint -c .eslintrc.json 'src/**/*.{js,jsx,ts,tsx}'",
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "clean-build": "rm -rf build"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.3",
+    "@reduxjs/toolkit": "^1.8.5",
+    "axios": "^0.27.2",
+    "prop-types": "^15.7.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.7.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

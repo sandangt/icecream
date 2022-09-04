@@ -2,7 +2,7 @@
   "name": "icecream_backoffice",
   "version": "1.0.0",
   "author": "SanDang",
-  "description": "Icecream back office",
+  "description": "Icecream back office administration",
   "main": "./src/index.js",
   "scripts": {
     "format-all": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",

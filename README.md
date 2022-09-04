@@ -2,14 +2,13 @@
 ## Technologies and frameworks:
 - Frontend: 
 	- ReactJS 18
-	- NodeJS v16.15.1
+	- NodeJS v16.16.0
 - Backend: 
 	- Java 17
-	- GoLang 1.18
-	- Python 3.10
+	- GoLang 1.19
+	- Python 3.10.6
 - Database: 
 	- PostgreSQL 14
-	- Neo4j 4.4
 	- MongoDB 4.2
 - Caching:
 	- Redis 7.0

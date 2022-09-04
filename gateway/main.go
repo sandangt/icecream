@@ -1,13 +1,21 @@
 package main
 
 import (
-	"icecream/gateway/app/route"
+	"fmt"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"icecream/gateway/app/route"
+	"icecream/gateway/app/setting"
 )
 
+func runServer() {
+	server := &http.Server{
+		Addr:    fmt.Sprintf("%s:%s", setting.HOST, setting.PORT),
+		Handler: route.Router(),
+	}
+	server.ListenAndServe()
+}
+
 func main() {
-	router := gin.Default()
-	router.GET("/albums", route.Handler)
-	router.Run(":8080")
+	runServer()
 }
