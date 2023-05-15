@@ -1,0 +1,29 @@
+server:
+  http2:
+    enabled: true
+  port: ${GATEWAY_PORT}
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: Icecream Gateway Service
+    version: 0.1.0
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+      allowed-methods: GET,POST
+      max-age: 3600
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    schema-registry-server: http://${SCHEMA_REGISTRY_HOST}:${SCHEMA_REGISTRY_PORT}
+
+module:
+  asset:
+    grpcUrl: ${PRODUCT_GRPC_HOST}:${PRODUCT_GRPC_PORT}
+    httpUrl: ${PRODUCT_PROTOCOL}://${PRODUCT_HOST}:${PRODUCT_PORT}
+
+piratereel:
+  services:
+    asset: ${PRODUCT_PROTOCOL}://${PRODUCT_HOST}:${PRODUCT_PORT}

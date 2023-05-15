@@ -1,0 +1,11 @@
+{
+  "name": "storefront",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev -p ${STOREFRONT_PORT}",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'"
+  }
+}

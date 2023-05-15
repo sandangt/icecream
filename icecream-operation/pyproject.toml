@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "icecream-operation"
+version = "0.1.0"
+description = ""
+authors = ["San Dang <dangthaisan@hotmail.com>"]
+readme = "README.md"
+packages = [{include = "icecream_operation"}]
+
+[tool.poetry.dependencies]
+python = "3.11.3"
+pandas = "2.0.1"
+numpy = "1.24.3"
+sqlalchemy = "2.0.13"
+psycopg = "3.1.9"
+httpx = "0.24.0"
+alembic = "1.10.4"
+confluent-kafka = "2.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

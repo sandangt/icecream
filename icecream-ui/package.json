@@ -1,0 +1,44 @@
+{
+  "name": "icecream-ui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "UI for icecream project",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "@emotion/cache": "11.11.0",
+    "@emotion/react": "11.11.0",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.11.16",
+    "@mui/material": "5.12.3",
+    "@next/font": "13.4.1",
+    "lerna": "6.6.2",
+    "next": "13.4.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.1.0",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-react": "^1.1.7",
+    "prettier": "^2.8.8",
+    "typescript": "5.0.4"
+  },
+  "scripts": {
+    "storefront:dev": "lerna run --parallel --scope=storefront dev",
+    "storefront:build": "lerna run --parallel --scope=storefront build --include-dependencies",
+    "storefront:start": "lerna run --parallel --scope=storefront start",
+    "backoffice:dev": "lerna run --parallel --scope=backoffice dev",
+    "backoffice:build": "lerna run --parallel --scope=backoffice build --include-dependencies",
+    "backoffice:start": "lerna run --parallel --scope=backoffice start",
+    "format": "lerna run --parallel format"
+  }
+}

@@ -1,1 +1,22 @@
-!.envrc
+.direnv/
+node_modules/
+.mvn/
+target/
+.gradle/
+__pycache__/
+env/
+.build/
+build/
+dist/
+lib/
+tmp/
+pkg/
+bin/
+target/
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*~
+*.swp
