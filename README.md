@@ -16,7 +16,7 @@
 - Backend: 
 	- eclipse IDE >> import maven project trỏ tới thư mục Backend
 	- Run as >> Java Application >> Search file Application.java
-	- Quá trình start up của ứng dụng sẽ thành công khi có dòng chữ **Core data loaded** !["Core data loaded"](guide.png)
+	- Quá trình start up của ứng dụng sẽ thành công khi có dòng chữ **Core data loaded** !["Core data loaded"](wiki/guide.png)
 - Frontend: 
 ```bash
 $ cd Frontend
