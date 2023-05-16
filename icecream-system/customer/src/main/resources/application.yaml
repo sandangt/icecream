@@ -1,22 +1,22 @@
 server:
   http2:
     enabled: true
-  port: ${CART_PORT}
+  port: ${CUSTOMER_PORT}
   error:
     include-message: always
 
 grpc:
-  port: ${CART_GRPC_PORT}
-  host: ${CART_GRPC_HOST}
+  port: ${CUSTOMER_GRPC_PORT}
+  host: ${CUSTOMER_GRPC_HOST}
 
 spring:
   application:
-    name: Icecream Cart Service
+    name: Icecream Customer Service
     version: 0.1.0
   datasource:
     username: ${POSTGRESQL_USER}
     password: ${POSTGRESQL_PASSWORD}
-    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_CART_DB}
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_CUSTOMER_DB}
   jpa:
     properties:
       hibernate:

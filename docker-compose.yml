@@ -100,3 +100,25 @@ services:
       PORT: 9021
     networks:
       - icecream-network
+
+  identity:
+    image: quay.io/keycloak/keycloak:21.1
+    hostname: identity
+    container_name: icecream-identity
+    command: [ 'start-dev --import-realm' ]
+    ports:
+      - "${IDENTITY_PORT}:80"
+    environment:
+      KEYCLOAK_ADMIN: ${KC_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+      KC_PROXY: passthrough
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgresql:5432/${POSTGRESQL_IDENTITY_DB}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_HTTP_PORT: 80
+    volumes:
+      - ./piratereel-system/identity/data/import:/opt/keycloak/data/import
+      - ./piratereel-system/identity/themes:/opt/keycloak/themes
+    networks:
+      - icecream-network
