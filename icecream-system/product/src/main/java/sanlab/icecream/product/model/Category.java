@@ -36,7 +36,7 @@ public class Category extends AbstractAuditEntity {
     private String metaKeyword;
     private String metaDescription;
 
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Product> productList;
 
     private UUID mediaId;

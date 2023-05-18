@@ -1,7 +1,5 @@
 package sanlab.icecream.order.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +35,7 @@ public class OrderItem extends AbstractAuditEntity {
 
     private Long productId;
     private String productName;
-    private BigDecimal productPrice;
+    private Double productPrice;
 
     @Override
     public boolean equals(Object o) {

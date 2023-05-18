@@ -30,7 +30,7 @@ public class Feedback extends AbstractAuditEntity {
     private String content;
     private Float ratingStart;
 
-    private Long customerId;
+    private String userId;
     private Long productId;
     private String productName;
 

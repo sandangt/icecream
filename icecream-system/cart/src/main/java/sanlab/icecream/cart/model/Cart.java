@@ -28,10 +28,10 @@ public class Cart extends AbstractAuditEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartItem> cartItemList;
 
-    private Long customerId;
+    private String userId;
     private Long orderId;
 
     @Override

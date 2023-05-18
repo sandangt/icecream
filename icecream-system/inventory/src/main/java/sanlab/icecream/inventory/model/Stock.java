@@ -22,7 +22,6 @@ import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 @Entity(name = "Stock")
 @Table(name = "stock")
 public class Stock extends AbstractAuditEntity {
-
     @Id
     @SequenceGenerator(name = "stock_id_sequence", sequenceName = "stock_id_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_id_sequence")

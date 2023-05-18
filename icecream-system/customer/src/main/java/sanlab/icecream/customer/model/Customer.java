@@ -7,8 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,13 +29,17 @@ public class Customer extends AbstractAuditEntity {
     @SequenceGenerator(name = "customer_id_sequence", sequenceName = "customer_id_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_sequence")
     private Long id;
-    private String lastName;
+    private String email;
     private String phone;
+    private String lastName;
     private String firstName;
     private Boolean isActive;
 
-    private Long userId;
-    private Set<Long> addressIdList;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<CustomerAddress> customerAddressList;
+
+    private String userId;
+
 
     @Override
     public boolean equals(Object o) {

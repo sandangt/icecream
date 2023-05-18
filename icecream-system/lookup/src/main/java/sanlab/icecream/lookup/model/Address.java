@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
+
 
 @Builder
 @AllArgsConstructor
@@ -19,12 +21,11 @@ import lombok.Setter;
 @Setter
 @Entity(name = "Address")
 @Table(name = "address")
-public class Address {
+public class Address extends AbstractAuditEntity {
     @Id
-    @SequenceGenerator(name = "media_id_sequence", sequenceName = "media_id_sequence")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "media_id_sequence")
+    @SequenceGenerator(name = "address_id_sequence", sequenceName = "address_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_id_sequence")
     private Long id;
-    private String phone;
     private String address;
     private String city;
     private String country;

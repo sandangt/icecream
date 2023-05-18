@@ -1,7 +1,5 @@
 package sanlab.icecream.payment.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,11 +29,12 @@ public class Payment extends AbstractAuditEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_id_sequence")
     private Long id;
 
-    private BigDecimal amount;
-    private BigDecimal paymentFee;
+    private Double amount;
+    private Double paymentFee;
     private EPaymentMethod paymentMethod;
     private EPaymentStatus paymentStatus;
 
+    private String userId;
     private Long orderId;
 
     @Override

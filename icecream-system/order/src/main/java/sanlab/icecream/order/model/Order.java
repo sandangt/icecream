@@ -1,6 +1,5 @@
 package sanlab.icecream.order.model;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -28,7 +27,7 @@ import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 @Getter
 @Setter
 @Entity(name = "Order")
-@Table(name = "order")
+@Table(name = "order_tbl")
 public class Order extends AbstractAuditEntity {
 
     @Id
@@ -36,20 +35,19 @@ public class Order extends AbstractAuditEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_sequence")
     private Long id;
 
-    private String email;
     private String note;
-    private BigDecimal totalPrice;
-    private BigDecimal deliveryFee;
+    private Double totalPrice;
+    private Double deliveryFee;
     private EOrderStatus orderStatus;
     private EDeliveryMethod deliveryMethod;
     private EDeliveryStatus deliveryStatus;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order_tbl", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<OrderItem> orderItemList;
 
-    private Long customerId;
-    private String contactName;
-    private String phone;
+    private String userId;
+    private String customerName;
+    private String customerPhone;
     private Long paymentId;
     private Long addressId;
 
