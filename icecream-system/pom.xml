@@ -12,6 +12,12 @@
     <module>gateway</module>
     <module>sharedlib</module>
     <module>cart</module>
+    <module>customer</module>
+    <module>feedback</module>
+    <module>order</module>
+    <module>inventory</module>
+    <module>payment</module>
+    <module>lookup</module>
   </modules>
 
   <properties>

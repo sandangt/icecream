@@ -13,7 +13,7 @@ config.set_section_option(config_section, 'POSTGRES_HOST', POSTGRES['HOST'])
 config.set_section_option(config_section, 'POSTGRES_PORT', POSTGRES['PORT'])
 config.set_section_option(config_section, 'POSTGRES_USER', POSTGRES['USER'])
 config.set_section_option(config_section, 'POSTGRES_PASSWORD', POSTGRES['PASSWORD'])
-config.set_section_option(config_section, 'POSTGRES_DB', POSTGRES['ASSET_DB'])
+config.set_section_option(config_section, 'POSTGRES_DB', POSTGRES['PRODUCT_DB'])
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
