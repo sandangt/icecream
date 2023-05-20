@@ -1,5 +1,5 @@
 # Icecream shop
-This is not a regular shop, this is my shooting ground
+Just a regular shop
 # Techstack
 - Java 21
 - python 3.11

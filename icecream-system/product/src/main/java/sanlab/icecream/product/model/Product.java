@@ -29,7 +29,6 @@ public class Product extends AbstractAuditEntity {
     @SequenceGenerator(name = "product_id_sequence", sequenceName = "product_id_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_sequence")
     private Long id;
-
     private String name;
     private String briefDescription;
     private String description;

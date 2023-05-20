@@ -23,7 +23,3 @@ module:
   asset:
     grpcUrl: ${PRODUCT_GRPC_HOST}:${PRODUCT_GRPC_PORT}
     httpUrl: ${PRODUCT_PROTOCOL}://${PRODUCT_HOST}:${PRODUCT_PORT}
-
-piratereel:
-  services:
-    asset: ${PRODUCT_PROTOCOL}://${PRODUCT_HOST}:${PRODUCT_PORT}

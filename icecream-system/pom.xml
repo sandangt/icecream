@@ -37,6 +37,7 @@
     <postgresql.version>42.6.0</postgresql.version>
     <lombok.version>1.18.26</lombok.version>
     <guava.version>31.1-jre</guava.version>
+    <apache.commons.lang>3.12.0</apache.commons.lang>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -149,6 +150,11 @@
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
         <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${apache.commons.lang}</version>
       </dependency>
       <!--endregion-->
     </dependencies>

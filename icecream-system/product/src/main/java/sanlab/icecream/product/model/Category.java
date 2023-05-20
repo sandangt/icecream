@@ -1,6 +1,5 @@
 package sanlab.icecream.product.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +50,6 @@ public class Category extends AbstractAuditEntity {
         }
         return id != null && id.equals(((Category) o).id);
     }
-
     @Override
     public int hashCode() {
         return getClass().hashCode();

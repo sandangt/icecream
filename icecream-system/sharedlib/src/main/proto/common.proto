@@ -1,0 +1,9 @@
+syntax = "proto3";
+package icecream.sharedlib.proto;
+
+option java_multiple_files = true;
+
+message PageInfoRequest {
+    uint32 offset = 1;
+    uint32 limit = 2;
+}
