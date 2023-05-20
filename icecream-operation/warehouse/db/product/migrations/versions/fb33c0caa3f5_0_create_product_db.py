@@ -1,16 +1,17 @@
 """0 Create product db
 
-Revision ID: 987e9ce9e0a5
-Revises: 
-Create Date: 2023-05-18 11:22:07.013285
+Revision ID: fb33c0caa3f5
+Revises:
+Create Date: 2023-05-21 00:04:19.433659
 
 """
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.schema import Sequence, CreateSequence
 
 # revision identifiers, used by Alembic.
-revision = '987e9ce9e0a5'
+revision = 'fb33c0caa3f5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,7 +31,7 @@ def upgrade() -> None:
     sa.Column('created_by', sa.VARCHAR(length=500), nullable=True),
     sa.Column('last_modified_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('last_modified_by', sa.VARCHAR(length=500), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
     )
     op.create_table('product',
     sa.Column('id', sa.BIGINT(), nullable=False),
@@ -54,6 +55,8 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['category_id'], ['category.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.execute(CreateSequence(Sequence('product_id_sequence')))
+    op.execute(CreateSequence(Sequence('category_id_sequence')))
     # ### end Alembic commands ###
 
 

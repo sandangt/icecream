@@ -12,7 +12,8 @@ metadata = BaseModel.metadata
 
 class Product(BaseModel):
     __tablename__ = 'product'
-    id = Column(BIGINT, Sequence('product_id_sequence', start=1), primary_key=True)
+    product_id_sequence = Sequence('product_id_sequence', start=1)
+    id = Column(BIGINT, product_id_sequence, primary_key=True)
     name = Column(VARCHAR(1000), nullable=True)
     brief_description = Column(VARCHAR(500), nullable=True)
     description = Column(TEXT, nullable=True)
@@ -39,7 +40,8 @@ class Product(BaseModel):
 
 class Category(BaseModel):
     __tablename__ = 'category'
-    id = Column(BIGINT, Sequence('category_id_sequence', start=1), primary_key=True)
+    category_id_sequence = Sequence('category_id_sequence', start=1)
+    id = Column(BIGINT, category_id_sequence, primary_key=True)
     name = Column(VARCHAR(200), nullable=True)
     description = Column(TEXT, nullable=True)
     slug = Column(VARCHAR(200), nullable=True)
