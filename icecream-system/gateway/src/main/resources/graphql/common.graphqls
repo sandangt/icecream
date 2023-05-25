@@ -1,0 +1,8 @@
+input PageInfo {
+    offset: Int
+    limit: Int
+}
+
+type GenericResponse {
+    ok: Boolean
+}

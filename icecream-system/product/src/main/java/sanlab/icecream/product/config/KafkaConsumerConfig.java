@@ -3,8 +3,6 @@ package sanlab.icecream.product.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import icecream.sharedlib.proto.CategoryDTO;
-import icecream.sharedlib.proto.ProductDTO;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -15,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import sanlab.icecream.sharedlib.constant.KafkaGroup;
+import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
 @Configuration

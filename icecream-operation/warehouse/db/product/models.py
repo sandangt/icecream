@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from sqlalchemy import Sequence, Column, ForeignKey
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import VARCHAR, TIMESTAMP, BIGINT, INTEGER, TEXT, FLOAT
+from sqlalchemy.dialects.postgresql import VARCHAR, TIMESTAMP, BIGINT, INTEGER, TEXT, FLOAT, UUID
 
 BaseModel = declarative_base()
 metadata = BaseModel.metadata
@@ -29,7 +29,7 @@ class Product(BaseModel):
     category_id: Mapped[Optional[BIGINT]] = mapped_column(ForeignKey('category.id'))
     category: Mapped[Optional[Category]] = relationship(back_populates='product_list')
 
-    media_id = Column(BIGINT, nullable=True)
+    media_id = Column(UUID, nullable=True)
 
     created_on = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc))
     created_by = Column(VARCHAR(500), nullable=True)
@@ -51,7 +51,7 @@ class Category(BaseModel):
     product_list: Mapped[List[Product]] = \
         relationship(back_populates='category', collection_class=list, cascade='save-update')
 
-    media_id = Column(BIGINT, nullable=True)
+    media_id = Column(UUID, nullable=True)
 
     created_on = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc))
     created_by = Column(VARCHAR(500), nullable=True)

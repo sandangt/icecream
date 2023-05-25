@@ -1,17 +1,18 @@
 """0 Create product db
 
-Revision ID: fb33c0caa3f5
+Revision ID: 20dabf558224
 Revises:
-Create Date: 2023-05-21 00:04:19.433659
+Create Date: 2023-05-25 23:04:34.481934
 
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import Sequence
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.schema import Sequence, CreateSequence
+from sqlalchemy.sql.ddl import CreateSequence
 
 # revision identifiers, used by Alembic.
-revision = 'fb33c0caa3f5'
+revision = '20dabf558224'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,12 +27,12 @@ def upgrade() -> None:
     sa.Column('slug', sa.VARCHAR(length=200), nullable=True),
     sa.Column('meta_keyword', sa.VARCHAR(length=200), nullable=True),
     sa.Column('meta_description', sa.VARCHAR(length=500), nullable=True),
-    sa.Column('media_id', sa.BIGINT(), nullable=True),
+    sa.Column('media_id', sa.UUID(), nullable=True),
     sa.Column('created_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('created_by', sa.VARCHAR(length=500), nullable=True),
     sa.Column('last_modified_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('last_modified_by', sa.VARCHAR(length=500), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('product',
     sa.Column('id', sa.BIGINT(), nullable=False),
@@ -47,7 +48,7 @@ def upgrade() -> None:
     sa.Column('meta_keyword', sa.VARCHAR(length=200), nullable=True),
     sa.Column('meta_description', sa.VARCHAR(length=500), nullable=True),
     sa.Column('category_id', sa.BIGINT(), nullable=True),
-    sa.Column('media_id', sa.BIGINT(), nullable=True),
+    sa.Column('media_id', sa.UUID(), nullable=True),
     sa.Column('created_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('created_by', sa.VARCHAR(length=500), nullable=True),
     sa.Column('last_modified_on', postgresql.TIMESTAMP(timezone=True), nullable=False),

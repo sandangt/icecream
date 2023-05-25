@@ -1,5 +1,5 @@
 syntax = "proto3";
-package icecream.sharedlib.proto;
+package sanlab.icecream.sharedlib.proto;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
@@ -70,6 +70,6 @@ service ProductService {
     rpc getProductById(ProductRequest) returns (ProductResponse);
     rpc getProductListFromCategoryId(CategoryRequest) returns (ProductCollectionResponse);
     rpc getAllCategories(google.protobuf.Empty) returns (CategoryCollectionResponse);
-    rpc getCategoryByID(CategoryRequest) returns (CategoryResponse);
+    rpc getCategoryById(CategoryRequest) returns (CategoryResponse);
     rpc getCategoryFromProductId(ProductRequest) returns (CategoryResponse);
 }

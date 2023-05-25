@@ -47,7 +47,7 @@ def generate_fake_category(faker: Faker) -> Dict[str, Any]:
         'slug': category_name.replace(' ', '-'),
         'meta_keyword': ', '.join(faker.words(nb=2)),
         'meta_description': faker.paragraph(nb_sentences=3),
-        'media_id': None,
+        'media_id': faker.uuid4(),
         'created_by': 'seed generator',
         'last_modified_by': 'seed generator'
     })

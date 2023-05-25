@@ -11,13 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -35,10 +35,10 @@ public class Category extends AbstractAuditEntity {
     private String metaKeyword;
     private String metaDescription;
 
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Product> productList;
-
     private UUID mediaId;
+
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Product> productList;
 
     @Override
     public boolean equals(Object o) {

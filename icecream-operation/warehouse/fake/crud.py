@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from warehouse.db.product.models import Product, Category
 
 
-def fetch_values(value_generator: Callable, row_num: int):
+def _fetch_values(value_generator: Callable, row_num: int):
     chunk_size = 200
     insert_values = []
     current_chunk = row_num
@@ -20,7 +20,7 @@ def fetch_values(value_generator: Callable, row_num: int):
 
 
 def mass_insert_data(value_generator: Callable, row_num: int, db_session: Session):
-    fake_value_generator = fetch_values(value_generator, row_num)
+    fake_value_generator = _fetch_values(value_generator, row_num)
     for insert_values in fake_value_generator:
         db_session.add_all(insert_values)
 

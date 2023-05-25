@@ -1,0 +1,119 @@
+type Product {
+    id: ID
+    name: String
+    briefDescription: String
+    description: String
+    specification: String
+    sku: String
+    slug: String
+    price: Float
+    stockQuantity: Int
+    metaTitle: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+    createdOn: String
+    createdBy: String
+    lastModifiedOn: String
+    lastModifiedBy: String
+}
+
+type ProductResponse {
+    id: ID
+    name: String
+    briefDescription: String
+    description: String
+    specification: String
+    sku: String
+    slug: String
+    price: Float
+    stockQuantity: Int
+    metaTitle: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+    createdOn: String
+    createdBy: String
+    lastModifiedOn: String
+    lastModifiedBy: String
+    category: Category
+}
+
+input InsertProductRequest {
+    name: String!
+    briefDescription: String!
+    description: String!
+    specification: String!
+    sku: String!
+    slug: String!
+    price: Float!
+    stockQuantity: Int!
+    metaTitle: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+}
+
+input UpdateProductRequest {
+    id: ID!
+    name: String
+    briefDescription: String
+    description: String
+    specification: String
+    sku: String
+    slug: String
+    price: Float
+    stockQuantity: Int
+    metaTitle: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+}
+
+type Category {
+    id: ID
+    name: String
+    description: String
+    slug: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+    createdOn: String
+    createdBy: String
+    lastModifiedOn: String
+    lastModifiedBy: String
+}
+
+type CategoryResponse {
+    id: ID
+    name: String
+    description: String
+    slug: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+    createdOn: String
+    createdBy: String
+    lastModifiedOn: String
+    lastModifiedBy: String
+    productList: [Product]
+}
+
+input InsertCategoryRequest {
+    name: String!
+    description: String!
+    slug: String!
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+}
+
+input UpdateCategoryRequest {
+    id: ID!
+    name: String
+    description: String
+    slug: String
+    metaKeyword: String
+    metaDescription: String
+    mediaId: String
+}

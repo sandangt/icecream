@@ -2,21 +2,20 @@ package sanlab.icecream.product.service;
 
 import java.util.List;
 
-import icecream.sharedlib.proto.PageInfoRequest;
-import icecream.sharedlib.proto.ProductDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sanlab.icecream.product.exception.ErrorCode;
-import sanlab.icecream.product.mapper.ProductMapper;
+import sanlab.icecream.product.mapper.IMapper;
 import sanlab.icecream.product.model.Category;
 import sanlab.icecream.product.model.Product;
 import sanlab.icecream.product.repository.ICategoryRepository;
 import sanlab.icecream.product.repository.IProductRepository;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
+import sanlab.icecream.sharedlib.proto.PageInfoRequest;
+import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
 @Service
@@ -24,6 +23,7 @@ import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 public class ProductService {
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
+    private final IMapper mapper;
 
     public List<ProductDTO> getAllProducts(PageInfoRequest pageInfo) {
         Pageable page = PageRequest.of(
@@ -32,7 +32,7 @@ public class ProductService {
         );
         return productRepository.findAllByOrderByLastModifiedOnDesc(page)
             .stream()
-            .map(ProductMapper::modelToDTO)
+            .map(mapper.INSTANCE::modelToDTO)
             .toList();
     }
 
@@ -42,7 +42,7 @@ public class ProductService {
                 String.format("Product with id: %s not found", id), ErrorCode.PRODUCT_NOT_FOUND
             )
         );
-        return ProductMapper.modelToDTO(product);
+        return mapper.INSTANCE.modelToDTO(product);
     }
 
     @Transactional
@@ -54,15 +54,21 @@ public class ProductService {
         );
         return category.getProductList()
             .stream()
-            .map(ProductMapper::modelToDTO)
+            .map(mapper.INSTANCE::modelToDTO)
             .toList();
     }
 
     public void insertProduct(ProductDTO productDTO) {
-        throw new NotImplementedException();
+        productRepository.save(mapper.INSTANCE.DTOToModel(productDTO));
     }
 
-    public void updateProduct(ProductDTO productDTO) {
-        throw new NotImplementedException();
+    public void updateProduct(ProductDTO productDTO) throws ItemNotFoundException {
+        Product product = productRepository.findById(productDTO.getId())
+            .orElseThrow(() -> new ItemNotFoundException(
+                    String.format("Product with ID: %s not found", productDTO.getId()), ErrorCode.PRODUCT_NOT_FOUND
+                )
+            );
+        mapper.INSTANCE.updateProductFromDTO(productDTO, product);
+        productRepository.save(product);
     }
 }

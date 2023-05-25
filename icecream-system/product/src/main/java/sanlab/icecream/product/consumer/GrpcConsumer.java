@@ -3,23 +3,23 @@ package sanlab.icecream.product.consumer;
 import java.util.List;
 
 import com.google.protobuf.Empty;
-import icecream.sharedlib.proto.CategoryCollectionResponse;
-import icecream.sharedlib.proto.CategoryDTO;
-import icecream.sharedlib.proto.CategoryRequest;
-import icecream.sharedlib.proto.CategoryResponse;
-import icecream.sharedlib.proto.PageInfoRequest;
-import icecream.sharedlib.proto.ProductCollectionResponse;
-import icecream.sharedlib.proto.ProductDTO;
-import icecream.sharedlib.proto.ProductRequest;
-import icecream.sharedlib.proto.ProductResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.lognet.springboot.grpc.GRpcService;
 
-import icecream.sharedlib.proto.ProductServiceGrpc;
 import sanlab.icecream.product.service.CategoryService;
 import sanlab.icecream.product.service.ProductService;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
+import sanlab.icecream.sharedlib.proto.CategoryCollectionResponse;
+import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.CategoryRequest;
+import sanlab.icecream.sharedlib.proto.CategoryResponse;
+import sanlab.icecream.sharedlib.proto.PageInfoRequest;
+import sanlab.icecream.sharedlib.proto.ProductCollectionResponse;
+import sanlab.icecream.sharedlib.proto.ProductDTO;
+import sanlab.icecream.sharedlib.proto.ProductRequest;
+import sanlab.icecream.sharedlib.proto.ProductResponse;
+import sanlab.icecream.sharedlib.proto.ProductServiceGrpc;
 
 
 @GRpcService
@@ -77,7 +77,7 @@ public class GrpcConsumer extends ProductServiceGrpc.ProductServiceImplBase {
     }
 
     @Override
-    public void getCategoryByID(CategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
+    public void getCategoryById(CategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
         try {
             CategoryDTO category = categoryService.getCategoryById(request.getCategoryId());
             CategoryResponse response = CategoryResponse.newBuilder().setCategory(category).build();
