@@ -3,9 +3,11 @@ package sanlab.icecream.product.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +26,7 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.schema-registry-server}")
     private String schemaRegistryServerUrl;
 
-    private Map<String, Object> generateBasicConfig() {
+    private Map<String, Object> generateProtobufObjConfig() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServersUrl);
         properties.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryServerUrl);
@@ -35,11 +37,21 @@ public class KafkaConsumerConfig {
         return properties;
     }
 
+    private Map<String, Object> generateGenericObjConfig() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServersUrl);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaGroup.PRODUCT);
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class);
+        return properties;
+    }
+
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, ProductDTO> productListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ProductDTO> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
-        Map<String, Object> properties = generateBasicConfig();
+        Map<String, Object> properties = generateProtobufObjConfig();
         properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, ProductDTO.class.getName());
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
         return factory;
@@ -49,8 +61,17 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, CategoryDTO> categoryListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, CategoryDTO> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
-        Map<String, Object> properties = generateBasicConfig();
+        Map<String, Object> properties = generateProtobufObjConfig();
         properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, CategoryDTO.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, byte[]> relationshipListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, byte[]> factory =
+            new ConcurrentKafkaListenerContainerFactory<>();
+        Map<String, Object> properties = generateGenericObjConfig();
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
         return factory;
     }

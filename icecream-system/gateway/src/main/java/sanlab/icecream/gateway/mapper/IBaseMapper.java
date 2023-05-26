@@ -6,7 +6,7 @@ import java.time.ZoneOffset;
 import com.google.protobuf.Timestamp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import sanlab.icecream.sharedlib.datetime.DateTimeConverter;
+import sanlab.icecream.sharedlib.converter.DateTimeConverter;
 
 
 @Mapper

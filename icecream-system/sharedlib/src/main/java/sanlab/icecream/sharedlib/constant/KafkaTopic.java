@@ -1,11 +1,11 @@
 package sanlab.icecream.sharedlib.constant;
 
 public class KafkaTopic {
-    public static final String UPDATE_PRODUCT = "update_product";
-    public static final String INSERT_PRODUCT = "insert_product";
-    public static final String DELETE_PRODUCT = "delete_product";
-    public static final String UPDATE_CATEGORY = "update_category";
-    public static final String INSERT_CATEGORY = "insert_category";
-    public static final String DELETE_CATEGORY = "delete_category";
-    public static final String LABEL_PRODUCT = "label_product";
+    public static final String UPDATE_PRODUCT = "update-product";
+    public static final String INSERT_PRODUCT = "insert-product";
+    public static final String DELETE_PRODUCT = "delete-product";
+    public static final String UPDATE_CATEGORY = "update-category";
+    public static final String INSERT_CATEGORY = "insert-category";
+    public static final String DELETE_CATEGORY = "delete-category";
+    public static final String LABEL_PRODUCT = "label-product";
 }

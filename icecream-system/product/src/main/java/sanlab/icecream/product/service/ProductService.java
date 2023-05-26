@@ -1,6 +1,7 @@
 package sanlab.icecream.product.service;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +73,10 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void assignProductToCategory(Long productId, Long categoryId) throws ItemNotFoundException {
+    @Transactional
+    public void assignProductToCategory(Map<String, Long> relationshipMap) throws ItemNotFoundException {
+        Long productId = relationshipMap.get("productId");
+        Long categoryId = relationshipMap.get("categoryId");
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ItemNotFoundException(
                     String.format("Product with ID: %s not found", productId), ErrorCode.PRODUCT_NOT_FOUND
@@ -84,6 +88,7 @@ public class ProductService {
                     String.format("Category with ID: %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
                 )
             );
-        category.getProductList().add(product);
+        product.setCategory(category);
+        productRepository.save(product);
     }
 }

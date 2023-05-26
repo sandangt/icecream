@@ -10,4 +10,5 @@ type Mutation {
     updateProduct(product: UpdateProductRequest!): GenericResponse
     insertCategory(category: InsertCategoryRequest!): GenericResponse
     updateCategory(category: UpdateCategoryRequest!): GenericResponse
+    labelProduct(productId: Int!, categoryId: Int!): GenericResponse
 }

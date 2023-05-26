@@ -1,8 +1,10 @@
 package sanlab.icecream.gateway.repository.product;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import io.grpc.ManagedChannel;
 import io.grpc.StatusRuntimeException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import sanlab.icecream.gateway.viewmodel.PageInfoRequestVm;
 import sanlab.icecream.sharedlib.constant.GrpcChannel;
 import sanlab.icecream.sharedlib.constant.KafkaTopic;
+import sanlab.icecream.sharedlib.converter.ByteArrayConverter;
 import sanlab.icecream.sharedlib.proto.CategoryRequest;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
 import sanlab.icecream.sharedlib.proto.ProductCollectionResponse;
@@ -26,12 +29,15 @@ import sanlab.icecream.sharedlib.proto.ProductServiceGrpc;
 public class ProductRepository {
     private final ProductServiceGrpc.ProductServiceBlockingStub stub;
     private final KafkaTemplate<String, ProductDTO> productProducer;
+    private final KafkaTemplate<String, byte[]> relationshipProducer;
     public ProductRepository(
         @Qualifier(GrpcChannel.PRODUCT)ManagedChannel productChannel,
-        @Qualifier("product-producer") KafkaTemplate<String, ProductDTO> productProducer
+        @Qualifier("product-producer") KafkaTemplate<String, ProductDTO> productProducer,
+        @Qualifier("product-relationship-producer") KafkaTemplate<String, byte[]> relationshipProducer
     ) {
         this.stub = ProductServiceGrpc.newBlockingStub(productChannel);
         this.productProducer = productProducer;
+        this.relationshipProducer = relationshipProducer;
     }
 
     public Optional<List<ProductDTO>> getAllProducts(PageInfoRequestVm pageInfo) {
@@ -77,6 +83,14 @@ public class ProductRepository {
             KafkaTopic.UPDATE_PRODUCT,
             ZonedDateTime.now(ZoneOffset.UTC).toString(),
             messageValue
+        );
+    }
+
+    public void labelProduct(Map<String, Long> messageValue) throws IOException {
+        relationshipProducer.send(
+            KafkaTopic.LABEL_PRODUCT,
+            ZonedDateTime.now(ZoneOffset.UTC).toString(),
+            ByteArrayConverter.toByteArray(messageValue)
         );
     }
 }

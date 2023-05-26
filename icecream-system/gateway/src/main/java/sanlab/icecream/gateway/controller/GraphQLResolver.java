@@ -1,5 +1,6 @@
 package sanlab.icecream.gateway.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,16 @@ public class GraphQLResolver {
     @SchemaMapping(typeName="Mutation", field = "updateProduct")
     public ResponseVm updateProduct(@Argument("product") ProductVm product) {
         productService.updateProduct(product);
+        return new ResponseVm(true);
+    }
+
+    @SchemaMapping(typeName = "Mutation", field = "labelProduct")
+    public ResponseVm labelProduct(@Argument("productId") Long productId, @Argument("categoryId") Long categoryId) {
+        try {
+            productService.labelProduct(productId, categoryId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new ResponseVm(true);
     }
     // endregion

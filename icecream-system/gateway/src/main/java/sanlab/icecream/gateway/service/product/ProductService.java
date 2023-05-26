@@ -1,7 +1,11 @@
 package sanlab.icecream.gateway.service.product;
 
+import static java.util.Map.entry;
+
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,6 +58,15 @@ public class ProductService {
     public void updateProduct(ProductVm productVm) {
         ProductDTO productDTO = productMapper.INSTANCE.VmToDTO(productVm);
         productRepository.updateProduct(productDTO);
+    }
+
+    public void labelProduct(Long productId, Long categoryId) throws IOException {
+        productRepository.labelProduct(
+            Map.ofEntries(
+                entry("productId", productId),
+                entry("categoryId", categoryId)
+            )
+        );
     }
 
     // region Helper methods

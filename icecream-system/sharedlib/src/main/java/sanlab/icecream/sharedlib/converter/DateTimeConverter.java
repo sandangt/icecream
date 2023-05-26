@@ -1,4 +1,4 @@
-package sanlab.icecream.sharedlib.datetime;
+package sanlab.icecream.sharedlib.converter;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;

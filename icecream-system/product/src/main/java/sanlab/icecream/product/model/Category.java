@@ -37,7 +37,7 @@ public class Category extends AbstractAuditEntity {
 
     private UUID mediaId;
 
-    @OneToMany(mappedBy = "category", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Product> productList;
 
     @Override
