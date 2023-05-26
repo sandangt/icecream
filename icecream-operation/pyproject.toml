@@ -15,6 +15,7 @@ psycopg = "3.1.9"
 httpx = "0.24.0"
 alembic = "1.11.0"
 confluent-kafka = "2.1.0"
+faker = "18.9.0"
 
 
 [build-system]

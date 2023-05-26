@@ -1,0 +1,75 @@
+syntax = "proto3";
+package sanlab.icecream.sharedlib.proto;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "common.proto";
+
+option java_multiple_files = true;
+
+message ProductDTO {
+    optional uint64 id = 1;
+    optional string name = 2;
+    optional string briefDescription = 3;
+    optional string description = 4;
+    optional string specification = 5;
+    optional string sku = 6;
+    optional string slug = 7;
+    optional double price = 8;
+    optional uint64 stockQuantity = 9;
+    optional string metaTitle = 10;
+    optional string metaKeyword = 11;
+    optional string metaDescription = 12;
+    optional string mediaId = 13;
+    optional google.protobuf.Timestamp createdOn = 14;
+    optional string createdBy = 15;
+    optional google.protobuf.Timestamp lastModifiedOn = 16;
+    optional string lastModifiedBy = 17;
+}
+
+message ProductRequest {
+    uint64 productId = 1;
+}
+
+message ProductResponse {
+    ProductDTO product = 1;
+}
+
+message ProductCollectionResponse {
+    repeated ProductDTO productCollection = 1;
+}
+
+message CategoryDTO {
+    optional uint64 id = 1;
+    optional string name = 2;
+    optional string description = 3;
+    optional string slug = 4;
+    optional string metaKeyword = 5;
+    optional string metaDescription = 6;
+    optional string mediaId = 7;
+    optional google.protobuf.Timestamp createdOn = 8;
+    optional string createdBy = 9;
+    optional google.protobuf.Timestamp lastModifiedOn = 10;
+    optional string lastModifiedBy = 11;
+}
+
+message CategoryRequest {
+    uint64 categoryId = 1;
+}
+
+message CategoryResponse {
+    CategoryDTO category = 1;
+}
+
+message CategoryCollectionResponse {
+    repeated CategoryDTO categoryCollection = 1;
+}
+
+service ProductService {
+    rpc getAllProducts(PageInfoRequest) returns (ProductCollectionResponse);
+    rpc getProductById(ProductRequest) returns (ProductResponse);
+    rpc getProductListFromCategoryId(CategoryRequest) returns (ProductCollectionResponse);
+    rpc getAllCategories(google.protobuf.Empty) returns (CategoryCollectionResponse);
+    rpc getCategoryById(CategoryRequest) returns (CategoryResponse);
+    rpc getCategoryFromProductId(ProductRequest) returns (CategoryResponse);
+}

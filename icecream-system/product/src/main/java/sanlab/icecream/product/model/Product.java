@@ -11,13 +11,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,10 +26,9 @@ import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 @Table(name = "product")
 public class Product extends AbstractAuditEntity {
     @Id
-    @SequenceGenerator(name = "product_id_sequence", sequenceName = "product_id_sequence")
+    @SequenceGenerator(name = "product_id_sequence", sequenceName = "product_id_sequence", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_sequence")
     private Long id;
-
     private String name;
     private String briefDescription;
     private String description;
@@ -42,11 +41,11 @@ public class Product extends AbstractAuditEntity {
     private String metaKeyword;
     private String metaDescription;
 
+    private UUID mediaId;
+
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-
-    private UUID mediaId;
 
     @Override
     public boolean equals(Object o) {

@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from sqlalchemy import Sequence, Column, ForeignKey
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import VARCHAR, TIMESTAMP, BIGINT, INTEGER, TEXT, FLOAT
+from sqlalchemy.dialects.postgresql import VARCHAR, TIMESTAMP, BIGINT, INTEGER, TEXT, FLOAT, UUID
 
 BaseModel = declarative_base()
 metadata = BaseModel.metadata
@@ -12,7 +12,8 @@ metadata = BaseModel.metadata
 
 class Product(BaseModel):
     __tablename__ = 'product'
-    id = Column(BIGINT, Sequence('product_id_sequence', start=1), primary_key=True)
+    product_id_sequence = Sequence('product_id_sequence', start=1)
+    id = Column(BIGINT, product_id_sequence, primary_key=True)
     name = Column(VARCHAR(1000), nullable=True)
     brief_description = Column(VARCHAR(500), nullable=True)
     description = Column(TEXT, nullable=True)
@@ -28,7 +29,7 @@ class Product(BaseModel):
     category_id: Mapped[Optional[BIGINT]] = mapped_column(ForeignKey('category.id'))
     category: Mapped[Optional[Category]] = relationship(back_populates='product_list')
 
-    media_id = Column(BIGINT, nullable=True)
+    media_id = Column(UUID, nullable=True)
 
     created_on = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc))
     created_by = Column(VARCHAR(500), nullable=True)
@@ -39,7 +40,8 @@ class Product(BaseModel):
 
 class Category(BaseModel):
     __tablename__ = 'category'
-    id = Column(BIGINT, Sequence('category_id_sequence', start=1), primary_key=True)
+    category_id_sequence = Sequence('category_id_sequence', start=1)
+    id = Column(BIGINT, category_id_sequence, primary_key=True)
     name = Column(VARCHAR(200), nullable=True)
     description = Column(TEXT, nullable=True)
     slug = Column(VARCHAR(200), nullable=True)
@@ -49,7 +51,7 @@ class Category(BaseModel):
     product_list: Mapped[List[Product]] = \
         relationship(back_populates='category', collection_class=list, cascade='save-update')
 
-    media_id = Column(BIGINT, nullable=True)
+    media_id = Column(UUID, nullable=True)
 
     created_on = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc))
     created_by = Column(VARCHAR(500), nullable=True)
