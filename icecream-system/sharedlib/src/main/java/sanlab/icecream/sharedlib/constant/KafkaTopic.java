@@ -7,4 +7,5 @@ public class KafkaTopic {
     public static final String UPDATE_CATEGORY = "update_category";
     public static final String INSERT_CATEGORY = "insert_category";
     public static final String DELETE_CATEGORY = "delete_category";
+    public static final String LABEL_PRODUCT = "label_product";
 }

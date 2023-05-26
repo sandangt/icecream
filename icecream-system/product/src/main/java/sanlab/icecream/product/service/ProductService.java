@@ -71,4 +71,19 @@ public class ProductService {
         mapper.INSTANCE.updateProductFromDTO(productDTO, product);
         productRepository.save(product);
     }
+
+    public void assignProductToCategory(Long productId, Long categoryId) throws ItemNotFoundException {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ItemNotFoundException(
+                    String.format("Product with ID: %s not found", productId), ErrorCode.PRODUCT_NOT_FOUND
+                )
+            );
+
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new ItemNotFoundException(
+                    String.format("Category with ID: %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
+                )
+            );
+        category.getProductList().add(product);
+    }
 }
