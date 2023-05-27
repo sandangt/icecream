@@ -60,13 +60,12 @@ public class ProductService {
         productRepository.updateProduct(productDTO);
     }
 
-    public void labelProduct(Long productId, Long categoryId) throws IOException {
-        productRepository.labelProduct(
-            Map.ofEntries(
-                entry("productId", productId),
-                entry("categoryId", categoryId)
-            )
-        );
+    public void labelProduct(Long productId, Long categoryId) {
+        productRepository.labelProduct(productId, categoryId);
+    }
+
+    public void unlabelProduct(Long productId, Long categoryId) {
+        productRepository.unlabelProduct(productId, categoryId);
     }
 
     // region Helper methods

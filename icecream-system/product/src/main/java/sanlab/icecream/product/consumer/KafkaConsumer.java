@@ -1,8 +1,5 @@
 package sanlab.icecream.product.consumer;
 
-import java.io.IOException;
-import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -10,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import sanlab.icecream.product.service.CategoryService;
 import sanlab.icecream.product.service.ProductService;
 import sanlab.icecream.sharedlib.constant.KafkaTopic;
-import sanlab.icecream.sharedlib.converter.ByteArrayConverter;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
@@ -42,14 +39,7 @@ public class KafkaConsumer {
     }
 
     @KafkaListener(topics = KafkaTopic.LABEL_PRODUCT, containerFactory = "relationshipListenerContainerFactory")
-    public void labelProduct(ConsumerRecord<String, byte[]> payload) {
-        try {
-            Object deserializedPayload = ByteArrayConverter.toObject(payload.value());
-            if (deserializedPayload instanceof Map) {
-                productService.assignProductToCategory((Map<String, Long>) deserializedPayload);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void labelProduct(ConsumerRecord<String, ProductCategoryDTO> payload) {
+        productService.modifiedRelationship(payload.value());
     }
 }
