@@ -65,6 +65,12 @@ message CategoryCollectionResponse {
     repeated CategoryDTO categoryCollection = 1;
 }
 
+message ProductCategoryDTO {
+    uint64 productId = 1;
+    uint64 categoryId = 2;
+    bool label = 3;
+}
+
 service ProductService {
     rpc getAllProducts(PageInfoRequest) returns (ProductCollectionResponse);
     rpc getProductById(ProductRequest) returns (ProductResponse);

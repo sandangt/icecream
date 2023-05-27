@@ -14,7 +14,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 import sanlab.icecream.product.model.Category;
 import sanlab.icecream.product.model.Product;
-import sanlab.icecream.sharedlib.datetime.DateTimeConverter;
+import sanlab.icecream.sharedlib.converter.DateTimeConverter;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 

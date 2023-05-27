@@ -7,6 +7,7 @@ PRODUCT_TOPICS = {
     'UPDATE_CATEGORY': 'update-category',
     'INSERT_CATEGORY': 'insert-category',
     'DELETE_CATEGORY': 'delete-category',
+    'LABEL_PRODUCT': 'label-product'
 }
 
 PRODUCT_GROUP = 'product'

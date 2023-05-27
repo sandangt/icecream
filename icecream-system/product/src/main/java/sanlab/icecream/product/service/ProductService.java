@@ -13,8 +13,10 @@ import sanlab.icecream.product.model.Category;
 import sanlab.icecream.product.model.Product;
 import sanlab.icecream.product.repository.ICategoryRepository;
 import sanlab.icecream.product.repository.IProductRepository;
+import sanlab.icecream.sharedlib.exception.IllegalValueException;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
+import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
@@ -72,7 +74,10 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void assignProductToCategory(Long productId, Long categoryId) throws ItemNotFoundException {
+    public void modifiedRelationship(ProductCategoryDTO relationship) throws
+        ItemNotFoundException, IllegalValueException {
+        Long productId = relationship.getProductId();
+        Long categoryId = relationship.getCategoryId();
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ItemNotFoundException(
                     String.format("Product with ID: %s not found", productId), ErrorCode.PRODUCT_NOT_FOUND
@@ -84,6 +89,27 @@ public class ProductService {
                     String.format("Category with ID: %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
                 )
             );
-        category.getProductList().add(product);
+        if (relationship.getLabel()) {
+            labelProduct(product, category);
+            return;
+        }
+        unlabelProduct(product, category);
+    }
+
+    private void labelProduct(Product product, Category category) {
+        product.setCategory(category);
+        productRepository.save(product);
+    }
+
+    private void unlabelProduct(Product product, Category category) throws IllegalValueException {
+        if (category.equals(product.getCategory())) {
+            product.setCategory(null);
+            productRepository.save(product);
+            return;
+        }
+        throw new IllegalValueException(
+            String.format("Product id %s has not been asign to category id %s", product.getId(), category.getId()),
+            ErrorCode.LABEL_MISMATCH
+        );
     }
 }

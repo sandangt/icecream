@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
@@ -23,7 +24,7 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.schema-registry-server}")
     private String schemaRegistryServerUrl;
 
-    private Map<String, Object> generateBasicConfig() {
+    private Map<String, Object> generateProtobufObjConfig() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServersUrl);
         properties.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryServerUrl);
@@ -34,11 +35,16 @@ public class KafkaProducerConfig {
 
     @Bean(name = "product-producer")
     public KafkaTemplate<String, ProductDTO> productProducer() {
-        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(generateBasicConfig()));
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(generateProtobufObjConfig()));
     }
 
     @Bean(name = "category-producer")
     public KafkaTemplate<String, CategoryDTO> categoryProducer() {
-        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(generateBasicConfig()));
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(generateProtobufObjConfig()));
+    }
+
+    @Bean(name = "product-category-producer")
+    public KafkaTemplate<String, ProductCategoryDTO> productRelationshipProducer() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(generateProtobufObjConfig()));
     }
 }
