@@ -29,13 +29,13 @@ public class OrderItem extends AbstractAuditEntity {
     private Integer quantity;
     private String note;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
-
     private Long productId;
     private String productName;
     private Double productPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 
     @Override
     public boolean equals(Object o) {

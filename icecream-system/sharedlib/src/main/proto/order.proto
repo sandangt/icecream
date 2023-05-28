@@ -1,0 +1,69 @@
+syntax = "proto3";
+package sanlab.icecream.sharedlib.proto;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "common.proto";
+
+option java_multiple_files = true;
+
+message OrderDTO {
+    optional uint64 id = 1;
+    optional string note = 2;
+    optional float totalPrice = 3;
+    optional float deliveryFee = 4;
+    optional string orderStatus = 5;
+    optional string deliveryMethod = 6;
+    optional string deliveryStatus = 7;
+    optional string userId = 8;
+    optional string customerName = 9;
+    optional string customerPhone = 10;
+    optional uint64 paymentId = 11;
+    optional uint64 addressId = 12;
+}
+
+message OrderRequest {
+    uint64 orderId = 1;
+}
+
+message OrderResponse {
+    OrderDTO order = 1;
+}
+
+message OrderCollectionResponse {
+    repeated OrderDTO orderCollection = 1;
+}
+
+message OrderItemDTO {
+    optional uint64 id = 1;
+    optional uint32 quantity = 2;
+    optional string note = 3;
+    optional uint64 productId = 4;
+    optional string productName = 5;
+    optional float productPrice = 6;
+}
+
+message OrderItemRequest {
+    uint64 orderItemId = 1;
+}
+
+message OrderItemResponse {
+    OrderItemDTO product = 1;
+}
+
+message OrderItemCollectionResponse {
+    repeated OrderItemDTO productCollection = 1;
+}
+
+message OrderRelationship {
+    uint64 orderId = 1;
+    uint64 orderItemId = 2;
+    bool inRelationship = 3;
+}
+
+service OrderService {
+    rpc getAllOrders(PageInfoRequest) returns (OrderCollectionResponse);
+    rpc getOrderById(OrderRequest) returns (OrderResponse);
+    rpc getOrderItemList(OrderRequest) returns (OrderItemCollectionResponse);
+    rpc getOrderItemById(OrderItemRequest) returns (OrderItemResponse);
+}

@@ -23,3 +23,6 @@ module:
   product:
     grpcUrl: ${PRODUCT_GRPC_HOST}:${PRODUCT_GRPC_PORT}
     httpUrl: ${PRODUCT_PROTOCOL}://${PRODUCT_HOST}:${PRODUCT_PORT}
+  order:
+    grpcUrl: ${ORDER_GRPC_HOST}:${ORDER_GRPC_PORT}
+    httpUrl: ${ORDER_PROTOCOL}://${ORDER_HOST}:${ORDER_PORT}

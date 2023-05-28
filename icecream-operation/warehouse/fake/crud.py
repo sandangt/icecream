@@ -3,6 +3,7 @@ from typing import Callable
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from warehouse.db.order.models import Order, OrderItem
 from warehouse.db.product.models import Product, Category
 
 
@@ -32,3 +33,12 @@ def insert_product_category_relationship(db_session: Session):
         product = db_session.scalars(select(Product).where(Product.id == i)).first()
         category = db_session.scalars(select(Category).where(Category.id == randint(1, category_cnt))).first()
         category.product_list.append(product)
+
+
+def insert_order_relationship(db_session: Session):
+    order_item_cnt = db_session.scalars(func.count(OrderItem.id)).first()
+    order_cnt = db_session.scalars(func.count(Order.id)).first()
+    for i in range(1, order_item_cnt + 1):
+        order_item = db_session.scalars(select(OrderItem).where(OrderItem.id == i)).first()
+        order = db_session.scalars(select(Order).where(Order.id == randint(1, order_cnt))).first()
+        order.order_item_list.add(order_item)

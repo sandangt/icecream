@@ -22,7 +22,7 @@ import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 @CrossOrigin
 @Controller
 @RequiredArgsConstructor
-public class GraphQLResolver {
+public class ProductResolver {
     private final ProductService productService;
     private final CategoryService categoryService;
 

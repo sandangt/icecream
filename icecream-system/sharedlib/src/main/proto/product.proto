@@ -65,10 +65,10 @@ message CategoryCollectionResponse {
     repeated CategoryDTO categoryCollection = 1;
 }
 
-message ProductCategoryDTO {
+message ProductCategoryRelationship {
     uint64 productId = 1;
     uint64 categoryId = 2;
-    bool label = 3;
+    bool inRelationship = 3;
 }
 
 service ProductService {

@@ -29,4 +29,8 @@ class SQLSession:
 
     @classmethod
     def get_product_db_session(cls) -> Any:
-        return sessionmaker(bind=cls._create_db_engine('product'), autoflush=False, autocommit=False)
+        return sessionmaker(bind=cls._create_db_engine('product'), autoflush=False)
+
+    @classmethod
+    def get_order_db_session(cls) -> Any:
+        return sessionmaker(bind=cls._create_db_engine('order'), autoflush=False)
