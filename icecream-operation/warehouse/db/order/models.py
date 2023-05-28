@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from typing import Set, Optional
 
 from sqlalchemy import Column, Sequence, ForeignKey
-from sqlalchemy.dialects.postgresql import BIGINT, TEXT, VARCHAR, FLOAT, TIMESTAMP
+from sqlalchemy.dialects.postgresql import BIGINT, TEXT, VARCHAR, FLOAT, TIMESTAMP, INTEGER
 from sqlalchemy.orm import declarative_base, relationship, Mapped, mapped_column
 
 BaseModel = declarative_base()
@@ -21,7 +21,7 @@ class Order(BaseModel):
     delivery_status = Column(VARCHAR(50), nullable=True)
 
     order_item_list: Mapped[Set[OrderItem]] = \
-        relationship(back_populates='order_tbl', collection_class=set, cascade='all')
+        relationship(back_populates='order', collection_class=set, cascade='all')
 
     user_id = Column(VARCHAR(500), nullable=True)
     customer_name = Column(VARCHAR(200), nullable=True)
@@ -39,8 +39,7 @@ class Order(BaseModel):
 class OrderItem(BaseModel):
     __tablename__ = 'order_item'
     id = Column(BIGINT, primary_key=True, autoincrement=True)
-    quantity = Column()
-    note = Column(TEXT)
+    quantity = Column(INTEGER, nullable=True)
 
     order_id: Mapped[Optional[BIGINT]] = mapped_column(ForeignKey('order_tbl.id'))
     order: Mapped[Optional[Order]] = relationship(back_populates='order_item_list')

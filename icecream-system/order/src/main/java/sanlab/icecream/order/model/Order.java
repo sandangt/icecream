@@ -38,18 +38,18 @@ public class Order extends AbstractAuditEntity {
     private String note;
     private Double totalPrice;
     private Double deliveryFee;
-    private EOrderStatus orderStatus;
-    private EDeliveryMethod deliveryMethod;
-    private EDeliveryStatus deliveryStatus;
-
-    @OneToMany(mappedBy = "order_tbl", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    Set<OrderItem> orderItemList;
+    private String orderStatus;
+    private String deliveryMethod;
+    private String deliveryStatus;
 
     private String userId;
     private String customerName;
     private String customerPhone;
     private Long paymentId;
     private Long addressId;
+
+    @OneToMany(mappedBy = "order_tbl", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Set<OrderItem> orderItemList;
 
     @Override
     public boolean equals(Object o) {

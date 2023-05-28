@@ -8,7 +8,7 @@ import sanlab.icecream.product.service.CategoryService;
 import sanlab.icecream.product.service.ProductService;
 import sanlab.icecream.sharedlib.constant.KafkaTopic;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
-import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
@@ -39,7 +39,7 @@ public class KafkaConsumer {
     }
 
     @KafkaListener(topics = KafkaTopic.LABEL_PRODUCT, containerFactory = "relationshipListenerContainerFactory")
-    public void labelProduct(ConsumerRecord<String, ProductCategoryDTO> payload) {
+    public void labelProduct(ConsumerRecord<String, ProductCategoryRelationship> payload) {
         productService.modifiedRelationship(payload.value());
     }
 }

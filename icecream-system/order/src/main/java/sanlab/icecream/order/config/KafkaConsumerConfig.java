@@ -1,4 +1,4 @@
-package sanlab.icecream.product.config;
+package sanlab.icecream.order.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,9 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import sanlab.icecream.sharedlib.constant.KafkaGroup;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.OrderDTO;
+import sanlab.icecream.sharedlib.proto.OrderItemDTO;
+import sanlab.icecream.sharedlib.proto.OrderRelationship;
 import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
@@ -37,33 +40,32 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ProductDTO> productListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ProductDTO> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, OrderDTO> orderListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderDTO> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> properties = generateProtobufObjConfig();
-        properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, ProductDTO.class.getName());
+        properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, OrderDTO.class.getName());
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
         return factory;
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CategoryDTO> categoryListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, CategoryDTO> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, OrderItemDTO> orderItemListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderItemDTO> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> properties = generateProtobufObjConfig();
-        properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, CategoryDTO.class.getName());
+        properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, OrderItemDTO.class.getName());
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
         return factory;
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ProductCategoryRelationship>
-    relationshipListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ProductCategoryRelationship> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, OrderRelationship> relationshipListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderRelationship> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> properties = generateProtobufObjConfig();
         properties.put(
-            KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, ProductCategoryRelationship.class.getName()
+            KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, OrderRelationship.class.getName()
         );
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
         return factory;

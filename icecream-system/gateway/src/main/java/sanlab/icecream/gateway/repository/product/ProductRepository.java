@@ -15,7 +15,7 @@ import sanlab.icecream.sharedlib.constant.GrpcChannel;
 import sanlab.icecream.sharedlib.constant.KafkaTopic;
 import sanlab.icecream.sharedlib.proto.CategoryRequest;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
-import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductCollectionResponse;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 import sanlab.icecream.sharedlib.proto.ProductRequest;
@@ -27,11 +27,11 @@ import sanlab.icecream.sharedlib.proto.ProductServiceGrpc;
 public class ProductRepository {
     private final ProductServiceGrpc.ProductServiceBlockingStub stub;
     private final KafkaTemplate<String, ProductDTO> productProducer;
-    private final KafkaTemplate<String, ProductCategoryDTO> relationshipProducer;
+    private final KafkaTemplate<String, ProductCategoryRelationship> relationshipProducer;
     public ProductRepository(
         @Qualifier(GrpcChannel.PRODUCT)ManagedChannel productChannel,
         @Qualifier("product-producer") KafkaTemplate<String, ProductDTO> productProducer,
-        @Qualifier("product-category-producer") KafkaTemplate<String, ProductCategoryDTO> relationshipProducer
+        @Qualifier("product-category-producer") KafkaTemplate<String, ProductCategoryRelationship> relationshipProducer
     ) {
         this.stub = ProductServiceGrpc.newBlockingStub(productChannel);
         this.productProducer = productProducer;
@@ -85,10 +85,10 @@ public class ProductRepository {
     }
 
     public void labelProduct(Long productId, Long categoryId) {
-        ProductCategoryDTO message = ProductCategoryDTO.newBuilder()
+        ProductCategoryRelationship message = ProductCategoryRelationship.newBuilder()
             .setCategoryId(categoryId)
             .setProductId(productId)
-            .setLabel(true)
+            .setInRelationship(true)
             .build();
         relationshipProducer.send(
             KafkaTopic.LABEL_PRODUCT,
@@ -98,10 +98,10 @@ public class ProductRepository {
     }
 
     public void unlabelProduct(Long productId, Long categoryId) {
-        ProductCategoryDTO message = ProductCategoryDTO.newBuilder()
+        ProductCategoryRelationship message = ProductCategoryRelationship.newBuilder()
             .setCategoryId(categoryId)
             .setProductId(productId)
-            .setLabel(false)
+            .setInRelationship(false)
             .build();
         relationshipProducer.send(
             KafkaTopic.LABEL_PRODUCT,

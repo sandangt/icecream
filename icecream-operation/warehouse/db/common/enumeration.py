@@ -1,0 +1,35 @@
+from enum import Enum
+
+
+class EDeliveryMethod(Enum):
+    VIETTEL_POST = 'VIETTEL_POST'
+    GRAB_EXPRESS = 'GRAB_EXPRESS'
+    SHOPEE_EXPRESS = 'SHOPEE_EXPRESS'
+
+
+class EDeliveryStatus(Enum):
+    PENDING = 'PENDING'
+    DELIVERING = 'DELIVERING'
+    DELIVERED = 'DELIVERED'
+    CANCELLED = 'CANCELLED'
+
+
+class EOrderStatus(Enum):
+    PENDING = 'PENDING'
+    ACCEPTED = 'ACCEPTED'
+    PENDING_PAYMENT = 'PENDING_PAYMENT'
+    SHIPPING = 'SHIPPING'
+    COMPLETED = 'COMPLETED'
+    REFUND = 'REFUND'
+    CANCELLED = 'CANCELLED'
+
+
+class EPaymentMethod(Enum):
+    COD = 'COD'
+    BANKING = 'BANKING'
+
+
+class EPaymentStatus(Enum):
+    PENDING = 'PENDING'
+    COMPLETED = 'COMPLETED'
+    CANCELLED = 'CANCELLED'

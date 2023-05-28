@@ -1,20 +1,9 @@
-from typing import Dict, Any, Callable
+from typing import Dict, Any
 
 from faker import Faker
 
 from warehouse.db.product.models import Product, Category
-
-FAKER_SEED = 10
-
-
-def initialize_faker(generate_func: Callable) -> Callable:
-    fake = Faker()
-    Faker.seed(FAKER_SEED)
-
-    def inner() -> Dict[str, Any]:
-        return generate_func(fake)
-
-    return inner
+from warehouse.fake.common import initialize_faker
 
 
 @initialize_faker

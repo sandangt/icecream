@@ -1,16 +1,18 @@
 """0 Create order db
 
-Revision ID: a73bd1fa0215
-Revises: 
-Create Date: 2023-05-18 11:21:45.399255
+Revision ID: cb0edb8aa6fe
+Revises:
+Create Date: 2023-05-28 14:40:10.523452
 
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import Sequence
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.sql.ddl import CreateSequence
 
 # revision identifiers, used by Alembic.
-revision = 'a73bd1fa0215'
+revision = 'cb0edb8aa6fe'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,8 +41,7 @@ def upgrade() -> None:
     )
     op.create_table('order_item',
     sa.Column('id', sa.BIGINT(), autoincrement=True, nullable=False),
-    sa.Column('quantity', sa.NullType(), nullable=True),
-    sa.Column('note', sa.TEXT(), nullable=True),
+    sa.Column('quantity', sa.INTEGER(), nullable=True),
     sa.Column('order_id', sa.BIGINT(), nullable=True),
     sa.Column('product_id', sa.BIGINT(), nullable=True),
     sa.Column('product_name', sa.VARCHAR(length=1000), nullable=True),
@@ -52,6 +53,7 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['order_id'], ['order_tbl.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.execute(CreateSequence(Sequence('order_id_sequence')))
     # ### end Alembic commands ###
 
 

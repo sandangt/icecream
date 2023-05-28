@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
-import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
@@ -44,7 +44,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean(name = "product-category-producer")
-    public KafkaTemplate<String, ProductCategoryDTO> productRelationshipProducer() {
+    public KafkaTemplate<String, ProductCategoryRelationship> productRelationshipProducer() {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(generateProtobufObjConfig()));
     }
 }

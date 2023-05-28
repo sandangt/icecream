@@ -16,13 +16,14 @@ import sanlab.icecream.product.repository.IProductRepository;
 import sanlab.icecream.sharedlib.exception.IllegalValueException;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
-import sanlab.icecream.sharedlib.proto.ProductCategoryDTO;
+import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
     private final IMapper mapper;
@@ -41,9 +42,9 @@ public class ProductService {
     public ProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ItemNotFoundException(
-                String.format("Product with id: %s not found", id), ErrorCode.PRODUCT_NOT_FOUND
-            )
-        );
+                    String.format("Product with id: %s not found", id), ErrorCode.PRODUCT_NOT_FOUND
+                )
+            );
         return mapper.INSTANCE.modelToDTO(product);
     }
 
@@ -51,9 +52,9 @@ public class ProductService {
     public List<ProductDTO> getProductListFromCategoryId(Long categoryId) throws ItemNotFoundException {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(() -> new ItemNotFoundException(
-                String.format("Category with id %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
-            )
-        );
+                    String.format("Category with id %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
+                )
+            );
         return category.getProductList()
             .stream()
             .map(mapper.INSTANCE::modelToDTO)
@@ -74,8 +75,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void modifiedRelationship(ProductCategoryDTO relationship) throws
-        ItemNotFoundException, IllegalValueException {
+    public void modifiedRelationship(ProductCategoryRelationship relationship) throws ItemNotFoundException {
         Long productId = relationship.getProductId();
         Long categoryId = relationship.getCategoryId();
         Product product = productRepository.findById(productId)
@@ -89,7 +89,7 @@ public class ProductService {
                     String.format("Category with ID: %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
                 )
             );
-        if (relationship.getLabel()) {
+        if (relationship.getInRelationship()) {
             labelProduct(product, category);
             return;
         }
@@ -102,14 +102,14 @@ public class ProductService {
     }
 
     private void unlabelProduct(Product product, Category category) throws IllegalValueException {
-        if (category.equals(product.getCategory())) {
-            product.setCategory(null);
-            productRepository.save(product);
-            return;
+        if (!category.equals(product.getCategory())) {
+            throw new IllegalValueException(
+                String.format("Product id %s has not been assigned to category id %s",
+                    product.getId(), category.getId()),
+                ErrorCode.LABEL_MISMATCH
+            );
         }
-        throw new IllegalValueException(
-            String.format("Product id %s has not been asign to category id %s", product.getId(), category.getId()),
-            ErrorCode.LABEL_MISMATCH
-        );
+        product.setCategory(null);
+        productRepository.save(product);
     }
 }

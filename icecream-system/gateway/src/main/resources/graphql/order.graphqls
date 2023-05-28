@@ -1,0 +1,23 @@
+type Order {
+    id: ID
+    note: String
+    totalPrice: Float
+    deliveryFee: Float
+    orderStatus: String
+    deliveryMethod: String
+    deliveryStatus: String
+    userId: String
+    customerName: String
+    customerPhone: String
+    paymentId: Int
+    addressId: Int
+}
+
+type OrderItem {
+    id: ID
+    quantity: Int
+    note: String
+    productId: Int
+    productName: String
+    productPrice: Float
+}
