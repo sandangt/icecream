@@ -19,14 +19,11 @@
                 }
             }
         </script>
-            <div class="logoyas">
-           <img class="logo" src="${url.resourcesPath}/img/yaslogo.png" alt="yas">
-        </div>
     <#elseif section = "form">
-    
+
         <div class="box-container">
             <div>
-                <p class="application-name">Welcome to Yas store</p>
+                <p class="application-name">Welcome to Icecream shop</p>
             </div>
         <#if realm.password>
             <div>
@@ -46,7 +43,7 @@
             </div>
         </#if>
         <div>
-            <p class="copyright">&copy; copyright - yas.nashtech-garage ${.now?string('yyyy')}</p>
+          <p class="copyright">Icecream Shop ${.now?string('yyyy')}</p>
         </div>
     </#if>
 </@layout.registrationLayout>

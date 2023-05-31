@@ -19,19 +19,16 @@
                 }
             }
         </script>
-            <div class="logoyas">
-           <img class="logo" src="${url.resourcesPath}/img/yaslogo.png" alt="yas">
-        </div>
     <#elseif section = "form">
       <div class="box-container">
             <div>
-                <p class="application-name">Welcome to Yas store</p>
+                <p class="application-name">Welcome to Icecream Shop</p>
             </div>
-     
+
         <form id="kc-register-form" class="form" onsubmit="return true;" action="${url.registrationAction}" method="post">
-           
-            <div class="input-group">                
-                    <input type="text" id="firstName" class="login-field" name="firstName" 
+
+            <div class="input-group">
+                    <input type="text" id="firstName" class="login-field" name="firstName"
                           placeholder="${msg("firstName")}"
                            value="${(register.formData.firstName!'')}"
                            aria-invalid="<#if messagesPerField.existsError('firstName')>true</#if>"
@@ -43,9 +40,9 @@
                     </#if>
             </div>
 
-            <div class="input-group">       
-                    <input type="text" id="lastName" class="login-field" name="lastName" 
-                          placeholder="${msg("lastName")}" 
+            <div class="input-group">
+                    <input type="text" id="lastName" class="login-field" name="lastName"
+                          placeholder="${msg("lastName")}"
                            value="${(register.formData.lastName!'')}"
                            aria-invalid="<#if messagesPerField.existsError('lastName')>true</#if>"
                     />
@@ -53,10 +50,10 @@
                         <span id="input-error-lastname" class="error-message" aria-live="polite">
                             ${kcSanitize(messagesPerField.get('lastName'))?no_esc}
                         </span>
-                    </#if>                
+                    </#if>
             </div>
 
-            <div class="input-group">               
+            <div class="input-group">
                     <input type="text" id="email" class="login-field" name="email"
                           placeholder="${msg("email")}"
                            value="${(register.formData.email!'')}" autocomplete="email"
@@ -66,11 +63,11 @@
                         <span id="input-error-email" class="error-message" aria-live="polite">
                             ${kcSanitize(messagesPerField.get('email'))?no_esc}
                         </span>
-                    </#if>        
+                    </#if>
             </div>
 
             <#if !realm.registrationEmailAsUsername>
-                <div class="input-group">                   
+                <div class="input-group">
                         <input type="text" id="username" class="login-field" name="username"
                               placeholder="${msg("username")}"
                                value="${(register.formData.username!'')}" autocomplete="username"
@@ -114,7 +111,7 @@
 
             <#if recaptchaRequired??>
                 <div class="form-group">
-                        <div class="g-recaptcha" data-size="compact" data-sitekey="${recaptchaSiteKey}"></div>                    
+                        <div class="g-recaptcha" data-size="compact" data-sitekey="${recaptchaSiteKey}"></div>
                 </div>
             </#if>
 
@@ -125,9 +122,8 @@
                  <input class="register-submit" type="submit" value="${msg("doRegister")}"/>
             </div>
         </form>
-
         <div>
-            <p class="copyright">&copy; copyright - yas.nashtech-garage ${.now?string('yyyy')}</p>
+          <p class="copyright">Icecream Shop ${.now?string('yyyy')}</p>
         </div>
     </#if>
 </@layout.registrationLayout>

@@ -1,11 +1,7 @@
 package sanlab.icecream.gateway.service.product;
 
-import static java.util.Map.entry;
-
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
