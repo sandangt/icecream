@@ -18,6 +18,18 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
     schema-registry-server: http://${SCHEMA_REGISTRY_HOST}:${SCHEMA_REGISTRY_PORT}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:32002/realms/icecream
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+jwt:
+  auth:
+    converter:
+      resource-id: icecream-client
+      principle-attribute: preferred_username
 
 module:
   product:
