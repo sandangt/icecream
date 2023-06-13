@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import sanlab.icecream.gateway.exception.controller.NotFoundException;
 import sanlab.icecream.gateway.service.product.CategoryService;
 import sanlab.icecream.gateway.service.product.ProductService;
@@ -19,7 +18,6 @@ import sanlab.icecream.gateway.viewmodel.product.ProductVm;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 
 
-@CrossOrigin
 @Controller
 @RequiredArgsConstructor
 public class ProductResolver {

@@ -3,26 +3,32 @@ import Head from 'next/head'
 import { Box } from '@mui/material'
 
 import AppProvider from '@icecream/storefront/config'
-import theme from '@icecream/storefront/assets/theme'
+import Layout from '@icecream/storefront/views/components/Layout'
+
+const style = {
+  p: 0,
+  m: 0,
+  fontSize: 15,
+  color: '#666666',
+  height: '100%',
+  backgroundColor: '#fff',
+  boxSizing: 'border-box',
+}
 
 const App: AppType<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
+        <title>Icecream Shop</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content={theme.palette.primary.main} />
         <meta name="emotion-insertion-point" content="" />
+        <meta name="description" content="We serve cold-stoned icecream and stuff" />
       </Head>
       <AppProvider>
-        <Box
-          sx={{
-            width: '100%',
-            height: '100vh',
-            bgcolor: 'background.default',
-            position: 'relative',
-          }}
-        >
-          <Component {...pageProps} />
+        <Box sx={style}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </Box>
       </AppProvider>
     </>

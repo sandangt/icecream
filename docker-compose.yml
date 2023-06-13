@@ -118,7 +118,7 @@ services:
       KC_DB_PASSWORD: ${KC_DB_PASSWORD}
       KC_HTTP_PORT: 80
     volumes:
-      - ./piratereel-system/identity/data/import:/opt/keycloak/data/import
-      - ./piratereel-system/identity/themes:/opt/keycloak/themes
+      - ./icecream-system/identity/data/import:/opt/keycloak/data/import
+      - ./icecream-system/identity/themes:/opt/keycloak/themes
     networks:
       - icecream-network

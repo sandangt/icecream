@@ -2,7 +2,7 @@ import { CacheProvider, ThemeProvider } from '@emotion/react'
 import { type ReactElement } from 'react'
 import { CssBaseline } from '@mui/material'
 
-import theme from '@icecream/storefront/assets/theme'
+import theme from '@icecream/backoffice/assets/theme'
 import createEmotionCache from './emotion-cache'
 
 type Props = {
