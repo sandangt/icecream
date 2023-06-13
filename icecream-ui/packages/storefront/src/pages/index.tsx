@@ -1,8 +1,14 @@
-import { Box } from "@mui/material"
-import { type NextPage } from "next"
+import { type NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { BasicRoute } from '../constants'
 
-const Home: NextPage = () => {
-  return <Box>Icecream UI</Box>
+const Index: NextPage = () => {
+  const router = useRouter()
+  useEffect(() => {
+    router.push(`/${BasicRoute.HOME}`)
+  }, [])
+  return null
 }
 
-export default Home
+export default Index
