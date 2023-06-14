@@ -1,4 +1,4 @@
-export enum BasicRoute {
+export enum StorefrontRoutes {
   HOME = 'home',
   SHOP = 'shop',
   CART = 'cart',

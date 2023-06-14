@@ -4,7 +4,7 @@ import Carousel from 'react-material-ui-carousel'
 
 import { type Product } from '@icecream/storefront/types/product'
 import { useRouter } from 'next/router'
-import { BasicRoute } from '@icecream/storefront/constants'
+import { StorefrontRoutes } from '@icecream/storefront/constants'
 
 type BannerItemProps = {
   id: string
@@ -26,7 +26,7 @@ const BannerItem: FC<BannerItemProps> = ({ name, description, id }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="medium" onClick={() => router.push(`/${BasicRoute.SHOP}/${id}`)}>
+        <Button size="medium" onClick={() => router.push(`/${StorefrontRoutes.SHOP}/${id}`)}>
           Check it out
         </Button>
       </CardActions>

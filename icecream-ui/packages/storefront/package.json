@@ -12,7 +12,6 @@
     "clean": "rm -rf .next node_modules"
   },
   "dependencies": {
-    "classnames": "2.3.2",
     "immer": "10.0.2",
     "jotai": "2.2.0",
     "react-material-ui-carousel": "3.4.2",
