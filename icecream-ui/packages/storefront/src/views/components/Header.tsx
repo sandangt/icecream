@@ -19,7 +19,7 @@ import {
 import { type MouseEvent, useState, type FC, type ReactElement } from 'react'
 import Link from 'next/link'
 
-import { BasicRoute } from '@icecream/storefront/constants'
+import { StorefrontRoutes } from '@icecream/storefront/constants'
 
 const SETTINGS = ['Profile', 'Account', 'Dashboard', 'Logout']
 const CART = ['Profile', 'Account', 'Dashboard', 'Logout']
@@ -81,7 +81,7 @@ const Header = () => {
           <Typography variant="h5" noWrap>
             <MuiLink
               component={Link}
-              href={`/${BasicRoute.HOME}`}
+              href={`/${StorefrontRoutes.HOME}`}
               sx={{ textDecoration: 'none', color: 'inherit' }}
             >
               ICECREAM
