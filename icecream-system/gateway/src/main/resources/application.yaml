@@ -15,6 +15,11 @@ spring:
       path: /graphiql
       allowed-methods: GET,POST
       max-age: 3600
+    cors:
+      allow-credentials: true
+      allowed-origins:
+        - ${STOREFRONT_PROTOCOL}://${STOREFRONT_HOST}:${STOREFRONT_PORT}
+        - ${BACKOFFICE_PROTOCOL}://${BACKOFFICE_HOST}:${BACKOFFICE_PORT}
   kafka:
     bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
     schema-registry-server: http://${SCHEMA_REGISTRY_HOST}:${SCHEMA_REGISTRY_PORT}

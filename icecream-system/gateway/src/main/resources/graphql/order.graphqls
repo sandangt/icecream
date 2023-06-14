@@ -11,6 +11,8 @@ type Order {
     customerPhone: String
     paymentId: Int
     addressId: Int
+    lastModifiedOn: String
+    lastModifiedBy: String
 }
 
 type OrderItem {
@@ -20,4 +22,6 @@ type OrderItem {
     productId: Int
     productName: String
     productPrice: Float
+    lastModifiedOn: String
+    lastModifiedBy: String
 }

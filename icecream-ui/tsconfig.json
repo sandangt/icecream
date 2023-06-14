@@ -5,6 +5,7 @@
     "baseUrl": "./packages/",
     "allowJs": false,
     "skipLibCheck": true,
+    "noImplicitAny": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
