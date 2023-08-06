@@ -37,8 +37,7 @@ public class GrpcConsumer extends LookupServiceGrpc.LookupServiceImplBase {
     @Override
     public void getAllMedia(PageInfoRequest request, StreamObserver<MediaCollectionResponse> responseObserver) {
         List<MediaDTO> mediaList = mediaService.getAllMedia(request);
-        MediaCollectionResponse response = MediaCollectionResponse.newBuilder()
-            .addAllMediaCollection(mediaList).build();
+        MediaCollectionResponse response = MediaCollectionResponse.newBuilder().addAllMedia(mediaList).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

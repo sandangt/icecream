@@ -6,14 +6,17 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sanlab.icecream.gateway.exception.ErrorCode;
+import sanlab.icecream.gateway.mapper.ILookupMapper;
 import sanlab.icecream.gateway.mapper.IProductMapper;
 import sanlab.icecream.gateway.repository.product.CategoryRepository;
 import sanlab.icecream.gateway.repository.product.ProductRepository;
+import sanlab.icecream.gateway.viewmodel.lookup.MediaVm;
 import sanlab.icecream.gateway.viewmodel.product.CategoryResponseVm;
 import sanlab.icecream.gateway.viewmodel.product.CategoryVm;
 import sanlab.icecream.gateway.viewmodel.product.ProductVm;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.CategoryResponse;
 
 
 @Service
@@ -22,29 +25,35 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final IProductMapper productMapper;
+    private final ILookupMapper lookupMapper;
+
+    // region Helper methods
+    private CategoryResponseVm makeCategoryResponse(CategoryResponse categoryResponse) {
+        CategoryVm categoryVm = productMapper.DTOToVm(categoryResponse.getCategory());
+        List<ProductVm> productVmList = categoryResponse.getProductList()
+            .stream()
+            .map(productMapper.INSTANCE::DTOToVm)
+            .toList();
+        MediaVm mediaVm = lookupMapper.INSTANCE.DTOToVm(categoryResponse.getMedia());
+        return new CategoryResponseVm(categoryVm, productVmList, mediaVm);
+    }
+    // endregion
 
     public List<CategoryResponseVm> getAllCategories() {
         return categoryRepository.getAllCategories()
             .orElse(Collections.emptyList())
             .stream()
-            .map(productMapper.INSTANCE::DTOToVm)
-            .map(categoryVm -> new CategoryResponseVm(
-                    categoryVm,
-                    getProductListFromCategoryId(categoryVm.id())
-                )
-            )
+            .map(this::makeCategoryResponse)
             .toList();
     }
 
     public CategoryResponseVm getCategoryById(Long id) throws ItemNotFoundException {
-        CategoryDTO categoryDTO = categoryRepository.getCategoryById(id)
+        CategoryResponse categoryResponse = categoryRepository.getCategoryById(id)
             .orElseThrow(() -> new ItemNotFoundException(
                     String.format("Category with ID %s not found", id), ErrorCode.PRODUCT_CATEGORY_NOT_FOUND
                 )
             );
-        CategoryVm categoryVm = productMapper.INSTANCE.DTOToVm(categoryDTO);
-        List<ProductVm> productList = getProductListFromCategoryId(id);
-        return new CategoryResponseVm(categoryVm, productList);
+        return makeCategoryResponse(categoryResponse);
     }
 
     public void insertCategory(CategoryVm categoryVm) {
@@ -56,14 +65,4 @@ public class CategoryService {
         CategoryDTO categoryDTO = productMapper.INSTANCE.VmToDTO(categoryVm);
         categoryRepository.updateCategory(categoryDTO);
     }
-
-    // region Helper methods
-    private List<ProductVm> getProductListFromCategoryId(Long categoryId) {
-        return productRepository.getProductListFromCategoryId(categoryId)
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(productMapper.INSTANCE::DTOToVm)
-            .toList();
-    }
-    // endregion
 }

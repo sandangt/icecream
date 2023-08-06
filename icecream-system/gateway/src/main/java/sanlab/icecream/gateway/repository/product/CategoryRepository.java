@@ -12,10 +12,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Repository;
 import sanlab.icecream.sharedlib.constant.GrpcChannel;
 import sanlab.icecream.sharedlib.constant.KafkaTopic;
-import sanlab.icecream.sharedlib.proto.CategoryCollectionResponse;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
 import sanlab.icecream.sharedlib.proto.CategoryRequest;
 import sanlab.icecream.sharedlib.proto.CategoryResponse;
+import sanlab.icecream.sharedlib.proto.CategoryResponseCollection;
 import sanlab.icecream.sharedlib.proto.ProductRequest;
 import sanlab.icecream.sharedlib.proto.ProductServiceGrpc;
 
@@ -32,28 +32,28 @@ public class CategoryRepository {
         this.categoryProducer = categoryProducer;
     }
 
-    public Optional<List<CategoryDTO>> getAllCategories() {
-        CategoryCollectionResponse response = stub.getAllCategories(null);
-        return Optional.of(response.getCategoryCollectionList());
+    public Optional<List<CategoryResponse>> getAllCategories() {
+        CategoryResponseCollection response = stub.getAllCategories(null);
+        return Optional.of(response.getCategoryResponseList());
     }
 
-    public Optional<CategoryDTO> getCategoryById(Long categoryId) {
+    public Optional<CategoryResponse> getCategoryById(Long categoryId) {
         CategoryRequest request = CategoryRequest.newBuilder().setCategoryId(categoryId).build();
         try {
             CategoryResponse response = stub.getCategoryById(request);
-            return Optional.of(response.getCategory());
+            return Optional.of(response);
         } catch (StatusRuntimeException e) {
             return Optional.empty();
         }
     }
 
-    public Optional<CategoryDTO> getCategoryFromProductId(Long productId) {
+    public Optional<CategoryResponse> getCategoryFromProductId(Long productId) {
         ProductRequest request = ProductRequest.newBuilder()
             .setProductId(productId)
             .build();
         try {
             CategoryResponse response = stub.getCategoryFromProductId(request);
-            return Optional.of(response.getCategory());
+            return Optional.of(response);
         } catch (StatusRuntimeException e) {
             return Optional.empty();
         }

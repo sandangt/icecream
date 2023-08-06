@@ -23,6 +23,7 @@ public class MediaRepository {
     }
 
     public Optional<MediaDTO> getMediaById(UUID id) {
+        if (id == null) return Optional.empty();
         MediaRequest request = MediaRequest.newBuilder().setMediaId(id.toString()).build();
         try {
             MediaResponse response = stub.getMediaById(request);

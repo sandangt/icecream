@@ -4,6 +4,7 @@ package sanlab.icecream.sharedlib.proto;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "common.proto";
+import "lookup.proto";
 
 option java_multiple_files = true;
 
@@ -27,18 +28,6 @@ message ProductDTO {
     optional string lastModifiedBy = 17;
 }
 
-message ProductRequest {
-    uint64 productId = 1;
-}
-
-message ProductResponse {
-    ProductDTO product = 1;
-}
-
-message ProductCollectionResponse {
-    repeated ProductDTO productCollection = 1;
-}
-
 message CategoryDTO {
     optional uint64 id = 1;
     optional string name = 2;
@@ -53,16 +42,32 @@ message CategoryDTO {
     optional string lastModifiedBy = 11;
 }
 
+message ProductRequest {
+    uint64 productId = 1;
+}
+
+message ProductResponse {
+    ProductDTO product = 1;
+    optional CategoryDTO category = 2;
+    optional MediaDTO media = 3;
+}
+
+message ProductResponseCollection {
+    repeated ProductResponse productResponse = 1;
+}
+
 message CategoryRequest {
     uint64 categoryId = 1;
 }
 
 message CategoryResponse {
     CategoryDTO category = 1;
+    repeated ProductDTO product = 2;
+    optional MediaDTO media = 3;
 }
 
-message CategoryCollectionResponse {
-    repeated CategoryDTO categoryCollection = 1;
+message CategoryResponseCollection {
+    repeated CategoryResponse categoryResponse = 1;
 }
 
 message ProductCategoryRelationship {
@@ -72,10 +77,10 @@ message ProductCategoryRelationship {
 }
 
 service ProductService {
-    rpc getAllProducts(PageInfoRequest) returns (ProductCollectionResponse);
+    rpc getAllProducts(PageInfoRequest) returns (ProductResponseCollection);
     rpc getProductById(ProductRequest) returns (ProductResponse);
-    rpc getProductListFromCategoryId(CategoryRequest) returns (ProductCollectionResponse);
-    rpc getAllCategories(google.protobuf.Empty) returns (CategoryCollectionResponse);
+    rpc getProductListFromCategoryId(CategoryRequest) returns (ProductResponseCollection);
+    rpc getAllCategories(google.protobuf.Empty) returns (CategoryResponseCollection);
     rpc getCategoryById(CategoryRequest) returns (CategoryResponse);
     rpc getCategoryFromProductId(ProductRequest) returns (CategoryResponse);
 }

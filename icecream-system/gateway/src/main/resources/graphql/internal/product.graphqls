@@ -1,4 +1,4 @@
-type ProductResponse {
+type Product {
   id: ID
   name: String
   briefDescription: String
@@ -15,11 +15,9 @@ type ProductResponse {
   createdBy: String
   lastModifiedOn: String
   lastModifiedBy: String
-  category: Category
-  media: Media
 }
 
-type CategoryResponse {
+type Category {
   id: ID
   name: String
   description: String
@@ -30,6 +28,4 @@ type CategoryResponse {
   createdBy: String
   lastModifiedOn: String
   lastModifiedBy: String
-  productList: [Product]
-  media: Media
 }

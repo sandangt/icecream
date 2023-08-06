@@ -27,7 +27,7 @@ message MediaResponse {
 }
 
 message MediaCollectionResponse {
-    repeated MediaDTO mediaCollection = 1;
+    repeated MediaDTO media = 1;
 }
 
 message AddressDTO {
@@ -51,7 +51,7 @@ message AddressResponse {
 }
 
 message AddressCollectionResponse {
-    repeated AddressDTO addressCollection = 1;
+    repeated AddressDTO address = 1;
 }
 
 service LookupService {
