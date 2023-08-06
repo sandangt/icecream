@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+
 @Configurable
 class CustomAuditingEntityListener extends AuditingEntityListener {
     public CustomAuditingEntityListener(ObjectFactory<AuditingHandler> handler) {

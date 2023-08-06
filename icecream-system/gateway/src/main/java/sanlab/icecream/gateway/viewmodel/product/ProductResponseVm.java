@@ -3,6 +3,7 @@ package sanlab.icecream.gateway.viewmodel.product;
 import java.time.OffsetDateTime;
 
 import lombok.Data;
+import sanlab.icecream.gateway.viewmodel.lookup.MediaVm;
 
 
 @Data
@@ -19,14 +20,14 @@ public class ProductResponseVm {
     private final String metaTitle;
     private final String metaKeyword;
     private final String metaDescription;
-    private final String mediaId;
     private final OffsetDateTime createdOn;
     private final String createdBy;
     private final OffsetDateTime lastModifiedOn;
     private final String lastModifiedBy;
     private final CategoryVm category;
+    private final MediaVm media;
 
-    public ProductResponseVm(ProductVm productVm, CategoryVm categoryVm) {
+    public ProductResponseVm(ProductVm productVm, CategoryVm categoryVm, MediaVm mediaVm) {
         this.id = productVm.id();
         this.name = productVm.name();
         this.briefDescription = productVm.briefDescription();
@@ -39,11 +40,11 @@ public class ProductResponseVm {
         this.metaTitle = productVm.metaTitle();
         this.metaKeyword = productVm.metaKeyword();
         this.metaDescription = productVm.metaDescription();
-        this.mediaId = productVm.mediaId();
         this.createdOn = productVm.createdOn();
         this.createdBy = productVm.createdBy();
         this.lastModifiedOn = productVm.lastModifiedOn();
         this.lastModifiedBy = productVm.lastModifiedBy();
         this.category = categoryVm;
+        this.media = mediaVm;
     }
 }

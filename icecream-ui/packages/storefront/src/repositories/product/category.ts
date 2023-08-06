@@ -20,10 +20,10 @@ const getAllCategoriesDocument = gql`
   }
 `
 
-export const getAllCategoryKey = 'categories'
+export const getAllCategoryKey = 'all-categories'
 
 export const getAllCategoriesRequest = async () =>
-  await client.request({ document: getAllCategoriesDocument })
+  await client.request<any>({ document: getAllCategoriesDocument })
 
 const getCategoryByIdDocument = gql`
   query GetCategoryById($categoryId: Int!) {
@@ -50,4 +50,4 @@ export type GetCategoryByIdVariables = {
 export const getCategoryByIdKey = 'categoryById'
 
 export const getCategoryByIdRequest = (variables: GetCategoryByIdVariables) => async () =>
-  await client.request({ document: getCategoryByIdDocument, variables })
+  await client.request<any, GetCategoryByIdVariables>({ document: getCategoryByIdDocument, variables })

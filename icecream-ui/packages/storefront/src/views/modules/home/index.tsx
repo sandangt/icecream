@@ -1,25 +1,26 @@
 import { CircularProgress, Divider, Stack } from '@mui/material'
+import { type FC } from 'react'
 
-import { useAllCategories, useLatestProducts } from '@icecream/storefront/services/hooks/product'
-import Category from './Category'
-import Banner from './Banner'
+import { type Category, type Product } from '@icecream/storefront/types/product'
+import NewProducts from './NewProducts'
+import ProductsByCategory from './ProductsByCategory'
+import ProductSlider from './ProductSlider'
 
-const HomeModule = () => {
-  const { data: productData, isSuccess: productDataReady } = useLatestProducts()
-  const { data: categoryData, isSuccess: categoryDataReady } = useAllCategories()
-  let bannerComponent = <CircularProgress />
-  let categoryComponent = <CircularProgress />
-  if (productDataReady) {
-    bannerComponent = <Banner data={productData} />
-  }
-  if (categoryDataReady) {
-    categoryComponent = <Category data={categoryData} />
-  }
+
+type Props = {
+  latestProducts: Product[]
+  categories: Category[]
+}
+
+const HomeModule: FC<Props> = ({ latestProducts, categories }) => {
+  // let bannerComponent = <CircularProgress />
+  // let categoryComponent = <CircularProgress />
   return (
     <Stack spacing={5}>
-      {bannerComponent}
+      <ProductSlider data={latestProducts} />
       <Divider />
-      {categoryComponent}
+      <NewProducts data={latestProducts} />
+      <ProductsByCategory data={categories} />
     </Stack>
   )
 }

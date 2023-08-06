@@ -1,0 +1,31 @@
+type Product {
+  id: ID
+  name: String
+  briefDescription: String
+  description: String
+  specification: String
+  sku: String
+  slug: String
+  price: Float
+  stockQuantity: Int
+  metaTitle: String
+  metaKeyword: String
+  metaDescription: String
+  createdOn: String
+  createdBy: String
+  lastModifiedOn: String
+  lastModifiedBy: String
+}
+
+type Category {
+  id: ID
+  name: String
+  description: String
+  slug: String
+  metaKeyword: String
+  metaDescription: String
+  createdOn: String
+  createdBy: String
+  lastModifiedOn: String
+  lastModifiedBy: String
+}

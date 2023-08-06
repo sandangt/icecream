@@ -7,7 +7,7 @@ const nextConfig = {
     PORT: process.env.STOREFRONT_PORT,
     GATEWAY_PROTOCOL: process.env.GATEWAY_PROTOCOL,
     GATEWAY_HOST: process.env.GATEWAY_HOST,
-    GATEWAY_PORT: process.env.GATEWAY_PORT,
+    GATEWAY_PORT: process.env.GATEWAY_PORT
   },
 }
 

@@ -13,7 +13,6 @@ import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 @Mapper(componentModel = "spring")
 public interface IProductMapper extends IBaseMapper {
-
     IProductMapper INSTANCE = Mappers.getMapper(IProductMapper.class);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)

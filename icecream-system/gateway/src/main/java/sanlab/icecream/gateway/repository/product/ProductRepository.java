@@ -16,10 +16,10 @@ import sanlab.icecream.sharedlib.constant.KafkaTopic;
 import sanlab.icecream.sharedlib.proto.CategoryRequest;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
 import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
-import sanlab.icecream.sharedlib.proto.ProductCollectionResponse;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 import sanlab.icecream.sharedlib.proto.ProductRequest;
 import sanlab.icecream.sharedlib.proto.ProductResponse;
+import sanlab.icecream.sharedlib.proto.ProductResponseCollection;
 import sanlab.icecream.sharedlib.proto.ProductServiceGrpc;
 
 
@@ -29,7 +29,7 @@ public class ProductRepository {
     private final KafkaTemplate<String, ProductDTO> productProducer;
     private final KafkaTemplate<String, ProductCategoryRelationship> relationshipProducer;
     public ProductRepository(
-        @Qualifier(GrpcChannel.PRODUCT)ManagedChannel productChannel,
+        @Qualifier(GrpcChannel.PRODUCT) ManagedChannel productChannel,
         @Qualifier("product-producer") KafkaTemplate<String, ProductDTO> productProducer,
         @Qualifier("product-category-producer") KafkaTemplate<String, ProductCategoryRelationship> relationshipProducer
     ) {
@@ -38,31 +38,31 @@ public class ProductRepository {
         this.relationshipProducer = relationshipProducer;
     }
 
-    public Optional<List<ProductDTO>> getAllProducts(PageInfoRequestVm pageInfo) {
+    public Optional<List<ProductResponse>> getAllProducts(PageInfoRequestVm pageInfo) {
         PageInfoRequest request = PageInfoRequest.newBuilder()
             .setOffset(pageInfo.offset()).setLimit(pageInfo.limit())
             .build();
-        ProductCollectionResponse response = stub.getAllProducts(request);
-        return Optional.of(response.getProductCollectionList());
+        ProductResponseCollection response = stub.getAllProducts(request);
+        return Optional.of(response.getProductResponseList());
     }
 
-    public Optional<ProductDTO> getProductById(Long productId) {
+    public Optional<ProductResponse> getProductById(Long productId) {
         ProductRequest request = ProductRequest.newBuilder()
             .setProductId(productId)
             .build();
         try {
             ProductResponse response = stub.getProductById(request);
-            return Optional.of(response.getProduct());
+            return Optional.of(response);
         } catch (StatusRuntimeException e) {
             return Optional.empty();
         }
     }
 
-    public Optional<List<ProductDTO>> getProductListFromCategoryId(Long categoryId) {
+    public Optional<List<ProductResponse>> getProductListFromCategoryId(Long categoryId) {
         CategoryRequest request = CategoryRequest.newBuilder().setCategoryId(categoryId).build();
         try {
-            ProductCollectionResponse response = stub.getProductListFromCategoryId(request);
-            return Optional.of(response.getProductCollectionList());
+            ProductResponseCollection response = stub.getProductListFromCategoryId(request);
+            return Optional.of(response.getProductResponseList());
         } catch (StatusRuntimeException e) {
             return Optional.empty();
         }

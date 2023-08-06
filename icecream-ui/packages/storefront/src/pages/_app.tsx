@@ -1,4 +1,3 @@
-import { type AppType, type AppProps } from 'next/app'
 import Head from 'next/head'
 import { Box } from '@mui/material'
 
@@ -15,7 +14,8 @@ const style = {
   boxSizing: 'border-box',
 }
 
-const App: AppType<AppProps> = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }) => {
+  const { session } = pageProps
   return (
     <>
       <Head>
@@ -24,7 +24,7 @@ const App: AppType<AppProps> = ({ Component, pageProps }) => {
         <meta name="emotion-insertion-point" content="" />
         <meta name="description" content="We serve cold-stoned icecream and stuff" />
       </Head>
-      <AppProvider>
+      <AppProvider session={session}>
         <Box sx={style}>
           <Layout>
             <Component {...pageProps} />

@@ -1,0 +1,10 @@
+type Media {
+  id: String
+  caption: String
+  filepath: String
+  mediaType: String
+  createdOn: String
+  createdBy: String
+  lastModifiedOn: String
+  lastModifiedBy: String
+}

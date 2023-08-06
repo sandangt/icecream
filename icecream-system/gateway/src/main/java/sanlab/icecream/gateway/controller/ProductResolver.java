@@ -5,7 +5,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import sanlab.icecream.gateway.exception.controller.NotFoundException;
 import sanlab.icecream.gateway.service.product.CategoryService;
 import sanlab.icecream.gateway.service.product.ProductService;
@@ -18,6 +21,7 @@ import sanlab.icecream.gateway.viewmodel.product.ProductVm;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
 @RequiredArgsConstructor
 public class ProductResolver {
@@ -25,6 +29,7 @@ public class ProductResolver {
     private final CategoryService categoryService;
 
     // region Product
+//    @PreAuthorize("hasRole('icecream-client-normie')")
     @SchemaMapping(typeName = "Query", field = "allProducts")
     public List<ProductResponseVm> getAllProducts(@Argument("pageInfo") PageInfoRequestVm pageInfo) {
         return productService.getAllProducts(pageInfo);
@@ -32,6 +37,7 @@ public class ProductResolver {
 
     @SchemaMapping(typeName = "Query", field = "productById")
     public ProductResponseVm getProductById(@Argument("id") Long id) {
+        SecurityContext ctx = SecurityContextHolder.getContext();
         try {
             return productService.getProductById(id);
         } catch (ItemNotFoundException ex) {

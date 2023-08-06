@@ -1,9 +1,16 @@
+import os
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 
-from settings import POSTGRES
+POSTGRES = {
+    'PORT': os.environ.get('POSTGRESQL_PORT'),
+    'HOST': os.environ.get('POSTGRESQL_HOST'),
+    'USER': os.environ.get('POSTGRESQL_USER'),
+    'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD'),
+    'DB_NAME': os.environ.get('POSTGRESQL_PRODUCT_DB'),
+}
 
 # region Custom configuration
 config = context.config
@@ -13,12 +20,12 @@ config.set_section_option(config_section, 'POSTGRES_HOST', POSTGRES['HOST'])
 config.set_section_option(config_section, 'POSTGRES_PORT', POSTGRES['PORT'])
 config.set_section_option(config_section, 'POSTGRES_USER', POSTGRES['USER'])
 config.set_section_option(config_section, 'POSTGRES_PASSWORD', POSTGRES['PASSWORD'])
-config.set_section_option(config_section, 'POSTGRES_DB', POSTGRES['PRODUCT_DB'])
+config.set_section_option(config_section, 'POSTGRES_DB', POSTGRES['DB_NAME'])
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from warehouse.db.product.models import BaseModel
+from models import BaseModel
 
 target_metadata = [BaseModel.metadata]
 

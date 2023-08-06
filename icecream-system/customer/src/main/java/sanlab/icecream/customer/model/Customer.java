@@ -1,6 +1,7 @@
 package sanlab.icecream.customer.model;
 
 import java.util.Set;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -38,8 +39,8 @@ public class Customer extends AbstractAuditEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<CustomerAddress> customerAddressList;
 
-    private String userId;
-
+    private String username;
+    private UUID mediaId;
 
     @Override
     public boolean equals(Object o) {

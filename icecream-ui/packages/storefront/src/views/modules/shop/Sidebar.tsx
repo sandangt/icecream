@@ -1,6 +1,7 @@
 import { type FC } from 'react'
-import { type Category } from '@icecream/storefront/types/product'
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material'
+import { type Category } from '@icecream/storefront/types/product'
+
 
 const SIDEBAR_ITEMS = ['Inbox', 'Starred', 'Send email', 'Drafts']
 
@@ -23,7 +24,7 @@ const Sidebar: FC<Props> = ({ data }) => {
         }}
       >
         <List>
-          {data.map(({id, name}) => (
+          {data.map(({ id, name }) => (
             <ListItem key={id} disablePadding>
               <ListItemButton>
                 <ListItemText primary={name} />

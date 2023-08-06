@@ -1,6 +1,7 @@
 package sanlab.icecream.product.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +14,15 @@ import sanlab.icecream.product.model.Category;
 import sanlab.icecream.product.model.Product;
 import sanlab.icecream.product.repository.ICategoryRepository;
 import sanlab.icecream.product.repository.IProductRepository;
+import sanlab.icecream.product.repository.lookup.MediaRepository;
 import sanlab.icecream.sharedlib.exception.IllegalValueException;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
+import sanlab.icecream.sharedlib.proto.CategoryDTO;
+import sanlab.icecream.sharedlib.proto.MediaDTO;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
 import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
+import sanlab.icecream.sharedlib.proto.ProductResponse;
 
 
 @Service
@@ -26,30 +31,45 @@ public class ProductService {
 
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
+    private final MediaRepository mediaRepository;
     private final IMapper mapper;
 
-    public List<ProductDTO> getAllProducts(PageInfoRequest pageInfo) {
+    // region Helper methods
+    private ProductResponse makeProductResponse(Product product) {
+        ProductDTO productDTO = mapper.INSTANCE.modelToDTO(product);
+        CategoryDTO categoryDTO = mapper.INSTANCE.modelToDTO(product.getCategory());
+        ProductResponse.Builder builder = ProductResponse.newBuilder()
+            .setProduct(productDTO)
+            .setCategory(categoryDTO);
+        mediaRepository
+            .getMediaById(product.getMediaId())
+            .ifPresent(builder::setMedia);
+        return builder.build();
+    }
+    // endregion
+
+    public List<ProductResponse> getAllProducts(PageInfoRequest pageInfo) {
         Pageable page = PageRequest.of(
-            Math.round((float) pageInfo.getOffset() / (float) pageInfo.getLimit()),
+            pageInfo.getOffset() / pageInfo.getLimit(),
             pageInfo.getLimit()
         );
         return productRepository.findAllByOrderByLastModifiedOnDesc(page)
             .stream()
-            .map(mapper.INSTANCE::modelToDTO)
+            .map(this::makeProductResponse)
             .toList();
     }
 
-    public ProductDTO getProductById(Long id) {
+    public ProductResponse getProductById(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ItemNotFoundException(
                     String.format("Product with id: %s not found", id), ErrorCode.PRODUCT_NOT_FOUND
                 )
             );
-        return mapper.INSTANCE.modelToDTO(product);
+        return makeProductResponse(product);
     }
 
     @Transactional
-    public List<ProductDTO> getProductListFromCategoryId(Long categoryId) throws ItemNotFoundException {
+    public List<ProductResponse> getProductListFromCategoryId(Long categoryId) throws ItemNotFoundException {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(() -> new ItemNotFoundException(
                     String.format("Category with id %s not found", categoryId), ErrorCode.CATEGORY_NOT_FOUND
@@ -57,12 +77,12 @@ public class ProductService {
             );
         return category.getProductList()
             .stream()
-            .map(mapper.INSTANCE::modelToDTO)
+            .map(this::makeProductResponse)
             .toList();
     }
 
     public void insertProduct(ProductDTO productDTO) {
-        productRepository.save(mapper.INSTANCE.DTOToModel(productDTO));
+        productRepository.save(mapper.INSTANCE.dtoToModel(productDTO));
     }
 
     public void updateProduct(ProductDTO productDTO) throws ItemNotFoundException {

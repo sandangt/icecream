@@ -2,6 +2,7 @@ import { gql } from 'graphql-request'
 
 import client from '@icecream/storefront/repositories/common/graphql-client'
 
+
 const getAllProductsDocument = gql`
   query GetAllProducts($pageInfo: PageInfo!) {
     allProducts(pageInfo: $pageInfo) {
@@ -33,10 +34,14 @@ export type GetAllProductsVariables = {
   }
 }
 
-export const getAllProductsKey = 'products'
+export const getAllProductsKey = 'all-products'
 
-export const getAllProductsRequest = (variables: GetAllProductsVariables) => async () =>
-  await client.request({
+type GetAllProductsRequestProps = {
+  variables: GetAllProductsVariables,
+}
+
+export const getAllProductsRequest = ({variables}: GetAllProductsRequestProps) => async () =>
+  await client.request<any, GetAllProductsVariables>({
     document: getAllProductsDocument,
     variables,
   })
@@ -70,8 +75,16 @@ export type GetProductByIdVariables = {
 
 export const getProductByIdKey = 'productById'
 
-export const getProductByIdRequest = (variables: GetProductByIdVariables) => async () =>
-  await client.request({
+type GetProductByIdRequestProps = {
+  variables: GetProductByIdVariables,
+  accessToken: string
+}
+
+export const getProductByIdRequest = ({variables, accessToken}: GetProductByIdRequestProps) => async () =>
+  await client.request<any, GetProductByIdVariables>({
     document: getProductByIdDocument,
     variables,
+    requestHeaders: {
+      Authorization: `Bearer ${accessToken}`
+    }
   })

@@ -7,10 +7,13 @@ PRODUCT_TOPICS = {
     'UPDATE_CATEGORY': 'update-category',
     'INSERT_CATEGORY': 'insert-category',
     'DELETE_CATEGORY': 'delete-category',
-    'LABEL_PRODUCT': 'label-product'
+    'LABEL_PRODUCT': 'label-product',
+    'INSERT_CUSTOMER': 'insert-customer',
+    'UPDATE_CUSTOMER': 'update-customer',
 }
 
 PRODUCT_GROUP = 'product'
+CUSTOMER_GROUP = 'customer'
 
 CONFIG = {
     'bootstrap.servers': '%s:%s' % (KAFKA['HOST'], KAFKA['PORT'])

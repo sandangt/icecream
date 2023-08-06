@@ -13,12 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import sanlab.icecream.sharedlib.constant.KafkaGroup;
-import sanlab.icecream.sharedlib.proto.CategoryDTO;
 import sanlab.icecream.sharedlib.proto.OrderDTO;
 import sanlab.icecream.sharedlib.proto.OrderItemDTO;
 import sanlab.icecream.sharedlib.proto.OrderRelationship;
-import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
-import sanlab.icecream.sharedlib.proto.ProductDTO;
 
 
 @Configuration

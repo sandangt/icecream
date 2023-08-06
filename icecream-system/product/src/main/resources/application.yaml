@@ -26,3 +26,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
     schema-registry-server: http://${SCHEMA_REGISTRY_HOST}:${SCHEMA_REGISTRY_PORT}
+
+module:
+  lookup:
+    grpcUrl: ${LOOKUP_GRPC_HOST}:${LOOKUP_GRPC_PORT}

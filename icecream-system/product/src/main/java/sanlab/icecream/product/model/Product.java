@@ -57,6 +57,7 @@ public class Product extends AbstractAuditEntity {
         }
         return id != null && id.equals(((Product) o).id);
     }
+
     @Override
     public int hashCode() {
         // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/

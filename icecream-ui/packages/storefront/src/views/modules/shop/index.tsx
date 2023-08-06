@@ -8,11 +8,7 @@ const ShopModule = () => {
   if (categoryDataReady) {
     sidebarComponent = <Sidebar data={categoryData} />
   }
-  return (
-  <Box>
-    {sidebarComponent}
-  </Box>
-  )
+  return <Box>{sidebarComponent}</Box>
 }
 
 export default ShopModule

@@ -1,0 +1,28 @@
+server:
+  http2:
+    enabled: true
+  port: ${LOOKUP_PORT}
+  error:
+    include-message: always
+
+grpc:
+  port: ${LOOKUP_GRPC_PORT}
+  host: ${LOOKUP_GRPC_HOST}
+
+spring:
+  application:
+    name: Icecream Customer Service
+    version: 0.1.0
+  datasource:
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_LOOKUP_DB}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    schema-registry-server: http://${SCHEMA_REGISTRY_HOST}:${SCHEMA_REGISTRY_PORT}

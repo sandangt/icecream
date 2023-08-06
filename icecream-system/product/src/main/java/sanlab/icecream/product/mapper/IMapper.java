@@ -25,8 +25,7 @@ public interface IMapper {
 
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
-    Product DTOToModel(ProductDTO product);
-
+    Product dtoToModel(ProductDTO product);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
@@ -35,8 +34,7 @@ public interface IMapper {
 
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
-    Category DTOToModel(CategoryDTO category);
-
+    Category dtoToModel(CategoryDTO category);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
