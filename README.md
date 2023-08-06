@@ -10,7 +10,7 @@ Mundane e-commerce store
 - python 3.11
 - NodeJS 18.15 | NextJS 13
 
-## Overvall Architecture
+## Architecture
 
 ![overview-architecture](./wiki/images/architecture/overview-architecture.png)
 
