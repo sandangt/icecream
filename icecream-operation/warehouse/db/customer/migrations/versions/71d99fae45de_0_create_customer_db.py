@@ -1,8 +1,8 @@
 """0 Create customer db
 
-Revision ID: 66ec40ed223b
+Revision ID: 71d99fae45de
 Revises: 
-Create Date: 2023-05-18 11:21:09.286865
+Create Date: 2023-07-16 09:10:53.510989
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '66ec40ed223b'
+revision = '71d99fae45de'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +25,8 @@ def upgrade() -> None:
     sa.Column('last_name', sa.VARCHAR(length=100), nullable=True),
     sa.Column('first_name', sa.VARCHAR(length=100), nullable=True),
     sa.Column('is_active', sa.BOOLEAN(), nullable=True),
-    sa.Column('user_id', sa.VARCHAR(length=500), nullable=True),
+    sa.Column('username', sa.VARCHAR(length=500), nullable=True),
+    sa.Column('media_id', sa.UUID(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('customer_address',

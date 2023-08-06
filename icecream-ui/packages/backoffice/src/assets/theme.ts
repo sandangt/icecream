@@ -14,12 +14,12 @@ const typography = {
 }
 
 export const lightTheme = createTheme({
-  typography
+  typography,
 })
 
 export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
-  typography
+  typography,
 })

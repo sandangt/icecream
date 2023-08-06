@@ -30,7 +30,7 @@ public class ProductService {
 
     public List<ProductDTO> getAllProducts(PageInfoRequest pageInfo) {
         Pageable page = PageRequest.of(
-            Math.round((float) pageInfo.getOffset() / (float) pageInfo.getLimit()),
+            pageInfo.getOffset() / pageInfo.getLimit(),
             pageInfo.getLimit()
         );
         return productRepository.findAllByOrderByLastModifiedOnDesc(page)
@@ -62,7 +62,7 @@ public class ProductService {
     }
 
     public void insertProduct(ProductDTO productDTO) {
-        productRepository.save(mapper.INSTANCE.DTOToModel(productDTO));
+        productRepository.save(mapper.INSTANCE.dtoToModel(productDTO));
     }
 
     public void updateProduct(ProductDTO productDTO) throws ItemNotFoundException {

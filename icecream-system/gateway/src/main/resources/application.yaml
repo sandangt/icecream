@@ -27,14 +27,14 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:32002/realms/icecream
+          issuer-uri: ${IDENTITY_PROTOCOL}://${IDENTITY_HOST}:${IDENTITY_PORT}/realms/${IDENTITY_REALM}
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 jwt:
   auth:
     converter:
-      resource-id: icecream-client
-      principle-attribute: preferred_username
+      resource-id: storefront
+      principle-attribute: email
 
 module:
   product:

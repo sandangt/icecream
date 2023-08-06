@@ -29,7 +29,7 @@ public class ProductRepository {
     private final KafkaTemplate<String, ProductDTO> productProducer;
     private final KafkaTemplate<String, ProductCategoryRelationship> relationshipProducer;
     public ProductRepository(
-        @Qualifier(GrpcChannel.PRODUCT)ManagedChannel productChannel,
+        @Qualifier(GrpcChannel.PRODUCT) ManagedChannel productChannel,
         @Qualifier("product-producer") KafkaTemplate<String, ProductDTO> productProducer,
         @Qualifier("product-category-producer") KafkaTemplate<String, ProductCategoryRelationship> relationshipProducer
     ) {

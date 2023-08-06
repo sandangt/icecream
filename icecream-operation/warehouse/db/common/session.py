@@ -20,6 +20,10 @@ class SQLSession:
                 db_name = POSTGRES['ORDER_DB']
             case 'inventory':
                 db_name = POSTGRES['INVENTORY_DB']
+            case 'customer':
+                db_name = POSTGRES['CUSTOMER_DB']
+            case 'lookup':
+                db_name = POSTGRES['LOOKUP_DB']
             case _:
                 raise Exception('Unrecognized Database name')
         return create_engine(
@@ -34,3 +38,7 @@ class SQLSession:
     @classmethod
     def get_order_db_session(cls) -> Any:
         return sessionmaker(bind=cls._create_db_engine('order'), autoflush=False)
+
+    @classmethod
+    def get_lookup_db_session(cls) -> Any:
+        return sessionmaker(bind=cls._create_db_engine('lookup'), autoflush=False)

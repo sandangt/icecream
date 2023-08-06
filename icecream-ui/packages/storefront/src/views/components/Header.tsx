@@ -9,20 +9,18 @@ import {
   Link as MuiLink,
   Stack,
   TextField,
+  Button,
 } from '@mui/material'
 import IcecreamIcon from '@mui/icons-material/Icecream'
 import {
-  AccountCircle,
+  AccountCircle as AccountIcon,
   Search as SearchIcon,
-  ShoppingCart as ShoppingCartIcon,
 } from '@mui/icons-material'
 import { type MouseEvent, useState, type FC, type ReactElement } from 'react'
 import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
-import { StorefrontRoutes } from '@icecream/storefront/constants'
-
-const SETTINGS = ['Profile', 'Account', 'Dashboard', 'Logout']
-const CART = ['Profile', 'Account', 'Dashboard', 'Logout']
+import { AuthSessionStatus, StorefrontRoutes } from '@icecream/storefront/constants'
 
 type DropdownHeaderMenuProps = {
   hoverTitle: string
@@ -70,6 +68,10 @@ const DropdownHeaderMenu: FC<DropdownHeaderMenuProps> = ({ hoverTitle, menuIcon,
 }
 
 const Header = () => {
+  const { status: loginStatus } = useSession()
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const handleOpenMenu = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
+  const handleCloseMenu = () => setAnchorEl(null)
   return (
     <AppBar component="nav" position="relative" color="default" sx={{ p: 2 }}>
       <Toolbar
@@ -93,19 +95,43 @@ const Header = () => {
           <SearchIcon sx={{ mr: 1, my: 0.5 }} />
           <TextField label="Search" variant="standard" sx={{ width: '100%' }} />
         </Stack>
-
-        <Stack direction="row" spacing={2}>
-          <DropdownHeaderMenu
-            hoverTitle="Open User Settings"
-            menuIcon={<AccountCircle />}
-            menuItems={SETTINGS}
-          />
-          <DropdownHeaderMenu
-            hoverTitle="Check Cart"
-            menuIcon={<ShoppingCartIcon />}
-            menuItems={CART}
-          />
-        </Stack>
+        {loginStatus === AuthSessionStatus.AUTHENTICATED ? (
+          <Stack direction="row" spacing={2}>
+            <Tooltip title="Open User settings">
+              <IconButton size="large" onClick={handleOpenMenu} color="inherit">
+                <AccountIcon />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: 3, ml: -3 }}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleCloseMenu}
+            >
+              <MenuItem>
+                <Link href={`/${StorefrontRoutes.PROFILE}`} style={{ textDecoration: 'none' }}>
+                  <Typography textAlign="center">Profile</Typography>
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Typography textAlign="center" onClick={() => signOut()}>
+                  Logout
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Stack>
+        ) : (
+          <Button onClick={() => signIn('keycloak')}>Sign In</Button>
+        )}
       </Toolbar>
     </AppBar>
   )

@@ -27,7 +27,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     @Value("${jwt.auth.converter.principle-attribute}")
     private String principleAttribute;
 
-    @Value("${jwt.auth.converter.reource-id}")
+    @Value("${jwt.auth.converter.resource-id}")
     private String resourceId;
 
     @Override
@@ -51,10 +51,10 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
             return Set.of();
         }
         resourceAccess = jwt.getClaim("resource_access");
-        if (resourceAccess.get("icecream-client") == null) {
+        if (resourceAccess.get(this.resourceId) == null) {
             return Set.of();
         }
-        resource = (Map<String, Object>) resourceAccess.get("icecream-client");
+        resource = (Map<String, Object>) resourceAccess.get(this.resourceId);
         resourceRoles = (Collection<String>) resource.get("roles");
         return resourceRoles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
             .collect(Collectors.toSet());

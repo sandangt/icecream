@@ -50,7 +50,7 @@ public class CategoryService {
     }
 
     public void insertCategory(CategoryDTO categoryDTO) {
-        categoryRepository.save(mapper.INSTANCE.DTOToModel(categoryDTO));
+        categoryRepository.save(mapper.INSTANCE.dtoToModel(categoryDTO));
     }
 
     public void updateCategory(CategoryDTO categoryDTO) throws ItemNotFoundException {

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from typing import Set, Optional
-from sqlalchemy import Column, Sequence
+
+from sqlalchemy import Column, Sequence, UUID
 from sqlalchemy.orm import declarative_base, relationship, Mapped
 from sqlalchemy.dialects.postgresql import VARCHAR, BIGINT, BOOLEAN
 
@@ -21,7 +22,8 @@ class Customer(BaseModel):
     customer_address_list: Mapped[Set[CustomerAddress]] = \
         relationship(back_populates='customer', collection_class=set, cascade='all')
 
-    user_id = Column(VARCHAR(500), nullable=True)
+    username = Column(VARCHAR(500), nullable=True)
+    media_id = Column(UUID, nullable=True)
 
 
 class CustomerAddress(BaseModel):

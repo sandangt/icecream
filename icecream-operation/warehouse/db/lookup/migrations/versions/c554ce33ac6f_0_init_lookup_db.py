@@ -1,8 +1,8 @@
-"""0 Create Lookup db
+"""0 Init lookup db
 
-Revision ID: 3d9205cfc426
+Revision ID: c554ce33ac6f
 Revises: 
-Create Date: 2023-05-18 00:29:34.333888
+Create Date: 2023-08-03 00:49:47.726717
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '3d9205cfc426'
+revision = 'c554ce33ac6f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,7 +23,7 @@ def upgrade() -> None:
     sa.Column('address', sa.VARCHAR(length=500), nullable=True),
     sa.Column('city', sa.VARCHAR(length=200), nullable=True),
     sa.Column('country', sa.VARCHAR(length=100), nullable=True),
-    sa.Column('zipCode', sa.VARCHAR(length=50), nullable=True),
+    sa.Column('zip_code', sa.VARCHAR(length=50), nullable=True),
     sa.Column('created_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('created_by', sa.VARCHAR(length=500), nullable=True),
     sa.Column('last_modified_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
@@ -34,7 +34,6 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('caption', sa.VARCHAR(length=500), nullable=True),
     sa.Column('filepath', sa.VARCHAR(length=200), nullable=True),
-    sa.Column('data', postgresql.OID(), nullable=True),
     sa.Column('media_type', sa.VARCHAR(length=50), nullable=True),
     sa.Column('created_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('created_by', sa.VARCHAR(length=500), nullable=True),

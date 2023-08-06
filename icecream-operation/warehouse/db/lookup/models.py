@@ -11,11 +11,12 @@ metadata = BaseModel.metadata
 
 class Address(BaseModel):
     __tablename__ = 'address'
+    address_id_sequence = Sequence('address_id_sequence', start=1)
     id = Column(BIGINT, Sequence('address_id_sequence', start=1), primary_key=True)
     address = Column(VARCHAR(500), nullable=True)
     city = Column(VARCHAR(200), nullable=True)
     country = Column(VARCHAR(100), nullable=True)
-    zipCode = Column(VARCHAR(50), nullable=True)
+    zip_code = Column(VARCHAR(50), nullable=True)
 
     created_on = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc))
     created_by = Column(VARCHAR(500), nullable=True)
@@ -29,7 +30,6 @@ class Media(BaseModel):
     id = Column(UUID, primary_key=True, default=uuid.uuid4)
     caption = Column(VARCHAR(500), nullable=True)
     filepath = Column(VARCHAR(200), nullable=True)
-    data = Column(OID, nullable=True)
     media_type = Column(VARCHAR(50), nullable=True)
 
     created_on = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc))

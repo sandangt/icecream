@@ -8,8 +8,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WelcomeController {
     @GetMapping("/hello")
-    @PreAuthorize("hasRole('icecream-client-normie')")
+    @PreAuthorize("hasAnyRole('icecream-client-normie','icecream-client-vip')")
     public String sayWelcome() {
         return "<h1>Icecream gateway is up and running</h1>";
+    }
+
+    @GetMapping("/vip-hello")
+    @PreAuthorize("hasRole('icecream-client-vip')")
+    public String sayWelcomeVip() {
+        return """
+            <div>
+                <h1>Icecream gateway is up and running</h1>
+                <p>Hello Mr. Important</p>
+            </div>
+        """;
     }
 }

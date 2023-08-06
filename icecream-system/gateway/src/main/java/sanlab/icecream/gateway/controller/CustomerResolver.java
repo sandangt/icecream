@@ -1,3 +1,3 @@
 package sanlab.icecream.gateway.controller;
 
-public class OrderResolver {}
+public class CustomerResolver {}
