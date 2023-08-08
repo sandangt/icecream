@@ -11,7 +11,6 @@ const getAllCategoriesDocument = gql`
       slug
       metaKeyword
       metaDescription
-      mediaId
       createdOn
       createdBy
       lastModifiedOn
@@ -34,7 +33,6 @@ const getCategoryByIdDocument = gql`
       slug
       metaKeyword
       metaDescription
-      mediaId
       createdOn
       createdBy
       lastModifiedOn

@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class ProductResolver {
     private final CategoryService categoryService;
 
     // region Product
-//    @PreAuthorize("hasRole('icecream-client-normie')")
+    // @PreAuthorize("hasRole('icecream-client-normie')")
     @SchemaMapping(typeName = "Query", field = "allProducts")
     public List<ProductResponseVm> getAllProducts(@Argument("pageInfo") PageInfoRequestVm pageInfo) {
         return productService.getAllProducts(pageInfo);

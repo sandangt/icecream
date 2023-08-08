@@ -26,8 +26,6 @@ const ProductSlider: FC<Props> = ({ data }) => {
         navigation={{ enabled: true, hideOnClick: true }}
         pagination={{ enabled: true, clickable: true, dynamicBullets: true }}
         autoplay={{ delay: 1500, disableOnInteraction: false }}
-        onSlideChange={() => console.log('slide change !')}
-        onSwiper={(swiper) => console.log(swiper)}
       >
         {data.map((product) => (
           <SwiperSlide key={product.id}>

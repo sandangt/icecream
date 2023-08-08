@@ -22,7 +22,6 @@ const getAllProductsDocument = gql`
       stockQuantity
       metaTitle
       metaKeyword
-      mediaId
     }
   }
 `
@@ -60,7 +59,6 @@ const getProductByIdDocument = gql`
       metaTitle
       metaKeyword
       metaDescription
-      mediaId
       createdOn
       createdBy
       lastModifiedOn

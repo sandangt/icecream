@@ -26,10 +26,8 @@ export const authConfig = {
     strategy: 'jwt' as SessionStrategy,
   },
   callbacks: {
-    jwt: async ({ token, account, trigger }: CallbacksJWTProps) => {
-      if (trigger !== AuthTrigger.SIGN_IN) {
-        return token
-      }
+    jwt: async ({ token, account }: CallbacksJWTProps) => {
+      // #region Login and still not expired
       if (account) {
         return {
           accessToken: account?.access_token,
@@ -39,14 +37,17 @@ export const authConfig = {
       } else if (Date.now() < (token?.expiresAt as number) * 1000) {
         return token
       }
+      // #endregion
+      // #region Refetch new token set
       try {
-        const response = await fetch(
-          `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
+        const encodedCredential = btoa(`${process.env.KEYCLOAK_CLIENT_ID as string}:${process.env.KEYCLOAK_CLIENT_SECRET as string}`)
+        const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
           {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: `Basic ${encodedCredential}`
+            },
             body: new URLSearchParams({
-              client_id: process.env.KEYCLOAK_CLIENT_ID as string,
-              client_secret: process.env.KEYCLOAK_CLIENT_SECRET as string,
               refresh_token: token?.refreshToken as string,
               grant_type: 'refresh_token',
               scope: 'openid',
@@ -55,7 +56,6 @@ export const authConfig = {
           },
         )
         const tokenSet: TokenSet = await response.json()
-        console.log('tokenSet: ', tokenSet)
         if (!response.ok) throw tokenSet
         return {
           ...token,
@@ -66,6 +66,7 @@ export const authConfig = {
       } catch (error) {
         return { ...token, error: 'RefreshAccessTokenError' }
       }
+      // #endregion
     },
     session: async ({ session, token }) => {
       return {
