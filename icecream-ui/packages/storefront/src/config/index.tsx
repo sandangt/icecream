@@ -7,7 +7,7 @@ import { Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { lightTheme, darkTheme } from '@icecream/storefront/assets/theme'
+import { lightTheme } from '@icecream/storefront/assets/theme'
 import createEmotionCache from './emotion-cache'
 import queryClient from './query-client'
 

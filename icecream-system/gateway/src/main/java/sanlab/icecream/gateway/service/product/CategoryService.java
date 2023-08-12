@@ -9,7 +9,6 @@ import sanlab.icecream.gateway.exception.ErrorCode;
 import sanlab.icecream.gateway.mapper.ILookupMapper;
 import sanlab.icecream.gateway.mapper.IProductMapper;
 import sanlab.icecream.gateway.repository.product.CategoryRepository;
-import sanlab.icecream.gateway.repository.product.ProductRepository;
 import sanlab.icecream.gateway.viewmodel.lookup.MediaVm;
 import sanlab.icecream.gateway.viewmodel.product.CategoryResponseVm;
 import sanlab.icecream.gateway.viewmodel.product.CategoryVm;
@@ -23,7 +22,6 @@ import sanlab.icecream.sharedlib.proto.CategoryResponse;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
     private final IProductMapper productMapper;
     private final ILookupMapper lookupMapper;
 

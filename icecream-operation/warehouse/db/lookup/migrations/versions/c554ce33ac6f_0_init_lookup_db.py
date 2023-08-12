@@ -1,13 +1,15 @@
 """0 Init lookup db
 
 Revision ID: c554ce33ac6f
-Revises: 
+Revises:
 Create Date: 2023-08-03 00:49:47.726717
 
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import Sequence
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.sql.ddl import CreateSequence
 
 # revision identifiers, used by Alembic.
 revision = 'c554ce33ac6f'
@@ -41,6 +43,7 @@ def upgrade() -> None:
     sa.Column('last_modified_by', sa.VARCHAR(length=500), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+    op.execute(CreateSequence(Sequence('address_id_sequence')))
     # ### end Alembic commands ###
 
 

@@ -1,4 +1,13 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Typography,
+} from '@mui/material'
 import { type FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
@@ -16,7 +25,7 @@ type Props = {
 }
 
 const ProductSlider: FC<Props> = ({ data }) => {
-  return (
+  return data?.length ? (
     <Box sx={{ my: 5 }}>
       <Swiper
         spaceBetween={50}
@@ -34,6 +43,8 @@ const ProductSlider: FC<Props> = ({ data }) => {
         ))}
       </Swiper>
     </Box>
+  ) : (
+    <CircularProgress />
   )
 }
 

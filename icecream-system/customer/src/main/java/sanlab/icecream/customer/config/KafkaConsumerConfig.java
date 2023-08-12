@@ -43,5 +43,4 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(properties));
         return factory;
     }
-
 }

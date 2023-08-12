@@ -17,11 +17,11 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = KafkaTopic.INSERT_CUSTOMER, containerFactory = "customerListenerContainerFactory")
     public void insertCustomer(ConsumerRecord<String, CustomerDTO> payload) {
-        throw new NotImplementedException();
+        customerService.insertCustomer(payload.value());
     }
 
     @KafkaListener(topics = KafkaTopic.UPDATE_CUSTOMER, containerFactory = "customerListenerContainerFactory")
     public void updateCustomer(ConsumerRecord<String, CustomerDTO> payload) {
-        throw new NotImplementedException();
+        customerService.updateCustomer(payload.value());
     }
 }

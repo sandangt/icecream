@@ -8,6 +8,9 @@ PRODUCT_TOPICS = {
     'INSERT_CATEGORY': 'insert-category',
     'DELETE_CATEGORY': 'delete-category',
     'LABEL_PRODUCT': 'label-product',
+}
+
+CUSTOMER_TOPICS = {
     'INSERT_CUSTOMER': 'insert-customer',
     'UPDATE_CUSTOMER': 'update-customer',
 }

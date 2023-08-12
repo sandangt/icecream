@@ -1,6 +1,6 @@
 from warehouse.db.common.session import SQLSession
-from warehouse.fake.crud import mass_insert_data, insert_product_category_relationship, insert_order_relationship
-from warehouse.fake.lookup import generate_fake_media
+from warehouse.fake.crud import mass_insert_data
+from warehouse.fake.lookup import generate_fake_address, generate_fake_media
 
 
 def main():
@@ -21,8 +21,8 @@ def main():
     # endregion
     # region Lookup
     with db_lookup_session.begin() as session:
-        mass_insert_data(generate_fake_media, 3500, session)
-    #     mass_insert_data(generate_fake_address, 4000, session)
+        mass_insert_data(generate_fake_media, 5000, session)
+        mass_insert_data(generate_fake_address, 4000, session)
     # endregion
 
 

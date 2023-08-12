@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import sanlab.icecream.gateway.exception.ErrorCode;
 import sanlab.icecream.gateway.mapper.ILookupMapper;
 import sanlab.icecream.gateway.mapper.IProductMapper;
-import sanlab.icecream.gateway.repository.product.CategoryRepository;
 import sanlab.icecream.gateway.repository.product.ProductRepository;
 import sanlab.icecream.gateway.viewmodel.PageInfoRequestVm;
 import sanlab.icecream.gateway.viewmodel.lookup.MediaVm;
@@ -16,7 +15,6 @@ import sanlab.icecream.gateway.viewmodel.product.CategoryVm;
 import sanlab.icecream.gateway.viewmodel.product.ProductResponseVm;
 import sanlab.icecream.gateway.viewmodel.product.ProductVm;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
-import sanlab.icecream.sharedlib.proto.CategoryDTO;
 import sanlab.icecream.sharedlib.proto.ProductDTO;
 import sanlab.icecream.sharedlib.proto.ProductResponse;
 
@@ -25,7 +23,6 @@ import sanlab.icecream.sharedlib.proto.ProductResponse;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
     private final IProductMapper productMapper;
     private final ILookupMapper lookupMapper;
 

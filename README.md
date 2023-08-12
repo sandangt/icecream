@@ -12,7 +12,7 @@ Mundane e-commerce store
 
 ## Overvall Architecture
 
-![overview-architecture](./wiki/images/architecture/overview-architecture.png)
+![overview-architecture](./wiki/img/architecture/overview-architecture.png)
 
 ## Status
 

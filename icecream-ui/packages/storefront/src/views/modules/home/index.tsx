@@ -1,4 +1,4 @@
-import { CircularProgress, Divider, Stack } from '@mui/material'
+import { Divider, Stack } from '@mui/material'
 import { type FC } from 'react'
 
 import { type Category, type Product } from '@icecream/storefront/types/product'

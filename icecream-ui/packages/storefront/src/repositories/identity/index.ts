@@ -3,8 +3,6 @@ import { type AdapterUser } from 'next-auth/adapters'
 import { type JWT } from 'next-auth/jwt'
 import KeycloakProvider from 'next-auth/providers/keycloak'
 
-import { AuthTrigger } from '@icecream/storefront/constants'
-
 
 type CallbacksJWTProps = {
   token: JWT
@@ -40,7 +38,9 @@ export const authConfig = {
       // #endregion
       // #region Refetch new token set
       try {
-        const encodedCredential = btoa(`${process.env.KEYCLOAK_CLIENT_ID as string}:${process.env.KEYCLOAK_CLIENT_SECRET as string}`)
+        const encodedCredential = Buffer.from(
+          `${process.env.KEYCLOAK_CLIENT_ID as string}:${process.env.KEYCLOAK_CLIENT_SECRET as string}`
+        ).toString('base64')
         const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
           {
             headers: {
@@ -69,12 +69,13 @@ export const authConfig = {
       // #endregion
     },
     session: async ({ session, token }) => {
-      return {
+      const result = {
         ...session,
         accessToken: token?.accessToken,
         refreshToken: token?.refreshToken,
         tokenError: token?.error,
       }
+      return result
     },
   },
 }

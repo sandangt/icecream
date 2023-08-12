@@ -22,7 +22,6 @@ import sanlab.icecream.gateway.viewmodel.product.ProductVm;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
 @RequiredArgsConstructor
 public class ProductResolver {
@@ -30,12 +29,13 @@ public class ProductResolver {
     private final CategoryService categoryService;
 
     // region Product
-    // @PreAuthorize("hasRole('icecream-client-normie')")
+//    @PreAuthorize("hasRole('icecream-client-normie')")
     @SchemaMapping(typeName = "Query", field = "allProducts")
     public List<ProductResponseVm> getAllProducts(@Argument("pageInfo") PageInfoRequestVm pageInfo) {
         return productService.getAllProducts(pageInfo);
     }
 
+//    @PreAuthorize("hasRole('icecream-client-normie')")
     @SchemaMapping(typeName = "Query", field = "productById")
     public ProductResponseVm getProductById(@Argument("id") Long id) {
         SecurityContext ctx = SecurityContextHolder.getContext();

@@ -1,13 +1,14 @@
 """0 Create customer db
 
 Revision ID: 71d99fae45de
-Revises: 
+Revises:
 Create Date: 2023-07-16 09:10:53.510989
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy import Sequence
+from sqlalchemy.sql.ddl import CreateSequence
 
 # revision identifiers, used by Alembic.
 revision = '71d99fae45de'
@@ -34,6 +35,7 @@ def upgrade() -> None:
     sa.Column('address_id', sa.BIGINT(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+    op.execute(CreateSequence(Sequence('customer_id_sequence')))
     # ### end Alembic commands ###
 
 
