@@ -41,6 +41,18 @@ public class CustomerRepository {
         }
     }
 
+    public Optional<CustomerResponse> getCustomerByUsername(String customerEmail) {
+        CustomerRequest request = CustomerRequest.newBuilder()
+            .setCustomerUsername(customerEmail)
+            .build();
+        try {
+            CustomerResponse response = stub.getCustomerByUsername(request);
+            return Optional.ofNullable(response);
+        } catch (StatusRuntimeException ex) {
+            return Optional.empty();
+        }
+    }
+
     public void insertCustomer(CustomerDTO messageValue) {
         customerProducer.send(
             KafkaTopic.INSERT_CUSTOMER,

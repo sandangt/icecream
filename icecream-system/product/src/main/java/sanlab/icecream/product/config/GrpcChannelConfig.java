@@ -17,5 +17,4 @@ public class GrpcChannelConfig {
     ManagedChannel managedLookupChannel() {
         return ManagedChannelBuilder.forTarget(grpcLookupUrl).usePlaintext().build();
     }
-
 }

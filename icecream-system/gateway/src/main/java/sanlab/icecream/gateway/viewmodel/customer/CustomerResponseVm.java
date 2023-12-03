@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class CustomerResponseVm {
-
     private final Long id;
     private final String email;
     private final String phone;
@@ -22,17 +21,17 @@ public class CustomerResponseVm {
     private final String lastModifiedBy;
 
     public CustomerResponseVm(CustomerVm customerVm) {
-        this.id = customerVm.id();
-        this.email = customerVm.email();
-        this.phone = customerVm.phone();
-        this.lastName = customerVm.lastName();
-        this.firstName = customerVm.firstName();
-        this.isActive = customerVm.isActive();
-        this.username = customerVm.username();
-        this.mediaId = customerVm.mediaId();
-        this.createdOn = customerVm.createdOn();
-        this.createdBy = customerVm.createdBy();
-        this.lastModifiedOn = customerVm.lastModifiedOn();
-        this.lastModifiedBy = customerVm.lastModifiedBy();
+        this.id = customerVm.getId();
+        this.email = customerVm.getEmail();
+        this.phone = customerVm.getPhone();
+        this.lastName = customerVm.getLastName();
+        this.firstName = customerVm.getFirstName();
+        this.isActive = customerVm.getIsActive();
+        this.username = customerVm.getUsername();
+        this.mediaId = customerVm.getMediaId();
+        this.createdOn = customerVm.getCreatedOn();
+        this.createdBy = customerVm.getCreatedBy();
+        this.lastModifiedOn = customerVm.getLastModifiedOn();
+        this.lastModifiedBy = customerVm.getLastModifiedBy();
     }
 }

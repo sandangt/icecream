@@ -18,7 +18,6 @@ import sanlab.icecream.product.repository.lookup.MediaRepository;
 import sanlab.icecream.sharedlib.exception.IllegalValueException;
 import sanlab.icecream.sharedlib.exception.ItemNotFoundException;
 import sanlab.icecream.sharedlib.proto.CategoryDTO;
-import sanlab.icecream.sharedlib.proto.MediaDTO;
 import sanlab.icecream.sharedlib.proto.PageInfoRequest;
 import sanlab.icecream.sharedlib.proto.ProductCategoryRelationship;
 import sanlab.icecream.sharedlib.proto.ProductDTO;

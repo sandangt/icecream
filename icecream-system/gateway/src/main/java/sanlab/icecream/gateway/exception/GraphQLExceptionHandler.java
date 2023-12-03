@@ -25,7 +25,7 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
         if (ex instanceof ConstraintViolationException constraintViolationException) {
             return constraintViolationException.getConstraintViolations().stream()
                 .map(constraint -> new BadRequestException(constraint.getMessageTemplate(), sourceLocation))
-                .map(badRequestException -> (GraphQLError) badRequestException)
+                .map(GraphQLError.class::cast)
                 .toList();
         }
 

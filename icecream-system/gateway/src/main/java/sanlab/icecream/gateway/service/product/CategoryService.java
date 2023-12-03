@@ -27,12 +27,12 @@ public class CategoryService {
 
     // region Helper methods
     private CategoryResponseVm makeCategoryResponse(CategoryResponse categoryResponse) {
-        CategoryVm categoryVm = productMapper.DTOToVm(categoryResponse.getCategory());
+        CategoryVm categoryVm = productMapper.dtoToVm(categoryResponse.getCategory());
         List<ProductVm> productVmList = categoryResponse.getProductList()
             .stream()
-            .map(productMapper.INSTANCE::DTOToVm)
+            .map(productMapper.INSTANCE::dtoToVm)
             .toList();
-        MediaVm mediaVm = lookupMapper.INSTANCE.DTOToVm(categoryResponse.getMedia());
+        MediaVm mediaVm = lookupMapper.INSTANCE.dtoToVm(categoryResponse.getMedia());
         return new CategoryResponseVm(categoryVm, productVmList, mediaVm);
     }
     // endregion
@@ -55,12 +55,12 @@ public class CategoryService {
     }
 
     public void insertCategory(CategoryVm categoryVm) {
-        CategoryDTO categoryDTO = productMapper.INSTANCE.VmToDTO(categoryVm);
+        CategoryDTO categoryDTO = productMapper.INSTANCE.vmToDTO(categoryVm);
         categoryRepository.insertCategory(categoryDTO);
     }
 
     public void updateCategory(CategoryVm categoryVm) {
-        CategoryDTO categoryDTO = productMapper.INSTANCE.VmToDTO(categoryVm);
+        CategoryDTO categoryDTO = productMapper.INSTANCE.vmToDTO(categoryVm);
         categoryRepository.updateCategory(categoryDTO);
     }
 }

@@ -1,15 +1,10 @@
 package sanlab.icecream.gateway.controller;
 
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import sanlab.icecream.gateway.exception.controller.NotFoundException;
 import sanlab.icecream.gateway.service.product.CategoryService;
 import sanlab.icecream.gateway.service.product.ProductService;
@@ -29,16 +24,13 @@ public class ProductResolver {
     private final CategoryService categoryService;
 
     // region Product
-//    @PreAuthorize("hasRole('icecream-client-normie')")
     @SchemaMapping(typeName = "Query", field = "allProducts")
     public List<ProductResponseVm> getAllProducts(@Argument("pageInfo") PageInfoRequestVm pageInfo) {
         return productService.getAllProducts(pageInfo);
     }
 
-//    @PreAuthorize("hasRole('icecream-client-normie')")
     @SchemaMapping(typeName = "Query", field = "productById")
     public ProductResponseVm getProductById(@Argument("id") Long id) {
-        SecurityContext ctx = SecurityContextHolder.getContext();
         try {
             return productService.getProductById(id);
         } catch (ItemNotFoundException ex) {
@@ -52,7 +44,7 @@ public class ProductResolver {
         return new ResponseVm(true);
     }
 
-    @SchemaMapping(typeName="Mutation", field = "updateProduct")
+    @SchemaMapping(typeName = "Mutation", field = "updateProduct")
     public ResponseVm updateProduct(@Argument("product") ProductVm product) {
         productService.updateProduct(product);
         return new ResponseVm(true);
@@ -92,7 +84,7 @@ public class ProductResolver {
         return new ResponseVm(true);
     }
 
-    @SchemaMapping(typeName="Mutation", field = "updateCategory")
+    @SchemaMapping(typeName = "Mutation", field = "updateCategory")
     public ResponseVm updateCategory(@Argument("category") CategoryVm category) {
         categoryService.updateCategory(category);
         return new ResponseVm(true);

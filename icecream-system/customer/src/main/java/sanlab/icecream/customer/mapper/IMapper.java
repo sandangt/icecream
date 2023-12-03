@@ -10,8 +10,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
+import org.springframework.context.annotation.Bean;
 import sanlab.icecream.customer.model.Customer;
 import sanlab.icecream.sharedlib.converter.DateTimeConverter;
 import sanlab.icecream.sharedlib.proto.CustomerDTO;
@@ -21,13 +23,14 @@ import sanlab.icecream.sharedlib.proto.CustomerDTO;
 public interface IMapper {
     IMapper INSTANCE = Mappers.getMapper(IMapper.class);
 
-    @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
-    @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "odtToTimestamp")
-    CustomerDTO modelToDTO(Customer customer);
-
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
     Customer dtoToModel(CustomerDTO customer);
+
+    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
+    @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "odtToTimestamp")
+    CustomerDTO modelToDTO(Customer customer);
 
     @Named("odtToTimestamp")
     default Timestamp odtToTimestamp(OffsetDateTime offsetDateTime) {

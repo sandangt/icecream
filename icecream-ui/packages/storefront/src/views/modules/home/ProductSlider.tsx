@@ -52,7 +52,8 @@ export default ProductSlider
 
 type ProductSliderItemProps = Product
 
-const ProductSliderItem: FC<ProductSliderItemProps> = ({ name, id }) => {
+const ProductSliderItem: FC<ProductSliderItemProps> = ({ name, id, media }) => {
+  const { filepath: mediaFilepath } = media
   return (
     <Card sx={{ my: 3 }}>
       <CardContent sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -60,7 +61,7 @@ const ProductSliderItem: FC<ProductSliderItemProps> = ({ name, id }) => {
           {name}
         </Typography>
       </CardContent>
-      <CardMedia component="img" image="https://picsum.photos/seed/picsum/200/300" />
+      <CardMedia component="img" image={mediaFilepath} />
       <CardActions>
         <Link
           href={`/${StorefrontRoutes.SHOP}/${id}`}

@@ -16,6 +16,9 @@ public interface ICustomerMapper extends IBaseMapper {
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "odtToTimestamp")
-    CustomerDTO VmToDTO(CustomerVm customer);
+    CustomerDTO vmToDTO(CustomerVm customer);
 
+    @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
+    @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
+    CustomerVm dtoToVm(CustomerDTO customer);
 }

@@ -28,9 +28,9 @@ public class ProductService {
 
     // region Helper methods
     private ProductResponseVm makeProductResponse(ProductResponse productResponse) {
-        ProductVm productVm = productMapper.DTOToVm(productResponse.getProduct());
-        CategoryVm categoryVm = productMapper.DTOToVm(productResponse.getCategory());
-        MediaVm mediaVm = lookupMapper.DTOToVm(productResponse.getMedia());
+        ProductVm productVm = productMapper.dtoToVm(productResponse.getProduct());
+        CategoryVm categoryVm = productMapper.dtoToVm(productResponse.getCategory());
+        MediaVm mediaVm = lookupMapper.dtoToVm(productResponse.getMedia());
         return new ProductResponseVm(productVm, categoryVm, mediaVm);
     }
     // endregion
@@ -54,12 +54,12 @@ public class ProductService {
     }
 
     public void insertProduct(ProductVm productVm) {
-        ProductDTO productDTO = productMapper.INSTANCE.VmToDTO(productVm);
+        ProductDTO productDTO = productMapper.INSTANCE.vmToDTO(productVm);
         productRepository.insertProduct(productDTO);
     }
 
     public void updateProduct(ProductVm productVm) {
-        ProductDTO productDTO = productMapper.INSTANCE.VmToDTO(productVm);
+        ProductDTO productDTO = productMapper.INSTANCE.vmToDTO(productVm);
         productRepository.updateProduct(productDTO);
     }
 

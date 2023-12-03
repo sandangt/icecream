@@ -13,8 +13,6 @@ type Props = {
 }
 
 const HomeModule: FC<Props> = ({ latestProducts, categories }) => {
-  // let bannerComponent = <CircularProgress />
-  // let categoryComponent = <CircularProgress />
   return (
     <Stack spacing={5}>
       <ProductSlider data={latestProducts} />

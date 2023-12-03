@@ -3,7 +3,6 @@ import { type AdapterUser } from 'next-auth/adapters'
 import { type JWT } from 'next-auth/jwt'
 import KeycloakProvider from 'next-auth/providers/keycloak'
 
-
 type CallbacksJWTProps = {
   token: JWT
   user: User | AdapterUser
@@ -69,13 +68,12 @@ export const authConfig = {
       // #endregion
     },
     session: async ({ session, token }) => {
-      const result = {
+      return {
         ...session,
         accessToken: token?.accessToken,
         refreshToken: token?.refreshToken,
         tokenError: token?.error,
       }
-      return result
     },
   },
 }

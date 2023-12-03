@@ -2,26 +2,28 @@ import { gql } from 'graphql-request'
 
 import client from '@icecream/storefront/repositories/common/graphql-client'
 
-
 const getAllProductsDocument = gql`
   query GetAllProducts($pageInfo: PageInfo!) {
     allProducts(pageInfo: $pageInfo) {
       id
       name
-      createdOn
       briefDescription
       description
       specification
       sku
       slug
       price
-      metaDescription
-      lastModifiedOn
-      lastModifiedBy
-      createdBy
       stockQuantity
+      metaDescription
       metaTitle
       metaKeyword
+      media {
+        filepath
+      }
+      createdOn
+      createdBy
+      lastModifiedOn
+      lastModifiedBy
     }
   }
 `
@@ -59,6 +61,9 @@ const getProductByIdDocument = gql`
       metaTitle
       metaKeyword
       metaDescription
+      media {
+        filepath
+      }
       createdOn
       createdBy
       lastModifiedOn
@@ -71,18 +76,18 @@ export type GetProductByIdVariables = {
   productId: number | string
 }
 
-export const getProductByIdKey = 'productById'
+export const getProductByIdKey = 'product-by-id'
 
 type GetProductByIdRequestProps = {
   variables: GetProductByIdVariables,
   accessToken: string
 }
 
-export const getProductByIdRequest = ({variables, accessToken}: GetProductByIdRequestProps) => async () =>
-  await client.request<any, GetProductByIdVariables>({
-    document: getProductByIdDocument,
-    variables,
-    requestHeaders: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+export const getProductByIdRequest = ({ variables, accessToken }: GetProductByIdRequestProps) => async () =>
+    await client.request<any, GetProductByIdVariables>({
+      document: getProductByIdDocument,
+      variables,
+      requestHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })

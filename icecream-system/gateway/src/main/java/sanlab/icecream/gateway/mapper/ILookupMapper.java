@@ -13,5 +13,5 @@ public interface ILookupMapper extends IBaseMapper {
 
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
-    MediaVm DTOToVm(MediaDTO media);
+    MediaVm dtoToVm(MediaDTO media);
 }

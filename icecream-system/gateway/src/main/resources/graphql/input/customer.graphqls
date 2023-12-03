@@ -1,17 +1,14 @@
 input UpdateCustomerRequest {
   id: ID!
-  email: String
-  phone: String
-  lastName: String
   firstName: String
+  lastName: String
+  phone: String
   mediaId: String
 }
 
 input InsertCustomerRequest {
-  id: ID!
-  email: String
-  phone: String
   lastName: String
   firstName: String
+  phone: String
   mediaId: String
 }
