@@ -1,4 +1,13 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Typography,
+} from '@mui/material'
 import { type FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
@@ -16,7 +25,7 @@ type Props = {
 }
 
 const ProductSlider: FC<Props> = ({ data }) => {
-  return (
+  return data?.length ? (
     <Box sx={{ my: 5 }}>
       <Swiper
         spaceBetween={50}
@@ -26,8 +35,6 @@ const ProductSlider: FC<Props> = ({ data }) => {
         navigation={{ enabled: true, hideOnClick: true }}
         pagination={{ enabled: true, clickable: true, dynamicBullets: true }}
         autoplay={{ delay: 1500, disableOnInteraction: false }}
-        onSlideChange={() => console.log('slide change !')}
-        onSwiper={(swiper) => console.log(swiper)}
       >
         {data.map((product) => (
           <SwiperSlide key={product.id}>
@@ -36,6 +43,8 @@ const ProductSlider: FC<Props> = ({ data }) => {
         ))}
       </Swiper>
     </Box>
+  ) : (
+    <CircularProgress />
   )
 }
 
@@ -43,7 +52,8 @@ export default ProductSlider
 
 type ProductSliderItemProps = Product
 
-const ProductSliderItem: FC<ProductSliderItemProps> = ({ name, id }) => {
+const ProductSliderItem: FC<ProductSliderItemProps> = ({ name, id, media }) => {
+  const { filepath: mediaFilepath } = media
   return (
     <Card sx={{ my: 3 }}>
       <CardContent sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -51,7 +61,7 @@ const ProductSliderItem: FC<ProductSliderItemProps> = ({ name, id }) => {
           {name}
         </Typography>
       </CardContent>
-      <CardMedia component="img" image="https://picsum.photos/seed/picsum/200/300" />
+      <CardMedia component="img" image={mediaFilepath} />
       <CardActions>
         <Link
           href={`/${StorefrontRoutes.SHOP}/${id}`}

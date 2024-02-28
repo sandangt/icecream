@@ -1,3 +1,5 @@
+import { Media } from "./lookup"
+
 export type Product = {
   id: string
   name: string
@@ -11,7 +13,7 @@ export type Product = {
   metaTitle: string
   metaKeyword: string
   metaDescription: string
-  mediaId: string
+  media: Media
   createdOn: string
   createdBy: string
   lastModifiedOn: string
@@ -25,7 +27,7 @@ export type Category = {
   slug: string
   metaKeyword: string
   metaDescription: string
-  mediaId: string
+  media: Media
   createdOn: string
   createdBy: string
   lastModifiedOn: string

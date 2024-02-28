@@ -3,6 +3,7 @@ import { Container } from '@mui/material'
 
 import Header from './Header'
 import Footer from './Footer'
+import ErrorBoundary from './ErrorBoundary'
 
 const styles = {
   body: {
@@ -18,9 +19,11 @@ type Props = {
 const Layout: FC<Props> = ({ children }) => {
   return (
     <>
-      <Header />
-      <Container sx={styles.body}>{children}</Container>
-      <Footer />
+      <ErrorBoundary>
+        <Header />
+        <Container sx={styles.body}>{children}</Container>
+        <Footer />
+      </ErrorBoundary>
     </>
   )
 }

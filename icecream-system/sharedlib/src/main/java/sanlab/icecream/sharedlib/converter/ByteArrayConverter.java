@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+
 public class ByteArrayConverter {
     public static byte[] toByteArray(Object obj) throws IOException {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();

@@ -46,6 +46,7 @@ public class CategoryService {
     }
     // endregion
 
+    @Transactional
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAllByOrderByNameAsc()
             .stream()
@@ -53,6 +54,7 @@ public class CategoryService {
             .toList();
     }
 
+    @Transactional
     public CategoryResponse getCategoryById(Long id) throws ItemNotFoundException {
         Optional<Category> categoryWrapper = categoryRepository.findById(id);
         Category category = categoryWrapper.orElseThrow(() -> new ItemNotFoundException(

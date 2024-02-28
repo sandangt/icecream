@@ -7,7 +7,7 @@
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="$PROJECT_DIR$/.direnv/python-3.11.3/bin/python3.11" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/warehouse/db/lookup" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/warehouse/db/customer" />
     <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />

@@ -9,7 +9,6 @@ import sanlab.icecream.gateway.exception.ErrorCode;
 import sanlab.icecream.gateway.mapper.ILookupMapper;
 import sanlab.icecream.gateway.mapper.IProductMapper;
 import sanlab.icecream.gateway.repository.product.CategoryRepository;
-import sanlab.icecream.gateway.repository.product.ProductRepository;
 import sanlab.icecream.gateway.viewmodel.lookup.MediaVm;
 import sanlab.icecream.gateway.viewmodel.product.CategoryResponseVm;
 import sanlab.icecream.gateway.viewmodel.product.CategoryVm;
@@ -23,18 +22,17 @@ import sanlab.icecream.sharedlib.proto.CategoryResponse;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
     private final IProductMapper productMapper;
     private final ILookupMapper lookupMapper;
 
     // region Helper methods
     private CategoryResponseVm makeCategoryResponse(CategoryResponse categoryResponse) {
-        CategoryVm categoryVm = productMapper.DTOToVm(categoryResponse.getCategory());
+        CategoryVm categoryVm = productMapper.dtoToVm(categoryResponse.getCategory());
         List<ProductVm> productVmList = categoryResponse.getProductList()
             .stream()
-            .map(productMapper.INSTANCE::DTOToVm)
+            .map(productMapper.INSTANCE::dtoToVm)
             .toList();
-        MediaVm mediaVm = lookupMapper.INSTANCE.DTOToVm(categoryResponse.getMedia());
+        MediaVm mediaVm = lookupMapper.INSTANCE.dtoToVm(categoryResponse.getMedia());
         return new CategoryResponseVm(categoryVm, productVmList, mediaVm);
     }
     // endregion
@@ -57,12 +55,12 @@ public class CategoryService {
     }
 
     public void insertCategory(CategoryVm categoryVm) {
-        CategoryDTO categoryDTO = productMapper.INSTANCE.VmToDTO(categoryVm);
+        CategoryDTO categoryDTO = productMapper.INSTANCE.vmToDTO(categoryVm);
         categoryRepository.insertCategory(categoryDTO);
     }
 
     public void updateCategory(CategoryVm categoryVm) {
-        CategoryDTO categoryDTO = productMapper.INSTANCE.VmToDTO(categoryVm);
+        CategoryDTO categoryDTO = productMapper.INSTANCE.vmToDTO(categoryVm);
         categoryRepository.updateCategory(categoryDTO);
     }
 }

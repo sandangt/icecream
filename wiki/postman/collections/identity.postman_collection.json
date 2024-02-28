@@ -1,0 +1,212 @@
+{
+	"info": {
+		"_postman_id": "cea6b6d8-fa0f-405f-b1f9-124848425d90",
+		"name": "identity",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17180713"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"access_token\", jsonData.access_token)",
+							"pm.environment.set(\"refresh_token\", jsonData.refresh_token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "sandang",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "sandang",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{identity_url}}/realms/icecream/protocol/openid-connect/token",
+					"host": [
+						"{{identity_url}}"
+					],
+					"path": [
+						"realms",
+						"icecream",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorization code token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secrect",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "ca83b0bd-7c7a-42b4-88d0-3936334319f1.394e8011-fafd-4082-8de1-72fd984c67ff.c6ad3372-5479-45f5-b610-cc3c2d83e7f1",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{gateway_url}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{identity_url}}/realms/icecream/protocol/openid-connect/token",
+					"host": [
+						"{{identity_url}}"
+					],
+					"path": [
+						"realms",
+						"icecream",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh access token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{client_id}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{identity_url}}/realms/icecream/protocol/openid-connect/token",
+					"host": [
+						"{{identity_url}}"
+					],
+					"path": [
+						"realms",
+						"icecream",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{identity_url}}/realms/icecream/protocol/openid-connect/userinfo",
+					"host": [
+						"{{identity_url}}"
+					],
+					"path": [
+						"realms",
+						"icecream",
+						"protocol",
+						"openid-connect",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

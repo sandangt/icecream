@@ -18,19 +18,18 @@ public interface IProductMapper extends IBaseMapper {
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "odtToTimestamp")
-    ProductDTO VmToDTO(ProductVm product);
+    ProductDTO vmToDTO(ProductVm product);
 
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
-    ProductVm DTOToVm(ProductDTO product);
-
+    ProductVm dtoToVm(ProductDTO product);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "odtToTimestamp")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "odtToTimestamp")
-    CategoryDTO VmToDTO(CategoryVm category);
+    CategoryDTO vmToDTO(CategoryVm category);
 
     @Mapping(target = "createdOn", source = "createdOn", qualifiedByName = "timestampToOdt")
     @Mapping(target = "lastModifiedOn", source = "lastModifiedOn", qualifiedByName = "timestampToOdt")
-    CategoryVm DTOToVm(CategoryDTO category);
+    CategoryVm dtoToVm(CategoryDTO category);
 }

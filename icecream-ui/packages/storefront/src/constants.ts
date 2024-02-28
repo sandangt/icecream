@@ -6,6 +6,11 @@ export enum StorefrontRoutes {
   PROFILE = 'profile',
 }
 
+export enum StorefrontErrorRoutes {
+  DATA_SHORTAGE = '1',
+  DISPLAY_ERROR = '2'
+}
+
 export enum AuthTrigger {
   SIGN_IN = 'signIn',
   SIGN_UP = 'signUp',

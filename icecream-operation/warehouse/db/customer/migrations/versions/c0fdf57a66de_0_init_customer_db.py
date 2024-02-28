@@ -1,16 +1,18 @@
-"""0 Create customer db
+"""0 Init customer db
 
-Revision ID: 71d99fae45de
-Revises: 
-Create Date: 2023-07-16 09:10:53.510989
+Revision ID: c0fdf57a66de
+Revises:
+Create Date: 2023-08-20 16:17:41.819877
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy import Sequence
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.sql.ddl import CreateSequence
 
 # revision identifiers, used by Alembic.
-revision = '71d99fae45de'
+revision = 'c0fdf57a66de'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,15 +27,23 @@ def upgrade() -> None:
     sa.Column('last_name', sa.VARCHAR(length=100), nullable=True),
     sa.Column('first_name', sa.VARCHAR(length=100), nullable=True),
     sa.Column('is_active', sa.BOOLEAN(), nullable=True),
-    sa.Column('username', sa.VARCHAR(length=500), nullable=True),
+    sa.Column('username', sa.VARCHAR(length=500), nullable=False),
     sa.Column('media_id', sa.UUID(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('created_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('created_by', sa.VARCHAR(length=500), nullable=True),
+    sa.Column('last_modified_on', postgresql.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('last_modified_by', sa.VARCHAR(length=500), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('username')
     )
     op.create_table('customer_address',
     sa.Column('id', sa.BIGINT(), autoincrement=True, nullable=False),
+    sa.Column('customer_id', sa.BIGINT(), nullable=True),
     sa.Column('address_id', sa.BIGINT(), nullable=True),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.execute(CreateSequence(Sequence('customer_id_sequence')))
     # ### end Alembic commands ###
 
 

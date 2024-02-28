@@ -42,4 +42,27 @@ public class CustomerService {
         );
         return mapper.INSTANCE.modelToDTO(customer);
     }
+
+    public CustomerDTO getCustomerByUsername(String username) {
+        Customer customer = customerRepository.findByUsername(username)
+            .orElseThrow(() -> new ItemNotFoundException(
+                String.format("Customer with username: %s not found", username), ErrorCode.CUSTOMER_NOT_FOUND
+            )
+        );
+        return mapper.INSTANCE.modelToDTO(customer);
+    }
+
+    public void insertCustomer(CustomerDTO customerDTO) {
+        Customer result = mapper.INSTANCE.dtoToModel(customerDTO);
+        customerRepository.saveAndFlush(result);
+    }
+
+    public void updateCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findById(customerDTO.getId())
+            .orElseThrow(() -> new ItemNotFoundException(
+                String.format("Customer with ID: %s not found", customerDTO.getId()), ErrorCode.CUSTOMER_NOT_FOUND
+            ));
+        mapper.INSTANCE.updateCustomerFromDTO(customerDTO, customer);
+        customerRepository.saveAndFlush(customer);
+    }
 }

@@ -22,12 +22,12 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>20</java.version>
+    <java.version>21</java.version>
     <maven.version>3.11.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.1.1</spring.boot.version>
-    <spring.cloud.version>2022.0.3</spring.cloud.version>
+    <spring.boot.version>3.1.4</spring.boot.version>
+    <spring.cloud.version>2022.0.4</spring.cloud.version>
     <spring.kafka.version>3.0.8</spring.kafka.version>
     <apache.kafka.version>3.5.0</apache.kafka.version>
     <confluent.version>7.3.3</confluent.version>

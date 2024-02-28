@@ -23,7 +23,7 @@ import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 @Table(name = "address")
 public class Address extends AbstractAuditEntity {
     @Id
-    @SequenceGenerator(name = "address_id_sequence", sequenceName = "address_id_sequence")
+    @SequenceGenerator(name = "address_id_sequence", sequenceName = "address_id_sequence", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_id_sequence")
     private Long id;
     private String address;

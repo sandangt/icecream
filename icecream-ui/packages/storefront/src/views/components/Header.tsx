@@ -123,7 +123,7 @@ const Header = () => {
                 </Link>
               </MenuItem>
               <MenuItem>
-                <Typography textAlign="center" onClick={() => signOut()}>
+                <Typography textAlign="center" onClick={() => signOut({redirect: false})}>
                   Logout
                 </Typography>
               </MenuItem>

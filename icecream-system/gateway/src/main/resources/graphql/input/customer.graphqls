@@ -1,0 +1,14 @@
+input UpdateCustomerRequest {
+  id: ID!
+  firstName: String
+  lastName: String
+  phone: String
+  mediaId: String
+}
+
+input InsertCustomerRequest {
+  lastName: String
+  firstName: String
+  phone: String
+  mediaId: String
+}
