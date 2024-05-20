@@ -42,4 +42,17 @@ public class GrpcConsumer extends CustomerServiceGrpc.CustomerServiceImplBase {
             responseObserver.onCompleted();
         }
     }
+
+    @Override
+    public void getCustomerByUsername(CustomerRequest request, StreamObserver<CustomerResponse> responseObserver) {
+        try {
+            CustomerDTO customer = customerService.getCustomerByUsername(request.getCustomerUsername());
+            CustomerResponse response = CustomerResponse.newBuilder().setCustomer(customer).build();
+            responseObserver.onNext(response);
+        } catch (ItemNotFoundException ex) {
+            responseObserver.onError(ex);
+        } finally {
+            responseObserver.onCompleted();
+        }
+    }
 }

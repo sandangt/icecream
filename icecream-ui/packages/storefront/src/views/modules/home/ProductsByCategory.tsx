@@ -1,4 +1,12 @@
-import { Box, Card, CardContent, CardMedia, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { type FC } from 'react'
 import { type Category } from '@icecream/storefront/types/product'
 import { StorefrontRoutes } from '@icecream/storefront/constants'
@@ -12,13 +20,17 @@ const ProductsByCategory: FC<Props> = ({ data }) => {
   return (
     <Stack useFlexGap spacing={3} sx={{ my: 5 }}>
       <Typography variant="h4">Categories</Typography>
-      <Stack spacing={2} direction="row" flexWrap="wrap" useFlexGap>
-        {data.map((category) => (
-          <Box key={category.id}>
-            <CategoryItem {...category} />
-          </Box>
-        ))}
-      </Stack>
+      {data?.length ? (
+        <Stack spacing={2} direction="row" flexWrap="wrap" useFlexGap>
+          {data.map((category) => (
+            <Box key={category.id}>
+              <CategoryItem {...category} />
+            </Box>
+          ))}
+        </Stack>
+      ) : (
+        <CircularProgress />
+      )}
     </Stack>
   )
 }
@@ -27,7 +39,8 @@ export default ProductsByCategory
 
 type CategoryItemProps = Category
 
-const CategoryItem: FC<CategoryItemProps> = ({ name }) => {
+const CategoryItem: FC<CategoryItemProps> = ({ name, media }) => {
+  const { filepath: mediaFilepath } = media
   return (
     <Link
       href={`/${StorefrontRoutes.SHOP}/`}
@@ -48,7 +61,7 @@ const CategoryItem: FC<CategoryItemProps> = ({ name }) => {
         <CardContent sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
           <Typography noWrap>{name}</Typography>
         </CardContent>
-        <CardMedia component="img" image="https://picsum.photos/seed/picsum/200/300" />
+        <CardMedia component="img" image={mediaFilepath} />
       </Card>
     </Link>
   )

@@ -1,6 +1,14 @@
 import { StorefrontRoutes } from '@icecream/storefront/constants'
 import { type Product } from '@icecream/storefront/types/product'
-import { Box, Card, CardContent, CardMedia, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Stack,
+  Typography,
+} from '@mui/material'
 import Link from 'next/link'
 import { type FC } from 'react'
 
@@ -10,15 +18,19 @@ type Props = {
 
 const NewProducts: FC<Props> = ({ data }) => {
   return (
-    <Stack useFlexGap spacing={3} sx={{my: 5}}>
+    <Stack useFlexGap spacing={3} sx={{ my: 5 }}>
       <Typography variant="h4">New Products</Typography>
-      <Stack spacing={2} direction="row" flexWrap="wrap" useFlexGap>
-        {data.slice(10).map((product) => (
-          <Box key={product.id}>
-            <NewProductItem {...product} />
-          </Box>
-        ))}
-      </Stack>
+      {data?.length ? (
+        <Stack spacing={2} direction="row" flexWrap="wrap" useFlexGap>
+          {data.slice(10).map((product) => (
+            <Box key={product.id}>
+              <NewProductItem {...product} />
+            </Box>
+          ))}
+        </Stack>
+      ) : (
+        <CircularProgress />
+      )}
     </Stack>
   )
 }
@@ -27,7 +39,8 @@ export default NewProducts
 
 type NewProductItemProps = Product
 
-const NewProductItem: FC<NewProductItemProps> = ({ id, name }) => {
+const NewProductItem: FC<NewProductItemProps> = ({ id, name, media }) => {
+  const { filepath: mediaFilepath } = media
   return (
     <Link
       href={`/${StorefrontRoutes.SHOP}/${id}`}
@@ -46,7 +59,7 @@ const NewProductItem: FC<NewProductItemProps> = ({ id, name }) => {
         <CardContent sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
           <Typography noWrap>{name}</Typography>
         </CardContent>
-        <CardMedia component="img" image="https://picsum.photos/seed/picsum/200/300" />
+        <CardMedia component="img" image={mediaFilepath} />
       </Card>
     </Link>
   )

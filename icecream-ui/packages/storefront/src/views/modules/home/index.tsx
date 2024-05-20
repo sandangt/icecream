@@ -1,4 +1,4 @@
-import { CircularProgress, Divider, Stack } from '@mui/material'
+import { Divider, Stack } from '@mui/material'
 import { type FC } from 'react'
 
 import { type Category, type Product } from '@icecream/storefront/types/product'
@@ -13,8 +13,6 @@ type Props = {
 }
 
 const HomeModule: FC<Props> = ({ latestProducts, categories }) => {
-  // let bannerComponent = <CircularProgress />
-  // let categoryComponent = <CircularProgress />
   return (
     <Stack spacing={5}>
       <ProductSlider data={latestProducts} />

@@ -4,11 +4,13 @@ import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -16,9 +18,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 
-@Builder
+
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -27,7 +31,7 @@ import sanlab.icecream.sharedlib.abstractentity.AbstractAuditEntity;
 @Table(name = "customer")
 public class Customer extends AbstractAuditEntity {
     @Id
-    @SequenceGenerator(name = "customer_id_sequence", sequenceName = "customer_id_sequence")
+    @SequenceGenerator(name = "customer_id_sequence", sequenceName = "customer_id_sequence", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_sequence")
     private Long id;
     private String email;
@@ -39,6 +43,7 @@ public class Customer extends AbstractAuditEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<CustomerAddress> customerAddressList;
 
+    @Column(unique = true)
     private String username;
     private UUID mediaId;
 
@@ -56,5 +61,12 @@ public class Customer extends AbstractAuditEntity {
     public int hashCode() {
         // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
+    }
+
+    @PrePersist
+    public void updateDefaultValues() {
+        if (isActive == null) {
+            isActive = true;
+        }
     }
 }

@@ -23,7 +23,8 @@ message CustomerDTO {
 }
 
 message CustomerRequest {
-    uint64 customerId = 1;
+    optional uint64 customerId = 1;
+    optional string customerUsername = 2;
 }
 
 message CustomerResponse {
@@ -51,4 +52,5 @@ message CustomerAddressResponse {
 service CustomerService {
     rpc getAllCustomers(PageInfoRequest) returns (CustomerCollectionResponse);
     rpc getCustomerById(CustomerRequest) returns (CustomerResponse);
+    rpc getCustomerByUsername(CustomerRequest) returns (CustomerResponse);
 }

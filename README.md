@@ -2,7 +2,7 @@
 
 ## Description
 
-Mundane e-commerce store
+Yet another mundane e-commerce system built from based Martian cutting-edge technology.
 
 ## Tech stack
 
@@ -12,7 +12,15 @@ Mundane e-commerce store
 
 ## Architecture
 
-![overview-architecture](./wiki/images/architecture/overview-architecture.png)
+![overview-architecture](./wiki/img/architecture/overview-architecture.png)
+
+## Repository structure
+
+This repository is separated into 3 main parts (not included directories dedicated for docker and documentation):
+
+- ***system***: backend of the project.
+- ***ui***: frontend of the project.
+- ***operation***: backdoor tasks & scripts dedicated to correct data, fix kafka topic pipelines, or create dummy data...
 
 ## Status
 

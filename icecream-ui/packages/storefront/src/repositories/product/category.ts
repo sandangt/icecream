@@ -11,7 +11,9 @@ const getAllCategoriesDocument = gql`
       slug
       metaKeyword
       metaDescription
-      mediaId
+      media {
+        filepath
+      }
       createdOn
       createdBy
       lastModifiedOn
@@ -34,7 +36,9 @@ const getCategoryByIdDocument = gql`
       slug
       metaKeyword
       metaDescription
-      mediaId
+      media {
+        filepath
+      }
       createdOn
       createdBy
       lastModifiedOn
@@ -47,7 +51,10 @@ export type GetCategoryByIdVariables = {
   categoryId: number
 }
 
-export const getCategoryByIdKey = 'categoryById'
+export const getCategoryByIdKey = 'category-by-id'
 
 export const getCategoryByIdRequest = (variables: GetCategoryByIdVariables) => async () =>
-  await client.request<any, GetCategoryByIdVariables>({ document: getCategoryByIdDocument, variables })
+  await client.request<any, GetCategoryByIdVariables>({
+    document: getCategoryByIdDocument,
+    variables,
+  })
