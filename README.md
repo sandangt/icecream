@@ -12,8 +12,6 @@ Yet another mundane e-commerce system built from based Martian cutting-edge tech
 
 ## Architecture
 
-![overview-architecture](./wiki/img/architecture/overview-architecture.png)
-
 ## Repository structure
 
 This repository is separated into 3 main parts (not included directories dedicated for docker and documentation):

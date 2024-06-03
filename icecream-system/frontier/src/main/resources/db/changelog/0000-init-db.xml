@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="init-database" author="zoroaster">
+    <sql>
+      CREATE TABLE customer (
+        id UUID PRIMARY KEY,
+        email VARCHAR UNIQUE NOT NULL,
+        username VARCHAR NOT NULL,
+        phone VARCHAR,
+        last_name VARCHAR,
+        first_name VARCHAR,
+        is_active BOOLEAN,
+        created_at BIGINT,
+        modified_at BIGINT
+      );
+      CREATE TABLE image (
+        id UUID PRIMARY KEY,
+        description TEXT,
+        relative_path VARCHAR NOT NULL,
+        type VARCHAR NOT NULL,
+        created_at BIGINT,
+        modified_at BIGINT
+      );
+      CREATE TABLE category (
+        id UUID PRIMARY KEY,
+        slug VARCHAR UNIQUE NOT NULL,
+        name VARCHAR UNIQUE NOT NULL,
+        description TEXT
+      );
+      CREATE TABLE product (
+        id UUID PRIMARY KEY,
+        name VARCHAR NOT NULL,
+        description TEXT,
+        price DOUBLE PRECISION,
+        quantity INTEGER,
+        status VARCHAR,
+        created_at BIGINT,
+        modified_at BIGINT
+      );
+      CREATE TABLE product_category (
+        product_id UUID,
+        category_id UUID,
+        PRIMARY KEY (product_id, category_id),
+        CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES category(id)
+      );
+      CREATE TABLE product_image (
+        product_id UUID,
+        image_id UUID,
+        PRIMARY KEY (product_id, image_id),
+        CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_image FOREIGN KEY(image_id) REFERENCES image(id)
+      )
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

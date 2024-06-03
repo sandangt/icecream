@@ -1,0 +1,46 @@
+{
+  "name": "piratereel-backoffice",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=18.15.0"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "dev": "vite --port ${BACKOFFICE_PORT} --host ${BACKOFFICE_HOST}",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "keycloak-js": "24.0.4",
+    "qs": "^6.12.1",
+    "ra-data-local-forage": "4.16.17",
+    "ra-data-local-storage": "4.16.17",
+    "ra-input-rich-text": "4.16.18",
+    "ra-keycloak": "1.0.1",
+    "react": "18.3.1",
+    "react-admin": "4.16.18",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.8",
+    "@types/qs": "^6.9.15",
+    "@types/react": "18.3.2",
+    "@types/react-dom": "18.3.0",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^7.10.0",
+    "@typescript-eslint/parser": "^7.10.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^9.3.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "prettier": "^3.2.4",
+    "typescript": "5.4.5",
+    "vite": "5.2.11",
+    "vite-plugin-node-polyfills": "^0.22.0"
+  }
+}

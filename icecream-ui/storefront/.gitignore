@@ -1,0 +1,23 @@
+node_modules/
+/.next/
+/out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel
+.next
+yarn.lock
+*.tsbuildinfo
+next-env.d.ts
+build/
+dist/
+dist-ssr
+*.local
+.coverage
+*.log
+
+# Editor
+.idea/
+.vscode/
+*~
+*.swp

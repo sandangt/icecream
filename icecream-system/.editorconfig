@@ -9,5 +9,5 @@ max_line_length = 120
 trim_trailing_whitespace = true
 indent_size = 2
 
-[*.{java,py,proto}]
+[*.{java,py,kt,proto}]
 indent_size = 4

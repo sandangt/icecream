@@ -1,1 +1,0 @@
-# Ice cream front end

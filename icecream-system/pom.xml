@@ -8,41 +8,41 @@
   <packaging>pom</packaging>
   <version>0.1.0</version>
   <modules>
-    <module>product</module>
-    <module>gateway</module>
-    <module>sharedlib</module>
-    <module>cart</module>
-    <module>customer</module>
-    <module>feedback</module>
-    <module>order</module>
-    <module>inventory</module>
-    <module>payment</module>
-    <module>lookup</module>
+    <module>frontier</module>
+    <module>chronos</module>
+    <module>echo</module>
+    <module>fundamentum</module>
   </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>21</java.version>
-    <maven.version>3.11.0</maven.version>
+    <maven.version>3.13.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.1.4</spring.boot.version>
-    <spring.cloud.version>2022.0.4</spring.cloud.version>
-    <spring.kafka.version>3.0.8</spring.kafka.version>
-    <apache.kafka.version>3.5.0</apache.kafka.version>
-    <confluent.version>7.3.3</confluent.version>
-    <protobuf.version>3.23.2</protobuf.version>
-    <grpc.version>1.56.1</grpc.version>
-    <spring.grpc.version>5.1.3</spring.grpc.version>
-    <postgresql.version>42.6.0</postgresql.version>
-    <lombok.version>1.18.28</lombok.version>
-    <guava.version>32.1.1-jre</guava.version>
-    <apache.commons.lang>3.12.0</apache.commons.lang>
+    <spring.boot.version>3.2.5</spring.boot.version>
+    <spring.cloud.version>2023.0.1</spring.cloud.version>
+    <spring.doc.version>2.5.0</spring.doc.version>
+    <spring.kafka.version>3.1.4</spring.kafka.version>
+    <apache.kafka.version>3.7.0</apache.kafka.version>
+    <confluent.version>7.6.0</confluent.version>
+    <spring.grpc.version>3.1.0.RELEASE</spring.grpc.version>
+    <protobuf.version>4.26.1</protobuf.version>
+    <grpc.version>1.64.0</grpc.version>
+    <postgresql.version>42.7.3</postgresql.version>
+    <lombok.version>1.18.32</lombok.version>
+    <guava.version>33.2.0-jre</guava.version>
+    <apache.commons.lang>3.14.0</apache.commons.lang>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
+    <liquibase.version>4.27.0</liquibase.version>
+    <slugify.version>3.0.6</slugify.version>
+    <faker.version>1.0.2</faker.version>
+    <minio.version>8.5.10</minio.version>
   </properties>
   <dependencyManagement>
     <dependencies>
-      <!--region Spring-->
+      <!--region Spring boot & spring cloud-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -56,6 +56,13 @@
         <version>${spring.cloud.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!--endregion-->
+      <!--region Openapi-->
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>${spring.doc.version}</version>
       </dependency>
       <!--endregion-->
       <!--region Protobuf-->
@@ -101,15 +108,9 @@
       <!--endregion-->
       <!--region grpc-->
       <dependency>
-        <groupId>io.github.lognet</groupId>
+        <groupId>net.devh</groupId>
         <artifactId>grpc-spring-boot-starter</artifactId>
         <version>${spring.grpc.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty-shaded</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
       <dependency>
         <groupId>io.grpc</groupId>
@@ -139,6 +140,18 @@
         <version>${postgresql.version}</version>
         <scope>runtime</scope>
       </dependency>
+      <dependency>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-core</artifactId>
+        <version>${liquibase.version}</version>
+      </dependency>
+      <!--endregion-->
+      <!--region Minio-->
+      <dependency>
+        <groupId>io.minio</groupId>
+        <artifactId>minio</artifactId>
+        <version>${minio.version}</version>
+      </dependency>
       <!--endregion-->
       <!--region Utils-->
       <dependency>
@@ -162,9 +175,22 @@
         <artifactId>mapstruct</artifactId>
         <version>${mapstruct.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.github.slugify</groupId>
+        <artifactId>slugify</artifactId>
+        <version>${slugify.version}</version>
+      </dependency>
+      <!--endregion-->
+      <!--region Faker-->
+      <dependency>
+        <groupId>com.github.javafaker</groupId>
+        <artifactId>javafaker</artifactId>
+        <version>${faker.version}</version>
+      </dependency>
       <!--endregion-->
     </dependencies>
   </dependencyManagement>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -204,9 +230,10 @@
             <dependency>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok-mapstruct-binding</artifactId>
-              <version>0.2.0</version>
+              <version>${lombok.mapstruct.version}</version>
             </dependency>
           </annotationProcessorPaths>
+          <compilerArgs><arg>-parameters</arg></compilerArgs>
         </configuration>
       </plugin>
     </plugins>
@@ -231,4 +258,5 @@
       </snapshots>
     </repository>
   </repositories>
+
 </project>

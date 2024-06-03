@@ -1,0 +1,35 @@
+server:
+  port: ${FRONTIER_PORT}
+
+spring:
+  application:
+    name: Icecream e-commerce
+    version: 0.1.0
+  datasource:
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_FRONTIER_DB}
+    driverClassName: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    enabled: true
+    changeLog: classpath:/db/changelog/master.xml
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  jwtSecret: mySecret
+  jwtExpirationTime: 86400000
+  jwtPrefix: Bearer
+  jwtHeader: Authorization
