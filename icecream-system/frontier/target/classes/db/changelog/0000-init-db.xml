@@ -14,7 +14,7 @@
         phone VARCHAR,
         last_name VARCHAR,
         first_name VARCHAR,
-        is_active BOOLEAN,
+        status VARCHAR,
         created_at BIGINT,
         modified_at BIGINT
       );

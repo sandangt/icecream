@@ -1,5 +1,7 @@
 const Page = () => (
-  <div>Hello world</div>
+  <div>
+    <p>Page not exist</p>
+  </div>
 )
 
 export default Page

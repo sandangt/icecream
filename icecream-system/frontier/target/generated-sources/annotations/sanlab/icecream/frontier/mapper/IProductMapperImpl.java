@@ -15,8 +15,8 @@ import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-03T09:41:52+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Eclipse Adoptium)"
+    date = "2024-06-09T13:47:22+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.3 (Eclipse Adoptium)"
 )
 @Component
 public class IProductMapperImpl implements IProductMapper {
