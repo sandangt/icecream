@@ -15,9 +15,10 @@ const Page: FC<Props> = ({ error, reset }) => {
   }, [error])
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button onClick={() => reset()}>Try again</button>
+    <div className="h-[75vh] flex flex-col justify-center items-center px-2 text-center">
+      <h1 className="text-8xl font-extrabold text-red-500">500</h1>
+      <p className="text-4xl font-medium">Internal Server Error</p>
+      <p className="text-xl mt-4">We apologize for the inconvenience. Please try again later.</p>
     </div>
   )
 }

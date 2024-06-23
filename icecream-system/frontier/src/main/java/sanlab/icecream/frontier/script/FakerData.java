@@ -43,11 +43,12 @@ public class FakerData {
 
     @Bean
     CommandLineRunner seedData() {
-        seedProduct(1000);
-        seedCategory(8);
         seedImage(8326);
-        seedProductCategory();
+        seedCategory(8);
+        seedProduct(1000);
         seedProductImage();
+        seedProductCategory();
+        seedCategoryImage();
         return args -> log.info("SEED DATA Done.");
     }
 
@@ -158,6 +159,23 @@ public class FakerData {
             }
         }
         productRepository.saveAll(products);
+    }
+
+    private void seedCategoryImage() {
+        Optional<Category> firstCategory = categoryRepository.findFirstByOrderByName();
+        if (firstCategory.isEmpty() || Optional.ofNullable(firstCategory.get().getAvatar()).isPresent()) {
+            return;
+        }
+        var faker = getFaker();
+        List<Category> categories = categoryRepository.findAll();
+        for (Category category : categories) {
+            Image avatar = imageRepository.save(Image.builder()
+                .description(faker.lorem().characters(5, 1000))
+                .relativePath(FAKE_IMAGE_URL)
+                .type(EImageType.MEDIA).build());
+            category.setAvatar(avatar);
+        }
+        categoryRepository.saveAll(categories);
     }
 
 }

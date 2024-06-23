@@ -6,6 +6,7 @@ hs_err_pid*
 
 # MAVEN
 .m2/
+target/
 
 # IDE - Eclipse
 .settings/

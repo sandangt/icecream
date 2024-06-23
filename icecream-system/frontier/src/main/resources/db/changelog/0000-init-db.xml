@@ -30,7 +30,9 @@
         id UUID PRIMARY KEY,
         slug VARCHAR UNIQUE NOT NULL,
         name VARCHAR UNIQUE NOT NULL,
-        description TEXT
+        description TEXT,
+        avatar_id UUID,
+        CONSTRAINT fk_image FOREIGN KEY(avatar_id) REFERENCES image(id)
       );
       CREATE TABLE product (
         id UUID PRIMARY KEY,
@@ -56,7 +58,7 @@
         PRIMARY KEY (product_id, image_id),
         CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES product(id),
         CONSTRAINT fk_image FOREIGN KEY(image_id) REFERENCES image(id)
-      )
+      );
     </sql>
   </changeSet>
 

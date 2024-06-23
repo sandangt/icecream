@@ -8,6 +8,7 @@ import { auth } from '@/repositories/identity'
 import { generateUrl } from '@/lib/utils'
 import { SessionUnavailableException } from '@/exceptions/session'
 import type { Category, ProductResponse } from '@/types'
+import { FailToFetchException } from '@/exceptions/api-request'
 
 type RequestAllProductsParams = {
   pagination: {
@@ -41,20 +42,23 @@ export const requestAllProducts = async ({
   }
   const res = await fetch(url, { headers })
   if (res.status !== 200) {
-    return null
+    throw new FailToFetchException('Fail to fetch all products')
   }
   const json = await res.json()
   return json
 }
 
-export const requestAllCategories = async (): Promise<Category[] | null> => {
+export const requestAllCategories = async (): Promise<Category[]> => {
   const url = generateUrl(FRONTIER_URL, [API_PATHS.CATEGORY])
-  const res = await fetch(url)
-  if (res.status !== 200) {
-    return null
+  try {
+    const res = await fetch(url)
+    const json = await res.json()
+    return json
   }
-  const json = await res.json()
-  return json
+  catch (err) {
+    console.error(err)
+    return []
+  }
 }
 
 export const requesTrendyProducts = async () => {}

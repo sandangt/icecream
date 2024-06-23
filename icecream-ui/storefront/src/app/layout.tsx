@@ -1,5 +1,5 @@
 import { type ReactNode, type FC, Suspense } from 'react'
-import { Urbanist } from 'next/font/google'
+import { Poppins, Urbanist } from 'next/font/google'
 
 import { SITE_NAME } from '@/constants'
 import { Header } from './_components/header'
@@ -10,9 +10,11 @@ import { AuthProvider } from '@/components/providers/auth-provider'
 import { auth } from '@/repositories/identity'
 
 import '@/global.css'
-import { cn } from '@/lib/utils'
 
-const font = Urbanist({ subsets: ['latin'] })
+const font = Poppins({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+})
 
 export const metadata = {
   title: SITE_NAME,
@@ -26,7 +28,7 @@ type Props = {
 const RootLayout: FC<Props> = ({ children }) => (
   <html lang="en">
     <head />
-    <body className={cn(font.className, 'bg-background text-foreground')}>
+    <body className={font.className}>
       <Provider>
         <Header />
         <main>{children}</main>
