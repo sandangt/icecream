@@ -1,5 +1,6 @@
 package sanlab.icecream.frontier.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +39,8 @@ public class Product extends AbstractAuditEntity {
     private Double price;
     private EProductStatus status;
     private Long quantity;
+    @Column(name = "is_featured")
+    private Boolean isFeatured;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = MERGE)
     @JoinTable(name = "product_category",

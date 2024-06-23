@@ -39,6 +39,7 @@
         price DOUBLE PRECISION,
         quantity INTEGER,
         status VARCHAR,
+        is_featured BOOLEAN,
         created_at BIGINT,
         modified_at BIGINT
       );

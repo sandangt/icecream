@@ -2,11 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { type FC } from 'react'
 
 import { cn } from '@/lib/utils'
-import { type Category } from '@/types'
-import { createCategoryPath } from '@/lib/url'
+import { ROUTES } from '@/constants'
+import type { Category } from '@/types'
+import { type FC } from 'react'
 
 type Props = {
   data: Category[]
@@ -14,28 +14,27 @@ type Props = {
 
 export const Navbar: FC<Props> = ({ data }) => {
   const pathname = usePathname()
-  const routes = data.map(({ id, name, slug }) => {
-    const url = createCategoryPath(slug)
+  const routes = data.map(({ name, slug }) => {
+    const path = ROUTES.CATEGORIES(slug)
     return {
-      key: id,
-      url,
-      name: name,
-      active: pathname === url,
+      path,
+      title: name,
+      active: pathname === path,
     }
   })
 
   return (
-    <nav className="mx-6 flex items-center space-x-4 lg:space-x-6">
-      {routes.map(({ name, url, active }) => (
+    <nav className="flex items-center space-x-4 lg:space-x-6 p-3 justify-around">
+      {routes.map(({ title, path, active }) => (
         <Link
-          key={name}
-          href={url}
+          key={title}
+          href={path}
           className={cn(
             'text-sm font-medium transition-colors hover:text-neutral-650',
             active ? 'text-neutral-650' : 'text-neutral-400',
           )}
         >
-          {name}
+          {title}
         </Link>
       ))}
     </nav>

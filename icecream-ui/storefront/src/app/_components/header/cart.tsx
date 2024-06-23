@@ -11,6 +11,9 @@ export const Cart = () => {
   useEffect(() => {
     setIsMounted(true)
   }, [])
+  if (!isMounted) {
+    return null
+  }
   return (
     <div className="flex items-center gap-x-4">
       <Button

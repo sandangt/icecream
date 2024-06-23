@@ -1,1 +1,1 @@
-export { GET, POST} from '@/repositories/identity'
+export { GET, POST } from '@/repositories/identity'

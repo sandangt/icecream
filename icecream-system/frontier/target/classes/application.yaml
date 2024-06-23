@@ -21,15 +21,33 @@ spring:
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IDENTITY_ISSUER}
+          jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+
+jwt:
+  auth:
+    converter:
+      resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
+      principle-attribute: email
 
 springdoc:
   api-docs:
-    path: /v3/api-docs
+    path: /swagger-resources
   swagger-ui:
-    path: /swagger-ui.html
+    path: /swagger-ui
 
 app:
-  jwtSecret: mySecret
-  jwtExpirationTime: 86400000
-  jwtPrefix: Bearer
-  jwtHeader: Authorization
+  cors:
+    allowed-origins:
+      ${STOREFRONT_URL},
+
+#logging:
+#  level:
+#    org.springframework.security: TRACE

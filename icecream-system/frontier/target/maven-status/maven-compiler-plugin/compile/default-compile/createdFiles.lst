@@ -5,6 +5,7 @@ sanlab/icecream/frontier/model/Category.class
 sanlab/icecream/frontier/model/Payment.class
 sanlab/icecream/frontier/exception/ItemNotFoundException.class
 sanlab/icecream/frontier/viewmodel/response/ProductResponse$ProductResponseBuilderImpl.class
+sanlab/icecream/frontier/config/SecurityConfig.class
 sanlab/icecream/frontier/viewmodel/request/CollectionQueryRequest$PaginationRequest.class
 sanlab/icecream/frontier/model/CartItem.class
 sanlab/icecream/frontier/viewmodel/response/CategoryResponse.class
@@ -13,6 +14,7 @@ sanlab/icecream/frontier/viewmodel/request/CollectionQueryRequest$CollectionQuer
 sanlab/icecream/frontier/model/Cart.class
 sanlab/icecream/frontier/viewmodel/dto/ProductDto.class
 sanlab/icecream/frontier/model/Customer$CustomerBuilderImpl.class
+sanlab/icecream/frontier/constant/ECustomerStatus.class
 sanlab/icecream/frontier/viewmodel/dto/ImageDto$ImageDtoBuilder.class
 sanlab/icecream/frontier/utils/ObjectUtils.class
 sanlab/icecream/frontier/model/Feedback.class
@@ -24,16 +26,17 @@ sanlab/icecream/frontier/model/Customer.class
 sanlab/icecream/frontier/utils/RequestUtils.class
 sanlab/icecream/frontier/mapper/IProductMapperImpl.class
 sanlab/icecream/frontier/viewmodel/request/CollectionQueryRequest.class
-sanlab/icecream/frontier/model/AbstractAuditEntity.class
 sanlab/icecream/frontier/exception/advisor/ExceptionAdvisor.class
+sanlab/icecream/frontier/model/AbstractAuditEntity.class
 sanlab/icecream/frontier/mapper/ICategoryMapperImpl.class
 sanlab/icecream/frontier/service/ProductService.class
 sanlab/icecream/frontier/model/Product$ProductBuilder.class
-sanlab/icecream/frontier/viewmodel/response/ErrorResponse.class
 sanlab/icecream/frontier/viewmodel/response/CategoryResponse$CategoryResponseBuilder.class
+sanlab/icecream/frontier/viewmodel/response/ErrorResponse.class
 sanlab/icecream/frontier/model/AbstractAuditEntity$AbstractAuditEntityBuilder.class
 sanlab/icecream/frontier/constant/EImageType.class
 sanlab/icecream/frontier/viewmodel/dto/CategoryDto$CategoryDtoBuilder.class
+sanlab/icecream/frontier/model/CustomerAddress.class
 sanlab/icecream/frontier/script/FakerData.class
 sanlab/icecream/frontier/mapper/IProductMapper.class
 sanlab/icecream/frontier/model/Product.class
@@ -61,8 +64,10 @@ sanlab/icecream/frontier/repository/IImageRepository.class
 sanlab/icecream/frontier/viewmodel/dto/ProductDto$ProductDtoBuilderImpl.class
 sanlab/icecream/frontier/viewmodel/response/CollectionQueryResponse.class
 sanlab/icecream/frontier/config/WebConfig.class
+sanlab/icecream/frontier/service/middleware/JwtAuthConverter.class
 sanlab/icecream/frontier/viewmodel/dto/CategoryDto$CategoryDtoBuilderImpl.class
 sanlab/icecream/frontier/controller/CategoryController.class
+sanlab/icecream/frontier/constant/PreAuthorizedRole.class
 sanlab/icecream/frontier/viewmodel/response/ProductResponse$ProductResponseBuilder.class
 sanlab/icecream/frontier/model/Product$ProductBuilderImpl.class
 sanlab/icecream/frontier/viewmodel/request/CollectionQueryRequest$SortingRequest.class

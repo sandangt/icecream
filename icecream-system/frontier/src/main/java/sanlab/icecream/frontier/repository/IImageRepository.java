@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IImageRepository extends JpaRepository<Image, UUID> {
-    Page<Image> findAllByOrderById(Pageable pageable);
+//    Page<Image> findAllByOrderById(Pageable pageable);
     List<Image> findAllByOrderById();
 }

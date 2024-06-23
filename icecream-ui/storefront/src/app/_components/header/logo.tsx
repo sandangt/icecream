@@ -1,6 +1,6 @@
 'use client'
 
-import { SITE_NAME } from '@/constants'
+import { ROUTES, SITE_NAME } from '@/constants'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -22,7 +22,7 @@ const styles = clsx(
 )
 
 export const Logo = () => (
-  <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
+  <Link href={ROUTES.HOME} className="text-nowrap">
     <p className="font-bold text-xl">{SITE_NAME}</p>
   </Link>
 )

@@ -3,14 +3,15 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  env: {
-    SYSTEM_PROTOCOL: process.env.SYSTEM_PROTOCOL,
-    SYSTEM_HOST: process.env.SYSTEM_HOST,
-    SYSTEM_PORT: process.env.SYSTEM_PORT,
-  },
+  env: {},
   images: {
-    remotePatterns: []
-  }
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos'
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

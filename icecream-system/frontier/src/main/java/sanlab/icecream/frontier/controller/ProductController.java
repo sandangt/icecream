@@ -5,13 +5,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +27,14 @@ import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 import java.util.Optional;
 import java.util.UUID;
 
+import static sanlab.icecream.frontier.constant.PreAuthorizedRole.NORMIE_AND_WATCHER;
+
 @RestController
 @RequestMapping("/api/products")
-public record ProductController(ProductService productService) {
+@RequiredArgsConstructor
+public class ProductController {
+
+    private final ProductService productService;
 
     @Operation(summary = "Get a list of products with pagination and sorting")
     @ApiResponses(value = {
@@ -40,6 +42,7 @@ public record ProductController(ProductService productService) {
         @ApiResponse(responseCode = "400", description = "Invalid request parameters")
     })
     @GetMapping
+    @PreAuthorize(NORMIE_AND_WATCHER)
     public CollectionQueryResponse<ProductResponse> getProducts(@ModelAttribute CollectionQueryRequest request) {
         return productService.getProducts(request.getPageRequest());
     }

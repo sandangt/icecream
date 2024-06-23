@@ -1,5 +1,6 @@
 import { type Session } from 'next-auth'
 import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
 
 type State = {
   isLoggedIn: boolean
@@ -30,13 +31,13 @@ const EMPTY_STATE: State = {
   refreshToken: '',
 }
 
-export const useSessionStore = create<State & Action>((set) => ({
+// @ts-ignore
+export const useSessionStore = create<State & Action>(devtools((set) => ({
   ...EMPTY_STATE,
   clearSession: () => set(() => EMPTY_STATE),
-  // @ts-ignore
-  updateSession: (session: Session) => set(() => ({
+  updateSession: (session: Session) =>
+    set(() => ({
       isLoggedIn: true,
       ...session,
-    })
-  ),
-}))
+    })),
+})))

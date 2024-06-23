@@ -15,7 +15,7 @@ import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-09T13:47:22+0700",
+    date = "2024-06-12T01:16:47+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.3 (Eclipse Adoptium)"
 )
 @Component

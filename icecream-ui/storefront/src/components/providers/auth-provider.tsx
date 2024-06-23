@@ -17,8 +17,5 @@ export const AuthProvider: FC<Props> = ({ session, children }) => {
     }
   }, [session])
 
-  return (
-    <>{children}</>
-  )
-
+  return <>{children}</>
 }

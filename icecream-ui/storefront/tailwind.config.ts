@@ -9,6 +9,10 @@ const config = {
       center: true,
       padding: '2rem',
       screens: {
+        sm: "576px",
+        md: "768px",
+        lg: "992px",
+        xl: "1200px",
         '2xl': '1400px',
       },
     },
@@ -69,7 +73,10 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/forms'),
+  ],
 } satisfies Config
 
 export default config

@@ -1,5 +1,4 @@
 import NextAuth from 'next-auth'
-import { type JWT } from 'next-auth/jwt'
 import authConfig from './auth.config'
 
 export const {
@@ -9,10 +8,10 @@ export const {
   signOut,
 } = NextAuth({
   callbacks: {
-    // @ts-ignore
+    //@ts-ignore
     jwt: async (params) => {
       const { token, user, account, profile } = params
-      return { ...token, ...user, ...account, ...profile}
+      return { ...token, ...user, ...account, ...profile }
     },
     session: async (params) => {
       const { session, token } = params
@@ -28,9 +27,6 @@ export const {
         refreshToken: token?.refresh_token,
       }
       return result
-    },
-    signIn: async (params) => {
-      return true
     },
     redirect: async (params) => {
       const { url, baseUrl } = params

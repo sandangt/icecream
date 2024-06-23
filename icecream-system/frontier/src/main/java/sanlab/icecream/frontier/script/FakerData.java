@@ -1,6 +1,7 @@
 package sanlab.icecream.frontier.script;
 
 import com.github.javafaker.Faker;
+import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -43,7 +44,7 @@ public class FakerData {
     @Bean
     CommandLineRunner seedData() {
         seedProduct(1000);
-        seedCategory(20);
+        seedCategory(8);
         seedImage(8326);
         seedProductCategory();
         seedProductImage();
@@ -65,6 +66,7 @@ public class FakerData {
                 .price(faker.number().randomDouble(2, 0, 10_000_000L))
                 .status(status)
                 .quantity(quantity)
+                .isFeatured(false)
                 .build();
         }).toList();
         productRepository.saveAll(result);
@@ -75,7 +77,16 @@ public class FakerData {
             return;
         }
         var faker = getFaker();
-        var result = IntStream.range(0, number).mapToObj(ignore -> new Category(faker.funnyName().name())).toList();
+        Set<String> existingNames = new HashSet<>();
+        var result = IntStream.range(0, number).mapToObj(ignore -> {
+            String name;
+            Slugify slugMaker = Slugify.builder().build();
+            do {
+                name = faker.funnyName().name();
+            } while (existingNames.contains(slugMaker.slugify(name)));
+            existingNames.add(name);
+            return new Category(name);
+        }).toList();
         categoryRepository.saveAll(result);
     }
 

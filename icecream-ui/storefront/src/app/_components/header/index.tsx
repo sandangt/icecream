@@ -1,23 +1,28 @@
+import { Container } from '../container'
 import { Navbar } from './navbar'
 import { Logo } from './logo'
-import { getCategories } from '@/data'
 import { Cart } from './cart'
 import { Profile } from './profile'
-import { auth } from '@/repositories/identity'
-import { getCsrfToken } from 'next-auth/react'
+import { Search } from './search'
+import { requestAllCategories } from '@/repositories/frontier'
 
 export const Header = async () => {
-  const categoryList = await getCategories()
+  const categoryList = await requestAllCategories()
   return (
-    <div className="border-b mx-auto max-w-7xl">
-      <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center">
-        <Logo />
-        <Navbar data={categoryList} />
-        <div className="ml-auto flex gap-3">
-          <Cart />
-          <Profile />
-        </div>
+    <header className="border-b">
+      <div className="flex flex-col divide-y">
+        <Container>
+          <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center gap-x-10">
+            <Logo />
+            <Search />
+            <div className="ml-auto flex gap-x-4 items-center">
+              <Cart />
+              <Profile />
+            </div>
+          </div>
+        </Container>
+        { categoryList ? <Navbar data={categoryList} /> : null }
       </div>
-    </div>
+    </header>
   )
 }

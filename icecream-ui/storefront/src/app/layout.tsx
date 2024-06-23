@@ -6,9 +6,11 @@ import { Header } from './_components/header'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Footer } from './_components/footer'
 
-import '@/global.css'
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { auth } from '@/repositories/identity'
+
+import '@/global.css'
+import { cn } from '@/lib/utils'
 
 const font = Urbanist({ subsets: ['latin'] })
 
@@ -24,7 +26,7 @@ type Props = {
 const RootLayout: FC<Props> = ({ children }) => (
   <html lang="en">
     <head />
-    <body className={font.className}>
+    <body className={cn(font.className, 'bg-background text-foreground')}>
       <Provider>
         <Header />
         <main>{children}</main>
@@ -43,8 +45,8 @@ type ProviderProps = {
 const Provider: FC<ProviderProps> = async ({ children }) => {
   const session = await auth()
   return (
-  <ThemeProvider attribute="class" defaultTheme="light">
-    <AuthProvider session={session}>{children}</AuthProvider>
-  </ThemeProvider>
+    <ThemeProvider attribute="class">
+      <AuthProvider session={session}>{children}</AuthProvider>
+    </ThemeProvider>
   )
 }
