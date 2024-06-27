@@ -1,10 +1,7 @@
 package sanlab.icecream.frontier.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sanlab.icecream.frontier.exception.ItemNotFoundException;

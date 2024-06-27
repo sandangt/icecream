@@ -1,6 +1,5 @@
 package sanlab.icecream.frontier.controller;
 
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,13 @@ import sanlab.icecream.frontier.model.Category;
 import sanlab.icecream.frontier.repository.ICategoryRepository;
 import sanlab.icecream.frontier.service.CategoryService;
 import sanlab.icecream.frontier.viewmodel.dto.CategoryDto;
+import sanlab.icecream.frontier.viewmodel.response.CategoryResponse;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static sanlab.icecream.frontier.constant.PreAuthorizedRole.NORMIE_AND_WATCHER;
-import static sanlab.icecream.frontier.constant.PreAuthorizedRole.WATCHER;
+import static sanlab.icecream.frontier.constant.PreAuthorizedRole.NORMIE;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -37,14 +36,12 @@ public class CategoryController {
     private final ICategoryMapper categoryMapper;
 
     @GetMapping
-    @PermitAll
-    public List<CategoryDto> getAllCategories() {
+    public List<CategoryResponse> getAllCategories() {
         List<Category> categoryList = categoryRepository.findAll();
-        return categoryMapper.entityToDto(categoryList);
+        return categoryMapper.entityToResponse(categoryList);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(NORMIE_AND_WATCHER)
     public ResponseEntity<CategoryDto> getCategory(@PathVariable UUID id) {
         Optional<Category> category = categoryRepository.findById(id);
         return category.map(categoryMapper::entityToDto).map(ResponseEntity::ok)
@@ -53,14 +50,12 @@ public class CategoryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    @PreAuthorize(WATCHER)
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto request) {
         var result = categoryService.createCategory(request);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize(WATCHER)
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryDto request) {
         var result = categoryService.updateCategory(id, request);
         return ResponseEntity.ok(result);

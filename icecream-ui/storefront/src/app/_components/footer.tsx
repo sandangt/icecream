@@ -4,6 +4,7 @@ import { FaTwitter } from 'react-icons/fa'
 import { FaInstagram } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa'
 import Image from 'next/image'
+
 import { Logo } from './logo'
 
 export const Footer = () => (

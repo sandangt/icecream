@@ -27,7 +27,7 @@ import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 import java.util.Optional;
 import java.util.UUID;
 
-import static sanlab.icecream.frontier.constant.PreAuthorizedRole.NORMIE_AND_WATCHER;
+import static sanlab.icecream.frontier.constant.PreAuthorizedRole.NORMIE;
 
 @RestController
 @RequestMapping("/api/products")
@@ -42,7 +42,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Invalid request parameters")
     })
     @GetMapping
-    @PreAuthorize(NORMIE_AND_WATCHER)
+    @PreAuthorize(NORMIE)
     public CollectionQueryResponse<ProductResponse> getProducts(@ModelAttribute CollectionQueryRequest request) {
         return productService.getProducts(request.getPageRequest());
     }
@@ -80,7 +80,7 @@ public class ProductController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@Parameter(description = "ID of the product to be updated") @PathVariable UUID id,
-                                                 @Parameter(description = "Updated product data") @Valid @RequestBody ProductDto request) {
+                                                         @Parameter(description = "Updated product data") @Valid @RequestBody ProductDto request) {
         var result = productService.updateProduct(id, request);
         return ResponseEntity.ok(result);
     }

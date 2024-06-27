@@ -9,9 +9,10 @@ import sanlab.icecream.frontier.viewmodel.response.CategoryResponse;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { IProductMapper.class })
+@Mapper(componentModel = "spring", uses = { IImageMapper.class })
 public interface ICategoryMapper {
 
+    //region To DTO
     @Named("entityToDto")
     CategoryDto entityToDto(Category category);
 
@@ -25,12 +26,15 @@ public interface ICategoryMapper {
     @Named("entityToResponseIter")
     @IterableMapping(qualifiedByName = "entityToResponse")
     List<CategoryResponse> entityToResponse(List<Category> categories);
+    //endregion
 
+    //region To Entity
     @Named("dtoToEntity")
     Category dtoToEntity(CategoryDto categoryDto);
 
     @Named("dtoToEntityIter")
     @IterableMapping(qualifiedByName = "dtoToEntity")
     List<Category> dtoToEntity(List<CategoryDto> categoryDtos);
+    //endregion
 
 }

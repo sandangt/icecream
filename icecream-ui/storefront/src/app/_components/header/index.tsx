@@ -13,7 +13,7 @@ export const Header = async () => {
         <Search />
         <Personal />
       </div>
-      {categoryList.length ? <Navbar data={categoryList} /> : null}
+      <Navbar data={categoryList} />
     </header>
   )
 }

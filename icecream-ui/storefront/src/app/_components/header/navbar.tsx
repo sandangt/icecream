@@ -40,22 +40,27 @@ type Props = {
   data: Category[]
 }
 
-export const Navbar: FC<Props> = ({ data }) => (
-  <nav className="bg-primary text-primary-foreground px-8 py-4 ">
-    <div className="container flex items-center gap-5">
-      <NavbarCategories data={data} />
-      {NAVBAR_ROUTING_ITEMS.map(({ title, path }) => (
-        <Link href={path} className="capitalize">
-          <Button variant="ghost">{title}</Button>
-        </Link>
-      ))}
-    </div>
-  </nav>
-)
+export const Navbar: FC<Props> = ({ data }) => {
+  if (!data.length) {
+    return null
+  }
+  return (
+    <nav className="bg-primary text-primary-foreground px-8 py-4 ">
+      <div className="container flex items-center gap-5">
+        <NavbarCategories data={data} />
+        {NAVBAR_ROUTING_ITEMS.map(({ title, path }) => (
+          <Link href={path} className="capitalize" key={path}>
+            <Button variant="ghost">{title}</Button>
+          </Link>
+        ))}
+      </div>
+    </nav>
+  )
+}
 
 type NavbarCategoriesProps = Props
 
-const NavbarCategories: FC<NavbarCategoriesProps> = async ({ data }) => {
+const NavbarCategories: FC<NavbarCategoriesProps> = ({ data }) => {
   const pathname = usePathname()
   const categoryList = data.map(({ slug, name, id }) => {
     const path = ROUTES.CATEGORIES(slug)

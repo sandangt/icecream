@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth'
+
 import authConfig from './auth.config'
+import { AUTH_ID, AUTH_ISSUER, AUTH_SECRET } from '@/settings'
 
 export const {
   handlers: { GET, POST },
@@ -36,3 +38,22 @@ export const {
   session: { strategy: 'jwt' },
   ...authConfig,
 })
+
+export const requestSSOSignOut = async (refreshToken: string): Promise<void> => {
+  if (!refreshToken || !refreshToken.length) {
+    return
+  }
+  const headers = new Headers()
+  headers.append('Content-Type', 'application/x-www-form-urlencoded')
+  const body = new URLSearchParams()
+  body.append('client_id', AUTH_ID)
+  body.append('client_secret', AUTH_SECRET)
+  body.append('refresh_token', refreshToken)
+
+  fetch(`${AUTH_ISSUER}/protocol/openid-connect/logout`, {
+    method: 'POST',
+    headers,
+    body,
+    redirect: 'follow'
+  })
+}

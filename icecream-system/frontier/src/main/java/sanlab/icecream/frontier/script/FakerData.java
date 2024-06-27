@@ -34,7 +34,7 @@ public class FakerData {
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
     private final IImageRepository imageRepository;
-    private static final String FAKE_IMAGE_URL = "https://picsum.photos/200/300?blur";
+    private static final String FAKE_IMAGE_RELATIVE_PATH = "/200/300?blur";
 
     @Bean
     public Faker getFaker() {
@@ -99,7 +99,7 @@ public class FakerData {
         var result = IntStream.range(0, number)
             .mapToObj(ignore -> Image.builder()
                 .description(faker.lorem().characters(5, 1000))
-                .relativePath(FAKE_IMAGE_URL)
+                .relativePath(FAKE_IMAGE_RELATIVE_PATH)
                 .type(EImageType.MEDIA).build()
             ).toList();
         imageRepository.saveAll(result);
@@ -171,7 +171,7 @@ public class FakerData {
         for (Category category : categories) {
             Image avatar = imageRepository.save(Image.builder()
                 .description(faker.lorem().characters(5, 1000))
-                .relativePath(FAKE_IMAGE_URL)
+                .relativePath(FAKE_IMAGE_RELATIVE_PATH)
                 .type(EImageType.MEDIA).build());
             category.setAvatar(avatar);
         }

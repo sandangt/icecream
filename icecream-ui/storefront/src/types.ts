@@ -33,4 +33,9 @@ interface ProductResponse extends Product {
   media: Media[]
 }
 
-export type { Category, Product, Media, ProductResponse }
+interface CategoryResponse extends Category {
+  products: Product[]
+  avatar: Media
+}
+
+export type { Category, Product, Media, ProductResponse, CategoryResponse }

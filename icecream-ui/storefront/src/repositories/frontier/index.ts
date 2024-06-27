@@ -1,14 +1,7 @@
-import qs from 'qs'
-import path from 'path'
-import { type Session } from 'next-auth'
-
 import { FRONTIER_URL } from '@/settings'
 import { API_PATHS } from '@/constants'
-import { auth } from '@/repositories/identity'
 import { generateUrl } from '@/lib/utils'
-import { SessionUnavailableException } from '@/exceptions/session'
-import type { Category, ProductResponse } from '@/types'
-import { FailToFetchException } from '@/exceptions/api-request'
+import type { CategoryResponse, ProductResponse } from '@/types'
 
 type RequestAllProductsParams = {
   pagination: {
@@ -17,7 +10,7 @@ type RequestAllProductsParams = {
   }
   sorting: {
     field: string
-    order: 'ASC' | 'DESC'
+    order: string // 'ASC | 'DESC'
   }
 }
 
@@ -31,36 +24,49 @@ type RequestAllProductsResult = {
 export const requestAllProducts = async ({
   pagination,
   sorting,
-}: RequestAllProductsParams): Promise<RequestAllProductsResult | null> => {
-  const session = await auth()
-  if (!session) {
-    throw new SessionUnavailableException('Cannot get session')
-  }
+}: RequestAllProductsParams): Promise<RequestAllProductsResult> => {
+  // const session = await auth()
+  // if (!session) {
+  //   throw new SessionUnavailableException('Cannot get session')
+  // }
+  // const headers = new Headers()
+  // headers.append('Authorization', `Bearer ${session?.accessToken}`)
   const url = generateUrl(FRONTIER_URL, [API_PATHS.PRODUCT], { pagination, sorting })
-  const headers = {
-    Authorization: `Bearer ${session?.accessToken}`
-  }
-  const res = await fetch(url, { headers })
-  if (res.status !== 200) {
-    throw new FailToFetchException('Fail to fetch all products')
-  }
-  const json = await res.json()
-  return json
+  const res = await fetch(url)
+  return res.json()
 }
 
-export const requestAllCategories = async (): Promise<Category[]> => {
-  const url = generateUrl(FRONTIER_URL, [API_PATHS.CATEGORY])
+export const request10RecommenedProducts = async (): Promise<ProductResponse[]> => {
+  const pagination = { limit: 10, offset: 0 }
+  const sorting = { field: 'quantity', order: 'DESC' }
   try {
-    const res = await fetch(url)
-    const json = await res.json()
-    return json
-  }
-  catch (err) {
+    const { data } = await requestAllProducts({ pagination, sorting })
+    return data
+  } catch (err) {
     console.error(err)
     return []
   }
 }
 
-export const requesTrendyProducts = async () => {}
+export const request10NewProducts = async (): Promise<ProductResponse[]> => {
+  const pagination = { limit: 10, offset: 0 }
+  const sorting = { field: 'modifiedAt', order: 'DESC' }
+  try {
+    const { data } = await requestAllProducts({ pagination, sorting })
+    return data
+  } catch (err) {
+    console.error(err)
+    return []
+  }
+}
 
-export const requestNewProducts = async () => {}
+export const requestAllCategories = async (): Promise<CategoryResponse[]> => {
+  const url = generateUrl(FRONTIER_URL, [API_PATHS.CATEGORY])
+  try {
+    const res = await fetch(url)
+    return res.json()
+  } catch (err) {
+    console.error(err)
+    return []
+  }
+}

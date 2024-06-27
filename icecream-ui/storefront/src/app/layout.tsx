@@ -1,19 +1,19 @@
-import { type ReactNode, type FC, Suspense } from 'react'
-import { Poppins, Urbanist } from 'next/font/google'
+import { type ReactNode, type FC } from 'react'
+import { Poppins } from 'next/font/google'
 
 import { SITE_NAME } from '@/constants'
-import { Header } from './_components/header'
 import { ThemeProvider } from '@/components/providers/theme-provider'
-import { Footer } from './_components/footer'
-
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { auth } from '@/repositories/identity'
+import { QueryProvider } from '@/components/providers/client-query-provider'
+import { Header } from './_components/header'
+import { Footer } from './_components/footer'
 
 import '@/global.css'
 
 const font = Poppins({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 })
 
 export const metadata = {
@@ -27,7 +27,9 @@ type Props = {
 
 const RootLayout: FC<Props> = ({ children }) => (
   <html lang="en">
-    <head />
+    <head>
+      <link rel="icon" href="/img/favicon.ico" sizes="any" />
+    </head>
     <body className={font.className}>
       <Provider>
         <Header />
@@ -48,7 +50,9 @@ const Provider: FC<ProviderProps> = async ({ children }) => {
   const session = await auth()
   return (
     <ThemeProvider attribute="class">
-      <AuthProvider session={session}>{children}</AuthProvider>
+      <AuthProvider session={session}>
+        <QueryProvider>{children}</QueryProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 }

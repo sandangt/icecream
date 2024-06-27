@@ -1,6 +1,4 @@
-import { useRouter, useSearchParams } from 'next/navigation'
 import { BiSearchAlt } from 'react-icons/bi'
-import { MdOutlineSearch } from 'react-icons/md'
 
 export const Search = () => (
   <div className="w-full max-w-xl relative flex">

@@ -1,8 +1,9 @@
 'use client'
 
-import { useSessionStore } from '@/hooks/session'
 import { Session } from 'next-auth'
 import { useEffect, type FC, type ReactNode } from 'react'
+
+import { useSessionStore } from '@/hooks/session'
 
 type Props = {
   session: Session | null
