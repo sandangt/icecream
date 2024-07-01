@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.frontier.dto.extended.ProductExtendedDto;
 import sanlab.icecream.frontier.service.ProductService;
-import sanlab.icecream.frontier.viewmodel.dto.ProductDto;
+import sanlab.icecream.frontier.dto.core.ProductDto;
 import sanlab.icecream.frontier.viewmodel.request.CollectionQueryRequest;
 import sanlab.icecream.frontier.viewmodel.response.CollectionQueryResponse;
-import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +43,7 @@ public class ProductController {
     })
     @GetMapping
     @PreAuthorize(NORMIE)
-    public CollectionQueryResponse<ProductResponse> getProducts(@ModelAttribute CollectionQueryRequest request) {
+    public CollectionQueryResponse<ProductExtendedDto> getProducts(@ModelAttribute CollectionQueryRequest request) {
         return productService.getProducts(request.getPageRequest());
     }
 
@@ -53,8 +53,8 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProductById(@Parameter(description = "ID of the product to be fetched") @PathVariable UUID id) {
-        Optional<ProductResponse> product = productService.getProductById(id);
+    public ResponseEntity<ProductExtendedDto> getProductById(@Parameter(description = "ID of the product to be fetched") @PathVariable UUID id) {
+        Optional<ProductExtendedDto> product = productService.getProductById(id);
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -66,7 +66,7 @@ public class ProductController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProductResponse> createProduct(@Parameter(description = "Product to be created") @Valid @RequestBody ProductDto request) {
+    public ResponseEntity<ProductExtendedDto> createProduct(@Parameter(description = "Product to be created") @Valid @RequestBody ProductDto request) {
         var result = productService.createProduct(request);
         return ResponseEntity.ok(result);
     }
@@ -79,7 +79,7 @@ public class ProductController {
         @ApiResponse(responseCode = "500", description = "Error when updating product")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@Parameter(description = "ID of the product to be updated") @PathVariable UUID id,
+    public ResponseEntity<ProductExtendedDto> updateProduct(@Parameter(description = "ID of the product to be updated") @PathVariable UUID id,
                                                          @Parameter(description = "Updated product data") @Valid @RequestBody ProductDto request) {
         var result = productService.updateProduct(id, request);
         return ResponseEntity.ok(result);

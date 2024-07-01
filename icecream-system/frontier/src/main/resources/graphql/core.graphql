@@ -1,0 +1,27 @@
+type Category {
+  id: ID
+  slug: String
+  name: String
+  description: String
+}
+
+type Image {
+  id: ID
+  description: String
+  relativePath: String
+  type: String
+  createdAt: Int
+  modifiedAt: Int
+}
+
+type Product {
+  id: ID
+  name: String
+  description: String
+  price: Float
+  status: String
+  quantity: Int
+  isFeatured: Boolean
+  createdAt: Int
+  modifiedAt: Int
+}

@@ -30,6 +30,16 @@ spring:
   redis:
     host: ${REDIS_HOST}
     port: ${REDIS_PORT}
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+      allowed-method: GET,POST
+      max-age: 3600
+    cors:
+      allow-credentials: true
+      allowed-origins:
+        - ${STOREFRONT_URL}
 
 jwt:
   auth:

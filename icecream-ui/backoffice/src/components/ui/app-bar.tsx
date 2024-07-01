@@ -1,7 +1,7 @@
 import { AppBar, TitlePortal } from 'react-admin'
 import { Box, Theme, useMediaQuery } from '@mui/material'
 
-const IcecreamAppBar = () => {
+export const IcecreamAppBar = () => {
   const isLargeEnough = useMediaQuery<Theme>((theme) => theme.breakpoints.up('sm'))
   return (
     <AppBar color="secondary" elevation={1}>
@@ -10,5 +10,3 @@ const IcecreamAppBar = () => {
     </AppBar>
   )
 }
-
-export default IcecreamAppBar

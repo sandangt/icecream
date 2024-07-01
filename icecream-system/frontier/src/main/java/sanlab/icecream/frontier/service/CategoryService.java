@@ -7,7 +7,7 @@ import sanlab.icecream.frontier.exception.StoringDatabaseException;
 import sanlab.icecream.frontier.mapper.ICategoryMapper;
 import sanlab.icecream.frontier.model.Category;
 import sanlab.icecream.frontier.repository.ICategoryRepository;
-import sanlab.icecream.frontier.viewmodel.dto.CategoryDto;
+import sanlab.icecream.frontier.dto.core.CategoryDto;
 
 import java.util.UUID;
 

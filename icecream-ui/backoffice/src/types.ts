@@ -1,4 +1,4 @@
-import { Order } from './constants'
+import { ORDER } from './constants'
 
 export interface Product {
   id: string
@@ -6,7 +6,7 @@ export interface Product {
   description: string
   imagePath: string
   price: number
-  status: Order
+  status: ORDER
 }
 
 export interface Category {

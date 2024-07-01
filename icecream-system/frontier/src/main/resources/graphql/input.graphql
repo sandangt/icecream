@@ -1,0 +1,4 @@
+input PageInfo {
+  offset: Int!
+  limit: Int!
+}

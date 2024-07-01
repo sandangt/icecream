@@ -1,11 +1,10 @@
 export const APP_TITLE = 'ICECREAM ÜBER VIEW'
-
-export enum AppRoutes {
+export const DEFAULT_ROLE = 'watcher'
+export enum ROUTES {
   PRODUCT = 'products',
   CATEGORY = 'categories',
 }
-
-export enum Order {
+export enum ORDER {
   ASC = 'ASC',
   DESC = 'DESC'
 }

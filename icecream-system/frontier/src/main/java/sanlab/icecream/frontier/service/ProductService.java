@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import sanlab.icecream.frontier.dto.extended.ProductExtendedDto;
 import sanlab.icecream.frontier.exception.ItemNotFoundException;
 import sanlab.icecream.frontier.exception.StoringDatabaseException;
 import sanlab.icecream.frontier.mapper.IProductMapper;
@@ -11,9 +12,8 @@ import sanlab.icecream.frontier.model.Category;
 import sanlab.icecream.frontier.model.Product;
 import sanlab.icecream.frontier.repository.ICategoryRepository;
 import sanlab.icecream.frontier.repository.IProductRepository;
-import sanlab.icecream.frontier.viewmodel.dto.ProductDto;
+import sanlab.icecream.frontier.dto.core.ProductDto;
 import sanlab.icecream.frontier.viewmodel.response.CollectionQueryResponse;
-import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,11 +32,11 @@ public class ProductService {
     private final ICategoryRepository categoryRepository;
     private final IProductMapper productMapper;
 
-    public CollectionQueryResponse<ProductResponse> getProducts(Pageable pageable) {
+    public CollectionQueryResponse<ProductExtendedDto> getProducts(Pageable pageable) {
         Page<Product> paginatedProducts = productRepository.findAll(pageable);
         long total = productRepository.count();
-        List<ProductResponse> productList = productMapper.entityToResponse(paginatedProducts.stream().toList());
-        return CollectionQueryResponse.<ProductResponse>builder()
+        List<ProductExtendedDto> productList = productMapper.entityToExtendedDto(paginatedProducts.stream().toList());
+        return CollectionQueryResponse.<ProductExtendedDto>builder()
             .total(total)
             .page(pageable.getPageNumber())
             .totalPages(calculateTotalPage(total, pageable.getPageSize()))
@@ -44,34 +44,34 @@ public class ProductService {
             .build();
     }
 
-    public Optional<ProductResponse> getProductById(UUID id) {
+    public Optional<ProductExtendedDto> getProductById(UUID id) {
         Optional<Product> product = productRepository.findById(id);
-        return product.map(productMapper::entityToResponse);
+        return product.map(productMapper::entityToExtendedDto);
     }
 
-    public ProductResponse createProduct(ProductDto request) {
+    public ProductExtendedDto createProduct(ProductDto request) {
         try {
             Product result = productRepository.save(productMapper.dtoToEntity(request));
-            return productMapper.entityToResponse(result);
+            return productMapper.entityToExtendedDto(result);
         } catch (Exception ignore) {
             throw new StoringDatabaseException("Error occurs when creating product");
         }
     }
 
-    public ProductResponse updateProduct(UUID id, ProductDto request) {
+    public ProductExtendedDto updateProduct(UUID id, ProductDto request) {
         Product targetProduct = productRepository.findById(id)
             .orElseThrow(() -> new ItemNotFoundException("Product with id %s not found".formatted(id)));
         Product sourceProduct = productMapper.dtoToEntity(request);
         copyNotNull(sourceProduct, targetProduct);
         try {
             Product result = productRepository.save(targetProduct);
-            return productMapper.entityToResponse(result);
+            return productMapper.entityToExtendedDto(result);
         } catch (Exception ignore) {
             throw new StoringDatabaseException("Error occurs when updating product");
         }
     }
 
-    public Optional<ProductResponse> setCategories(UUID productId, List<UUID> categoryIdList) {
+    public Optional<ProductExtendedDto> setCategories(UUID productId, List<UUID> categoryIdList) {
         Optional<Product> product = productRepository.findById(productId);
         if (product.isEmpty()) {
             return Optional.empty();
@@ -81,7 +81,7 @@ public class ProductService {
             .map(Optional::get).collect(Collectors.toSet());
         product.get().setCategories(categories);
         var result = productRepository.save(product.get());
-        return Optional.ofNullable(productMapper.entityToResponse(result));
+        return Optional.ofNullable(productMapper.entityToExtendedDto(result));
     }
 
     public void deleteProduct(UUID id) {

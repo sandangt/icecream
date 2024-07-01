@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,18 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.frontier.dto.extended.CategoryExtendedDto;
 import sanlab.icecream.frontier.mapper.ICategoryMapper;
 import sanlab.icecream.frontier.model.Category;
 import sanlab.icecream.frontier.repository.ICategoryRepository;
 import sanlab.icecream.frontier.service.CategoryService;
-import sanlab.icecream.frontier.viewmodel.dto.CategoryDto;
-import sanlab.icecream.frontier.viewmodel.response.CategoryResponse;
+import sanlab.icecream.frontier.dto.core.CategoryDto;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static sanlab.icecream.frontier.constant.PreAuthorizedRole.NORMIE;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -36,9 +33,9 @@ public class CategoryController {
     private final ICategoryMapper categoryMapper;
 
     @GetMapping
-    public List<CategoryResponse> getAllCategories() {
+    public List<CategoryExtendedDto> getAllCategories() {
         List<Category> categoryList = categoryRepository.findAll();
-        return categoryMapper.entityToResponse(categoryList);
+        return categoryMapper.entityToExtendedDto(categoryList);
     }
 
     @GetMapping("/{id}")

@@ -1,15 +1,15 @@
-import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
-import { AppRoutes } from "@/constants";
-import ProductShow from './ProductShow';
-import ProductList from './ProductList';
-import ProductCreate from './ProductCreate';
-import ProductEdit from './ProductEdit';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing'
+import { ROUTES } from '@/constants'
+import { ProductShow } from './product-show'
+import { ProductList } from './product-list'
+import { ProductCreate } from './product-create'
+import { ProductEdit } from './product-edit'
 
 export default {
-  name: AppRoutes.PRODUCT,
+  name: ROUTES.PRODUCT,
   icon: PrecisionManufacturingIcon,
   show: ProductShow,
   list: ProductList,
   create: ProductCreate,
-  edit: ProductEdit
+  edit: ProductEdit,
 }

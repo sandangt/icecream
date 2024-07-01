@@ -26,7 +26,6 @@ import java.util.stream.IntStream;
 import static sanlab.icecream.frontier.constant.EProductStatus.AVAILABLE;
 import static sanlab.icecream.frontier.constant.EProductStatus.UNAVAILABLE;
 
-@Configuration
 @Slf4j
 @RequiredArgsConstructor
 public class FakerData {
@@ -34,7 +33,9 @@ public class FakerData {
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
     private final IImageRepository imageRepository;
+
     private static final String FAKE_IMAGE_RELATIVE_PATH = "/200/300?blur";
+    private final Slugify slugMaker = Slugify.builder().build();
 
     @Bean
     public Faker getFaker() {
@@ -61,12 +62,14 @@ public class FakerData {
         var result = IntStream.range(0, number).mapToObj(ignore -> {
             long quantity = faker.number().numberBetween(0, 1_000_000L);
             EProductStatus status = quantity == 0 ? UNAVAILABLE : AVAILABLE;
+            String name = faker.funnyName().name();
             return Product.builder()
-                .name(faker.funnyName().name())
+                .slug(slugMaker.slugify(name))
+                .name(name)
+                .briefDescription(faker.lorem().characters(5, 30))
                 .description(faker.lorem().characters(5, 1000))
                 .price(faker.number().randomDouble(2, 0, 10_000_000L))
                 .status(status)
-                .quantity(quantity)
                 .isFeatured(false)
                 .build();
         }).toList();
@@ -81,7 +84,6 @@ public class FakerData {
         Set<String> existingNames = new HashSet<>();
         var result = IntStream.range(0, number).mapToObj(ignore -> {
             String name;
-            Slugify slugMaker = Slugify.builder().build();
             do {
                 name = faker.funnyName().name();
             } while (existingNames.contains(slugMaker.slugify(name)));

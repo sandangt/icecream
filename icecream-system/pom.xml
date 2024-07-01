@@ -21,7 +21,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <spring.boot.version>3.2.5</spring.boot.version>
-    <spring.cloud.version>2023.0.1</spring.cloud.version>
+    <spring.cloud.version>2023.0.2</spring.cloud.version>
     <spring.doc.version>2.5.0</spring.doc.version>
     <spring.kafka.version>3.1.4</spring.kafka.version>
     <apache.kafka.version>3.7.0</apache.kafka.version>

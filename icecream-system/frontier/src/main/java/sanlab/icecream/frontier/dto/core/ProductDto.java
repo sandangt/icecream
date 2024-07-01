@@ -1,10 +1,11 @@
-package sanlab.icecream.frontier.viewmodel.dto;
+package sanlab.icecream.frontier.dto.core;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import sanlab.icecream.frontier.constant.EProductStatus;
 
 import java.util.UUID;
 
@@ -12,9 +13,14 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto {
+public class ProductDto {
     protected UUID id;
-    protected String slug;
     @NotBlank
     protected String name;
+    protected String description;
+    protected Double price;
+    protected EProductStatus status;
+    protected Long quantity;
+    protected Long createdAt;
+    protected Long modifiedAt;
 }

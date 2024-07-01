@@ -6,9 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import sanlab.icecream.frontier.constant.EOrder;
 
-import java.util.List;
-import java.util.Map;
-
 @Data
 @Builder
 public class CollectionQueryRequest {

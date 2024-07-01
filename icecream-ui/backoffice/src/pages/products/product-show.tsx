@@ -1,9 +1,7 @@
 import Box from '@mui/material/Box'
 
-const ProductShow = () => (
+export const ProductShow = () => (
   <Box>
     Hello Product
   </Box>
 )
-
-export default ProductShow

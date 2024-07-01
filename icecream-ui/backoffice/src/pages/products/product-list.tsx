@@ -10,11 +10,11 @@ import {
   type SortPayload,
 } from 'react-admin'
 
-import { Order } from '@/constants'
+import { ORDER } from '@/constants'
 
-const sort: SortPayload = { field: 'id', order: Order.ASC }
+const sort: SortPayload = { field: 'id', order: ORDER.ASC }
 
-const ProductList = () => (
+export const ProductList = () => (
   <List sort={sort}>
     <Datagrid rowClick="edit">
       <TextField label="ID" source="id" />
@@ -29,5 +29,3 @@ const ProductList = () => (
     </Datagrid>
   </List>
 )
-
-export default ProductList

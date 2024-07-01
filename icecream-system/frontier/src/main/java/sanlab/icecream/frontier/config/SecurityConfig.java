@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     private static final String[] UNAUTHEN_URL_PATTERNS = {
         "/swagger-ui/**", "/swagger-resources", "/swagger-resources/**",
-        "/actuator/**", "/api/categories"
+        "/actuator/**", "/api/categories", "/graphql"
     };
 
     @Bean
