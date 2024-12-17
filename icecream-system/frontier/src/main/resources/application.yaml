@@ -1,10 +1,22 @@
 server:
   port: ${FRONTIER_PORT}
+  servlet.context-path: /console
+
+springdoc:
+  api-docs:
+    path: /swagger-resources
+  swagger-ui:
+    path: /swagger-ui
 
 spring:
   application:
     name: Icecream e-commerce
     version: 0.1.0
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      resolve-lazily: true
   datasource:
     username: ${POSTGRESQL_USER}
     password: ${POSTGRESQL_PASSWORD}
@@ -27,9 +39,20 @@ spring:
         jwt:
           issuer-uri: ${IDENTITY_ISSUER}
           jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
-  redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+      allowed-method: GET,POST
+      max-age: 3600
+    cors:
+      allow-credentials: true
+      allowed-origins:
+        - ${STOREFRONT_URL}
 
 jwt:
   auth:
@@ -37,16 +60,29 @@ jwt:
       resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
       principle-attribute: email
 
-springdoc:
-  api-docs:
-    path: /swagger-resources
-  swagger-ui:
-    path: /swagger-ui
+minio:
+  url: ${STORAGE_URL}
+  access:
+    key: ${MINIO_ACCESS_KEY}
+    secret: ${MINIO_SECRET_KEY}
+  bucket:
+    image: images
 
 app:
   cors:
     allowed-origins:
       ${STOREFRONT_URL},
+
+grpc:
+  server:
+    port: ${FRONTIER_GRPC_PORT}
+  client:
+    chronos:
+      address: ${CHRONOS_GRPC_HOST}:${CHRONOS_GRPC_PORT}
+      negotiation-type: plaintext
+    echo:
+      address: ${ECHO_GRPC_HOST}:${ECHO_GRPC_PORT}
+      negotiation-type: plaintext
 
 #logging:
 #  level:

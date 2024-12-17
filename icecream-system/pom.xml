@@ -15,30 +15,33 @@
   </modules>
 
   <properties>
+    <project.version>0.1.0</project.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>21</java.version>
     <maven.version>3.13.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.2.5</spring.boot.version>
-    <spring.cloud.version>2023.0.1</spring.cloud.version>
+    <spring.boot.version>3.2.6</spring.boot.version>
+    <spring.cloud.version>2023.0.2</spring.cloud.version>
     <spring.doc.version>2.5.0</spring.doc.version>
     <spring.kafka.version>3.1.4</spring.kafka.version>
     <apache.kafka.version>3.7.0</apache.kafka.version>
     <confluent.version>7.6.0</confluent.version>
     <spring.grpc.version>3.1.0.RELEASE</spring.grpc.version>
-    <protobuf.version>4.26.1</protobuf.version>
-    <grpc.version>1.64.0</grpc.version>
+    <protobuf.version>4.27.3</protobuf.version>
+    <grpc.version>1.65.1</grpc.version>
     <postgresql.version>42.7.3</postgresql.version>
     <lombok.version>1.18.32</lombok.version>
     <guava.version>33.2.0-jre</guava.version>
-    <apache.commons.lang>3.14.0</apache.commons.lang>
+    <apache.commons.lang.version>3.14.0</apache.commons.lang.version>
+    <apache.commons.io.version>2.16.1</apache.commons.io.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
     <liquibase.version>4.27.0</liquibase.version>
     <slugify.version>3.0.6</slugify.version>
     <faker.version>1.0.2</faker.version>
     <minio.version>8.5.10</minio.version>
+    <testcontainers.version>1.19.8</testcontainers.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -106,11 +109,17 @@
         <version>${confluent.version}</version>
       </dependency>
       <!--endregion-->
-      <!--region grpc-->
+      <!--region gRPC-->
       <dependency>
         <groupId>net.devh</groupId>
         <artifactId>grpc-spring-boot-starter</artifactId>
         <version>${spring.grpc.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>io.grpc</groupId>
@@ -162,7 +171,12 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>${apache.commons.lang}</version>
+        <version>${apache.commons.lang.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${apache.commons.io.version}</version>
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>
@@ -180,12 +194,19 @@
         <artifactId>slugify</artifactId>
         <version>${slugify.version}</version>
       </dependency>
-      <!--endregion-->
-      <!--region Faker-->
       <dependency>
         <groupId>com.github.javafaker</groupId>
         <artifactId>javafaker</artifactId>
         <version>${faker.version}</version>
+      </dependency>
+      <!--endregion-->
+      <!--region Testcontainers-->
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <!--endregion-->
     </dependencies>

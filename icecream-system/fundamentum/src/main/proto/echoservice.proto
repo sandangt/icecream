@@ -1,0 +1,4 @@
+syntax = "proto3";
+package sanlab.icecream.fundamentum.proto;
+
+option java_multiple_files = true;

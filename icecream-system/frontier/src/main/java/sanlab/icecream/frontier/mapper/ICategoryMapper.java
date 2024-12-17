@@ -3,9 +3,9 @@ package sanlab.icecream.frontier.mapper;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import sanlab.icecream.frontier.dto.extended.CategoryExtendedDto;
 import sanlab.icecream.frontier.model.Category;
-import sanlab.icecream.frontier.viewmodel.dto.CategoryDto;
-import sanlab.icecream.frontier.viewmodel.response.CategoryResponse;
+import sanlab.icecream.frontier.dto.core.CategoryDto;
 
 import java.util.List;
 
@@ -20,12 +20,12 @@ public interface ICategoryMapper {
     @IterableMapping(qualifiedByName = "entityToDto")
     List<CategoryDto> entityToDto(List<Category> categories);
 
-    @Named("entityToResponse")
-    CategoryResponse entityToResponse(Category category);
+    @Named("entityToExtendedDto")
+    CategoryExtendedDto entityToExtendedDto(Category category);
 
-    @Named("entityToResponseIter")
-    @IterableMapping(qualifiedByName = "entityToResponse")
-    List<CategoryResponse> entityToResponse(List<Category> categories);
+    @Named("entityToExtendedDtoIter")
+    @IterableMapping(qualifiedByName = "entityToExtendedDto")
+    List<CategoryExtendedDto> entityToExtendedDto(List<Category> categories);
     //endregion
 
     //region To Entity

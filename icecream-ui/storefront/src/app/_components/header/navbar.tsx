@@ -1,7 +1,4 @@
-'use client'
-
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { type FC } from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
@@ -13,7 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
-import { ROUTES } from '@/constants'
+import { ROUTES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import type { Category } from '@/types'
 
@@ -45,7 +42,7 @@ export const Navbar: FC<Props> = ({ data }) => {
     return null
   }
   return (
-    <nav className="bg-primary text-primary-foreground px-8 py-4 ">
+    <nav className="bg-primary text-primary-foreground px-8 py-4">
       <div className="container flex items-center gap-5">
         <NavbarCategories data={data} />
         {NAVBAR_ROUTING_ITEMS.map(({ title, path }) => (
@@ -60,46 +57,28 @@ export const Navbar: FC<Props> = ({ data }) => {
 
 type NavbarCategoriesProps = Props
 
-const NavbarCategories: FC<NavbarCategoriesProps> = ({ data }) => {
-  const pathname = usePathname()
-  const categoryList = data.map(({ slug, name, id }) => {
-    const path = ROUTES.CATEGORIES(slug)
-    return {
-      id,
-      title: name,
-      path,
-      isActive: path === pathname,
-    }
-  })
-  return (
-    <div className="items-center cursor-pointer">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-primary-foreground bg-primary hover:text-secondary-foreground hover:bg-secondary">
-              <div className="flex">
-                <GiHamburgerMenu size="1.5rem" />
-                <span className="capitalize ml-2">All Categories</span>
-              </div>
-            </NavigationMenuTrigger>
-            <NavigationMenuContent className="bg-primary text-primary-foreground">
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                {categoryList.map(({ id, title, path, isActive }) => (
-                  <li
-                    key={id}
-                    className={cn(
-                      'hover:bg-secondary hover:text-secondary-foreground',
-                      isActive ? 'bg-secondary text-secondary-foreground' : '',
-                    )}
-                  >
-                    <Link href={path}>{title}</Link>
-                  </li>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
-  )
-}
+const NavbarCategories: FC<NavbarCategoriesProps> = ({ data }) => (
+  <div className="items-center cursor-pointer">
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger className="text-primary-foreground bg-primary hover:text-secondary-foreground hover:bg-secondary">
+            <div className="flex">
+              <GiHamburgerMenu size="1.5rem" />
+              <span className="capitalize ml-2">All Categories</span>
+            </div>
+          </NavigationMenuTrigger>
+          <NavigationMenuContent className="bg-primary text-primary-foreground">
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              {data.map(({ id, name }) => (
+                <li key={id} className="hover:bg-secondary hover:text-secondary-foreground">
+                  <Link href="/">{name}</Link>
+                </li>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  </div>
+)

@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Icecream e-commerce
+    version: 0.1.0
+  data:
+    mongodb:
+      username: ${MONGODB_USER}
+      password: ${MONGODB_PASSWORD}
+      host: ${MONGODB_HOST}
+      port: ${MONGODB_PORT}
+      database: ${MONGODB_ECHO_DB}
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+grpc:
+  server:
+    port: ${ECHO_GRPC_PORT}
+  client:
+    frontier:
+      address: ${FRONTIER_GRPC_HOST}:${FRONTIER_GRPC_PORT}
+      negotiation-type: plaintext
+    echo:
+      address: ${CHRONOS_GRPC_HOST}:${CHRONOS_GRPC_PORT}
+      negotiation-type: plaintext

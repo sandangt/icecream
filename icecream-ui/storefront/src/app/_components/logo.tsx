@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { ROUTES } from '@/constants'
+import { ROUTES } from '@/lib/constants'
 
 export const Logo = () => (
   <Link href={ROUTES.HOME}>

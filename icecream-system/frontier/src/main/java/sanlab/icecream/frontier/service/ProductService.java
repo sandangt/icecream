@@ -4,39 +4,56 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import sanlab.icecream.frontier.exception.ItemNotFoundException;
-import sanlab.icecream.frontier.exception.StoringDatabaseException;
+import org.springframework.web.multipart.MultipartFile;
+import sanlab.icecream.frontier.dto.core.FeedbackDto;
+import sanlab.icecream.frontier.dto.core.ImageDto;
+import sanlab.icecream.frontier.dto.extended.ProductExtendedDto;
+import sanlab.icecream.fundamentum.exception.ItemNotFoundException;
+import sanlab.icecream.fundamentum.exception.StoringDatabaseException;
+import sanlab.icecream.frontier.mapper.IFeedbackMapper;
+import sanlab.icecream.frontier.mapper.IImageMapper;
 import sanlab.icecream.frontier.mapper.IProductMapper;
 import sanlab.icecream.frontier.model.Category;
+import sanlab.icecream.frontier.model.Image;
 import sanlab.icecream.frontier.model.Product;
-import sanlab.icecream.frontier.repository.ICategoryRepository;
-import sanlab.icecream.frontier.repository.IProductRepository;
-import sanlab.icecream.frontier.viewmodel.dto.ProductDto;
+import sanlab.icecream.frontier.model.Stock;
+import sanlab.icecream.frontier.repository.crud.ICategoryRepository;
+import sanlab.icecream.frontier.repository.crud.IProductRepository;
+import sanlab.icecream.frontier.dto.core.ProductDto;
+import sanlab.icecream.frontier.repository.crud.IStockRepository;
 import sanlab.icecream.frontier.viewmodel.response.CollectionQueryResponse;
-import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static sanlab.icecream.frontier.utils.ObjectUtils.copyNotNull;
-import static sanlab.icecream.frontier.utils.RequestUtils.calculateTotalPage;
+import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
+import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
+    private final ImageService imageService;
+
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
-    private final IProductMapper productMapper;
+    private final IStockRepository stockRepository;
 
-    public CollectionQueryResponse<ProductResponse> getProducts(Pageable pageable) {
+    private final IFeedbackMapper feedbackMapper;
+    private final IProductMapper productMapper;
+    private final IImageMapper imageMapper;
+
+    public CollectionQueryResponse<ProductExtendedDto> getAll(Pageable pageable) {
         Page<Product> paginatedProducts = productRepository.findAll(pageable);
         long total = productRepository.count();
-        List<ProductResponse> productList = productMapper.entityToResponse(paginatedProducts.stream().toList());
-        return CollectionQueryResponse.<ProductResponse>builder()
+        List<ProductExtendedDto> productList = productMapper.entityToExtendedDto(paginatedProducts.stream().toList());
+        return CollectionQueryResponse.<ProductExtendedDto>builder()
             .total(total)
             .page(pageable.getPageNumber())
             .totalPages(calculateTotalPage(total, pageable.getPageSize()))
@@ -44,48 +61,94 @@ public class ProductService {
             .build();
     }
 
-    public Optional<ProductResponse> getProductById(UUID id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.map(productMapper::entityToResponse);
+    public ProductExtendedDto getById(UUID id) {
+        return productRepository.findById(id)
+            .map(productMapper::entityToExtendedDto)
+            .orElseThrow(() -> ItemNotFoundException.product(id));
     }
 
-    public ProductResponse createProduct(ProductDto request) {
+    public CollectionQueryResponse<FeedbackDto> getAllFeedbacks(UUID productId, Pageable pageable) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> ItemNotFoundException.product(productId));
+        long total = product.getFeedbacks().size();
+        List<FeedbackDto> feedbackList = product.getFeedbacks().parallelStream()
+            .map(feedbackMapper::entityToDto)
+            .toList();
+        return CollectionQueryResponse.<FeedbackDto>builder()
+            .total(total)
+            .page(pageable.getPageNumber())
+            .totalPages(calculateTotalPage(total, pageable.getPageSize()))
+            .data(feedbackList)
+            .build();
+    }
+
+    public ProductExtendedDto create(ProductDto request) {
         try {
-            Product result = productRepository.save(productMapper.dtoToEntity(request));
-            return productMapper.entityToResponse(result);
+            Product product = productRepository.save(productMapper.dtoToEntity(request));
+            return productMapper.entityToExtendedDto(product);
         } catch (Exception ignore) {
             throw new StoringDatabaseException("Error occurs when creating product");
         }
     }
 
-    public ProductResponse updateProduct(UUID id, ProductDto request) {
+    public ProductExtendedDto update(UUID id, ProductDto request) {
         Product targetProduct = productRepository.findById(id)
-            .orElseThrow(() -> new ItemNotFoundException("Product with id %s not found".formatted(id)));
+            .orElseThrow(() -> ItemNotFoundException.product(id));
         Product sourceProduct = productMapper.dtoToEntity(request);
         copyNotNull(sourceProduct, targetProduct);
         try {
-            Product result = productRepository.save(targetProduct);
-            return productMapper.entityToResponse(result);
+            return productMapper.entityToExtendedDto(productRepository.save(targetProduct));
         } catch (Exception ignore) {
             throw new StoringDatabaseException("Error occurs when updating product");
         }
     }
 
-    public Optional<ProductResponse> setCategories(UUID productId, List<UUID> categoryIdList) {
-        Optional<Product> product = productRepository.findById(productId);
-        if (product.isEmpty()) {
-            return Optional.empty();
-        }
-        Set<Category> categories = categoryIdList.stream()
-            .map(categoryRepository::findById)
-            .map(Optional::get).collect(Collectors.toSet());
-        product.get().setCategories(categories);
-        var result = productRepository.save(product.get());
-        return Optional.ofNullable(productMapper.entityToResponse(result));
+    public ProductExtendedDto setCategories(UUID productId, List<UUID> categoryIdList) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() ->ItemNotFoundException.product(productId));
+        Set<Category> categories = categoryRepository.findByIdIn(categoryIdList).stream()
+            .filter(category -> Optional.ofNullable(category).isPresent())
+            .collect(Collectors.toSet());
+        product.setCategories(categories);
+        return productMapper.entityToExtendedDto(productRepository.save(product));
     }
 
-    public void deleteProduct(UUID id) {
-        productRepository.deleteById(id);
+    public ProductExtendedDto setMedia(UUID productId, MultipartFile avatar, MultipartFile[] otherMedia) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> ItemNotFoundException.product(productId));
+        Deque<Image> savedDQ = new ArrayDeque<>();
+        Optional.ofNullable(avatar).ifPresent(img -> {
+            if (!img.isEmpty()) {
+                var imageDto = imageService.upsertProductAvatar(productId, avatar);
+                savedDQ.add(imageMapper.dtoToEntity(imageDto));
+            }
+        });
+        if (otherMedia != null && otherMedia.length > 0) {
+            List<ImageDto> imgList = imageService.bulkUpsertProductMedia(productId, otherMedia);
+            savedDQ.addAll(imageMapper.dtoToEntity(imgList));
+        }
+        product.setMedia(new HashSet<>(savedDQ));
+        return productMapper.entityToExtendedDto(productRepository.save(product));
+    }
+
+    public ProductExtendedDto setStocks(UUID productId, List<UUID> stockIdList) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> ItemNotFoundException.product(productId));
+        List<Stock> stocks = stockRepository.findByIdIn(stockIdList).stream()
+            .filter(stock -> Optional.ofNullable(stock).isPresent())
+            .toList();
+        product.setStocks(stocks);
+        return productMapper.entityToExtendedDto(productRepository.save(product));
+    }
+
+    // TODO
+    public void delete(UUID id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        productOptional.ifPresent(product -> {
+            product.setCategories(null);
+            product.setMedia(null);
+            productRepository.deleteById(id);
+        });
     }
 
 }

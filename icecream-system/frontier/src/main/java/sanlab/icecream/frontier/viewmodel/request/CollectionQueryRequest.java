@@ -4,10 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import sanlab.icecream.frontier.constant.EOrder;
-
-import java.util.List;
-import java.util.Map;
+import sanlab.icecream.fundamentum.constant.ESortingOrder;
 
 @Data
 @Builder
@@ -28,14 +25,14 @@ public class CollectionQueryRequest {
     @Builder
     public static class SortingRequest {
         private String field;
-        private EOrder order;
+        private ESortingOrder order;
     }
 
     public PageRequest getPageRequest() {
         int offset = pagination.getOffset();
         int limit = pagination.getLimit();
         var sortBy = Sort.by(sorting.getField());
-        sortBy = sorting.getOrder() == EOrder.ASC ? sortBy.ascending(): sortBy.descending();
+        sortBy = sorting.getOrder() == ESortingOrder.ASC ? sortBy.ascending(): sortBy.descending();
         return PageRequest.of(offset, limit, sortBy);
     }
 

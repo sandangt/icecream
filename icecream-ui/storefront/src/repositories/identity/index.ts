@@ -11,6 +11,10 @@ export const {
 } = NextAuth({
   callbacks: {
     //@ts-ignore
+    signIn: async (params) => {
+      return params
+    },
+    //@ts-ignore
     jwt: async (params) => {
       const { token, user, account, profile } = params
       return { ...token, ...user, ...account, ...profile }
@@ -39,7 +43,7 @@ export const {
   ...authConfig,
 })
 
-export const requestSSOSignOut = async (refreshToken: string): Promise<void> => {
+export const requestSSOSignOut = async (refreshToken: string): Promise<any> => {
   if (!refreshToken || !refreshToken.length) {
     return
   }
@@ -50,10 +54,11 @@ export const requestSSOSignOut = async (refreshToken: string): Promise<void> => 
   body.append('client_secret', AUTH_SECRET)
   body.append('refresh_token', refreshToken)
 
-  fetch(`${AUTH_ISSUER}/protocol/openid-connect/logout`, {
+  const response = await fetch(`${AUTH_ISSUER}/protocol/openid-connect/logout`, {
     method: 'POST',
     headers,
     body,
     redirect: 'follow'
   })
+  return response
 }

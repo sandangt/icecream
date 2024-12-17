@@ -1,14 +1,15 @@
 import { type FC } from 'react'
 
-import type { CategoryResponse, ProductResponse } from '@/types'
+import type { CategoryExtended, ProductExtended } from '@/types'
 import { EmptyList } from '@/app/_components/empty-list'
 import { CategoryCard, ProductCard } from '@/app/_components/item-card'
 
 type CategoryItemsProps = {
-  data: CategoryResponse[]
+  data: CategoryExtended[]
 }
 
-export const CategoryItems: FC<CategoryItemsProps> = ({ data }) => (
+export const CategoryItems: FC<CategoryItemsProps> = ({ data }) => {
+  return (
   <div className="container py-16">
     <h2 className="text-2xl font-medium uppercase mb-6">shop by category</h2>
     {data.length ? (
@@ -23,10 +24,10 @@ export const CategoryItems: FC<CategoryItemsProps> = ({ data }) => (
       <EmptyList />
     )}
   </div>
-)
+)}
 
 type ProductProps = {
-  data: ProductResponse[]
+  data: ProductExtended[]
 }
 
 export const TopNewArrivalItems: FC<ProductProps> = ({ data }) => (

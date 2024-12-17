@@ -1,10 +1,9 @@
 import { type ReactNode, type FC } from 'react'
 import { Poppins } from 'next/font/google'
 
-import { SITE_NAME } from '@/constants'
+import { SITE_NAME } from '@/lib/constants'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { AuthProvider } from '@/components/providers/auth-provider'
-import { auth } from '@/repositories/identity'
 import { QueryProvider } from '@/components/providers/client-query-provider'
 import { Header } from './_components/header'
 import { Footer } from './_components/footer'
@@ -31,28 +30,25 @@ const RootLayout: FC<Props> = ({ children }) => (
       <link rel="icon" href="/img/favicon.ico" sizes="any" />
     </head>
     <body className={font.className}>
-      <Provider>
+      <AppProvider>
         <Header />
         <main>{children}</main>
         <Footer />
-      </Provider>
+      </AppProvider>
     </body>
   </html>
 )
 
 export default RootLayout
 
-type ProviderProps = {
+type AppProviderProps = {
   children: ReactNode
 }
 
-const Provider: FC<ProviderProps> = async ({ children }) => {
-  const session = await auth()
-  return (
-    <ThemeProvider attribute="class">
-      <AuthProvider session={session}>
-        <QueryProvider>{children}</QueryProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  )
-}
+const AppProvider: FC<AppProviderProps> = async ({ children }) => (
+  <ThemeProvider attribute="class">
+    <AuthProvider>
+      <QueryProvider>{children}</QueryProvider>
+    </AuthProvider>
+  </ThemeProvider>
+)

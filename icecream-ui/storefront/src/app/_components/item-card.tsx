@@ -5,12 +5,12 @@ import { HiMagnifyingGlassPlus } from 'react-icons/hi2'
 import { IoHeartOutline } from 'react-icons/io5'
 import { FaRegStar } from 'react-icons/fa'
 
-import { ROUTES } from '@/constants'
+import { ROUTES } from '@/lib/constants'
 import { makeStorageUrl } from '@/lib/utils'
-import type { CategoryResponse, ProductResponse } from '@/types'
+import type { CategoryExtended, ProductExtended } from '@/types'
 
 type CategoryCardProps = {
-  data: CategoryResponse
+  data: CategoryExtended
 }
 
 export const CategoryCard: FC<CategoryCardProps> = ({ data }) => {
@@ -26,7 +26,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({ data }) => {
         />
       </div>
       <Link
-        href={ROUTES.CATEGORIES(slug)}
+        href="/"
         className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white font-roboto font-medium group-hover:bg-opacity-60 transition"
       >
         {name}
@@ -37,7 +37,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({ data }) => {
 
 
 type ProductCardProps = {
-  data: ProductResponse
+  data: ProductExtended
 }
 
 export const ProductCard: FC<ProductCardProps> = ({ data }) => {

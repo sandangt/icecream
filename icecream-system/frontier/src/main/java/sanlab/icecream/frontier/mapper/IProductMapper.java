@@ -3,14 +3,14 @@ package sanlab.icecream.frontier.mapper;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import sanlab.icecream.frontier.dto.extended.ProductExtendedDto;
 import sanlab.icecream.frontier.model.Product;
-import sanlab.icecream.frontier.viewmodel.dto.ProductDto;
-import sanlab.icecream.frontier.viewmodel.response.ProductResponse;
+import sanlab.icecream.frontier.dto.core.ProductDto;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { ICategoryMapper.class, IImageMapper.class })
-public interface IProductMapper {
+@Mapper(componentModel = "spring", uses = { ICategoryMapper.class, IImageMapper.class, IStockMapper.class })
+public interface IProductMapper extends IBaseMapper {
 
     //region To DTO
     @Named("entityToDto")
@@ -20,12 +20,12 @@ public interface IProductMapper {
     @IterableMapping(qualifiedByName = "entityToDto")
     List<ProductDto> entityToDto(List<Product> products);
 
-    @Named("entityToResponse")
-    ProductResponse entityToResponse(Product product);
+    @Named("entityToExtendedDto")
+    ProductExtendedDto entityToExtendedDto(Product product);
 
-    @Named("entityToResponseIter")
-    @IterableMapping(qualifiedByName = "entityToResponse")
-    List<ProductResponse> entityToResponse(List<Product> products);
+    @Named("entityToExtendedDtoIter")
+    @IterableMapping(qualifiedByName = "entityToExtendedDto")
+    List<ProductExtendedDto> entityToExtendedDto(List<Product> products);
     //endregion
 
     //region To Entity

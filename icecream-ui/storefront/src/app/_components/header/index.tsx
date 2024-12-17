@@ -1,4 +1,4 @@
-import { requestAllCategories } from '@/repositories/frontier'
+import { requestAllCategories } from '@/repositories/frontier/categories'
 import { Logo } from '../logo'
 import { Search } from './search'
 import { Personal } from './personal'

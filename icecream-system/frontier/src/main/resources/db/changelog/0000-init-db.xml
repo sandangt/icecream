@@ -8,7 +8,7 @@
   <changeSet id="init-database" author="zoroaster">
     <sql>
       CREATE TABLE customer (
-        id UUID PRIMARY KEY,
+        user_id UUID PRIMARY KEY,
         email VARCHAR UNIQUE NOT NULL,
         username VARCHAR NOT NULL,
         phone VARCHAR,
@@ -26,38 +26,151 @@
         created_at BIGINT,
         modified_at BIGINT
       );
+      CREATE TABLE address (
+        id UUID PRIMARY KEY,
+        contact_name VARCHAR NOT NULL,
+        phone VARCHAR,
+        address_line_1 VARCHAR,
+        address_line_2 VARCHAR,
+        city VARCHAR,
+        zip_code VARCHAR,
+        district VARCHAR,
+        state_or_province VARCHAR,
+        country VARCHAR,
+        created_at BIGINT,
+        modified_at BIGINT
+      );
+      CREATE TABLE product (
+        id UUID PRIMARY KEY,
+        slug VARCHAR NOT NULL,
+        name VARCHAR NOT NULL,
+        brief_description VARCHAR,
+        description TEXT,
+        status VARCHAR,
+        price DOUBLE PRECISION,
+        sku VARCHAR,
+        is_featured BOOLEAN,
+        stock_quantity BIGINT,
+        meta_title VARCHAR,
+        meta_keyword VARCHAR,
+        meta_description TEXT,
+        created_at BIGINT,
+        modified_at BIGINT
+      );
       CREATE TABLE category (
         id UUID PRIMARY KEY,
         slug VARCHAR UNIQUE NOT NULL,
         name VARCHAR UNIQUE NOT NULL,
         description TEXT,
         avatar_id UUID,
-        CONSTRAINT fk_image FOREIGN KEY(avatar_id) REFERENCES image(id)
-      );
-      CREATE TABLE product (
-        id UUID PRIMARY KEY,
-        name VARCHAR NOT NULL,
-        description TEXT,
-        price DOUBLE PRECISION,
-        quantity INTEGER,
-        status VARCHAR,
-        is_featured BOOLEAN,
         created_at BIGINT,
-        modified_at BIGINT
+        modified_at BIGINT,
+        CONSTRAINT fk_image__category FOREIGN KEY(avatar_id) REFERENCES image(id)
+      );
+      CREATE TABLE stock (
+        id UUID PRIMARY KEY,
+        product_id UUID,
+        quantity BIGINT,
+        reserved_quantity BIGINT,
+        created_at BIGINT,
+        modified_at BIGINT,
+        CONSTRAINT fk_product__stock FOREIGN KEY(product_id) REFERENCES product(id)
+      );
+      CREATE TABLE feedback (
+        id UUID PRIMARY KEY,
+        product_id UUID,
+        customer_id UUID,
+        content TEXT,
+        star SMALLINT NOT NULL,
+        created_at BIGINT,
+        modified_at BIGINT,
+        CONSTRAINT fk_product__feedback FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_customer__feedback FOREIGN KEY(customer_id) REFERENCES customer(user_id)
+      );
+      CREATE TABLE order_tbl (
+        id UUID PRIMARY KEY,
+        customer_id UUID,
+        address_id UUID,
+        note TEXT,
+        discount DOUBLE PRECISION,
+        total_price DOUBLE PRECISION,
+        delivery_fee DOUBLE PRECISION,
+        delivery_method VARCHAR,
+        payment_method VARCHAR,
+        order_status VARCHAR,
+        delivery_status VARCHAR,
+        payment_status VARCHAR,
+        created_at BIGINT,
+        modified_at BIGINT,
+        CONSTRAINT fk_customer__order FOREIGN KEY(customer_id) REFERENCES customer(user_id),
+        CONSTRAINT fk_address__order FOREIGN KEY(address_id) REFERENCES address(id)
+      );
+      CREATE TABLE order_item (
+        id UUID PRIMARY KEY,
+        product_id UUID,
+        order_id UUID,
+        quantity BIGINT,
+        note TEXT,
+        price DOUBLE PRECISION,
+        discount DOUBLE PRECISION,
+        created_at BIGINT,
+        modified_at BIGINT,
+        CONSTRAINT fk_product__order_item FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_order__order_item FOREIGN KEY(order_id) REFERENCES order_tbl(id)
+      );
+      CREATE TABLE cart (
+        id UUID PRIMARY KEY,
+        customer_id UUID,
+        order_id UUID,
+        created_at BIGINT,
+        modified_at BIGINT,
+        CONSTRAINT fk_customer__cart FOREIGN KEY(customer_id) REFERENCES customer(user_id),
+        CONSTRAINT fk_order__cart FOREIGN KEY(order_id) REFERENCES order_tbl(id)
+      );
+      CREATE TABLE cart_item (
+        id UUID PRIMARY KEY,
+        product_id UUID,
+        cart_id UUID,
+        quantity BIGINT,
+        created_at BIGINT,
+        modified_at BIGINT,
+        CONSTRAINT fk_product__cart_item FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_cart__cart_item FOREIGN KEY(cart_id) REFERENCES cart(id)
       );
       CREATE TABLE product_category (
         product_id UUID,
         category_id UUID,
         PRIMARY KEY (product_id, category_id),
-        CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES product(id),
-        CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES category(id)
+        CONSTRAINT fk_product__product_category FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_category__product_category FOREIGN KEY(category_id) REFERENCES category(id)
+      );
+      CREATE TABLE customer_image (
+        customer_id UUID,
+        image_id UUID,
+        PRIMARY KEY (customer_id, image_id),
+        CONSTRAINT fk_customer__customer_image FOREIGN KEY(customer_id) REFERENCES customer(user_id),
+        CONSTRAINT fk_image__customer_image FOREIGN KEY(image_id) REFERENCES image(id)
       );
       CREATE TABLE product_image (
         product_id UUID,
         image_id UUID,
         PRIMARY KEY (product_id, image_id),
-        CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES product(id),
-        CONSTRAINT fk_image FOREIGN KEY(image_id) REFERENCES image(id)
+        CONSTRAINT fk_product__product_image FOREIGN KEY(product_id) REFERENCES product(id),
+        CONSTRAINT fk_image__product_image FOREIGN KEY(image_id) REFERENCES image(id)
+      );
+      CREATE TABLE customer_address (
+        customer_id UUID,
+        address_id UUID,
+        PRIMARY KEY (customer_id, address_id),
+        CONSTRAINT fk_customer__customer_address FOREIGN KEY(customer_id) REFERENCES customer(user_id),
+        CONSTRAINT fk_address__customer_address FOREIGN KEY(address_id) REFERENCES address(id)
+      );
+      CREATE TABLE stock_address (
+        stock_id UUID,
+        address_id UUID,
+        PRIMARY KEY (stock_id, address_id),
+        CONSTRAINT fk_customer__stock_address FOREIGN KEY(stock_id) REFERENCES stock(id),
+        CONSTRAINT fk_address__stock_address FOREIGN KEY(address_id) REFERENCES address(id)
       );
     </sql>
   </changeSet>

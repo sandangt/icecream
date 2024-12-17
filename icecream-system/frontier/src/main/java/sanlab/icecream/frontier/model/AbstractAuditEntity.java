@@ -11,6 +11,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Setter
+@Getter
 @MappedSuperclass
 @SuperBuilder
 @NoArgsConstructor
@@ -19,14 +21,10 @@ public abstract class AbstractAuditEntity {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    @Getter
-    @Setter
     private Long createdAt;
 
     @LastModifiedDate
     @Column(name = "modified_at", nullable = false)
-    @Getter
-    @Setter
     private Long modifiedAt;
 
 }

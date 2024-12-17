@@ -1,0 +1,180 @@
+x-icecream-minio-common: &minio-common
+  image: minio/minio:RELEASE.2024-11-07T00-52-20Z
+  command: server --address ":9000" --console-address ":9001" /data
+  environment:
+    MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+    MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+  networks:
+    - icecream-network
+
+volumes:
+  icecream-postgresql-volume:
+  icecream-mongodb-volume:
+  icecream-redis-volume:
+  icecream-minio-volume:
+
+networks:
+  icecream-network:
+
+services:
+
+  postgresql:
+    container_name: icecream-postgresql
+    build:
+      context: .
+      dockerfile: postgresql/Dockerfile
+    ports:
+      - ${POSTGRESQL_PORT}:5432
+    volumes:
+      - icecream-postgresql-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRESQL_FRONTIER_DB},${POSTGRESQL_IDENTITY_DB}
+    networks:
+      - icecream-network
+
+  redis:
+    container_name: icecream-redis
+    image: redis:7.4.1
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+        - icecream-network
+    volumes:
+        - icecream-redis-volume:/data
+    healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 5s
+        timeout: 30s
+        retries: 50
+
+  identity:
+    image: quay.io/keycloak/keycloak:26.0.7
+    hostname: identity
+    container_name: icecream-identity
+    command: ['start-dev', '--import-realm']
+    ports:
+      - "${IDENTITY_PORT}:8080"
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_PROXY: passthrough
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgresql:5432/${POSTGRESQL_IDENTITY_DB}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - ../identity/data/import:/opt/keycloak/data/import
+      - ../identity/themes:/opt/keycloak/themes
+    networks:
+      - icecream-network
+
+  minio:
+    <<: *minio-common
+    container_name: icecream-minio
+    hostname: minio
+    ports:
+      - "${MINIO_API_PORT}:9000"
+      - "${MINIO_CONSOLE_PORT}:9001"
+    volumes:
+      - icecream-minio-volume:/data
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://localhost:${MINIO_API_PORT}/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  #  mongodb:
+  #    container_name: icecream-mongodb
+  #    image: mongo:7.0.12
+  #    ports:
+  #      - ${MONGODB_PORT}:27017
+  #    environment:
+  #      MONGO_INITDB_DATABASE: ${MONGODB_CHRONOS_DB}
+  #      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+  #      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+  #    volumes:
+  #      - icecream-mongodb-volume:/data/db
+  #    networks:
+  #      - icecream-network
+
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:7.3.3
+  #   container_name: icecream-zookeeper
+  #   hostname: zookeeper
+  #   ports:
+  #     - "${ZOOKEEPER_CLIENT_PORT}:2181"
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+  #     ZOOKEEPER_SERVER_ID: 1
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #   networks:
+  #     - icecream-network
+
+  # kafka:
+  #   image: confluentinc/cp-kafka:7.3.3
+  #   container_name: icecream-kafka
+  #   hostname: kafka
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - "${KAFKA_PORT}:${KAFKA_PORT}"
+  #     - "19092:19092"
+  #     - "9999:9999"
+  #   environment:
+  #     KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+  #     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:19092,EXTERNAL://127.0.0.1:${KAFKA_PORT}
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  #     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+  #     KAFKA_JMX_PORT: 9999
+  #     KAFKA_JMX_HOSTNAME: "127.0.0.1"
+  #     KAFKA_AUTHORIZER_CLASS_NAME: "kafka.security.authorizer.AclAuthorizer"
+  #     KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+  #   networks:
+  #     - icecream-network
+
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:7.3.3
+  #   hostname: schema-registry
+  #   container_name: icecream-schema-registry
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   ports:
+  #     - "${SCHEMA_REGISTRY_PORT}:8081"
+  #   environment:
+  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:19092
+  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+  #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+  #   networks:
+  #     - icecream-network
+
+  # ops-control-center:
+  #   image: confluentinc/cp-enterprise-control-center:7.3.3
+  #   container_name: icecream-ops-control-center
+  #   hostname: ops-control-center
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #     - schema-registry
+  #   ports:
+  #     - "${CP_CONTROL_CENTER_PORT}:9021"
+  #   environment:
+  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:19092"
+  #     CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
+  #     CONTROL_CENTER_SCHEMA_REGISTRY_URL: "schema-registry:8081"
+  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
+  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+  #     CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+  #     PORT: 9021
+  #   networks:
+  #     - icecream-network
+
+

@@ -12,8 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import sanlab.icecream.frontier.service.middleware.JwtAuthConverter;
+import sanlab.icecream.frontier.service.security.JwtAuthConverter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import sanlab.icecream.frontier.service.security.StorefrontAuthorizationManager;
 
 import java.util.List;
 
@@ -26,21 +27,25 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter;
+    private final StorefrontAuthorizationManager authorizationManager;
 
-    private static final String[] UNAUTHEN_URL_PATTERNS = {
-        "/swagger-ui/**", "/swagger-resources", "/swagger-resources/**",
-        "/actuator/**", "/api/categories"
-    };
+//    private static final String[] ANON_URL_PATTERNS = {
+//        "/swagger-ui/**", "/swagger-resources", "/swagger-resources/**",
+//        "/actuator/**", "/graphql"
+//    };
+
+//    @Bean
+//    public WebSecurityCustomizer anonUrl() {
+//        return web -> web.ignoring().requestMatchers(ANON_URL_PATTERNS);
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.cors(withDefaults())
+        return http
+            .cors(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(req -> req
-                .requestMatchers(UNAUTHEN_URL_PATTERNS).permitAll()
-                .anyRequest().authenticated()
-            )
             .oauth2ResourceServer(auth -> auth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+            .authorizeHttpRequests(req -> req.anyRequest().permitAll())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .build();
     }

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/constants'
+import { ROUTES } from '@/lib/constants'
 
 export const Banner = () => (
   <div className="py-36 bg-cover bg-no-repeat bg-center bg-[url('/img/home-banner.jpg')]">

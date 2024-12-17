@@ -4,7 +4,7 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import sanlab.icecream.frontier.model.Image;
-import sanlab.icecream.frontier.viewmodel.dto.ImageDto;
+import sanlab.icecream.frontier.dto.core.ImageDto;
 
 import java.util.List;
 

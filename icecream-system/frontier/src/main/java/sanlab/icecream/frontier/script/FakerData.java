@@ -7,15 +7,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sanlab.icecream.frontier.constant.EImageType;
-import sanlab.icecream.frontier.constant.EProductStatus;
+import sanlab.icecream.frontier.model.Address;
+import sanlab.icecream.frontier.model.Stock;
+import sanlab.icecream.frontier.repository.crud.IAddressRepository;
+import sanlab.icecream.frontier.repository.crud.IStockRepository;
+import sanlab.icecream.fundamentum.constant.EImageType;
+import sanlab.icecream.fundamentum.constant.EProductStatus;
 import sanlab.icecream.frontier.model.Category;
 import sanlab.icecream.frontier.model.Image;
 import sanlab.icecream.frontier.model.Product;
-import sanlab.icecream.frontier.repository.ICategoryRepository;
-import sanlab.icecream.frontier.repository.IImageRepository;
-import sanlab.icecream.frontier.repository.IProductRepository;
+import sanlab.icecream.frontier.repository.crud.ICategoryRepository;
+import sanlab.icecream.frontier.repository.crud.IImageRepository;
+import sanlab.icecream.frontier.repository.crud.IProductRepository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,18 +28,22 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static sanlab.icecream.frontier.constant.EProductStatus.AVAILABLE;
-import static sanlab.icecream.frontier.constant.EProductStatus.UNAVAILABLE;
+import static sanlab.icecream.fundamentum.constant.EProductStatus.AVAILABLE;
+import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 
-@Configuration
 @Slf4j
+@Configuration
 @RequiredArgsConstructor
 public class FakerData {
 
     private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
     private final IImageRepository imageRepository;
+    private final IAddressRepository addressRepository;
+    private final IStockRepository stockRepository;
+
     private static final String FAKE_IMAGE_RELATIVE_PATH = "/200/300?blur";
+    private final Slugify slugMaker = Slugify.builder().build();
 
     @Bean
     public Faker getFaker() {
@@ -44,11 +53,15 @@ public class FakerData {
     @Bean
     CommandLineRunner seedData() {
         seedImage(8326);
+        seedAddress(7512);
         seedCategory(8);
         seedProduct(1000);
+        seedStock(3101);
         seedProductImage();
         seedProductCategory();
         seedCategoryImage();
+        seedStockAddress();
+        seedProductStock();
         return args -> log.info("SEED DATA Done.");
     }
 
@@ -61,13 +74,20 @@ public class FakerData {
         var result = IntStream.range(0, number).mapToObj(ignore -> {
             long quantity = faker.number().numberBetween(0, 1_000_000L);
             EProductStatus status = quantity == 0 ? UNAVAILABLE : AVAILABLE;
+            String name = faker.funnyName().name();
             return Product.builder()
-                .name(faker.funnyName().name())
+                .slug(slugMaker.slugify(name))
+                .name(name)
+                .briefDescription(faker.lorem().characters(5, 30))
                 .description(faker.lorem().characters(5, 1000))
                 .price(faker.number().randomDouble(2, 0, 10_000_000L))
                 .status(status)
-                .quantity(quantity)
                 .isFeatured(false)
+                .sku(faker.lorem().characters(30))
+                .stockQuantity(faker.number().randomNumber())
+                .metaTitle(faker.lorem().characters(3, 20))
+                .metaKeyword(faker.lorem().characters(3, 10))
+                .metaDescription(faker.lorem().characters(5, 30))
                 .build();
         }).toList();
         productRepository.saveAll(result);
@@ -81,12 +101,11 @@ public class FakerData {
         Set<String> existingNames = new HashSet<>();
         var result = IntStream.range(0, number).mapToObj(ignore -> {
             String name;
-            Slugify slugMaker = Slugify.builder().build();
             do {
                 name = faker.funnyName().name();
             } while (existingNames.contains(slugMaker.slugify(name)));
             existingNames.add(name);
-            return new Category(name);
+            return new Category(name, faker.lorem().characters(5, 50));
         }).toList();
         categoryRepository.saveAll(result);
     }
@@ -97,12 +116,50 @@ public class FakerData {
         }
         var faker = getFaker();
         var result = IntStream.range(0, number)
-            .mapToObj(ignore -> Image.builder()
-                .description(faker.lorem().characters(5, 1000))
-                .relativePath(FAKE_IMAGE_RELATIVE_PATH)
-                .type(EImageType.MEDIA).build()
+            .mapToObj(ignore -> {
+                String relativeFilePath = IntStream.range(0, 2)
+                    .mapToObj(ignore1 -> faker.lorem().characters(1, 10)).collect(Collectors.joining("/"));
+                return Image.builder()
+                        .description(faker.lorem().characters(5, 1000))
+                        .relativePath(relativeFilePath)
+                        .type(EImageType.MEDIA).build();
+                }
             ).toList();
         imageRepository.saveAll(result);
+    }
+
+    private void seedAddress(int number) {
+        if (addressRepository.count() > 0) {
+            return;
+        }
+        var faker = getFaker();
+        var result = IntStream.range(0, number).mapToObj(ignore -> Address.builder()
+            .contactName(faker.funnyName().name())
+            .phone(faker.phoneNumber().cellPhone())
+            .addressLine1(faker.address().fullAddress())
+            .addressLine2(faker.address().fullAddress())
+            .city(faker.address().city())
+            .zipCode(faker.address().zipCode())
+            .district(faker.address().streetName())
+            .stateOrProvince(faker.address().cityName())
+            .country(faker.address().country())
+            .build()
+        ).toList();
+        addressRepository.saveAll(result);
+    }
+
+    private void seedStock(int number) {
+        if (stockRepository.count() > 0) {
+            return;
+        }
+        var faker = getFaker();
+        var result = IntStream.range(0, number)
+            .mapToObj(ignore -> Stock.builder()
+                .quantity(faker.number().numberBetween(1L, 999_999_999L))
+                .reservedQuantity(faker.number().numberBetween(1L, 999_999_999L))
+                .build()
+        ).toList();
+        stockRepository.saveAll(result);
     }
 
     private void seedProductCategory() {
@@ -124,11 +181,12 @@ public class FakerData {
     private void seedProductImage() {
         long totalProducts = productRepository.count();
         long totalImages = imageRepository.count();
-        if (totalProducts >= totalImages) {
+        if (totalProducts > totalImages) {
             return;
         }
         Optional<Product> firstProduct = productRepository.findFirstByOrderByName();
-        if (firstProduct.isEmpty() || !firstProduct.get().getMedia().isEmpty()) {
+        var firstProductMediaOptional = firstProduct.map(Product::getMedia);
+        if (firstProductMediaOptional.isPresent() && !firstProductMediaOptional.get().isEmpty()) {
             return;
         }
         var faker = getFaker();
@@ -163,7 +221,7 @@ public class FakerData {
 
     private void seedCategoryImage() {
         Optional<Category> firstCategory = categoryRepository.findFirstByOrderByName();
-        if (firstCategory.isEmpty() || Optional.ofNullable(firstCategory.get().getAvatar()).isPresent()) {
+        if (firstCategory.map(Category::getAvatar).isPresent()) {
             return;
         }
         var faker = getFaker();
@@ -176,6 +234,84 @@ public class FakerData {
             category.setAvatar(avatar);
         }
         categoryRepository.saveAll(categories);
+    }
+
+    private void seedStockAddress() {
+        long totalStocks = stockRepository.count();
+        long totalAddresses = addressRepository.count();
+        if (totalStocks > totalAddresses) {
+            return;
+        }
+        Optional<Stock> firstStock = stockRepository.findFirstByOrderByCreatedAt();
+        var firstStockAddressOptional = firstStock.map(Stock::getAddresses);
+        if (firstStockAddressOptional.isPresent() && !firstStockAddressOptional.get().isEmpty()) {
+            return;
+        }
+        var faker = getFaker();
+        List<Stock> stocks = stockRepository.findAll();
+        List<Address> addresses = addressRepository.findAllByOrderByCreatedAt();
+        int currentIndex = 0;
+        for (Stock stock : stocks) {
+            Set<Address> addressSet = new HashSet<>();
+            long numberOfAddresses = faker.number().numberBetween(1,
+                (totalAddresses - currentIndex) / (totalAddresses - stocks.indexOf(stock)));
+            for (int i=0; i < numberOfAddresses && currentIndex < totalAddresses; i++) {
+                Address targetAddress = addresses.get(currentIndex++);
+                addressSet.add(targetAddress);
+            }
+            stock.setAddresses(addressSet);
+        }
+        while (currentIndex < totalAddresses) {
+            for (Stock stock : stocks) {
+                Set<Address> addressSet = stock.getAddresses();
+                if (currentIndex < totalAddresses) {
+                    Address targetAddress = addresses.get(currentIndex++);
+                    addressSet.add(targetAddress);
+                    stock.setAddresses(addressSet);
+                } else {
+                    break;
+                }
+            }
+        }
+        stockRepository.saveAll(stocks);
+    }
+
+    private void seedProductStock() {
+        long totalProducts = productRepository.count();
+        long totalStocks = stockRepository.count();
+        if (totalProducts > totalStocks) {
+            return;
+        }
+        Optional<Product> firstProduct = productRepository.findFirstByOrderByName();
+        var firstProductStockOptional = firstProduct.map(Product::getStocks);
+        if (firstProductStockOptional.isPresent() && !firstProductStockOptional.get().isEmpty()) {
+            return;
+        }
+        var faker = getFaker();
+        List<Product> products = productRepository.findAll();
+        List<Stock> stocks = stockRepository.findAllByOrderByCreatedAt();
+        int currentIndex = 0;
+        for (Product product : products) {
+            List<Stock> stockList = new ArrayList<>();
+            long numberOfStocks = faker.number().numberBetween(1,
+                (totalStocks - currentIndex) / (totalStocks - products.indexOf(product)));
+            for (int i=0; i < numberOfStocks && currentIndex < totalStocks; i++) {
+                Stock targetStock = stocks.get(currentIndex++);
+                stockList.add(targetStock);
+            }
+            stockList.forEach(stock -> stock.setProduct(product));
+        }
+        while (currentIndex < totalStocks) {
+            for (Product product : products) {
+                List<Stock> stockList = product.getStocks();
+                if (currentIndex < totalStocks) {
+                    Stock targetStock = stocks.get(currentIndex++);
+                    stockList.add(targetStock);
+                    stockList.forEach(stock -> stock.setProduct(product));
+                }
+            }
+        }
+        stockRepository.saveAll(stocks);
     }
 
 }

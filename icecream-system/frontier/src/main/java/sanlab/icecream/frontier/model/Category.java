@@ -7,28 +7,27 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.CascadeType.MERGE;
 
 @Entity
 @Table(name = "category")
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
-public class Category {
+public class Category extends AbstractAuditEntity {
 
     private static final Slugify SLUG_BUILDER = Slugify.builder().build();
 
@@ -44,8 +43,19 @@ public class Category {
         setName(name);
     }
 
+    public Category(String name, String description) {
+        setName(name);
+        setDescription(description);
+    }
+
     public Category(String name, Image avatar) {
         setName(name);
+        setAvatar(avatar);
+    }
+
+    public Category(String name, String description, Image avatar) {
+        setName(name);
+        setDescription(description);
         setAvatar(avatar);
     }
 
@@ -54,11 +64,10 @@ public class Category {
         this.slug = SLUG_BUILDER.slugify(name);
     }
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY, cascade = MERGE)
+    @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
-    @Setter
-    @OneToOne(fetch = FetchType.EAGER, cascade = ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private Image avatar;
 
