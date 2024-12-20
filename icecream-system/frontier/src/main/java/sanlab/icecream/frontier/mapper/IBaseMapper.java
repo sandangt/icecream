@@ -14,7 +14,7 @@ public interface IBaseMapper {
     default UUID stringToUuid(String str) {
         try {
             return UUID.fromString(str);
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             return null;
         }
     }

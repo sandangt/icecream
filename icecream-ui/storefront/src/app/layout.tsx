@@ -5,6 +5,8 @@ import { SITE_NAME } from '@/lib/constants'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { QueryProvider } from '@/components/providers/client-query-provider'
+import { ToastMessageProvider } from '@/components/providers/toast-provider'
+
 import { Header } from './_components/header'
 import { Footer } from './_components/footer'
 
@@ -48,7 +50,9 @@ type AppProviderProps = {
 const AppProvider: FC<AppProviderProps> = async ({ children }) => (
   <ThemeProvider attribute="class">
     <AuthProvider>
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        <ToastMessageProvider>{children}</ToastMessageProvider>
+      </QueryProvider>
     </AuthProvider>
   </ThemeProvider>
 )

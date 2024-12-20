@@ -2,32 +2,33 @@
 
 import { useEffect, type FC, type ReactNode } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
-import { SessionProvider, useSession } from 'next-auth/react'
-
-import { AUTHENTICATION_STATUS, COOKIE_NAME } from '@/lib/constants'
-
+import { SessionProvider, signOut, useSession } from 'next-auth/react'
+import { fromUnixTime, isAfter, isBefore, parseISO } from 'date-fns'
+import { Session } from '@/types'
 
 type Props = {
   children: ReactNode
 }
 
-const InnerAuthProvider: FC<Props> = ({ children }) => {
-  const sessionData = useSession()
-  const [cookies, setCookie, removeCookie] = useCookies()
+const ValidateSessionProvider: FC<Props> = ({ children }) => {
+  const session = useSession()
+  const { data: sessionData } = session
   useEffect(() => {
-    if (sessionData && sessionData?.status === AUTHENTICATION_STATUS.AUTHENTICATED) {
-      if (!cookies[COOKIE_NAME]) setCookie(COOKIE_NAME, sessionData?.data)
-    } else if (sessionData && sessionData?.status === AUTHENTICATION_STATUS.UNAUTHENTICATED) {
-      if (cookies[COOKIE_NAME]) removeCookie(COOKIE_NAME)
+    if (sessionData && sessionData?.expires) {
+      const now = new Date()
+      // @ts-ignore
+      if (isAfter(now, fromUnixTime(sessionData?.expiresAt))) {
+        signOut()
+      }
     }
-  }, [sessionData])
+  }, [session])
   return <>{children}</>
 }
 
 export const AuthProvider: FC<Props> = ({ children }) => (
   <CookiesProvider defaultSetOptions={{ path: '/' }}>
     <SessionProvider>
-      <InnerAuthProvider>{children}</InnerAuthProvider>
+      <ValidateSessionProvider>{children}</ValidateSessionProvider>
     </SessionProvider>
   </CookiesProvider>
 )

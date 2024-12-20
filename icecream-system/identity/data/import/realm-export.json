@@ -419,7 +419,19 @@
       ]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "33a8912c-059c-4cb3-a289-d6059b610d85",
+      "name": "icecream-dictators",
+      "path": "/icecream-dictators",
+      "subGroups": [],
+      "attributes": {},
+      "realmRoles": [
+        "watcher"
+      ],
+      "clientRoles": {}
+    }
+  ],
   "defaultRole": {
     "id": "68b8b7c8-c1f9-4bd0-8e97-bca83e6f6e16",
     "name": "default-roles-icecream",
@@ -756,11 +768,14 @@
       "protocol": "openid-connect",
       "attributes": {
         "client.secret.creation.time": "1733553497",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
         "login_theme": "icecream",
         "post.logout.redirect.uris": "http://localhost:34000",
         "oauth2.device.authorization.grant.enabled": "false",
+        "use.jwks.url": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
         "use.refresh.tokens": "true",
+        "exclude.session.state.from.auth.response": "true",
         "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
         "client.use.lightweight.access.token.enabled": "false",
@@ -778,14 +793,14 @@
       "defaultClientScopes": [
         "web-origins",
         "acr",
+        "address",
+        "phone",
         "roles",
         "profile",
         "basic",
         "email"
       ],
       "optionalClientScopes": [
-        "address",
-        "phone",
         "offline_access",
         "microprofile-jwt"
       ]
@@ -1061,6 +1076,18 @@
           }
         }
       ]
+    },
+    {
+      "id": "4e655002-840d-429e-b125-8c090da962c4",
+      "name": "openid",
+      "description": "",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
     },
     {
       "id": "493865a6-31a2-4815-abdc-40a5b823f392",
@@ -1481,17 +1508,18 @@
   ],
   "defaultDefaultClientScopes": [
     "role_list",
-    "profile",
-    "email",
     "roles",
     "web-origins",
     "acr",
-    "basic"
+    "basic",
+    "email",
+    "profile",
+    "phone",
+    "address",
+    "openid"
   ],
   "defaultOptionalClientScopes": [
     "offline_access",
-    "address",
-    "phone",
     "microprofile-jwt"
   ],
   "browserSecurityHeaders": {

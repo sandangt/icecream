@@ -12,11 +12,25 @@ export const ROUTES = {
 
 export const API_PATHS = {
   PRODUCT: '/console/products',
-  CATEGORY: '/console/categories'
+  CATEGORY: '/console/categories',
+  CUSTOMER: '/console/customers',
 }
 
 export const AUTHENTICATION_STATUS = {
   UNAUTHENTICATED: 'unauthenticated',
   LOADING: 'loading',
   AUTHENTICATED: 'authenticated'
+}
+
+export enum CUSTOMER_STATUS {
+  ACTIVE,
+  INACTIVE
+}
+
+export const HTTP_STATUS_CODE = {
+  OK: 200,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  INTERNAL_SERVER_ERROR: 500,
 }

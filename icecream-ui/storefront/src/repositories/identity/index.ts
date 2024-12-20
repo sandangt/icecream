@@ -2,6 +2,8 @@ import NextAuth from 'next-auth'
 
 import authConfig from './auth.config'
 import { AUTH_ID, AUTH_ISSUER, AUTH_SECRET } from '@/settings'
+import { requestCreateCustomerProfileIfNotExist } from '@/repositories/frontier/customers'
+import { encodeBase64Str } from '@/lib/utils'
 
 export const {
   handlers: { GET, POST },
@@ -12,6 +14,10 @@ export const {
   callbacks: {
     //@ts-ignore
     signIn: async (params) => {
+      const { account } = params
+      if (account && account?.access_token) {
+        requestCreateCustomerProfileIfNotExist(account.access_token)
+      }
       return params
     },
     //@ts-ignore
@@ -31,6 +37,7 @@ export const {
         lastName: token?.family_name,
         accessToken: token?.access_token,
         refreshToken: token?.refresh_token,
+        expiresAt: token?.expires_at
       }
       return result
     },
@@ -58,7 +65,28 @@ export const requestSSOSignOut = async (refreshToken: string): Promise<any> => {
     method: 'POST',
     headers,
     body,
-    redirect: 'follow'
+    redirect: 'follow',
+  })
+  return response
+}
+
+export const requestExtendAccessToken = async (refreshToken: string): Promise<any> => {
+  if (!refreshToken || !refreshToken.length) {
+    return
+  }
+  const headers = new Headers()
+  const body = new URLSearchParams()
+  headers.append('Content-Type', 'application/x-www-form-urlencoded')
+  const encodedIdAndPassword = encodeBase64Str(`${AUTH_ID}:${AUTH_SECRET}`)
+  headers.append('Authorization', `Basic ${encodedIdAndPassword}`)
+  body.append('grant_type', 'refresh_token')
+  body.append('scope', 'openid')
+  body.append('refresh_token', refreshToken)
+  const response = await fetch(`${AUTH_ISSUER}/protocol/openid-connect/token`, {
+    method: 'POST',
+    headers,
+    body,
+    redirect: 'follow',
   })
   return response
 }

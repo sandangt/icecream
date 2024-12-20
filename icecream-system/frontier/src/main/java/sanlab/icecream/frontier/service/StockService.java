@@ -49,7 +49,7 @@ public class StockService {
         try {
             Stock stock = stockRepository.save(stockMapper.dtoToEntity(request));
             return stockMapper.entityToExtendedDto(stock);
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when creating stock");
         }
     }
@@ -61,7 +61,7 @@ public class StockService {
         copyNotNull(sourceStock, targetStock);
         try {
             return stockMapper.entityToExtendedDto(stockRepository.save(targetStock));
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when creating stock");
         }
     }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sanlab.icecream.frontier.dto.core.FeedbackDto;
 import sanlab.icecream.frontier.dto.extended.FeedbackExtendedDto;
 import sanlab.icecream.fundamentum.exception.ItemNotFoundException;
@@ -27,6 +28,7 @@ public class FeedbackService {
 
     private final IFeedbackMapper feedbackMapper;
 
+    @Transactional(readOnly = true)
     public CollectionQueryResponse<FeedbackExtendedDto> getAll(Pageable pageable) {
         Page<Feedback> paginatedFeedbacks = feedbackRepository.findAll(pageable);
         long total = feedbackRepository.count();
@@ -40,21 +42,24 @@ public class FeedbackService {
             .build();
     }
 
+    @Transactional(readOnly = true)
     public FeedbackExtendedDto getById(UUID id) {
         return feedbackRepository.findById(id)
             .map(feedbackMapper::entityToExtendedDto)
             .orElseThrow(() -> ItemNotFoundException.stock(id));
     }
 
+    @Transactional
     public FeedbackExtendedDto create(FeedbackDto request) {
         try {
             Feedback feedback = feedbackRepository.save(feedbackMapper.dtoToEntity(request));
             return feedbackMapper.entityToExtendedDto(feedback);
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when creating feedback");
         }
     }
 
+    @Transactional
     public FeedbackExtendedDto update(UUID id, FeedbackDto request) {
         Feedback targetFeedback = feedbackRepository.findById(id)
             .orElseThrow(() -> ItemNotFoundException.stock(id));
@@ -62,9 +67,17 @@ public class FeedbackService {
         copyNotNull(sourceFeedback, targetFeedback);
         try {
             return feedbackMapper.entityToExtendedDto(feedbackRepository.save(targetFeedback));
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when creating feedback");
         }
+    }
+
+    @Transactional
+    public FeedbackExtendedDto delete(UUID id) {
+        Feedback feedback = feedbackRepository.findById(id)
+            .orElseThrow(() -> ItemNotFoundException.stock(id));
+        feedbackRepository.deleteById(id);
+        return feedbackMapper.entityToExtendedDto(feedback);
     }
 
 }

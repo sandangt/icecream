@@ -3,13 +3,13 @@ import { generateUrl } from '@/lib/utils'
 import { FRONTIER_URL } from '@/settings'
 import type { ProductExtended, RequestAllParams, RequestAllResult } from '@/types'
 
-export const requestAllProducts = async ({
+const requestAllProducts = async ({
   pagination,
   sorting,
 }: RequestAllParams): Promise<RequestAllResult<ProductExtended>> => {
   const url = generateUrl(FRONTIER_URL, [API_PATHS.PRODUCT], { pagination, sorting })
-  const res = await fetch(url)
-  return res.json()
+  const response = await fetch(url)
+  return response.json()
 }
 
 export const request10RecommendedProducts = async (): Promise<ProductExtended[]> => {
@@ -19,7 +19,6 @@ export const request10RecommendedProducts = async (): Promise<ProductExtended[]>
     const { data } = await requestAllProducts({ pagination, sorting })
     return data
   } catch (err) {
-    console.error(err)
     return []
   }
 }
@@ -31,7 +30,6 @@ export const request10NewProducts = async (): Promise<ProductExtended[]> => {
     const { data } = await requestAllProducts({ pagination, sorting })
     return data
   } catch (err) {
-    console.error(err)
     return []
   }
 }

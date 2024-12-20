@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.frontier.dto.core.FeedbackDto;
 import sanlab.icecream.frontier.dto.core.ImageDto;
@@ -49,6 +50,7 @@ public class ProductService {
     private final IProductMapper productMapper;
     private final IImageMapper imageMapper;
 
+    @Transactional(readOnly = true)
     public CollectionQueryResponse<ProductExtendedDto> getAll(Pageable pageable) {
         Page<Product> paginatedProducts = productRepository.findAll(pageable);
         long total = productRepository.count();
@@ -61,12 +63,14 @@ public class ProductService {
             .build();
     }
 
+    @Transactional(readOnly = true)
     public ProductExtendedDto getById(UUID id) {
         return productRepository.findById(id)
             .map(productMapper::entityToExtendedDto)
             .orElseThrow(() -> ItemNotFoundException.product(id));
     }
 
+    @Transactional(readOnly = true)
     public CollectionQueryResponse<FeedbackDto> getAllFeedbacks(UUID productId, Pageable pageable) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> ItemNotFoundException.product(productId));
@@ -82,15 +86,17 @@ public class ProductService {
             .build();
     }
 
+    @Transactional
     public ProductExtendedDto create(ProductDto request) {
         try {
             Product product = productRepository.save(productMapper.dtoToEntity(request));
             return productMapper.entityToExtendedDto(product);
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when creating product");
         }
     }
 
+    @Transactional
     public ProductExtendedDto update(UUID id, ProductDto request) {
         Product targetProduct = productRepository.findById(id)
             .orElseThrow(() -> ItemNotFoundException.product(id));
@@ -98,11 +104,12 @@ public class ProductService {
         copyNotNull(sourceProduct, targetProduct);
         try {
             return productMapper.entityToExtendedDto(productRepository.save(targetProduct));
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when updating product");
         }
     }
 
+    @Transactional
     public ProductExtendedDto setCategories(UUID productId, List<UUID> categoryIdList) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() ->ItemNotFoundException.product(productId));
@@ -113,6 +120,7 @@ public class ProductService {
         return productMapper.entityToExtendedDto(productRepository.save(product));
     }
 
+    @Transactional
     public ProductExtendedDto setMedia(UUID productId, MultipartFile avatar, MultipartFile[] otherMedia) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> ItemNotFoundException.product(productId));
@@ -131,6 +139,7 @@ public class ProductService {
         return productMapper.entityToExtendedDto(productRepository.save(product));
     }
 
+    @Transactional
     public ProductExtendedDto setStocks(UUID productId, List<UUID> stockIdList) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> ItemNotFoundException.product(productId));
@@ -142,6 +151,7 @@ public class ProductService {
     }
 
     // TODO
+    @Transactional
     public void delete(UUID id) {
         Optional<Product> productOptional = productRepository.findById(id);
         productOptional.ifPresent(product -> {

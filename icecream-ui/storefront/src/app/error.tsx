@@ -1,5 +1,7 @@
 'use client'
 
+import { UnauthorizedException } from '@/exceptions/api-request'
+import { signOut } from 'next-auth/react'
 import { useEffect, type FC } from 'react'
 
 type Props = {
@@ -10,9 +12,12 @@ type Props = {
 }
 
 const Page: FC<Props> = ({ error, reset }) => {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
+  // useEffect(() => {
+  //   if (error instanceof UnauthorizedException) {
+  //     signOut()
+  //     console.log('done')
+  //   }
+  // }, [error])
 
   return (
     <div className="h-[75vh] flex flex-col justify-center items-center px-2 text-center">

@@ -3,6 +3,7 @@ package sanlab.icecream.frontier.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.frontier.dto.core.ProductDto;
 import sanlab.icecream.frontier.dto.extended.CategoryExtendedDto;
@@ -34,26 +35,30 @@ public class CategoryService {
     private final IImageMapper imageMapper;
     private final IProductMapper productMapper;
 
+    @Transactional(readOnly = true)
     public List<CategoryExtendedDto> getAll() {
         List<Category> categoryList = categoryRepository.findAll();
         return categoryMapper.entityToExtendedDto(categoryList);
     }
 
+    @Transactional(readOnly = true)
     public CategoryExtendedDto getById(UUID id) {
         return categoryRepository.findById(id)
             .map(categoryMapper::entityToExtendedDto)
             .orElseThrow(() -> ItemNotFoundException.category(id));
     }
 
+    @Transactional
     public CategoryExtendedDto create(CategoryDto request) {
         try {
             var result = categoryRepository.save(categoryMapper.dtoToEntity(request));
             return categoryMapper.entityToExtendedDto(result);
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when creating category");
         }
     }
 
+    @Transactional
     public CategoryExtendedDto update(UUID id, CategoryDto request) {
         Category targetCategory = categoryRepository.findById(id)
             .orElseThrow(() -> ItemNotFoundException.category(id));
@@ -61,11 +66,12 @@ public class CategoryService {
         copyNotNull(sourceCategory, targetCategory);
         try {
             return categoryMapper.entityToExtendedDto(categoryRepository.save(targetCategory));
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringDatabaseException("Error occurs when updating category");
         }
     }
 
+    @Transactional
     public CategoryExtendedDto setAvatar(UUID id, MultipartFile avatar) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> ItemNotFoundException.category(id));
@@ -78,6 +84,7 @@ public class CategoryService {
         return categoryMapper.entityToExtendedDto(categoryRepository.save(category));
     }
 
+    @Transactional(readOnly = true)
     public CollectionQueryResponse<ProductDto> getAllProducts(UUID categoryId, Pageable pageable) {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(() -> ItemNotFoundException.category(categoryId));

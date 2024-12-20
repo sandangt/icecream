@@ -12,6 +12,7 @@ public class ItemNotFoundException extends RuntimeException {
     private static final String CATEGORY_NOT_FOUND_PATTERN = "Category with id %s not found";
     private static final String STOCK_NOT_FOUND_PATTERN = "Stock with id %s not found";
     private static final String FEEDBACK_NOT_FOUND_PATTERN = "Feedback with id %s not found";
+    private static final String CUSTOMER_NOT_FOUND_PATTERN = "Customer with id %s not found";
 
     public ItemNotFoundException(String message) {
         super(message);
@@ -31,6 +32,10 @@ public class ItemNotFoundException extends RuntimeException {
 
     public static ItemNotFoundException feedback(UUID feedbackId) {
         return new ItemNotFoundException(FEEDBACK_NOT_FOUND_PATTERN.formatted(feedbackId));
+    }
+
+    public static ItemNotFoundException customer(UUID userId) {
+        return new ItemNotFoundException(CUSTOMER_NOT_FOUND_PATTERN.formatted(userId));
     }
 
 }

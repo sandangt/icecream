@@ -3,6 +3,7 @@ package sanlab.icecream.frontier.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.fundamentum.constant.EImageType;
 import sanlab.icecream.fundamentum.constant.StoragePath;
@@ -31,6 +32,7 @@ public class ImageService {
     private static final String AVATAR_PIC_NAME = "avatar";
     private static final String MEDIA_PIC_PATTERN = "media-%s";
 
+    @Transactional
     private ImageDto upsertAvatar(UUID id, MultipartFile img, String entityPath, String description) {
         String fileName = String.join(
             ".", AVATAR_PIC_NAME, FilenameUtils.getExtension(img.getOriginalFilename()));
@@ -48,7 +50,7 @@ public class ImageService {
         try {
             return upsertAvatar(
                 productId, img, StoragePath.PRODUCT, "Avatar of product with id %s".formatted(productId.toString()));
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringImageException();
         }
     }
@@ -57,11 +59,12 @@ public class ImageService {
         try {
             return upsertAvatar(
                 categoryId, img, StoragePath.CATEGORY, "Avatar of category with id %s".formatted(categoryId.toString()));
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringImageException();
         }
     }
 
+    @Transactional
     public List<ImageDto> bulkUpsertProductMedia(UUID productId, MultipartFile[] media) {
         try {
             List<ImageDto> result = new ArrayList<>();
@@ -86,7 +89,7 @@ public class ImageService {
             var newImgs = imageRepository.saveAll(savedDQ);
             result.addAll(imageMapper.entityToDto(newImgs));
             return result;
-        } catch (Exception ignore) {
+        } catch (Exception ignored) {
             throw new StoringImageException();
         }
     }

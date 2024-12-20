@@ -1,4 +1,26 @@
 //region Core
+export interface Session {
+  accessToken: string
+  refreshToken: string
+  userId: string
+  username: string
+  name: string
+  email: string
+  firstName: string
+  lastName: string
+  expiresAt: number
+}
+
+export interface Customer {
+  userId: string
+  email: string
+  username: string
+  phone: string
+  firstName: string
+  lastName: string
+  status: string
+}
+
 export interface Category {
   id: string
   slug: string
@@ -100,6 +122,11 @@ export interface ProductExtended extends Product {
   categories: Category[]
   media: Media[]
   stocks: Stock[]
+}
+
+export interface CustomerExtended extends Customer {
+  media: Media[]
+  addresses: Address[]
 }
 //endregion
 

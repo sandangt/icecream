@@ -27,7 +27,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
   liquibase:
@@ -84,6 +84,6 @@ grpc:
       address: ${ECHO_GRPC_HOST}:${ECHO_GRPC_PORT}
       negotiation-type: plaintext
 
-#logging:
-#  level:
-#    org.springframework.security: TRACE
+logging:
+  level:
+    sanlab.icecream.frontier: INFO

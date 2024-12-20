@@ -43,3 +43,13 @@ export function isLoggedIn(session: Session | null): boolean {
   }
   return true
 }
+
+export function encodeBase64Str(origin: string): string {
+  const obj = Buffer.from(origin, 'utf8')
+  return obj.toString('base64')
+}
+
+export function decodeBase64Str(encoded: string): string {
+  const obj = Buffer.from(encoded, 'base64')
+  return obj.toString('utf8')
+}

@@ -31,8 +31,8 @@ import java.util.stream.IntStream;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.AVAILABLE;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 
+//@Configuration
 @Slf4j
-@Configuration
 @RequiredArgsConstructor
 public class FakerData {
 

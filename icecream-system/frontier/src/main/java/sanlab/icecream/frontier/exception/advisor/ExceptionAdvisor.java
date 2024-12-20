@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import sanlab.icecream.frontier.exception.InvalidUserPrincipalException;
 import sanlab.icecream.fundamentum.exception.ItemNotFoundException;
 import sanlab.icecream.fundamentum.exception.ReadWriteObjectException;
 import sanlab.icecream.fundamentum.exception.StoringDatabaseException;
@@ -25,6 +26,11 @@ public class ExceptionAdvisor {
     @ExceptionHandler({StoringDatabaseException.class, ReadWriteObjectException.class})
     public ResponseEntity<ErrorResponse> storingDatabase(RuntimeException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({ InvalidUserPrincipalException.class })
+    public ResponseEntity<ErrorResponse> unauthorized(RuntimeException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
 }
