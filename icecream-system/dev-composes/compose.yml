@@ -83,7 +83,6 @@ services:
     container_name: icecream-rabbitmq
     hostname: rabbitmq
     image: docker.io/rabbitmq:3.13.7-management-alpine
-    restart: always
     ports:
       - ${RABBITMQ_PORT}:5672
       - ${RABBITMQ_MANAGEMENT_PORT}:15672

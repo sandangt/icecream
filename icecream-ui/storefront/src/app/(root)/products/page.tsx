@@ -1,8 +1,9 @@
-import { ProductCard } from '../_components/item-card'
+import { FC } from 'react'
+
 import { queryProducts } from '@/repositories/consul'
 import { ProductService } from '@/services'
-import { FC } from 'react'
-import { PaginationControls } from './_components/pagination-controls'
+import { PaginationControls } from './_components'
+import { ProductCard } from '../_components'
 
 type Props = {
   searchParams?: {

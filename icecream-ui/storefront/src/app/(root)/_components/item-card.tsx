@@ -15,7 +15,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { STORAGE_URL } from '@/settings'
 import { ProductService } from '@/services'
 
 type CategoryCardProps = {

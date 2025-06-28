@@ -5,7 +5,7 @@ import { type FC } from 'react'
 import { requestFeaturedProducts, requestNewProducts } from '@/repositories/consul'
 import { Button } from '@/components/ui/button'
 import { ProductExtended } from '@/types'
-import { ProductCard } from './_components/item-card'
+import { ProductCard } from './_components'
 
 const Page = async () => {
   const newProducts = await requestNewProducts()

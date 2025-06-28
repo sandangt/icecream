@@ -4,10 +4,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { FC } from 'react'
+import qs from 'qs'
 
 import { Button } from '@/components/ui/button'
 import { generateUrlPath } from '@/lib/utils'
-import qs from 'qs'
 
 type Props = {
   currentPage: number

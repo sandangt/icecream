@@ -1,9 +1,7 @@
 import { type ReactNode, type FC } from 'react'
 
 import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/constants'
-import { AuthProvider } from '@/components/providers/auth-provider'
-import { QueryProvider } from '@/components/providers/client-query-provider'
-import { ToastMessageProvider } from '@/components/providers/toast-provider'
+import { AuthProvider, QueryProvider, ToastMessageProvider } from '@/components/providers'
 
 import '@/global.css'
 
