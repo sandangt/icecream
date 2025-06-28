@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: memoir
+    version: 0.1.0
+  config:
+    import: 'configserver:http://${CODEX_HOST}:${CODEX_PORT}'

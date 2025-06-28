@@ -11,17 +11,20 @@ type Action = {
 }
 
 const INIT_STATE: State = {
-  extendingSessionModal: false
+  extendingSessionModal: false,
 }
 
 // @ts-ignore
-export const useModalStore = create<State & Action>(devtools((set) => ({
+export const useModalStore = create<State & Action>(
+  devtools((set) => ({
     ...INIT_STATE,
-    openExtendingSessionModal: () => set((state) => ({
-      extendingSessionModal: true
-    })),
-    closeExtendingSessionModal: () => set((state) => ({
-      extendingSessionModal: false
-    })),
+    openExtendingSessionModal: () =>
+      set((state) => ({
+        extendingSessionModal: true,
+      })),
+    closeExtendingSessionModal: () =>
+      set((state) => ({
+        extendingSessionModal: false,
+      })),
   })),
 )

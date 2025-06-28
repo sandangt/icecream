@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 
 import authConfig from './auth.config'
 import { AUTH_ID, AUTH_ISSUER, AUTH_SECRET } from '@/settings'
-import { requestCreateCustomerProfileIfNotExist } from '@/repositories/frontier/customers'
+import { requestCreateCustomerProfileIfNotExist } from '@/repositories/consul'
 import { encodeBase64Str } from '@/lib/utils'
 
 export const {
@@ -37,7 +37,7 @@ export const {
         lastName: token?.family_name,
         accessToken: token?.access_token,
         refreshToken: token?.refresh_token,
-        expiresAt: token?.expires_at
+        expiresAt: token?.expires_at,
       }
       return result
     },

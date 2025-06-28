@@ -1,0 +1,21 @@
+server:
+  address: ${ECHO_HOST}
+  port: ${ECHO_PORT}
+
+spring:
+  application:
+    name: echo
+  rsocket:
+    server:
+      port: ${ECHO_RSOCK_PORT}
+  datasource:
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_ECHO_DB}
+  liquibase:
+    enabled: true
+    changeLog: classpath:/db/changelog/master.xml
+  cloud:
+    stream:
+      bindings:
+        auditlog-in-0:
+          binder: rabbit
+          destination: audit_log_queue

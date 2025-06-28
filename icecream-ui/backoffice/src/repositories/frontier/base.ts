@@ -23,9 +23,9 @@ import {
 import qs from 'qs'
 import path from 'path'
 
-import { FRONTIER_URL } from '@/settings'
+import { CONSUL_URL } from '@/settings'
 
-const FRONTIER_API_URL = path.join(FRONTIER_URL, 'api')
+const CONSUL_API_URL = path.join(CONSUL_URL, 'api')
 
 export const getAll = async <T extends RaRecord<Identifier>>(
   resource: string,
@@ -47,7 +47,7 @@ export const getAll = async <T extends RaRecord<Identifier>>(
     sorting,
     filters,
   }
-  const url = `${FRONTIER_API_URL}/${resource}?${stringify(queryParams, { arrayFormat: 'brackets', allowDots: true })}`
+  const url = `${CONSUL_API_URL}/${resource}?${stringify(queryParams, { arrayFormat: 'brackets', allowDots: true })}`
   const { json } = await fetchUtils.fetchJson(url)
   const hasNextPage = json?.page < json?.totalPage
   const hasPreviousPage = json?.page > 0
@@ -65,7 +65,7 @@ export const getById = async <T extends RaRecord<Identifier>>(
   resource: string,
   params: GetOneParams,
 ): Promise<GetOneResult<T>> => {
-  const url = `${FRONTIER_API_URL}/${resource}/${params.id}`
+  const url = `${CONSUL_API_URL}/${resource}/${params.id}`
   const { json } = await fetchUtils.fetchJson(url)
   return { data: json }
 }
@@ -77,7 +77,7 @@ export const getMultipleByIds = async <T extends RaRecord<Identifier>>(
   const query = {
     ids: params.ids,
   }
-  const url = `${FRONTIER_API_URL}/${resource}/${qs.stringify(query)}`
+  const url = `${CONSUL_API_URL}/${resource}/${qs.stringify(query)}`
   const { json } = await fetchUtils.fetchJson(url)
   return { data: json }
 }
@@ -86,7 +86,7 @@ export const createOne = async <T extends RaRecord<Identifier>>(
   resource: string,
   params: CreateParams<T>,
 ): Promise<CreateResult<T>> => {
-  const url = `${FRONTIER_API_URL}/${resource}`
+  const url = `${CONSUL_API_URL}/${resource}`
   const { json } = await fetchUtils.fetchJson(url, {
     method: 'POST',
     body: JSON.stringify(params.data),
@@ -98,7 +98,7 @@ export const updateOne = async <T extends RaRecord<Identifier>>(
   resource: string,
   params: UpdateParams,
 ): Promise<UpdateResult<T>> => {
-  const url = `${FRONTIER_API_URL}/${resource}`
+  const url = `${CONSUL_API_URL}/${resource}`
   const { json } = await fetchUtils.fetchJson(url, {
     method: 'PATCH',
     body: JSON.stringify(params.data),
@@ -110,7 +110,7 @@ export const updateMany = async <T extends RaRecord<Identifier>>(
   resource: string,
   params: UpdateManyParams<T>,
 ): Promise<UpdateManyResult<T>> => {
-  const url = `${FRONTIER_API_URL}/${resource}/multiple`
+  const url = `${CONSUL_API_URL}/${resource}/multiple`
   const { json } = await fetchUtils.fetchJson(url, {
     method: 'PATCH',
     body: JSON.stringify(params.data),
@@ -122,7 +122,7 @@ export const deleteOne = async <T extends RaRecord<Identifier>>(
   resource: string,
   params: DeleteParams,
 ): Promise<DeleteResult<T>> => {
-  const url = `${FRONTIER_API_URL}/${resource}/${params.id}`
+  const url = `${CONSUL_API_URL}/${resource}/${params.id}`
   const { json } = await fetchUtils.fetchJson(url, {
     method: 'DELETE',
   })
@@ -136,7 +136,7 @@ export const deleteMany = async <T extends RaRecord<Identifier>>(
   const query = {
     filter: JSON.stringify({ id: params.ids }),
   }
-  const url = `${FRONTIER_API_URL}/${resource}/?${stringify(query)}`
+  const url = `${CONSUL_API_URL}/${resource}/?${stringify(query)}`
   const { json } = await fetchUtils.fetchJson(url, {
     method: 'DELETE',
   })

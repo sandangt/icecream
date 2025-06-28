@@ -2,94 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .wrapper {
-    @apply max-w-7xl lg:mx-auto p-5 md:px-10 w-full;
-  }
-
-  .flex-start {
-    @apply flex justify-start items-center;
-  }
-  .flex-center {
-    @apply flex justify-center items-center;
-  }
-
-  .flex-between {
-    @apply flex justify-between items-center;
-  }
-
-  .h1-bold {
-    @apply font-bold text-3xl lg:text-4xl;
-  }
-
-  .h2-bold {
-    @apply font-bold text-2xl lg:text-3xl;
-  }
-
-  .h3-bold {
-    @apply font-bold text-xl lg:text-2xl;
-  }
+body {
+  font-family: var(--font-body), sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --background: 36 100% 97%; /* #FAF9F6 Light Off-White */
+    --foreground: 224 71.4% 4.1%; /* Dark text for contrast on light background */
+
+    --card: 36 100% 97%; /* Same as background or slightly lighter/whiter */
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%; /* White for popovers */
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 26 100% 66%; /* #FF7F50 Vibrant Orange */
+    --primary-foreground: 26 80% 12%; /* Darker orange/brown for text on primary */
+
+    --secondary: 36 60% 92%; /* Lighter shade of background or a soft grey */
+    --secondary-foreground: 224 71.4% 10%; /* Darker text for secondary */
+
+    --muted: 36 40% 90%; /* Muted grey, derived from background */
+    --muted-foreground: 224 71.4% 35%; /* Softer dark text for muted */
+
+    --accent: 0 82% 75%; /* #F08080 Soft Coral */
+    --accent-foreground: 0 70% 15%; /* Darker coral/red for text on accent */
+
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 36 30% 85%; /* Border color derived from background */
+    --input: 36 30% 88%; /* Input background, slightly lighter than border */
+    --ring: 26 100% 66%; /* Ring color same as primary */
+
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+
+    /* Sidebar colors - retaining original structure but might need adjustment if used */
+    --sidebar-background: 36 80% 95%;
+    --sidebar-foreground: 224 71.4% 15%;
+    --sidebar-primary: 26 100% 60%; /* Adjusted to primary scheme */
+    --sidebar-primary-foreground: 26 80% 10%;
+    --sidebar-accent: 0 80% 70%; /* Adjusted to accent scheme */
+    --sidebar-accent-foreground: 0 70% 15%;
+    --sidebar-border: 36 30% 80%;
+    --sidebar-ring: 26 100% 66%;
   }
+
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* Keeping dark mode defaults, can be customized later if needed */
+    --background: 222 47.4% 11.2%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222 47.4% 11.2%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47.4% 11.2%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 26 100% 66%; /* Vibrant Orange */
+    --primary-foreground: 26 80% 15%; /* Dark text on orange */
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 82% 75%; /* Soft Coral */
+    --accent-foreground: 0 70% 15%; /* Dark text on coral */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 26 100% 70%; /* Slightly lighter orange for dark mode ring */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-  }
-}
 
-@layer base {
-  body {
-    @apply bg-background text-foreground;
+    --sidebar-background: 222 47.4% 9.2%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 26 100% 60%;
+    --sidebar-primary-foreground: 26 80% 12%;
+    --sidebar-accent: 0 80% 70%;
+    --sidebar-accent-foreground: 0 70% 12%;
+    --sidebar-border: 217.2 32.6% 15.5%;
+    --sidebar-ring: 26 100% 70%;
   }
 }
 
@@ -100,13 +99,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Uploadthing button text override */
-html.dark .upload-field .text-white {
-  color: #ffffff !important;
-}
-
-.upload-field .text-white {
-  color: #000 !important;
 }

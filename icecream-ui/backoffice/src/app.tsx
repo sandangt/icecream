@@ -6,7 +6,7 @@ import { lightTheme, darkTheme } from '@/assets/themes'
 import products from './pages/products'
 import { APP_TITLE } from './constants'
 import authProvider from './repositories/identity'
-import dataProvider from './repositories/frontier'
+import dataProvider from './repositories/consul'
 import { IcecreamAppBar } from './components/ui/app-bar'
 
 export const App = () => (

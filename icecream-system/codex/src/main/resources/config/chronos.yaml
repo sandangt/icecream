@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: chronos
+  data:
+    mongodb:
+      database: ${MONGODB_CHRONOS_DB}

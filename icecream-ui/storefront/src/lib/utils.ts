@@ -15,12 +15,21 @@ export function generateUrl(
   extendedPaths: string[],
   searchParams: object | null = null,
 ): URL {
-  let url = path.join(baseUrl, ...(extendedPaths || []))
+  const relativePath = generateUrlPath('', extendedPaths, searchParams)
+  return new URL(baseUrl + relativePath)
+}
+
+export function generateUrlPath(
+  rootPath: string,
+  extendedPaths: string[],
+  searchParams: object | null = null,
+): string {
+  let relativePath = path.join(rootPath, ...(extendedPaths || []))
   if (searchParams) {
-    const query = qs.stringify(searchParams, { allowDots: true })
-    url = `${url}?${query}`
+    const query = qs.stringify(searchParams, { allowDots: true, addQueryPrefix: true })
+    relativePath += query
   }
-  return new URL(url)
+  return relativePath.startsWith('/') ? relativePath : '/' + relativePath
 }
 
 export function makeStorageUrl(relativePath: string): string {

@@ -1,4 +1,6 @@
-export const SITE_NAME = 'IceCream Store'
+export const SITE_NAME = 'IceCream E-Commerce'
+export const APP_NAME = 'Icecream'
+export const SITE_DESCRIPTION = 'Modern E-Commerce Platform'
 export const COOKIE_NAME = 'icecream'
 
 export const ROUTES = {
@@ -19,18 +21,23 @@ export const API_PATHS = {
 export const AUTHENTICATION_STATUS = {
   UNAUTHENTICATED: 'unauthenticated',
   LOADING: 'loading',
-  AUTHENTICATED: 'authenticated'
+  AUTHENTICATED: 'authenticated',
 }
 
-export enum CUSTOMER_STATUS {
+export enum CustomerStatus {
   ACTIVE,
-  INACTIVE
+  INACTIVE,
 }
 
-export const HTTP_STATUS_CODE = {
-  OK: 200,
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  INTERNAL_SERVER_ERROR: 500,
+export enum HttpStatusCode {
+  OK = 200,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  INTERNAL_SERVER_ERROR = 500,
+}
+
+export enum ImageType {
+  AVATAR = 'AVATAR',
+  MEDIA = 'MEDIA',
 }
