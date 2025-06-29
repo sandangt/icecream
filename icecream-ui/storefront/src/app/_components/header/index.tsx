@@ -1,19 +1,33 @@
-import { requestAllCategories } from '@/repositories/frontier/categories'
-import { Logo } from '../logo'
-import { Search } from './search'
-import { Personal } from './personal'
-import { Navbar } from './navbar'
+import Link from 'next/link'
+import { ShoppingCart, User } from 'lucide-react'
 
-export const Header = async () => {
-  const categoryList = await requestAllCategories()
-  return (
-    <header className="mt-5 shadow-sm bg-background flex flex-col gap-5">
-      <div className="container flex items-center justify-between">
-        <Logo />
-        <Search />
-        <Personal />
-      </div>
-      <Navbar data={categoryList} />
-    </header>
-  )
-}
+import { Logo } from './logo'
+import { AuthSection } from './auth-section'
+
+export const Header = () => (
+  <header className="bg-background/80 backdrop-blur-md sticky top-0 z-50 border-b">
+    <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+      <Logo />
+      <nav className="flex items-center space-x-2 sm:space-x-6">
+        <HomeSection />
+        <ProductSection />
+        <AuthSection />
+      </nav>
+    </div>
+  </header>
+)
+
+const HomeSection = () => (
+  <Link href="/" className="text-foreground hover:text-primary transition-colors font-medium">
+    Home
+  </Link>
+)
+
+const ProductSection = () => (
+  <Link
+    href="/products"
+    className="text-foreground hover:text-primary transition-colors font-medium"
+  >
+    Products
+  </Link>
+)

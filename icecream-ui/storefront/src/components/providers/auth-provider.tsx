@@ -4,7 +4,6 @@ import { useEffect, type FC, type ReactNode } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
 import { SessionProvider, signOut, useSession } from 'next-auth/react'
 import { fromUnixTime, isAfter, isBefore, parseISO } from 'date-fns'
-import { Session } from '@/types'
 
 type Props = {
   children: ReactNode

@@ -1,8 +1,4 @@
-/* eslint-disable no-undef */
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
   env: {},
   images: {
     remotePatterns: [
@@ -13,8 +9,13 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
-        port: '38002'
-      },
+        port: '38004'
+      },{
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
   logging: {

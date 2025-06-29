@@ -1,4 +1,4 @@
-//region Core
+//#region Core
 export interface Session {
   accessToken: string
   refreshToken: string
@@ -34,16 +34,16 @@ export interface Product {
   id: string
   name: string
   slug: string
-  briefDescription: string
-  description: string
+  briefDescription?: string
+  description?: string
   status: string
   price: number
   sku: string
   isFeatured: boolean
   stockQuantity: number
-  metaTitle: string
-  metaKeyword: string
-  metaDescription: string
+  metaTitle?: string
+  metaKeyword?: string
+  metaDescription?: string
   createdAt: number
   modifiedAt: number
 }
@@ -111,9 +111,9 @@ export interface CartItem {
   id: string
   quantity: number
 }
-//endregion
+//#endregion
 
-//region Extended
+//#region Extended
 export interface CategoryExtended extends Category {
   avatar: Media
 }
@@ -138,7 +138,7 @@ export type RequestAllParams = {
   }
   sorting: {
     field: string
-    order: string // 'ASC | 'DESC'
+    order: 'ASC' | 'DESC'
   }
 }
 
@@ -148,4 +148,4 @@ export type RequestAllResult<T> = {
   totalPages: number
   data: T[]
 }
-//endregion
+//#endregion

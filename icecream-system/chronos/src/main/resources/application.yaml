@@ -1,33 +1,6 @@
 spring:
   application:
-    name: Icecream e-commerce
+    name: chronos
     version: 0.1.0
-  data:
-    mongodb:
-      username: ${MONGODB_USER}
-      password: ${MONGODB_PASSWORD}
-      host: ${MONGODB_HOST}
-      port: ${MONGODB_PORT}
-      database: ${MONGODB_CHRONOS_DB}
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-
-minio:
-  url: ${STORAGE_URL}
-  access:
-    key: ${MINIO_ACCESS_KEY}
-    secret: ${MINIO_SECRET_KEY}
-  bucket:
-    image: images
-
-grpc:
-  server:
-    port: ${CHRONOS_GRPC_PORT}
-  client:
-    frontier:
-      address: ${FRONTIER_GRPC_HOST}:${FRONTIER_GRPC_PORT}
-      negotiation-type: plaintext
-    echo:
-      address: ${ECHO_GRPC_HOST}:${ECHO_GRPC_PORT}
-      negotiation-type: plaintext
+  config:
+    import: 'configserver:http://${CODEX_HOST}:${CODEX_PORT}'

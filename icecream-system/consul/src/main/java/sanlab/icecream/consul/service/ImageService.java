@@ -1,0 +1,98 @@
+package sanlab.icecream.consul.service;
+
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import sanlab.icecream.fundamentum.constant.EImageType;
+import sanlab.icecream.fundamentum.constant.StoragePath;
+import sanlab.icecream.consul.dto.core.ImageDto;
+import sanlab.icecream.consul.mapper.IImageMapper;
+import sanlab.icecream.consul.model.Image;
+import sanlab.icecream.consul.repository.crud.IImageRepository;
+import sanlab.icecream.consul.repository.storage.IStorageRepository;
+import sanlab.icecream.fundamentum.exception.IcRuntimeException;
+
+import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.UUID;
+
+import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_STORE_IMAGE_FILE;
+
+@Service
+@RequiredArgsConstructor
+public class ImageService {
+
+    private final IImageRepository imageRepository;
+    private final IStorageRepository minIOStorageRepository;
+    private final IImageMapper imageMapper;
+
+    private static final String AVATAR_PIC_NAME = "avatar";
+    private static final String MEDIA_PIC_PATTERN = "media-%s";
+
+    @Transactional
+    public ImageDto upsertImage(Path filePath, MultipartFile img, String description) {
+        Path relativePath = minIOStorageRepository.upload(img, filePath);
+        try {
+            var image = imageRepository.findFirstByRelativePath(relativePath.toString())
+                .orElseGet(() -> imageRepository.save(Image.builder()
+                    .description(description)
+                    .relativePath(relativePath.toString())
+                    .type(EImageType.AVATAR)
+                    .build()));
+            return imageMapper.entityToDto(image);
+        } catch (Exception ex) {
+            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "image");
+        }
+    }
+
+    public ImageDto upsertProductAvatar(UUID productId, MultipartFile img) {
+        String fileName = String.join(
+            ".", AVATAR_PIC_NAME, FilenameUtils.getExtension(img.getOriginalFilename()));
+        Path filePath = Path.of(StoragePath.PRODUCT, productId.toString(), fileName);
+        return upsertImage(filePath, img, "Avatar of product with id %s".formatted(productId.toString()));
+    }
+
+    public ImageDto upsertCategoryAvatar(UUID categoryId, MultipartFile img) {
+        String fileName = String.join(
+            ".", AVATAR_PIC_NAME, FilenameUtils.getExtension(img.getOriginalFilename()));
+        Path filePath = Path.of(StoragePath.CATEGORY, categoryId.toString(), fileName);
+        return upsertImage(filePath, img, "Avatar of category with id %s".formatted(categoryId.toString()));
+    }
+
+    @Transactional
+    public List<ImageDto> bulkUpsertProductMedia(UUID productId, MultipartFile[] media) {
+        List<ImageDto> result = new ArrayList<>();
+        Deque<Image> savedDQ = new ArrayDeque<>();
+        for (int i=0; i<media.length; i++) {
+            if (media[i].isEmpty()) {
+                continue;
+            }
+            String fileName = String.join(".", MEDIA_PIC_PATTERN.formatted(i),
+                FilenameUtils.getExtension(media[i].getOriginalFilename()));
+            Path relativePath = minIOStorageRepository.upload(media[i], Path.of(StoragePath.PRODUCT, productId.toString(), fileName));
+            imageRepository.findFirstByRelativePath(relativePath.toString())
+                .ifPresentOrElse(image -> result.add(imageMapper.entityToDto(image)), () -> {
+                var newImage = Image.builder()
+                    .description("Image of product with id %s".formatted(productId.toString()))
+                    .relativePath(relativePath.toString())
+                    .type(EImageType.MEDIA)
+                    .build();
+                savedDQ.add(newImage);
+            });
+        }
+        try {
+            var newImgs = imageRepository.saveAll(savedDQ);
+            result.addAll(imageMapper.entityToDto(newImgs));
+            return result;
+        } catch (Exception ex) {
+            throw new IcRuntimeException(ex, FAIL_TO_STORE_IMAGE_FILE);
+        }
+    }
+
+}

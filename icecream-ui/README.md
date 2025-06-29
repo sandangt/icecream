@@ -25,7 +25,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/next",
-      "runtimeArgs": ["dev", "-p", "34000"],
+      "runtimeArgs": ["dev", "-p", "34000", "--turbopack"],
       "envFile": "${workspaceFolder}/.env"
     }
   ]

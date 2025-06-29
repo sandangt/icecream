@@ -8,10 +8,12 @@
   <packaging>pom</packaging>
   <version>0.1.0</version>
   <modules>
-    <module>frontier</module>
+    <module>consul</module>
     <module>chronos</module>
     <module>echo</module>
     <module>fundamentum</module>
+    <module>codex</module>
+    <module>memoir</module>
   </modules>
 
   <properties>
@@ -21,31 +23,26 @@
     <maven.version>3.13.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.2.6</spring.boot.version>
-    <spring.cloud.version>2023.0.2</spring.cloud.version>
-    <spring.doc.version>2.5.0</spring.doc.version>
-    <spring.kafka.version>3.1.4</spring.kafka.version>
-    <apache.kafka.version>3.7.0</apache.kafka.version>
-    <confluent.version>7.6.0</confluent.version>
-    <spring.grpc.version>3.1.0.RELEASE</spring.grpc.version>
-    <protobuf.version>4.27.3</protobuf.version>
-    <grpc.version>1.65.1</grpc.version>
-    <postgresql.version>42.7.3</postgresql.version>
-    <lombok.version>1.18.32</lombok.version>
-    <guava.version>33.2.0-jre</guava.version>
-    <apache.commons.lang.version>3.14.0</apache.commons.lang.version>
-    <apache.commons.io.version>2.16.1</apache.commons.io.version>
-    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <spring.boot.version>3.5.2</spring.boot.version>
+    <spring.cloud.version>2025.0.0</spring.cloud.version>
+    <spring.doc.version>2.8.9</spring.doc.version>
+    <postgresql.version>42.7.7</postgresql.version>
+    <lombok.version>1.18.38</lombok.version>
+    <guava.version>33.4.8-jre</guava.version>
+    <apache.commons.lang.version>3.17.0</apache.commons.lang.version>
+    <apache.commons.io.version>2.19.0</apache.commons.io.version>
+    <fasterxml.jackson.version>2.19.1</fasterxml.jackson.version>
+    <mapstruct.version>1.6.3</mapstruct.version>
     <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
-    <liquibase.version>4.27.0</liquibase.version>
+    <liquibase.version>4.32.0</liquibase.version>
     <slugify.version>3.0.6</slugify.version>
     <faker.version>1.0.2</faker.version>
-    <minio.version>8.5.10</minio.version>
+    <minio.version>8.5.17</minio.version>
     <testcontainers.version>1.19.8</testcontainers.version>
   </properties>
   <dependencyManagement>
     <dependencies>
-      <!--region Spring boot & spring cloud-->
+      <!--region Spring-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -66,80 +63,6 @@
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         <version>${spring.doc.version}</version>
-      </dependency>
-      <!--endregion-->
-      <!--region Protobuf-->
-      <dependency>
-        <groupId>com.google.protobuf</groupId>
-        <artifactId>protobuf-java</artifactId>
-        <version>${protobuf.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.protobuf</groupId>
-        <artifactId>protobuf-java-util</artifactId>
-        <version>${protobuf.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <!--endregion-->
-      <!--region Kafka-->
-      <dependency>
-        <groupId>org.apache.kafka</groupId>
-        <artifactId>kafka-streams</artifactId>
-        <version>${apache.kafka.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.kafka</groupId>
-        <artifactId>spring-kafka</artifactId>
-        <version>${spring.kafka.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.kafka</groupId>
-        <artifactId>spring-kafka-test</artifactId>
-        <version>${spring.kafka.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.confluent</groupId>
-        <artifactId>kafka-protobuf-serializer</artifactId>
-        <version>${confluent.version}</version>
-      </dependency>
-      <!--endregion-->
-      <!--region gRPC-->
-      <dependency>
-        <groupId>net.devh</groupId>
-        <artifactId>grpc-spring-boot-starter</artifactId>
-        <version>${spring.grpc.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty-shaded</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>io.grpc</groupId>
-        <artifactId>grpc-netty-shaded</artifactId>
-        <version>${grpc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.grpc</groupId>
-        <artifactId>grpc-protobuf</artifactId>
-        <version>${grpc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.grpc</groupId>
-        <artifactId>grpc-stub</artifactId>
-        <version>${grpc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.grpc</groupId>
-        <artifactId>grpc-services</artifactId>
-        <version>${grpc.version}</version>
       </dependency>
       <!--endregion-->
       <!--region Postgres-->
@@ -164,6 +87,13 @@
       <!--endregion-->
       <!--region Utils-->
       <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${fasterxml.jackson.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>${guava.version}</version>
@@ -182,7 +112,6 @@
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.mapstruct</groupId>
@@ -228,6 +157,7 @@
           </executions>
         </plugin>
       </plugins>
+
     </pluginManagement>
     <plugins>
       <plugin>
@@ -278,6 +208,40 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
 
 </project>

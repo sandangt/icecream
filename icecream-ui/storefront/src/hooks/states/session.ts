@@ -32,12 +32,14 @@ const EMPTY_STATE: State = {
 }
 
 // @ts-ignore
-export const useSessionStore = create<State & Action>(devtools((set) => ({
-  ...EMPTY_STATE,
-  clearSession: () => set(() => EMPTY_STATE),
-  updateSession: (session: Session) =>
-    set(() => ({
-      isLoggedIn: true,
-      ...session,
-    })),
-})))
+export const useSessionStore = create<State & Action>(
+  devtools((set) => ({
+    ...EMPTY_STATE,
+    clearSession: () => set(() => EMPTY_STATE),
+    updateSession: (session: Session) =>
+      set(() => ({
+        isLoggedIn: true,
+        ...session,
+      })),
+  })),
+)

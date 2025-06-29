@@ -1,12 +1,33 @@
+import { FileQuestion, Home } from 'lucide-react'
 import Link from 'next/link'
 
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
 const Page = () => (
-  <div className="h-[75vh] flex flex-col justify-center items-center">
-    <h1 className="text-8xl font-bold">404</h1>
-    <p className="text-4xl font-medium">Page Not Found</p>
-    <Link href="/" className="mt-4 text-xl text-blue-600 hover:underline">
-      Go back home
-    </Link>
+  <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-4">
+    <Card className="w-full max-w-md shadow-xl">
+      <CardHeader className="items-center">
+        <FileQuestion className="h-20 w-20 text-primary mb-6" />
+        <CardTitle className="text-4xl font-headline font-bold text-primary">
+          404 - Page Not Found
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <CardDescription className="text-lg text-foreground/80">
+          Sorry, the page you are looking for does not exist or may have been moved.
+        </CardDescription>
+        <Button
+          asChild
+          size="lg"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+        >
+          <Link href="/">
+            <Home className="mr-2 h-5 w-5" /> Go Back to Homepage
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
   </div>
 )
 
