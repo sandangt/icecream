@@ -20,16 +20,13 @@ public class SecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter;
     private final StorefrontAuthorizationManager authorizationManager;
-//    private final CrossOriginResourceFilter corsFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .oauth2ResourceServer(auth -> auth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
-//            .authorizeHttpRequests(req -> req.anyRequest().access(authorizationManager))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//            .addFilterBefore(corsFilter, RequestHeaderAuthenticationFilter.class)
             .build();
     }
 

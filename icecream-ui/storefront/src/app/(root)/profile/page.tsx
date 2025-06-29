@@ -1,21 +1,24 @@
+import { redirect } from 'next/navigation'
+
 import { isLoggedIn } from '@/lib/utils'
-import { requestGetCustomerProfile } from '@/repositories/consul'
-import { auth, signOut } from '@/repositories/identity'
-import { CustomerExtended, Session } from '@/types'
-import UnauthorizedPage from '@/app/unauthorized'
-import { PersonalProfileCard } from './_components/personal-profile-card'
-import { AddressCard } from './_components/address-card'
-import { SideBar } from './_components/sidebar'
-import { UnauthorizedException } from '@/exceptions/api-request'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { auth } from '@/repositories/identity'
+import { Session } from '@/types'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ProfileForm } from './_components/profile-form'
+import { ROUTES } from '@/lib/constants'
+import { CustomerService } from '@/services'
 
 const Page = async () => {
-  // const session = await auth()
-  // if (!isLoggedIn(session)) {
-  //   return <UnauthorizedPage />
-  // }
-  // const customerInfoResponse = await requestGetCustomerProfile(session as unknown as Session)
+  const session = await auth()
+  if (!isLoggedIn(session)) {
+    redirect(ROUTES.UNAUTHORIZED)
+  }
+  const customer = await fetchCustomerProfile(session as unknown as Session)
+  const customerService = new CustomerService(customer)
+  if (customerService.isEmpty()) {
+    redirect(ROUTES.UNAUTHORIZED)
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
@@ -33,7 +36,7 @@ const Page = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ProfileForm />
+          <ProfileForm data={customerService.get()} />
         </CardContent>
       </Card>
     </div>

@@ -1,9 +1,9 @@
-import { UnauthorizedException } from '@/exceptions/api-request'
-import { SessionExpiredException } from '@/exceptions/session'
-import { API_PATHS, HttpStatusCode } from '@/lib/constants'
+import { IcRuntimeException, UNAUTHORIZED_REQUEST } from '@/exceptions'
+import { API_PATHS, HttpStatusCode, ROUTES } from '@/lib/constants'
 import { generateUrl } from '@/lib/utils'
 import { CONSUL_URL } from '@/settings'
 import { CustomerExtended, Session } from '@/types'
+import { redirect } from 'next/navigation'
 
 export const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
   const { accessToken } = session
@@ -13,7 +13,7 @@ export const requestGetCustomerProfile = async (session: Session): Promise<Custo
   }
   const response = await fetch(url, { headers })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw UnauthorizedException.defaultInstance()
+    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
   }
   return response.json()
 }
@@ -30,7 +30,15 @@ export const requestCreateCustomerProfileIfNotExist = async (
     method: 'POST',
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw UnauthorizedException.defaultInstance()
+    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
   }
   return await response.json()
+}
+
+export const fetchCustomerProfile = async (session: Session): Promise<CustomerExtended | null> => {
+  try {
+    return requestGetCustomerProfile(session)
+  } catch (err) {
+    return null
+  }
 }

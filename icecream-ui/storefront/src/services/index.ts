@@ -1,3 +1,4 @@
 import { ProductService } from './product'
+import { CustomerService } from './customer'
 
-export { ProductService }
+export { ProductService, CustomerService }

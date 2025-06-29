@@ -2,13 +2,14 @@ import Image from 'next/image'
 import { ShoppingCart, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import { NextPage } from 'next'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { requestProductBySlug } from '@/repositories/consul'
 import { ProductService } from '@/services'
+import { ROUTES } from '@/lib/constants'
 
 type Props = {
   params: {
@@ -23,7 +24,7 @@ const Page: NextPage<Props> = async ({ params }) => {
   const productService = new ProductService(product)
 
   if (productService.isEmpty()) {
-    notFound()
+    redirect(ROUTES.PRODUCT_NOT_FOUND)
   }
 
   const { name, description, price, categories } = productService.get()
@@ -36,7 +37,7 @@ const Page: NextPage<Props> = async ({ params }) => {
   return (
     <div className="space-y-12">
       <Button variant="outline" asChild className="mb-6">
-        <Link href="/products">
+        <Link href={ROUTES.PRODUCTS}>
           <ChevronLeft className="mr-2 h-4 w-4" /> Back to Products
         </Link>
       </Button>

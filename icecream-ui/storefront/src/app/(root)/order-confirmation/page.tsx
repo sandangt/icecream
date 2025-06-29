@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ROUTES } from '@/lib/constants';
 import { CheckCircle, Package } from 'lucide-react';
 import Link from 'next/link';
 
@@ -26,7 +27,7 @@ export default function OrderConfirmationPage() {
             You will receive an email confirmation shortly with your order details and tracking information.
           </p>
           <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link href="/products">
+            <Link href={ROUTES.PRODUCTS}>
               <Package className="mr-2 h-5 w-5" /> Continue Shopping
             </Link>
           </Button>

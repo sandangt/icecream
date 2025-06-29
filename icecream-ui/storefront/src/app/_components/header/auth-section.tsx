@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { ROUTES } from '@/lib/constants'
 
 export const AuthSection = async () => {
   const session = await auth()
@@ -48,7 +49,7 @@ const LoggedIn = async () => {
           <DropdownMenuLabel>Hello, {firstName} {lastName}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/profile" className="cursor-pointer">
+            <Link href={ROUTES.PROFILE} className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </Link>
@@ -60,8 +61,8 @@ const LoggedIn = async () => {
                 await Promise.all([signOut(), requestSSOSignOut(refreshToken)])
               }}
             >
-              <button className="flex items-center w-full h-auto" type="submit">
-                <LogOut className="mr-2 h-4 w-4" />
+              <button className="flex items-center w-full h-auto gap-4" type="submit">
+                <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </button>
             </form>
@@ -69,7 +70,7 @@ const LoggedIn = async () => {
         </DropdownMenuContent>
       </DropdownMenu>
       <Button variant="ghost" size="icon" asChild>
-        <Link href="/cart" aria-label="Shopping Cart" className="relative">
+        <Link href={ROUTES.CART} aria-label="Shopping Cart" className="relative">
           <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-foreground group-hover:text-primary" />
           <Badge
             variant="destructive"
