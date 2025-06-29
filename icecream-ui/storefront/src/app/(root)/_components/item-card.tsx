@@ -43,55 +43,6 @@ export const CategoryCard: FC<CategoryCardProps> = ({ data }) => {
   )
 }
 
-type ProductCardProps = {
-  data: ProductExtended
-}
-
-export const ProductCard: FC<ProductCardProps> = ({ data }) => {
-  const productService = new ProductService(data)
-  if (productService.isEmpty()) return null
-  const { slug, name, description, price } = productService.get()
-  const avatar = productService.avatar
-
-  return (
-    <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
-      <Link href={`/products/${slug}`} className="block">
-        <CardHeader className="p-0">
-          <div className="aspect-[4/3] relative w-full">
-            <Image
-              src={makeStorageUrl(avatar?.relativePath || '')}
-              alt={name}
-              layout="fill"
-              objectFit="cover"
-              className="transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-        </CardHeader>
-      </Link>
-      <CardContent className="p-4 flex-grow">
-        <Link href={`/products/${slug}`}>
-          <CardTitle className="text-lg font-headline mb-1 hover:text-primary transition-colors">
-            {name}
-          </CardTitle>
-        </Link>
-        <CardDescription className="text-sm text-muted-foreground mb-2 h-10 overflow-hidden">
-          {description?.substring(0, 30)}...
-        </CardDescription>
-        <p className="text-xl font-semibold text-primary">${price.toFixed(2)}</p>
-      </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <Button
-          // onClick={() => addItem(product)}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-          aria-label={`Add ${name} to cart`}
-        >
-          <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-        </Button>
-      </CardFooter>
-    </Card>
-  )
-}
-
 type ProductPriceProps = {
   value: number
   className?: string

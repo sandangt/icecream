@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 
 import authConfig from './auth.config'
-import { AUTH_ID, AUTH_ISSUER, AUTH_SECRET } from '@/settings'
+import { AUTH_KEYCLOAK_ID, AUTH_KEYCLOAK_ISSUER, AUTH_KEYCLOAK_SECRET } from '@/settings'
 import { requestCreateCustomerProfileIfNotExist } from '@/repositories/consul'
 import { encodeBase64Str } from '@/lib/utils'
 
@@ -57,11 +57,11 @@ export const requestSSOSignOut = async (refreshToken: string): Promise<any> => {
   const headers = new Headers()
   headers.append('Content-Type', 'application/x-www-form-urlencoded')
   const body = new URLSearchParams()
-  body.append('client_id', AUTH_ID)
-  body.append('client_secret', AUTH_SECRET)
+  body.append('client_id', AUTH_KEYCLOAK_ID)
+  body.append('client_secret', AUTH_KEYCLOAK_SECRET)
   body.append('refresh_token', refreshToken)
 
-  const response = await fetch(`${AUTH_ISSUER}/protocol/openid-connect/logout`, {
+  const response = await fetch(`${AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/logout`, {
     method: 'POST',
     headers,
     body,
@@ -77,12 +77,12 @@ export const requestExtendAccessToken = async (refreshToken: string): Promise<an
   const headers = new Headers()
   const body = new URLSearchParams()
   headers.append('Content-Type', 'application/x-www-form-urlencoded')
-  const encodedIdAndPassword = encodeBase64Str(`${AUTH_ID}:${AUTH_SECRET}`)
+  const encodedIdAndPassword = encodeBase64Str(`${AUTH_KEYCLOAK_ID}:${AUTH_KEYCLOAK_SECRET}`)
   headers.append('Authorization', `Basic ${encodedIdAndPassword}`)
   body.append('grant_type', 'refresh_token')
   body.append('scope', 'openid')
   body.append('refresh_token', refreshToken)
-  const response = await fetch(`${AUTH_ISSUER}/protocol/openid-connect/token`, {
+  const response = await fetch(`${AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
     method: 'POST',
     headers,
     body,

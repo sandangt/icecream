@@ -1,3 +1,3 @@
-import { ProductCard } from './item-card'
+import { ProductCard } from './product-card'
 
 export { ProductCard }

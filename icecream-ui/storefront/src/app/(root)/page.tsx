@@ -6,6 +6,7 @@ import { requestFeaturedProducts, requestNewProducts } from '@/repositories/cons
 import { Button } from '@/components/ui/button'
 import { ProductExtended } from '@/types'
 import { ProductCard } from './_components'
+import { SITE_NAME } from '@/lib/constants'
 
 const Page = async () => {
   const newProducts = await requestNewProducts()
@@ -24,7 +25,7 @@ export default Page
 
 const BannerSection = () => (
   <section className="text-center py-16 bg-gradient-to-r from-primary/10 via-background to-accent/10 rounded-lg shadow-inner">
-    <h1 className="text-5xl font-headline font-bold mb-6 text-primary">Discover Your Zenith</h1>
+    <h1 className="text-5xl font-headline font-bold mb-6 text-primary">{SITE_NAME}</h1>
     <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
       Elevate your lifestyle with our curated collection of modern and minimalist products.
     </p>

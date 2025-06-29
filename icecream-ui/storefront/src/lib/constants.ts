@@ -1,5 +1,5 @@
-export const SITE_NAME = 'IceCream E-Commerce'
-export const APP_NAME = 'Icecream'
+export const SITE_NAME = 'IceCream Shop'
+export const LOGO_NAME = 'Icecream'
 export const SITE_DESCRIPTION = 'Modern E-Commerce Platform'
 export const COOKIE_NAME = 'icecream'
 

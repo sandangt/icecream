@@ -13,4 +13,5 @@ public interface ICustomerRepository extends JpaRepository<Customer, UUID> {
     @NotNull
     Page<Customer> findAll(@NotNull Pageable pageable);
     Optional<Customer> findFirstByUserId(UUID id);
+    Optional<Customer> findFirstByOrderByUsername();
 }

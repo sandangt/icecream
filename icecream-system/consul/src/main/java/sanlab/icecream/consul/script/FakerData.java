@@ -10,11 +10,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sanlab.icecream.consul.model.Address;
+import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.model.Stock;
 import sanlab.icecream.consul.repository.crud.IAddressRepository;
+import sanlab.icecream.consul.repository.crud.ICustomerRepository;
 import sanlab.icecream.consul.repository.crud.IStockRepository;
 import sanlab.icecream.consul.service.ImageService;
 import sanlab.icecream.consul.viewmodel.request.IcMultipartFileRequest;
+import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 import sanlab.icecream.fundamentum.constant.EImageType;
 import sanlab.icecream.fundamentum.constant.EProductStatus;
 import sanlab.icecream.consul.model.Category;
@@ -53,6 +56,7 @@ public class FakerData {
     private final IImageRepository imageRepository;
     private final IAddressRepository addressRepository;
     private final IStockRepository stockRepository;
+    private final ICustomerRepository customerRepository;
 
     private final ImageService imageService;
 
@@ -75,11 +79,13 @@ public class FakerData {
         seedCategory(8);
         seedProduct(1000);
         seedStock(3101);
+        seedCustomer(1);
         seedProductImage();
         seedProductCategory();
         seedCategoryImage();
         seedStockAddress();
         seedProductStock();
+        seedCustomerImage();
         return args -> {
             var tmpPath = Path.of(tmpDir);
             if (Files.exists(tmpPath)) FileUtils.deleteDirectory(tmpPath.toFile());
@@ -365,6 +371,54 @@ public class FakerData {
         File file = filePath.toFile();
         ImageIO.write(img, "jpg", file);
         return new IcMultipartFileRequest(file);
+    }
+
+    private void seedCustomer(int number) {
+        if (customerRepository.count() > 0) {
+            return;
+        }
+        var faker = getFaker();
+        var result = IntStream.range(0, number).mapToObj(ignore -> Customer.builder()
+                .userId(UUID.randomUUID())
+                .email(faker.internet().emailAddress())
+                .username(faker.name().username())
+                .phone(faker.phoneNumber().cellPhone())
+                .firstName(faker.name().firstName())
+                .lastName(faker.name().lastName())
+                .status(ECustomerStatus.ACTIVE)
+                .build()).toList();
+        customerRepository.saveAll(result);
+    }
+
+    private void seedCustomerImage() {
+        long totalCustomers = customerRepository.count();
+        long totalImages = imageRepository.count();
+        if (totalCustomers > totalImages) {
+            return;
+        }
+        Optional<Customer> firstCustomer = customerRepository.findFirstByOrderByUsername();
+        var firstCustomerMediaOptional = firstCustomer.map(Customer::getMedia);
+        if (firstCustomerMediaOptional.isPresent() && !firstCustomerMediaOptional.get().isEmpty()) {
+            return;
+        }
+        var faker = getFaker();
+        List<Customer> customers = customerRepository.findAll();
+        for (Customer customer : customers) {
+            try {
+                Set<Image> imgSet = new HashSet<>();
+                Image avatar = generateImage();
+                avatar.setType(EImageType.AVATAR);
+                imgSet.add(avatar);
+                int imgNum = faker.number().numberBetween(1, 10);
+                for (int i=0;i<imgNum;i++) {
+                    Image img = generateImage();
+                    img.setType(EImageType.MEDIA);
+                    imgSet.add(img);
+                }
+                customer.setMedia(imgSet);
+                customerRepository.save(customer);
+            } catch (IOException ignored) {}
+        }
     }
 
 }

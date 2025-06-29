@@ -14,7 +14,7 @@ body {
     --card: 36 100% 97%; /* Same as background or slightly lighter/whiter */
     --card-foreground: 224 71.4% 4.1%;
 
-    --popover: 0 0% 100%; /* White for popovers */
+    --popover: 36 100% 97%; /* Aligned with app background */
     --popover-foreground: 224 71.4% 4.1%;
 
     --primary: 26 100% 66%; /* #FF7F50 Vibrant Orange */
