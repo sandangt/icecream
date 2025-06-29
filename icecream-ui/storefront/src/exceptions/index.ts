@@ -1,8 +1,11 @@
 import { IcErrorModel } from './error-model'
 
-export const PRODUCT_NOT_AVAILABLE = new IcErrorModel('ST1001', 'Product not available')
-export const FAIL_TO_FETCH = new IcErrorModel('ST1001', 'Fail to fetch')
-export const UNAUTHORIZED = new IcErrorModel('ST1001', 'Unauthorized exception')
+export const FAIL_TO_FETCH = new IcErrorModel('ST0000', 'Fail to fetch')
+export const UNAUTHORIZED_REQUEST = new IcErrorModel('ST0001', 'Unauthorized request exception')
+
+export const PRODUCT_NOT_AVAILABLE = new IcErrorModel('ST1000', 'Product not available')
+export const PROFILE_NOT_FOUND = new IcErrorModel('ST1001', 'Customer profile not found')
+
 export const SESSION_EXPIRED = new IcErrorModel('ST1001', 'Session UnavalableException')
 export const SESSION_UNAVAILABLE = new IcErrorModel('ST1001', 'Session unvailable')
 

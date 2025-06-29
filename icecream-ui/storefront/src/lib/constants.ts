@@ -1,3 +1,5 @@
+import { UNAUTHORIZED } from "@/exceptions"
+
 export const SITE_NAME = 'IceCream Shop'
 export const LOGO_NAME = 'Icecream'
 export const SITE_DESCRIPTION = 'Modern E-Commerce Platform'
@@ -6,22 +8,20 @@ export const COOKIE_NAME = 'icecream'
 export const ROUTES = {
   HOME: '/',
   PROFILE: '/profile',
-  SHOP: '/shop',
-  ABOUT: '/about',
-  CONTACT: '/contact',
-  PRODUCTS: (id: string) => `/products/${id}`,
+  PRODUCTS: '/products',
+  PRODUCT_DETAILS: (slug: string) => `/products/${slug}`,
+  CART: '/cart',
+
+  //#region Error pages
+  PRODUCT_NOT_FOUND: '/not-found/product',
+  UNAUTHORIZED: '/unauthorized',
+  //#endregion
 }
 
 export const API_PATHS = {
   PRODUCT: '/console/products',
   CATEGORY: '/console/categories',
   CUSTOMER: '/console/customers',
-}
-
-export const AUTHENTICATION_STATUS = {
-  UNAUTHENTICATED: 'unauthenticated',
-  LOADING: 'loading',
-  AUTHENTICATED: 'authenticated',
 }
 
 export enum CustomerStatus {

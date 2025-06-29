@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card'
 import { ProductService } from '@/services'
 import { ProductExtended } from '@/types'
+import { ROUTES } from '@/lib/constants'
 
 type Props = {
   data: ProductExtended
@@ -26,7 +27,7 @@ export const ProductCard: FC<Props> = ({ data }) => {
 
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
-      <Link href={`/products/${slug}`} className="block">
+      <Link href={ROUTES.PRODUCT_DETAILS(slug)} className="block">
         <CardHeader className="p-0">
           <div className="aspect-[4/3] relative w-full">
             <Image
@@ -40,7 +41,7 @@ export const ProductCard: FC<Props> = ({ data }) => {
         </CardHeader>
       </Link>
       <CardContent className="p-4 flex-grow">
-        <Link href={`/products/${slug}`}>
+        <Link href={ROUTES.PRODUCT_DETAILS(slug)}>
           <CardTitle className="text-lg font-headline mb-1 hover:text-primary transition-colors">
             {name}
           </CardTitle>

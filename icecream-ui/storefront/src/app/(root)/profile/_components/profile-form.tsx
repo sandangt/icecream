@@ -1,12 +1,11 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Form,
   FormControl,
@@ -26,6 +25,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { UploadCloud, UserCircle } from 'lucide-react'
+import { CustomerExtended } from '@/types'
+import { CustomerService } from '@/services'
+import { ROUTES } from '@/lib/constants'
+import { redirect } from 'next/navigation'
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters.' }).max(50),
@@ -71,7 +74,12 @@ const getInitialProfileData = (): ProfileFormValues => {
   }
 }
 
-export const ProfileForm = () => {
+type Props = {
+  data: CustomerExtended
+}
+
+export const ProfileForm: FC<Props> = ({ data }) => {
+  const customerService = new CustomerService(data)
   const { toast } = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -82,7 +90,7 @@ export const ProfileForm = () => {
   })
 
   const watchedAvatarUrl = form.watch('avatarUrl')
-  const [avatarPreview, setAvatarPreview] = useState(watchedAvatarUrl || defaultAvatar)
+  const [avatarPreview, setAvatarPreview] = useState(watchedAvatarUrl || customerService.avatarUrl)
 
   useEffect(() => {
     const initialData = getInitialProfileData()

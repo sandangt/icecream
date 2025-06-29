@@ -6,7 +6,7 @@ import { requestFeaturedProducts, requestNewProducts } from '@/repositories/cons
 import { Button } from '@/components/ui/button'
 import { ProductExtended } from '@/types'
 import { ProductCard } from './_components'
-import { SITE_NAME } from '@/lib/constants'
+import { ROUTES, SITE_NAME } from '@/lib/constants'
 
 const Page = async () => {
   const newProducts = await requestNewProducts()
@@ -30,7 +30,7 @@ const BannerSection = () => (
       Elevate your lifestyle with our curated collection of modern and minimalist products.
     </p>
     <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-      <Link href="/products">
+      <Link href={ROUTES.PRODUCTS}>
         Shop All Products <ArrowRight className="ml-2 h-5 w-5" />
       </Link>
     </Button>
