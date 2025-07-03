@@ -16,10 +16,11 @@ const Page: FC<Props> = async ({ searchParams }) => {
   const { page: rawPage, size: rawSize } = await searchParams
   const page = parseInt(rawPage || '1')
   const size = parseInt(rawSize || '10')
-  const { totalPages, data: paginatedProducts } = await queryProducts({
+  const { totalPages, data } = await queryProducts({
     pagination: { limit: size, offset: page - 1 },
     sorting: { field: 'createdAt', order: 'DESC' },
   })
+  const paginatedProducts = data?.map(item => new ProductService(item)).filter(item => !item.isEmpty()).map(item => item.get())
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -34,12 +35,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
 
       {paginatedProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {paginatedProducts
-            .map((item) => new ProductService(item))
-            .filter((item) => !item.isEmpty())
-            .map((item) => {
-              return <ProductCard key={item.get().id} data={item.get()} />
-            })}
+          {paginatedProducts.map((item) => <ProductCard key={item.id} data={item} />)}
         </div>
       ) : (
         <div className="text-center py-12">

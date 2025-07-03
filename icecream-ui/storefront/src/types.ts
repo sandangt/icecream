@@ -76,40 +76,10 @@ export interface Stock {
   reservedQuantity: number
 }
 
-export interface Feedback {
-  id: string
-  content: string
-  star: number
-}
-
-export interface Order {
-  id: string
-  note: string
-  discount: number
-  totalPrice: number
-  deliveryFee: number
-  deliveryMethod: string
-  paymentMethod: string
-  orderStatus: string
-  deliveryStatus: string
-  paymentStatus: string
-}
-
-export interface OrderItem {
-  id: string
-  quantity: number
-  note: string
-  price: number
-  discount: number
-}
-
-export interface Cart {
-  id: string
-}
-
 export interface CartItem {
   id: string
   quantity: number
+  product: ProductExtended
 }
 //#endregion
 
@@ -128,9 +98,9 @@ export interface CustomerExtended extends Customer {
   media: Media[]
   addresses: Address[]
 }
-//endregion
+//#endregion
 
-//region Pagination
+//#region Pagination
 export type RequestAllParams = {
   pagination: {
     limit: number

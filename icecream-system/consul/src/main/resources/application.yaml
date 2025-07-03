@@ -1,4 +1,8 @@
 spring:
+  main:
+    banner-mode: console
+  banner:
+    location: classpath:/banner.txt
   application:
     name: consul
     version: 0.1.0

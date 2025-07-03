@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, type FC, type ReactNode } from 'react'
-import { CookiesProvider, useCookies } from 'react-cookie'
+import { CookiesProvider } from 'react-cookie'
 import { SessionProvider, signOut, useSession } from 'next-auth/react'
-import { fromUnixTime, isAfter, isBefore, parseISO } from 'date-fns'
+import { fromUnixTime, isAfter } from 'date-fns'
+import { ROUTES } from '@/lib/constants'
 
 type Props = {
   children: ReactNode
@@ -25,7 +26,7 @@ const ValidateSessionProvider: FC<Props> = ({ children }) => {
 }
 
 export const AuthProvider: FC<Props> = ({ children }) => (
-  <CookiesProvider defaultSetOptions={{ path: '/' }}>
+  <CookiesProvider defaultSetOptions={{ path: ROUTES.HOME }}>
     <SessionProvider>
       <ValidateSessionProvider>{children}</ValidateSessionProvider>
     </SessionProvider>
