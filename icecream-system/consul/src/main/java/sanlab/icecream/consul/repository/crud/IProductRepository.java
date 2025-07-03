@@ -9,7 +9,7 @@ import sanlab.icecream.consul.model.Product;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface IProductRepository extends JpaRepository<Product, UUID> {
+public interface IProductRepository extends JpaRepository<Product, UUID>, IProductExtendRepository {
 
     @NotNull
     Page<Product> findAll(@NotNull Pageable pageable);

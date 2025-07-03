@@ -46,4 +46,21 @@ export class ProductService {
   get avatarUrl(): string {
     return makeStorageUrl(this.__avatar?.relativePath ?? '')
   }
+
+  get id(): string {
+    return this.__product?.id || ''
+  }
+
+  get slug(): string {
+    return this.__product?.slug || ''
+  }
+
+  get name(): string {
+    return this.__product?.name || ''
+  }
+
+  get price(): number | null {
+    return this.__product?.price ?? null
+  }
+
 }

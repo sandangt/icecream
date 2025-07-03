@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
@@ -12,18 +14,36 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { ProductService } from '@/services'
+import { ProductService, SessionService } from '@/services'
 import { ProductExtended } from '@/types'
 import { ROUTES } from '@/lib/constants'
+import { useCartStore } from '@/hooks/states'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
 
 type Props = {
   data: ProductExtended
 }
 
 export const ProductCard: FC<Props> = ({ data }) => {
+  const router = useRouter()
+  const addToCart = useCartStore((state) => state.addToCart)
+  const session = useSession()
+  const sessionService = new SessionService(session)
+
   const productService = new ProductService(data)
   if (productService.isEmpty()) return null
   const { slug, name, description, price } = productService.get()
+
+  const handleAddCart = () => {
+    if (!sessionService.isLoggedIn()) {
+      router.push(ROUTES.UNAUTHORIZED)
+      return
+    }
+    addToCart(productService.get())
+    toast.success('Added to cart')
+  }
 
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
@@ -53,7 +73,7 @@ export const ProductCard: FC<Props> = ({ data }) => {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button
-          // onClick={() => addItem(product)}
+          onClick={handleAddCart}
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
           aria-label={`Add ${name} to cart`}
         >
