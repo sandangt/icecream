@@ -41,3 +41,12 @@ app:
     allowed-origins: >
       ${STOREFRONT_URL},
   temp-dir: ${CONSUL_TEMP_DIR}
+  identity:
+    url: ${IDENTITY_URL}
+    admin:
+      username: ${KEYCLOAK_ADMIN}
+      password: ${KEYCLOAK_ADMIN_PASSWORD}
+    realm: ${IDENTITY_REALM}
+    client:
+      storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
+      backoffice: ${IDENTITY_BACKOFFICE_CLIENT_ID}

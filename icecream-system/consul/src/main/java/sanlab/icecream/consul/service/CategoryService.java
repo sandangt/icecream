@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.dto.core.ProductDto;
 import sanlab.icecream.consul.dto.extended.CategoryExtendedDto;
-import sanlab.icecream.consul.mapper.ICategoryMapper;
-import sanlab.icecream.consul.mapper.IImageMapper;
-import sanlab.icecream.consul.mapper.IProductMapper;
+import sanlab.icecream.consul.mapper.CategoryMapper;
+import sanlab.icecream.consul.mapper.ImageMapper;
+import sanlab.icecream.consul.mapper.ProductMapper;
 import sanlab.icecream.consul.model.Category;
-import sanlab.icecream.consul.repository.crud.ICategoryRepository;
+import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.consul.dto.core.CategoryDto;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
@@ -30,11 +30,11 @@ import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 public class CategoryService {
 
     private final ImageService imageService;
-    private final ICategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    private final ICategoryMapper categoryMapper;
-    private final IImageMapper imageMapper;
-    private final IProductMapper productMapper;
+    private final CategoryMapper categoryMapper;
+    private final ImageMapper imageMapper;
+    private final ProductMapper productMapper;
 
     @Transactional(readOnly = true)
     public List<CategoryExtendedDto> getAll() {

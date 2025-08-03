@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useCartStore } from '@/hooks/states'
-import { ProductService } from '@/services'
+import { ProductHelper } from '@/lib/helpers'
 
 export const CartDropdown = () => {
   const totalItems = useCartStore((state) => state.totalItems)
@@ -45,7 +45,7 @@ export const CartDropdown = () => {
           <>
             <div className="max-h-[400px] overflow-y-auto p-2 space-y-2">
               {Array.from(productMap).map(([key, value]) => {
-                const productService = new ProductService(value.product)
+                const productService = new ProductHelper(value.product)
                 return (
                   <div
                     key={key}

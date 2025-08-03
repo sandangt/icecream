@@ -9,17 +9,17 @@ import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.dto.core.FeedbackDto;
 import sanlab.icecream.consul.dto.core.ImageDto;
 import sanlab.icecream.consul.dto.extended.ProductExtendedDto;
-import sanlab.icecream.consul.mapper.IFeedbackMapper;
-import sanlab.icecream.consul.mapper.IImageMapper;
-import sanlab.icecream.consul.mapper.IProductMapper;
+import sanlab.icecream.consul.mapper.FeedbackMapper;
+import sanlab.icecream.consul.mapper.ImageMapper;
+import sanlab.icecream.consul.mapper.ProductMapper;
 import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.model.Image;
 import sanlab.icecream.consul.model.Product;
 import sanlab.icecream.consul.model.Stock;
-import sanlab.icecream.consul.repository.crud.ICategoryRepository;
-import sanlab.icecream.consul.repository.crud.IProductRepository;
+import sanlab.icecream.consul.repository.crud.CategoryRepository;
+import sanlab.icecream.consul.repository.crud.ProductRepository;
 import sanlab.icecream.consul.dto.core.ProductDto;
-import sanlab.icecream.consul.repository.crud.IStockRepository;
+import sanlab.icecream.consul.repository.crud.StockRepository;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
@@ -43,13 +43,13 @@ public class ProductService {
 
     private final ImageService imageService;
 
-    private final IProductRepository productRepository;
-    private final ICategoryRepository categoryRepository;
-    private final IStockRepository stockRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final StockRepository stockRepository;
 
-    private final IFeedbackMapper feedbackMapper;
-    private final IProductMapper productMapper;
-    private final IImageMapper imageMapper;
+    private final FeedbackMapper feedbackMapper;
+    private final ProductMapper productMapper;
+    private final ImageMapper imageMapper;
 
     @Transactional(readOnly = true)
     public CollectionQueryResponse<ProductExtendedDto> getAll(Pageable pageable, boolean featuredOnly) {

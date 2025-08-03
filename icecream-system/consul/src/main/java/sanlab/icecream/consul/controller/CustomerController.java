@@ -3,16 +3,21 @@ package sanlab.icecream.consul.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.dto.core.AddressDto;
 import sanlab.icecream.consul.dto.core.CustomerDto;
 import sanlab.icecream.consul.dto.extended.CustomerExtendedDto;
+import sanlab.icecream.consul.exception.HttpBadRequestException;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
+import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.exception.HttpServiceUnavailableException;
 import sanlab.icecream.consul.exception.HttpUnauthorizedException;
 import sanlab.icecream.consul.service.CustomerService;
@@ -21,8 +26,10 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
+import static sanlab.icecream.consul.exception.ConsulErrorModel.ADDRESS_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_UPDATE_USER_INFO_REQUEST;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_USER_PRINCIPAL;
 import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.NORMIE;
 
@@ -62,16 +69,88 @@ public class CustomerController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CustomerExtendedDto> updateCustomerProfile(@PathVariable UUID id,
-                                                                     @RequestBody CustomerDto payload) {
+    @PutMapping
+    public ResponseEntity<CustomerExtendedDto> updateCustomerProfile(@RequestBody CustomerDto payload) {
         try {
-            var result = customerService.update(id, payload);
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = customerService.update(UUID.fromString(userDetails.getSub()), payload);
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
                 case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case INVALID_UPDATE_USER_INFO_REQUEST -> new HttpBadRequestException(ex);
+                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                default -> new HttpInternalServerErrorException(ex);
+            };
+        }
+    }
+
+    @PostMapping("/addresses")
+    public ResponseEntity<CustomerExtendedDto> addAddress(@RequestBody AddressDto payload) {
+        try {
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = customerService.addAddress(UUID.fromString(userDetails.getSub()), payload);
+            return ResponseEntity.ok(result);
+        } catch (IcRuntimeException ex) {
+            var error = ex.getError();
+            throw switch (error) {
+                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                default -> new HttpInternalServerErrorException(ex);
+            };
+        }
+    }
+
+    @PatchMapping("/addresses/{addressId}")
+    public ResponseEntity<AddressDto> updateAddress(@PathVariable String addressId,
+                                                    @RequestBody AddressDto payload) {
+        try {
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            payload.setId(UUID.fromString(addressId));
+            var result = customerService.updateAddress(UUID.fromString(userDetails.getSub()), payload);
+            return ResponseEntity.ok(result);
+        } catch (IcRuntimeException ex) {
+            var error = ex.getError();
+            throw switch (error) {
+                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
+                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                default -> new HttpInternalServerErrorException(ex);
+            };
+        }
+    }
+
+    @DeleteMapping("/addresses/{addressId}")
+    public ResponseEntity<CustomerExtendedDto> deleteAddress(@PathVariable String addressId) {
+        try {
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = customerService.deleteAddress(
+                UUID.fromString(userDetails.getSub()), UUID.fromString(addressId));
+            return ResponseEntity.ok(result);
+        } catch (IcRuntimeException ex) {
+            var error = ex.getError();
+            throw switch (error) {
+                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
+                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                default -> new HttpInternalServerErrorException(ex);
+            };
+        }
+    }
+
+    @PostMapping("/addresses/primary/{addressId}")
+    public ResponseEntity<Void> setPrimaryAddress(@PathVariable String addressId) {
+        try {
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            customerService.setPrimaryAddress(
+                UUID.fromString(userDetails.getSub()), UUID.fromString(addressId));
+            return ResponseEntity.ok().build();
+        } catch (IcRuntimeException ex) {
+            var error = ex.getError();
+            throw switch (error) {
+                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
                 case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };

@@ -1,9 +1,13 @@
 'use client'
 
-import { useRef, useState, useEffect, FC } from 'react'
+import { useRef, useState, useEffect, FC, ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { PlusCircle, UploadCloud, UserCircle } from 'lucide-react'
 import * as z from 'zod'
+import Link from 'next/link'
+import { toast } from 'react-toastify'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -14,63 +18,39 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { useToast } from '@/hooks/use-toast'
-import { UploadCloud, UserCircle } from 'lucide-react'
-import { CustomerExtended } from '@/types'
-import { CustomerService } from '@/services'
-import { ROUTES } from '@/lib/constants'
-import { redirect } from 'next/navigation'
+import { CustomerExtended } from '@/models'
+import { CustomerHelper } from '@/lib/helpers'
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters.' }).max(50),
   lastName: z.string().min(2, { message: 'Last name must be at least 2 characters.' }).max(50),
-  email: z.string().email({ message: 'Invalid email address.' }),
+  username: z.string(),
+  email: z.string(),
   avatarUrl: z
     .string()
     .url({ message: 'Invalid URL for avatar. Please provide a valid image URL or upload a file.' })
     .or(z.string().startsWith('data:image/'))
     .or(z.literal(''))
     .optional(),
-  address: z.string().min(5, { message: 'Address must be at least 5 characters.' }).max(100),
-  city: z.string().min(2, { message: 'City must be at least 2 characters.' }).max(50),
-  postalCode: z.string().min(3, { message: 'Postal code must be at least 3 characters.' }).max(20),
-  country: z.string().min(2, { message: 'Please select a country.' }),
+  phone: z.string().min(5, { message: 'Phone must be at least 5 characters.' }),
 })
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+type ProfileFormFields = z.infer<typeof profileFormSchema>
 
-const defaultAvatar = 'https://placehold.co/128x128.png'
+const DEFAULT_AVATAR = 'https://placehold.co/128x128.png'
 
-const getInitialProfileData = (): ProfileFormValues => {
-  if (typeof window !== 'undefined') {
-    const storedProfile = localStorage.getItem('userProfile')
-    if (storedProfile) {
-      const parsed = JSON.parse(storedProfile)
-      // Ensure avatarUrl is a string, default if not present or invalid
-      if (typeof parsed.avatarUrl !== 'string' || parsed.avatarUrl.trim() === '') {
-        parsed.avatarUrl = defaultAvatar
-      }
-      return { ...parsed, email: parsed.email || 'user@example.com' }
-    }
-  }
+const initialProfileData = (data: CustomerExtended): ProfileFormFields => {
+  const customerHelper = new CustomerHelper(data)
+
   return {
-    firstName: 'Alex',
-    lastName: 'Zenith',
-    email: 'alex.zenith@example.com',
-    avatarUrl: defaultAvatar,
-    address: '123 Innovation Drive',
-    city: 'Techville',
-    postalCode: 'T3CH1',
-    country: 'USA',
+    username: customerHelper.username,
+    firstName: customerHelper.firstName,
+    lastName: customerHelper.lastName,
+    email: customerHelper.email,
+    phone: customerHelper.phone,
+    avatarUrl: customerHelper.avatarUrl,
   }
 }
 
@@ -79,25 +59,19 @@ type Props = {
 }
 
 export const ProfileForm: FC<Props> = ({ data }) => {
-  const customerService = new CustomerService(data)
-  const { toast } = useToast()
+  const customerHelper = new CustomerHelper(data)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const form = useForm<ProfileFormValues>({
+  const form = useForm<ProfileFormFields>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues: getInitialProfileData(),
+    defaultValues: initialProfileData(data),
     mode: 'onChange',
   })
-
   const watchedAvatarUrl = form.watch('avatarUrl')
-  const [avatarPreview, setAvatarPreview] = useState(watchedAvatarUrl || customerService.avatarUrl)
+  const [avatarPreview, setAvatarPreview] = useState(watchedAvatarUrl || customerHelper.avatarUrl)
 
-  useEffect(() => {
-    const initialData = getInitialProfileData()
-    form.reset(initialData)
-    setAvatarPreview(initialData.avatarUrl || defaultAvatar)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // Run once on mount
+  // useEffect(() => {
+  //   form.reset(initialProfileData(data))
+  // }, [])
 
   useEffect(() => {
     if (
@@ -106,21 +80,15 @@ export const ProfileForm: FC<Props> = ({ data }) => {
     ) {
       setAvatarPreview(watchedAvatarUrl)
     } else if (!watchedAvatarUrl) {
-      setAvatarPreview(defaultAvatar)
+      setAvatarPreview(DEFAULT_AVATAR)
     }
-    // If it's an invalid URL, zod validation will handle the message, preview might show broken or default.
   }, [watchedAvatarUrl])
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        // 2MB limit
-        toast({
-          variant: 'destructive',
-          title: 'File too large',
-          description: 'Avatar image must be less than 2MB.',
-        })
+        toast.success('Avatar image must be less than 2MB.')
         return
       }
       const reader = new FileReader()
@@ -133,22 +101,13 @@ export const ProfileForm: FC<Props> = ({ data }) => {
     }
   }
 
-  const onSubmit = (data: ProfileFormValues) => {
+  const onSubmit = (data: ProfileFormFields) => {
     localStorage.setItem('userProfile', JSON.stringify(data))
-    toast({
-      title: 'Profile Updated',
-      description: 'Your profile information has been successfully saved.',
-    })
-    form.reset(data) // Reset form with new saved values to clear dirty state
+    toast.success('Your profile information has been successfully saved.')
+    form.reset(data)
   }
 
-  const getInitials = (firstName?: string, lastName?: string) => {
-    const first = firstName?.[0] || ''
-    const last = lastName?.[0] || ''
-    return (
-      (first + last).toUpperCase() || <UserCircle className="h-full w-full text-muted-foreground" />
-    )
-  }
+  const { primaryAddress } = customerHelper.get()
 
   return (
     <Form {...form}>
@@ -158,7 +117,7 @@ export const ProfileForm: FC<Props> = ({ data }) => {
           <Avatar className="h-32 w-32 border-2 border-primary/30 shadow-md">
             <AvatarImage src={avatarPreview} alt="User Avatar" data-ai-hint="profile avatar" />
             <AvatarFallback className="text-4xl bg-secondary">
-              {getInitials(form.watch('firstName'), form.watch('lastName'))}
+              {getFallbackAvatar(form.watch('firstName'), form.watch('lastName'))}
             </AvatarFallback>
           </Avatar>
           <input
@@ -192,10 +151,47 @@ export const ProfileForm: FC<Props> = ({ data }) => {
         <Card>
           <CardHeader>
             <CardTitle>Personal Details</CardTitle>
-            <CardDescription>Update your first name, last name, and email.</CardDescription>
+            <CardDescription>Update your first name, last name, and personal phone number.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address (Read-only)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        {...field}
+                        readOnly
+                        className="bg-muted/50 cursor-not-allowed"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username (Read-only)</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        readOnly
+                        className="bg-muted/50 cursor-not-allowed"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormField
                 control={form.control}
                 name="firstName"
@@ -222,102 +218,53 @@ export const ProfileForm: FC<Props> = ({ data }) => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input type="phone" placeholder="123123123" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email Address (Read-only)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="alex.zenith@example.com"
-                      {...field}
-                      readOnly
-                      className="bg-muted/50 cursor-not-allowed"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </CardContent>
         </Card>
 
         {/* Shipping Address Section */}
         <Card>
-          <CardHeader>
-            <CardTitle>Shipping Address</CardTitle>
-            <CardDescription>Update your primary shipping address.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Street Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="123 Innovation Drive" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>City</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Techville" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="postalCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Postal Code</FormLabel>
-                    <FormControl>
-                      <Input placeholder="T3CH1" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="country"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Country</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a country" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="USA">United States</SelectItem>
-                        <SelectItem value="Canada">Canada</SelectItem>
-                        <SelectItem value="UK">United Kingdom</SelectItem>
-                        <SelectItem value="Germany">Germany</SelectItem>
-                        <SelectItem value="France">France</SelectItem>
-                        <SelectItem value="Australia">Australia</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Primary Shipping Address</CardTitle>
+              <CardDescription>This is your default address for checkouts.</CardDescription>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/profile/addresses">
+                <PlusCircle className="mr-2 h-4 w-4" /> Manage Addresses
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm text-muted-foreground p-6 border-t">
+            {primaryAddress ? (
+              <>
+                <p className="font-medium text-foreground">
+                  {primaryAddress.addressLine1}
+                </p>
+                <p className="font-medium text-foreground">
+                  {primaryAddress.addressLine2}
+                </p>
+                <p>
+                  {primaryAddress.city && ','} {primaryAddress.zipCode}
+                </p>
+                <p>{primaryAddress.country}</p>
+              </>
+            ) : (
+              <p className="font-medium text-foreground">No address set</p>
+            )}
           </CardContent>
         </Card>
 
@@ -327,9 +274,17 @@ export const ProfileForm: FC<Props> = ({ data }) => {
           className="w-full md:w-auto"
           disabled={!form.formState.isDirty || !form.formState.isValid}
         >
-          Save Profile Changes
+          Save Personal Details
         </Button>
       </form>
     </Form>
+  )
+}
+
+const getFallbackAvatar = (firstName?: string, lastName?: string) => {
+  const first = firstName?.[0] || ''
+  const last = lastName?.[0] || ''
+  return (
+    (first + last).toUpperCase() || <UserCircle className="h-full w-full text-muted-foreground" />
   )
 }

@@ -1,5 +1,11 @@
 import { requestAllCategories } from './categories'
-import { requestCreateCustomerProfileIfNotExist, fetchCustomerProfile } from './customers'
+import {
+  requestCreateCustomerProfileIfNotExist,
+  fetchCustomerProfile,
+  requestCreateCustomerAddress,
+  requestSetCustomerPrimaryAddress,
+  requestDeleteCustomerAddress
+} from './customers'
 import {
   requestProductBySlug,
   requestFeaturedProducts,
@@ -15,4 +21,7 @@ export {
   requestFeaturedProducts,
   requestNewProducts,
   queryProducts,
+  requestCreateCustomerAddress,
+  requestSetCustomerPrimaryAddress,
+  requestDeleteCustomerAddress
 }

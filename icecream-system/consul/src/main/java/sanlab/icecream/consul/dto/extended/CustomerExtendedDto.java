@@ -15,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerExtendedDto extends CustomerDto {
+    private AddressDto primaryAddress;
     private List<ImageDto> media;
     private List<AddressDto> addresses;
 }

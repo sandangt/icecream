@@ -27,6 +27,12 @@ services:
       POSTGRES_MULTIPLE_DATABASES: ${POSTGRESQL_CONSUL_DB},${POSTGRESQL_ECHO_DB},${POSTGRESQL_MEMOIR_DB},${POSTGRESQL_IDENTITY_DB}
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER} -d postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   redis:
     container_name: icecream-redis
@@ -58,6 +64,9 @@ services:
       KC_DB_URL: jdbc:postgresql://postgresql:5432/${POSTGRESQL_IDENTITY_DB}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    depends_on:
+      postgresql:
+        condition: service_healthy
     volumes:
       - ../identity/data/import:/opt/keycloak/data/import
       - ../identity/themes:/opt/keycloak/themes

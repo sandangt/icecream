@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { CartItem, ProductExtended } from '@/types'
+import { CartItem, ProductExtended } from '@/models'
 
 type State = {
   productMap: Map<string, CartItem>

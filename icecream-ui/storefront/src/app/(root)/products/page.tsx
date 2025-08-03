@@ -1,7 +1,8 @@
 import { FC } from 'react'
 
 import { queryProducts } from '@/repositories/consul'
-import { ProductService } from '@/services'
+import { ProductHelper } from '@/lib/helpers'
+
 import { PaginationControls } from './_components'
 import { ProductCard } from '../_components'
 
@@ -20,7 +21,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
     pagination: { limit: size, offset: page - 1 },
     sorting: { field: 'createdAt', order: 'DESC' },
   })
-  const paginatedProducts = data?.map(item => new ProductService(item)).filter(item => !item.isEmpty()).map(item => item.get())
+  const paginatedProducts = data?.map(item => new ProductHelper(item)).filter(item => !item.isEmpty()).map(item => item.get())
   return (
     <div className="space-y-8">
       <div className="text-center">

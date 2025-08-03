@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { type FC } from 'react'
 
 import { cn, makeStorageUrl } from '@/lib/utils'
-import { CategoryExtended, Product, ProductExtended } from '@/types'
+import { CategoryExtended, Product, ProductExtended } from '@/models'
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { ProductService } from '@/services'
 
 type CategoryCardProps = {
   data: CategoryExtended

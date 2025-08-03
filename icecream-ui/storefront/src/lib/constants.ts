@@ -1,5 +1,3 @@
-import { UNAUTHORIZED } from "@/exceptions"
-
 export const SITE_NAME = 'IceCream Shop'
 export const LOGO_NAME = 'Icecream'
 export const SITE_DESCRIPTION = 'Modern E-Commerce Platform'

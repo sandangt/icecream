@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sanlab.icecream.consul.dto.core.StockDto;
 import sanlab.icecream.consul.dto.extended.StockExtendedDto;
-import sanlab.icecream.consul.mapper.IStockMapper;
+import sanlab.icecream.consul.mapper.StockMapper;
 import sanlab.icecream.consul.model.Stock;
-import sanlab.icecream.consul.repository.crud.IStockRepository;
+import sanlab.icecream.consul.repository.crud.StockRepository;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
@@ -24,9 +24,9 @@ import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 @RequiredArgsConstructor
 public class StockService {
 
-    private final IStockRepository stockRepository;
+    private final StockRepository stockRepository;
 
-    private final IStockMapper stockMapper;
+    private final StockMapper stockMapper;
 
     public CollectionQueryResponse<StockExtendedDto> getAll(Pageable pageable) {
         Page<Stock> paginatedStocks = stockRepository.findAll(pageable);

@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { auth, requestSSOSignOut, signIn, signOut } from '@/repositories/identity'
-import { isLoggedIn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +12,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ROUTES } from '@/lib/constants'
+import { SessionHelper } from '@/lib/helpers'
+
 import { CartDropdown } from './cart-dropdown'
 
 export const AuthSection = async () => {
   const session = await auth()
-  return <>{isLoggedIn(session) ? <LoggedIn /> : <Anonymous />}</>
+  const sessionHelper = new SessionHelper(session)
+  return <>{sessionHelper.isLoggedIn() ? <LoggedIn /> : <Anonymous />}</>
 }
 
 const Anonymous = () => (

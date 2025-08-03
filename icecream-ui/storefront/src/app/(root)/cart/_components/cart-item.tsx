@@ -7,9 +7,9 @@ import { FC } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ProductService } from '@/services'
-import { ProductExtended } from '@/types'
+import { ProductExtended } from '@/models'
 import { useCartStore } from '@/hooks/states'
+import { ProductHelper } from '@/lib/helpers'
 
 type Props = {
   item: ProductExtended
@@ -20,7 +20,7 @@ export const CartItem: FC<Props> = ({ item, quantity }) => {
   const addToCart = useCartStore((state) => state.addToCart)
   const removeFromCart = useCartStore((state) => state.removeFromCart)
   const deleteItem = useCartStore((state) => state.deleteItem)
-  const productService = new ProductService(item)
+  const productService = new ProductHelper(item)
 
   return (
     <div className="flex items-center gap-4 p-4 border-b last:border-b-0 hover:bg-secondary/30 transition-colors rounded-md">

@@ -4,16 +4,16 @@ import { type FC } from 'react'
 
 import { requestFeaturedProducts, requestNewProducts } from '@/repositories/consul'
 import { Button } from '@/components/ui/button'
-import { ProductExtended } from '@/types'
+import { ProductExtended } from '@/models'
 import { ProductCard } from './_components'
 import { ROUTES, SITE_NAME } from '@/lib/constants'
-import { ProductService } from '@/services'
+import { ProductHelper } from '@/lib/helpers'
 
 const Page = async () => {
-  const newProducts = (await requestNewProducts()).map(item => new ProductService(item))
+  const newProducts = (await requestNewProducts()).map(item => new ProductHelper(item))
     .filter(item => !item.isEmpty())
     .map(item => item.get())
-  const featuredProducts = (await requestFeaturedProducts()).map(item => new ProductService(item))
+  const featuredProducts = (await requestFeaturedProducts()).map(item => new ProductHelper(item))
     .filter(item => !item.isEmpty())
     .map(item => item.get())
 
