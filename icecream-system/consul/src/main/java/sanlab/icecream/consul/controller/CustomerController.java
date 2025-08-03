@@ -1,6 +1,8 @@
 package sanlab.icecream.consul.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,9 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.dto.core.AddressDto;
 import sanlab.icecream.consul.dto.core.CustomerDto;
+import sanlab.icecream.consul.dto.core.ImageDto;
 import sanlab.icecream.consul.dto.extended.CustomerExtendedDto;
 import sanlab.icecream.consul.exception.HttpBadRequestException;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
@@ -58,7 +63,7 @@ public class CustomerController {
     public ResponseEntity<CustomerExtendedDto> createCustomerProfile() {
         try {
             var result = customerService.createIfNotExist();
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -74,7 +79,7 @@ public class CustomerController {
         try {
             var userDetails = SecurityContextUtils.getRegisteredUserInfo();
             var result = customerService.update(UUID.fromString(userDetails.getSub()), payload);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -91,7 +96,7 @@ public class CustomerController {
         try {
             var userDetails = SecurityContextUtils.getRegisteredUserInfo();
             var result = customerService.addAddress(UUID.fromString(userDetails.getSub()), payload);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -109,7 +114,7 @@ public class CustomerController {
             var userDetails = SecurityContextUtils.getRegisteredUserInfo();
             payload.setId(UUID.fromString(addressId));
             var result = customerService.updateAddress(UUID.fromString(userDetails.getSub()), payload);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.accepted().body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -127,7 +132,7 @@ public class CustomerController {
             var userDetails = SecurityContextUtils.getRegisteredUserInfo();
             var result = customerService.deleteAddress(
                 UUID.fromString(userDetails.getSub()), UUID.fromString(addressId));
-            return ResponseEntity.ok(result);
+            return ResponseEntity.accepted().body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -145,7 +150,7 @@ public class CustomerController {
             var userDetails = SecurityContextUtils.getRegisteredUserInfo();
             customerService.setPrimaryAddress(
                 UUID.fromString(userDetails.getSub()), UUID.fromString(addressId));
-            return ResponseEntity.ok().build();
+            return ResponseEntity.accepted().build();
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -154,6 +159,21 @@ public class CustomerController {
                 case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
+        }
+    }
+
+    @PostMapping("/avatars")
+    public ResponseEntity<ImageDto> uploadAvatar(@RequestParam("file") MultipartFile avatarFile) {
+        try {
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = customerService.uploadAvatar(UUID.fromString(userDetails.getSub()), avatarFile);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+        } catch (IcRuntimeException ex) {
+            var error = ex.getError();
+            if (FAIL_TO_PERSIST_DATA.equals(error)) {
+                throw new HttpServiceUnavailableException(ex);
+            }
+            throw new HttpInternalServerErrorException(ex);
         }
     }
 

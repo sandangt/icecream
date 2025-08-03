@@ -43,5 +43,4 @@ export class SessionHelper {
     }
     return this.__session.data
   }
-
 }

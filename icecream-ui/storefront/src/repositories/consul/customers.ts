@@ -42,16 +42,19 @@ export const fetchCustomerProfile = async (session: Session): Promise<CustomerEx
   }
 }
 
-export const requestCreateCustomerAddress = async (session: Session, payload: Address): Promise<CustomerExtended> => {
+export const requestCreateCustomerAddress = async (
+  session: Session,
+  payload: Address,
+): Promise<CustomerExtended> => {
   const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'addresses'])
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
     throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
@@ -70,14 +73,17 @@ export const requestSetCustomerPrimaryAddress = (session: Session, primaryId: st
   })
 }
 
-export const requestDeleteCustomerAddress = async (session: Session, id: string): Promise<CustomerExtended> => {
+export const requestDeleteCustomerAddress = async (
+  session: Session,
+  id: string,
+): Promise<CustomerExtended> => {
   const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'addresses', id])
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`,
     },
-    method: 'DELETE'
+    method: 'DELETE',
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
     throw new IcRuntimeException(UNAUTHORIZED_REQUEST)

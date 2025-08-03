@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.dto.core.AddressDto;
 import sanlab.icecream.consul.dto.core.CustomerDto;
+import sanlab.icecream.consul.dto.core.ImageDto;
 import sanlab.icecream.consul.dto.extended.CustomerExtendedDto;
 import sanlab.icecream.consul.mapper.AddressMapper;
 import sanlab.icecream.consul.mapper.CustomerMapper;
@@ -39,6 +41,7 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
+    private final ImageService imageService;
 
     @Transactional(readOnly = true)
     public CollectionQueryResponse<CustomerExtendedDto> getAll(Pageable pageable) {
@@ -168,6 +171,10 @@ public class CustomerService {
         } catch (Exception ex) {
             throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer & address");
         }
+    }
+
+    public ImageDto uploadAvatar(UUID id, MultipartFile avatarFile) {
+        return imageService.upsertCustomerAvatar(id, avatarFile);
     }
 
 }

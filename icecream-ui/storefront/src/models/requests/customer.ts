@@ -5,6 +5,4 @@ export type UpdateProfileRequest = {
   phone?: string
 }
 
-export type UpdateProfileAvatarRequest = {
-
-}
+export type UpdateProfileAvatarRequest = {}

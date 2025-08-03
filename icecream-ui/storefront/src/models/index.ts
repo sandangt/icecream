@@ -31,5 +31,5 @@ export {
   CustomerExtended,
   RequestAllParams,
   RequestAllResult,
-  UpdateProfileRequest
+  UpdateProfileRequest,
 }

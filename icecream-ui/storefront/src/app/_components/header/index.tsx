@@ -19,7 +19,10 @@ export const Header = () => (
 )
 
 const HomeSection = () => (
-  <Link href={ROUTES.HOME} className="text-foreground hover:text-primary transition-colors font-medium">
+  <Link
+    href={ROUTES.HOME}
+    className="text-foreground hover:text-primary transition-colors font-medium"
+  >
     Home
   </Link>
 )

@@ -18,7 +18,11 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
 
 import { Badge } from '@/components/ui/badge'
-import { requestCreateCustomerAddress, requestSetCustomerPrimaryAddress, requestDeleteCustomerAddress } from '@/repositories/consul'
+import {
+  requestCreateCustomerAddress,
+  requestSetCustomerPrimaryAddress,
+  requestDeleteCustomerAddress,
+} from '@/repositories/consul'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { AddressForm } from './address-form'
 
@@ -27,35 +31,37 @@ type Props = {
 }
 
 export const ManageAddressPage: FC<Props> = ({ data }) => {
-
   let customerHelper = new CustomerHelper(data)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingAddress, setEditingAddress] = useState<Address | null>(null)
   const [viewAddresses, setViewAddresses] = useState<Address[]>(customerHelper.addresses)
   const { mutate: createAddressMutate } = useMutation({
-    mutationFn: ({session, payload}: {session: Session, payload: Address}) => requestCreateCustomerAddress(session, payload),
+    mutationFn: ({ session, payload }: { session: Session; payload: Address }) =>
+      requestCreateCustomerAddress(session, payload),
     onSuccess: (data) => {
       customerHelper = new CustomerHelper(data)
       setViewAddresses(customerHelper.addresses)
       setIsFormOpen(false)
       setEditingAddress(null)
       toast.success('Your address has been successfully saved.')
-    }
+    },
   })
   const { mutate: setPrimaryAddressMutate } = useMutation({
-    mutationFn: async ({session, primaryId}: {session: Session, primaryId: string}) => requestSetCustomerPrimaryAddress(session, primaryId),
-    onSuccess: (_, {primaryId}) => {
+    mutationFn: async ({ session, primaryId }: { session: Session; primaryId: string }) =>
+      requestSetCustomerPrimaryAddress(session, primaryId),
+    onSuccess: (_, { primaryId }) => {
       setViewAddresses((prev) => prev.map((a) => ({ ...a, isPrimary: a.id === primaryId })))
       toast.success('Your primary shipping address has been changed.')
-    }
+    },
   })
   const { mutate: deleteAddressMutate } = useMutation({
-    mutationFn: async({session, id}: {session: Session, id: string}) => requestDeleteCustomerAddress(session, id),
+    mutationFn: async ({ session, id }: { session: Session; id: string }) =>
+      requestDeleteCustomerAddress(session, id),
     onSuccess: (data) => {
       customerHelper = new CustomerHelper(data)
       setViewAddresses(customerHelper.addresses)
       toast.success('The address has been removed.')
-    }
+    },
   })
   const session = useSession()
   const sessionHelper = new SessionHelper(session)
@@ -64,9 +70,11 @@ export const ManageAddressPage: FC<Props> = ({ data }) => {
     setEditingAddress(null)
     setIsFormOpen(true)
   }
-  const handleSaveAddress = (address: Address) => createAddressMutate({session: sessionHelper.data(), payload: address})
-  const handleSetPrimary = (id: string) => setPrimaryAddressMutate({session: sessionHelper.data(), primaryId: id})
-  const handleDelete = (id: string) => deleteAddressMutate({session: sessionHelper.data(), id})
+  const handleSaveAddress = (address: Address) =>
+    createAddressMutate({ session: sessionHelper.data(), payload: address })
+  const handleSetPrimary = (id: string) =>
+    setPrimaryAddressMutate({ session: sessionHelper.data(), primaryId: id })
+  const handleDelete = (id: string) => deleteAddressMutate({ session: sessionHelper.data(), id })
   const handleEdit = (address: Address) => {
     setEditingAddress(address)
     setIsFormOpen(true)
@@ -153,14 +161,20 @@ type AddressCardProps = {
   onSetPrimary: (id: string) => void
 }
 
-const AddressCard: FC<AddressCardProps> = ({ address, onEdit, onDelete, onSetPrimary, isPrimary }) => {
+const AddressCard: FC<AddressCardProps> = ({
+  address,
+  onEdit,
+  onDelete,
+  onSetPrimary,
+  isPrimary,
+}) => {
   return (
-    <Card
-      className={`transition-all ${isPrimary ? 'border-primary shadow-lg' : 'border-border'}`}
-    >
+    <Card className={`transition-all ${isPrimary ? 'border-primary shadow-lg' : 'border-border'}`}>
       <CardHeader>
         <div className="flex justify-between items-start">
-          <CardTitle className="text-lg">{address.addressLine1} {address.addressLine2}</CardTitle>
+          <CardTitle className="text-lg">
+            {address.addressLine1} {address.addressLine2}
+          </CardTitle>
           {isPrimary && (
             <Badge variant="default" className="bg-green-600 hover:bg-green-700">
               <CheckCircle className="mr-1.5 h-4 w-4" /> Primary

@@ -3,9 +3,8 @@
 import { useRef, useState, useEffect, FC, ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PlusCircle, UploadCloud, UserCircle } from 'lucide-react'
+import { UserCircle } from 'lucide-react'
 import * as z from 'zod'
-import Link from 'next/link'
 import { toast } from 'react-toastify'
 
 import { Button } from '@/components/ui/button'
@@ -18,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CustomerExtended } from '@/models'
 import { CustomerHelper } from '@/lib/helpers'
@@ -112,46 +110,12 @@ export const ProfileForm: FC<Props> = ({ data }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-        {/* Avatar Section */}
-        <div className="flex flex-col items-center space-y-4">
-          <Avatar className="h-32 w-32 border-2 border-primary/30 shadow-md">
-            <AvatarImage src={avatarPreview} alt="User Avatar" data-ai-hint="profile avatar" />
-            <AvatarFallback className="text-4xl bg-secondary">
-              {getFallbackAvatar(form.watch('firstName'), form.watch('lastName'))}
-            </AvatarFallback>
-          </Avatar>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleAvatarChange}
-            accept="image/png, image/jpeg, image/gif, image/webp"
-            className="hidden"
-          />
-          <div className="flex space-x-3">
-            <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
-              <UploadCloud className="mr-2 h-4 w-4" /> Upload Image
-            </Button>
-          </div>
-          <FormField
-            control={form.control}
-            name="avatarUrl"
-            render={({ field }) => (
-              <FormItem className="w-full max-w-md">
-                <FormLabel>Or paste image URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://example.com/avatar.png" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Personal Details Section */}
         <Card>
           <CardHeader>
             <CardTitle>Personal Details</CardTitle>
-            <CardDescription>Update your first name, last name, and personal phone number.</CardDescription>
+            <CardDescription>
+              Update your first name, last name, and personal phone number.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -180,11 +144,7 @@ export const ProfileForm: FC<Props> = ({ data }) => {
                   <FormItem>
                     <FormLabel>Username (Read-only)</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        readOnly
-                        className="bg-muted/50 cursor-not-allowed"
-                      />
+                      <Input {...field} readOnly className="bg-muted/50 cursor-not-allowed" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -232,50 +192,17 @@ export const ProfileForm: FC<Props> = ({ data }) => {
                 )}
               />
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Shipping Address Section */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Primary Shipping Address</CardTitle>
-              <CardDescription>This is your default address for checkouts.</CardDescription>
-            </div>
-            <Button asChild variant="outline">
-              <Link href="/profile/addresses">
-                <PlusCircle className="mr-2 h-4 w-4" /> Manage Addresses
-              </Link>
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full md:w-auto"
+              disabled={!form.formState.isDirty || !form.formState.isValid}
+            >
+              Save Personal Details
             </Button>
-          </CardHeader>
-          <CardContent className="space-y-4 text-sm text-muted-foreground p-6 border-t">
-            {primaryAddress ? (
-              <>
-                <p className="font-medium text-foreground">
-                  {primaryAddress.addressLine1}
-                </p>
-                <p className="font-medium text-foreground">
-                  {primaryAddress.addressLine2}
-                </p>
-                <p>
-                  {primaryAddress.city && ','} {primaryAddress.zipCode}
-                </p>
-                <p>{primaryAddress.country}</p>
-              </>
-            ) : (
-              <p className="font-medium text-foreground">No address set</p>
-            )}
           </CardContent>
         </Card>
-
-        <Button
-          type="submit"
-          size="lg"
-          className="w-full md:w-auto"
-          disabled={!form.formState.isDirty || !form.formState.isValid}
-        >
-          Save Personal Details
-        </Button>
       </form>
     </Form>
   )

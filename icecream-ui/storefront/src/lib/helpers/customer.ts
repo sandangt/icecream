@@ -12,9 +12,9 @@ export class CustomerHelper {
     this.__avatar = this.__customer?.media?.find((item) => item.type === ImageType.AVATAR)
     if (!!this.__customer?.primaryAddress) {
       this.__customer.primaryAddress.isPrimary = true
-      this.__customer.addresses = this.__customer.addresses.map(item => ({
+      this.__customer.addresses = this.__customer.addresses.map((item) => ({
         ...item,
-        isPrimary: this.__customer?.primaryAddress.id === item.id
+        isPrimary: this.__customer?.primaryAddress.id === item.id,
       }))
     }
   }
@@ -65,5 +65,4 @@ export class CustomerHelper {
   get username(): string {
     return this.__customer?.username ?? ''
   }
-
 }

@@ -125,8 +125,8 @@ export const DetailsProductCard: FC<Props> = ({ data }) => {
           </CardHeader>
           <CardContent className="p-6 md:p-10 flex flex-col justify-center">
             <div className="flex flex-row flex-wrap gap-2">
-              {categories.map(({ name }) => (
-                <Badge variant="secondary" className="w-fit mb-2">
+              {categories.map(({ id, name }) => (
+                <Badge variant="secondary" className="w-fit mb-2" key={id}>
                   {name}
                 </Badge>
               ))}

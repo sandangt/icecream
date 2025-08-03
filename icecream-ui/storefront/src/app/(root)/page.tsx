@@ -10,24 +10,20 @@ import { ROUTES, SITE_NAME } from '@/lib/constants'
 import { ProductHelper } from '@/lib/helpers'
 
 const Page = async () => {
-  const newProducts = (await requestNewProducts()).map(item => new ProductHelper(item))
-    .filter(item => !item.isEmpty())
-    .map(item => item.get())
-  const featuredProducts = (await requestFeaturedProducts()).map(item => new ProductHelper(item))
-    .filter(item => !item.isEmpty())
-    .map(item => item.get())
+  const newProducts = (await requestNewProducts())
+    .map((item) => new ProductHelper(item))
+    .filter((item) => !item.isEmpty())
+    .map((item) => item.get())
+  const featuredProducts = (await requestFeaturedProducts())
+    .map((item) => new ProductHelper(item))
+    .filter((item) => !item.isEmpty())
+    .map((item) => item.get())
 
   return (
     <div className="space-y-16">
       <BannerSection />
-      <ProductListSection
-        sectionTitle="Popular Products"
-        data={featuredProducts}
-      />
-      <ProductListSection
-        sectionTitle="New Arrivals"
-        data={newProducts}
-      />
+      <ProductListSection sectionTitle="Popular Products" data={featuredProducts} />
+      <ProductListSection sectionTitle="New Arrivals" data={newProducts} />
     </div>
   )
 }

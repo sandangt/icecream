@@ -7,7 +7,7 @@ import { ROUTES } from '@/lib/constants'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { Session } from '@/models'
 
-import { ProfileForm } from './_components'
+import { AvatarSection, PrimaryAddressSection, ProfileForm } from './_components'
 
 const Page = async () => {
   const session = await auth()
@@ -37,7 +37,11 @@ const Page = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ProfileForm data={customerHelper.get()} />
+          <div className="space-y-10">
+            <AvatarSection data={customerHelper.get()} />
+            <PrimaryAddressSection data={customerHelper.get()} />
+            <ProfileForm data={customerHelper.get()} />
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -5,6 +5,6 @@ export type RequestAllParams = {
   }
   sorting: {
     field: string
-    order: 'ASC' | 'DESC'
+    order: string // 'ASC' | 'DESC'
   }
 }

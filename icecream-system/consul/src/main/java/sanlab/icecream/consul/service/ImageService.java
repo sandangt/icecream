@@ -65,6 +65,13 @@ public class ImageService {
         return upsertImage(filePath, img, "Avatar of category with id %s".formatted(categoryId.toString()));
     }
 
+    public ImageDto upsertCustomerAvatar(UUID userId, MultipartFile img) {
+        String fileName = String.join(
+            ".", AVATAR_PIC_NAME, FilenameUtils.getExtension(img.getOriginalFilename()));
+        Path filePath = Path.of(StoragePath.CUSTOMER, userId.toString(), fileName);
+        return upsertImage(filePath, img, "Avatar of user with id %s".formatted(userId.toString()));
+    }
+
     @Transactional
     public List<ImageDto> bulkUpsertProductMedia(UUID productId, MultipartFile[] media) {
         List<ImageDto> result = new ArrayList<>();

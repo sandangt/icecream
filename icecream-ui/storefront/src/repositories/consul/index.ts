@@ -4,7 +4,7 @@ import {
   fetchCustomerProfile,
   requestCreateCustomerAddress,
   requestSetCustomerPrimaryAddress,
-  requestDeleteCustomerAddress
+  requestDeleteCustomerAddress,
 } from './customers'
 import {
   requestProductBySlug,
@@ -23,5 +23,5 @@ export {
   queryProducts,
   requestCreateCustomerAddress,
   requestSetCustomerPrimaryAddress,
-  requestDeleteCustomerAddress
+  requestDeleteCustomerAddress,
 }
