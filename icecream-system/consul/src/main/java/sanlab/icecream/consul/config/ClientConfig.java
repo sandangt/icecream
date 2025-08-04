@@ -33,11 +33,19 @@ public class ClientConfig {
     @Value("${app.chronos.rsocket.host}")
     private String chronosRsockHost;
 
+    @Value("${app.identity.url}")
+    private String identityUrl;
+
     private static final String APPLICATION_CBOR = "application/cbor";
 
     @Bean
     public RestClient restClient() {
         return RestClient.create();
+    }
+
+    @Bean
+    public RestClient identityClient() {
+        return RestClient.create(identityUrl);
     }
 
     @Bean
@@ -48,21 +56,21 @@ public class ClientConfig {
             .build();
     }
 
-    @Bean("echoRsockClient")
+    @Bean
     public RSocketRequester echoRsockClient(RSocketRequester.Builder builder) {
         return builder
             .dataMimeType(MimeType.valueOf(APPLICATION_CBOR))
             .tcp(echoRsockHost, Integer.parseInt(echoRsockPort));
     }
 
-    @Bean("memoirRsockClient")
+    @Bean
     public RSocketRequester memoirRsockClient(RSocketRequester.Builder builder) {
         return builder
             .dataMimeType(MimeType.valueOf(APPLICATION_CBOR))
             .tcp(memoirRsockHost, Integer.parseInt(memoirRsockPort));
     }
 
-    @Bean("chronosRsockClient")
+    @Bean
     public RSocketRequester chronosRsockClient(RSocketRequester.Builder builder) {
         return builder
             .dataMimeType(MimeType.valueOf(APPLICATION_CBOR))

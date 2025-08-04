@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { CartItem, ProductExtended } from '@/types'
+import { CartItem, ProductExtended } from '@/models'
 
 type State = {
   productMap: Map<string, CartItem>
@@ -29,24 +29,24 @@ export const useCartStore = create<State & Action>()(
   immer((set) => ({
     ...EMPTY_CART_STATE,
 
-    addToCart: (item: ProductExtended) => set((state) => {
+    addToCart: (item: ProductExtended) =>
+      set((state) => {
+        const cartItem = state.productMap.get(item.id)
 
-      const cartItem = state.productMap.get(item.id)
+        if (!cartItem) {
+          state.productMap.set(item.id, {
+            product: item,
+            quantity: 1,
+            id: '',
+          })
+        } else {
+          cartItem.quantity += 1
+        }
 
-      if (!cartItem) {
-        state.productMap.set(item.id, {
-          product: item,
-          quantity: 1,
-          id: ''
-        })
-      } else {
-        cartItem.quantity += 1
-      }
-
-      state.totalItems += 1
-      state.totalCost += item.price
-      state.isEmpty = false
-    }),
+        state.totalItems += 1
+        state.totalCost += item.price
+        state.isEmpty = false
+      }),
 
     removeFromCart: (item: ProductExtended) => {
       set((state) => {
@@ -79,6 +79,6 @@ export const useCartStore = create<State & Action>()(
           state.isEmpty = true
         }
       })
-    }
+    },
   })),
 )

@@ -1,31 +1,37 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, ShoppingBag, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { CartItem } from "./cart-item";
-import { useCartStore } from "@/hooks/states";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { ArrowRight, ShoppingBag, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import { CartItem } from './cart-item'
+import { useCartStore } from '@/hooks/states'
 
 export const CartPage = () => {
   const productMap = useCartStore((state) => state.productMap)
   const totalItems = useCartStore((state) => state.totalItems)
   const totalCost = useCartStore((state) => state.totalCost)
   const resetCart = useCartStore((state) => state.resetCart)
-  const shippingCost = totalItems > 0 ? 5.00 : 0;
-  const grandTotal = totalCost + shippingCost;
+  const shippingCost = totalItems > 0 ? 5.0 : 0
+  const grandTotal = totalCost + shippingCost
 
   if (totalItems === 0) {
     return (
       <div className="text-center py-20">
         <ShoppingBag className="mx-auto h-24 w-24 text-muted-foreground mb-6" />
         <h1 className="text-3xl font-headline font-semibold mb-4">Your Cart is Empty</h1>
-        <p className="text-muted-foreground mb-8">Looks like you haven't added anything to your cart yet.</p>
-        <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+        <p className="text-muted-foreground mb-8">
+          Looks like you haven't added anything to your cart yet.
+        </p>
+        <Button
+          asChild
+          size="lg"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+        >
           <Link href="/products">Start Shopping</Link>
         </Button>
       </div>
-    );
+    )
   }
 
   return (

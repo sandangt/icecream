@@ -5,13 +5,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sanlab.icecream.consul.mapper.ImageMapper;
 import sanlab.icecream.fundamentum.constant.EImageType;
 import sanlab.icecream.fundamentum.constant.StoragePath;
 import sanlab.icecream.consul.dto.core.ImageDto;
-import sanlab.icecream.consul.mapper.IImageMapper;
 import sanlab.icecream.consul.model.Image;
-import sanlab.icecream.consul.repository.crud.IImageRepository;
-import sanlab.icecream.consul.repository.storage.IStorageRepository;
+import sanlab.icecream.consul.repository.crud.ImageRepository;
+import sanlab.icecream.consul.repository.storage.StorageRepository;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.nio.file.Path;
@@ -28,9 +28,9 @@ import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_STORE_IM
 @RequiredArgsConstructor
 public class ImageService {
 
-    private final IImageRepository imageRepository;
-    private final IStorageRepository minIOStorageRepository;
-    private final IImageMapper imageMapper;
+    private final ImageRepository imageRepository;
+    private final StorageRepository minIOStorageRepository;
+    private final ImageMapper imageMapper;
 
     private static final String AVATAR_PIC_NAME = "avatar";
     private static final String MEDIA_PIC_PATTERN = "media-%s";
@@ -63,6 +63,13 @@ public class ImageService {
             ".", AVATAR_PIC_NAME, FilenameUtils.getExtension(img.getOriginalFilename()));
         Path filePath = Path.of(StoragePath.CATEGORY, categoryId.toString(), fileName);
         return upsertImage(filePath, img, "Avatar of category with id %s".formatted(categoryId.toString()));
+    }
+
+    public ImageDto upsertCustomerAvatar(UUID userId, MultipartFile img) {
+        String fileName = String.join(
+            ".", AVATAR_PIC_NAME, FilenameUtils.getExtension(img.getOriginalFilename()));
+        Path filePath = Path.of(StoragePath.CUSTOMER, userId.toString(), fileName);
+        return upsertImage(filePath, img, "Avatar of user with id %s".formatted(userId.toString()));
     }
 
     @Transactional

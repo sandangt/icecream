@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sanlab.icecream.consul.dto.core.FeedbackDto;
 import sanlab.icecream.consul.dto.extended.FeedbackExtendedDto;
-import sanlab.icecream.consul.mapper.IFeedbackMapper;
+import sanlab.icecream.consul.mapper.FeedbackMapper;
 import sanlab.icecream.consul.model.Feedback;
-import sanlab.icecream.consul.repository.crud.IFeedbackRepository;
+import sanlab.icecream.consul.repository.crud.FeedbackRepository;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
@@ -25,9 +25,9 @@ import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 @RequiredArgsConstructor
 public class FeedbackService {
 
-    private final IFeedbackRepository feedbackRepository;
+    private final FeedbackRepository feedbackRepository;
 
-    private final IFeedbackMapper feedbackMapper;
+    private final FeedbackMapper feedbackMapper;
 
     @Transactional(readOnly = true)
     public CollectionQueryResponse<FeedbackExtendedDto> getAll(Pageable pageable) {

@@ -57,7 +57,7 @@ public class IcMultipartFileRequest implements MultipartFile {
     @Override
     public void transferTo(@NotNull File dest) throws IOException, IllegalStateException {
         try (InputStream is = getInputStream();
-             OutputStream os = new FileOutputStream(dest)) {
+            OutputStream os = new FileOutputStream(dest)) {
             is.transferTo(os);
         }
     }

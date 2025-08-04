@@ -3,7 +3,6 @@ package sanlab.icecream.consul.repository.rsocketclient.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Component;
-import sanlab.icecream.consul.repository.rsocketclient.IAuditLogRsockRepository;
 import sanlab.icecream.fundamentum.dto.AuditLogDto;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class AuditLogRsockRepository implements IAuditLogRsockRepository {
+public class AuditLogRsockRepository implements sanlab.icecream.consul.repository.rsocketclient.AuditLogRsockRepository {
 
     private final RSocketRequester memoirRsockClient;
 

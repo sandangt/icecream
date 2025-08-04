@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import { FC } from 'react'
 
@@ -14,13 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { ProductService, SessionService } from '@/services'
-import { ProductExtended } from '@/types'
+import { ProductExtended } from '@/models'
 import { ROUTES } from '@/lib/constants'
 import { useCartStore } from '@/hooks/states'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
+import { Badge } from '@/components/ui/badge'
+import { ProductHelper, SessionHelper } from '@/lib/helpers'
+import { useSession } from 'next-auth/react'
+import { ChevronLeft, ShoppingCart } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   data: ProductExtended
@@ -30,14 +31,14 @@ export const ProductCard: FC<Props> = ({ data }) => {
   const router = useRouter()
   const addToCart = useCartStore((state) => state.addToCart)
   const session = useSession()
-  const sessionService = new SessionService(session)
+  const sessionHelper = new SessionHelper(session)
 
-  const productService = new ProductService(data)
+  const productService = new ProductHelper(data)
   if (productService.isEmpty()) return null
   const { slug, name, description, price } = productService.get()
 
   const handleAddCart = () => {
-    if (!sessionService.isLoggedIn()) {
+    if (!sessionHelper.isLoggedInClient()) {
       router.push(ROUTES.UNAUTHORIZED)
       return
     }
@@ -81,5 +82,73 @@ export const ProductCard: FC<Props> = ({ data }) => {
         </Button>
       </CardFooter>
     </Card>
+  )
+}
+
+export const DetailsProductCard: FC<Props> = ({ data }) => {
+  const router = useRouter()
+  const addToCart = useCartStore((state) => state.addToCart)
+  const session = useSession()
+  const sessionHelper = new SessionHelper(session)
+  const productHelper = new ProductHelper(data)
+
+  const { name, description, price, categories } = productHelper.get()
+
+  const handleAddCart = () => {
+    if (!sessionHelper.isLoggedInClient()) {
+      router.push(ROUTES.UNAUTHORIZED)
+      return
+    }
+    addToCart(productHelper.get())
+    toast.success('Added to cart')
+  }
+
+  return (
+    <>
+      <Button variant="outline" asChild className="mb-6">
+        <Link href={ROUTES.PRODUCTS}>
+          <ChevronLeft className="mr-2 h-4 w-4" /> Back to Products
+        </Link>
+      </Button>
+      <Card className="overflow-hidden shadow-xl text-wrap">
+        <div className="grid md:grid-cols-2 gap-0">
+          <CardHeader className="p-0">
+            <div className="aspect-square relative w-full h-full min-h-[300px] md:min-h-[500px]">
+              <Image
+                src={productHelper.avatarUrl}
+                alt={name}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-l-lg"
+              />
+            </div>
+          </CardHeader>
+          <CardContent className="p-6 md:p-10 flex flex-col justify-center">
+            <div className="flex flex-row flex-wrap gap-2">
+              {categories.map(({ id, name }) => (
+                <Badge variant="secondary" className="w-fit mb-2" key={id}>
+                  {name}
+                </Badge>
+              ))}
+            </div>
+            <CardTitle className="text-3xl lg:text-4xl font-headline font-bold mb-4">
+              {name}
+            </CardTitle>
+            <CardDescription className="text-base text-muted-foreground mb-6 leading-relaxed">
+              {description}
+            </CardDescription>
+            <p className="text-4xl font-semibold text-primary mb-8">${price?.toFixed(2)}</p>
+            <Button
+              size="lg"
+              onClick={handleAddCart}
+              className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground"
+              aria-label={`Add ${name} to cart`}
+            >
+              <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+            </Button>
+          </CardContent>
+        </div>
+      </Card>
+    </>
   )
 }

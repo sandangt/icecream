@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisteredUserInfoDto implements UserDetails{
+public class RegisteredUserInfoDto implements UserDetails {
     private String sub;
     private String emailVerified;
     private String name;

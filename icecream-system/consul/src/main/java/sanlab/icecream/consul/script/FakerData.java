@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.model.Stock;
-import sanlab.icecream.consul.repository.crud.IAddressRepository;
-import sanlab.icecream.consul.repository.crud.ICustomerRepository;
-import sanlab.icecream.consul.repository.crud.IStockRepository;
+import sanlab.icecream.consul.repository.crud.AddressRepository;
+import sanlab.icecream.consul.repository.crud.CustomerRepository;
+import sanlab.icecream.consul.repository.crud.StockRepository;
 import sanlab.icecream.consul.service.ImageService;
 import sanlab.icecream.consul.viewmodel.request.IcMultipartFileRequest;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
@@ -23,9 +23,9 @@ import sanlab.icecream.fundamentum.constant.EProductStatus;
 import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.model.Image;
 import sanlab.icecream.consul.model.Product;
-import sanlab.icecream.consul.repository.crud.ICategoryRepository;
-import sanlab.icecream.consul.repository.crud.IImageRepository;
-import sanlab.icecream.consul.repository.crud.IProductRepository;
+import sanlab.icecream.consul.repository.crud.CategoryRepository;
+import sanlab.icecream.consul.repository.crud.ImageRepository;
+import sanlab.icecream.consul.repository.crud.ProductRepository;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -51,12 +51,12 @@ import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 @RequiredArgsConstructor
 public class FakerData {
 
-    private final IProductRepository productRepository;
-    private final ICategoryRepository categoryRepository;
-    private final IImageRepository imageRepository;
-    private final IAddressRepository addressRepository;
-    private final IStockRepository stockRepository;
-    private final ICustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
+    private final AddressRepository addressRepository;
+    private final StockRepository stockRepository;
+    private final CustomerRepository customerRepository;
 
     private final ImageService imageService;
 

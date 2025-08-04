@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.model.Feedback;
 import sanlab.icecream.consul.model.Product;
-import sanlab.icecream.consul.repository.crud.ICategoryRepository;
-import sanlab.icecream.consul.repository.crud.IFeedbackRepository;
-import sanlab.icecream.consul.repository.crud.IProductRepository;
+import sanlab.icecream.consul.repository.crud.CategoryRepository;
+import sanlab.icecream.consul.repository.crud.FeedbackRepository;
+import sanlab.icecream.consul.repository.crud.ProductRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,11 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class IProductRepositoryTest extends AbstractJpaIntTest {
 
     @Autowired
-    private IProductRepository productRepository;
+    private ProductRepository productRepository;
     @Autowired
-    private ICategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
     @Autowired
-    private IFeedbackRepository feedbackRepository;
+    private FeedbackRepository feedbackRepository;
 
     private static List<Product> productList = Collections.emptyList();
     private static List<Category> categoryList = Collections.emptyList();

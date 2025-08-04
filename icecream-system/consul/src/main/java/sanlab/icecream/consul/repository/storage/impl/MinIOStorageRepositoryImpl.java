@@ -11,7 +11,7 @@ import io.minio.errors.XmlParserException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import sanlab.icecream.consul.repository.storage.IStorageRepository;
+import sanlab.icecream.consul.repository.storage.StorageRepository;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_STORE_IMAGE_FILE;
 
 @Component("minIOStorageRepository")
-public class MinIOStorageRepositoryImpl implements IStorageRepository {
+public class MinIOStorageRepositoryImpl implements StorageRepository {
 
     private final MinioClient minioClient;
     private final String bucketName;

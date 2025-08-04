@@ -2,10 +2,12 @@ package sanlab.icecream.consul.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +51,18 @@ public class Customer extends AbstractAuditEntity {
     )
     @Builder.Default
     private Set<Image> media = new HashSet<>();
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(name = "customer_address",
+        joinColumns = @JoinColumn(name = "customer_id"),
+        inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    @Builder.Default
+    private Set<Address> addresses = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "primary_address_id", referencedColumnName = "id")
+    private Address primaryAddress;
 
     @Override
     public boolean equals(Object o) {

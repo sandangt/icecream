@@ -1,3 +1,3 @@
-import { ProductCard } from './product-card'
+import { ProductCard, DetailsProductCard } from './product-card'
 
-export { ProductCard }
+export { ProductCard, DetailsProductCard }

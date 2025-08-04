@@ -1,15 +1,14 @@
-import { ROUTES } from '@/lib/constants'
-import { isLoggedIn } from '@/lib/utils'
-import { auth } from '@/repositories/identity'
 import { redirect } from 'next/navigation'
+import { ROUTES } from '@/lib/constants'
+import { auth } from '@/repositories/identity'
+import { SessionHelper } from '@/lib/helpers'
 import { CartPage } from './_components'
 
 const Page = async () => {
-    const session = await auth()
-    if (!isLoggedIn(session)) {
-      redirect(ROUTES.UNAUTHORIZED)
-    }
-    return <CartPage />
+  const session = await auth()
+  const sessionHelper = new SessionHelper(session)
+  if (!sessionHelper.isLoggedIn()) redirect(ROUTES.UNAUTHORIZED)
+  return <CartPage />
 }
 
 export default Page
