@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 import sanlab.icecream.consul.dto.core.CustomerDto;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
@@ -23,17 +24,21 @@ public class CustomerExtendRepositoryImpl implements CustomerExtendRepository {
     }
 
     @Override
-    public void updateCustomerInfo(CustomerDto customerDto) {
+    public void updateCustomerInfo(UUID id, CustomerDto customerDto) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Customer> criteriaUpdate = cb.createCriteriaUpdate(Customer.class);
         Root<Customer> root = criteriaUpdate.from(Customer.class);
+        if (StringUtils.isNotBlank(customerDto.getPhone())) {
+            criteriaUpdate.set(root.get("phone"), customerDto.getPhone());
+        }
+        if (StringUtils.isNotBlank(customerDto.getLastName())) {
+            criteriaUpdate.set(root.get("lastName"), customerDto.getLastName());
+        }
+        if (StringUtils.isNotBlank(customerDto.getFirstName())) {
+            criteriaUpdate.set(root.get("firstName"), customerDto.getFirstName());
+        }
         criteriaUpdate
-            .set(root.get("email"), customerDto.getEmail())
-            .set(root.get("username"), customerDto.getUsername())
-            .set(root.get("phone"), customerDto.getPhone())
-            .set(root.get("firstName"), customerDto.getFirstName())
-            .set(root.get("lastName"), customerDto.getLastName())
-            .where(cb.equal(root.get("userId"), customerDto.getUserId()));
+            .where(cb.equal(root.get("userId"), id));
         entityManager.createQuery(criteriaUpdate).executeUpdate();
     }
 

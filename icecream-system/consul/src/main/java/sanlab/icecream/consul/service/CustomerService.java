@@ -101,13 +101,14 @@ public class CustomerService {
 
     @Transactional
     public CustomerExtendedDto update(UUID id, CustomerDto request) {
-        Customer targetCustomer = customerRepository.findFirstByUserId(id)
-            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
         identityRepository.updateUserInfoByUserId(id, customerMapper.dtoToKeycloakUserInfo(request));
         try {
-            Customer sourceCustomer = customerMapper.dtoToEntity(request);
-            copyNotNull(sourceCustomer, targetCustomer);
-            return customerMapper.entityToExtendedDto(customerRepository.save(targetCustomer));
+            customerRepository.updateCustomerInfo(id, request);
+            return customerMapper.entityToExtendedDto(
+                customerRepository
+                    .findFirstByUserId(id)
+                    .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)))
+            );
         } catch (Exception ex) {
             throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
         }

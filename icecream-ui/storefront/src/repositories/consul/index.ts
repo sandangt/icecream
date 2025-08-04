@@ -6,6 +6,7 @@ import {
   requestSetCustomerPrimaryAddress,
   requestDeleteCustomerAddress,
   requestUploadAvatar,
+  requestUpdateCustomerProfile,
 } from './customers'
 import {
   requestProductBySlug,
@@ -26,4 +27,5 @@ export {
   requestSetCustomerPrimaryAddress,
   requestDeleteCustomerAddress,
   requestUploadAvatar,
+  requestUpdateCustomerProfile,
 }

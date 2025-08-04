@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface CustomerExtendRepository {
 
-    void updateCustomerInfo(CustomerDto customer);
+    void updateCustomerInfo(UUID id, CustomerDto customer);
     void setPrimaryAddress(UUID id, UUID addressId);
 
 }

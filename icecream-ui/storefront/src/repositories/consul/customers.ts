@@ -2,7 +2,7 @@ import { IcRuntimeException, UNAUTHORIZED_REQUEST } from '@/exceptions'
 import { API_PATHS, HttpStatusCode, ROUTES } from '@/lib/constants'
 import { generateUrl } from '@/lib/utils'
 import { CONSUL_URL } from '@/settings'
-import { Address, CustomerExtended, Media, Session } from '@/models'
+import { Address, Customer, CustomerExtended, Media, Session, UpdateProfileRequest } from '@/models'
 
 export const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
   const { accessToken } = session
@@ -21,11 +21,10 @@ export const requestCreateCustomerProfileIfNotExist = async (
   accessToken: string,
 ): Promise<CustomerExtended> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  }
   const response = await fetch(url, {
-    headers,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
     method: 'POST',
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
@@ -40,6 +39,23 @@ export const fetchCustomerProfile = async (session: Session): Promise<CustomerEx
   } catch (err) {
     return null
   }
+}
+
+export const requestUpdateCustomerProfile = async (session: Session, payload: UpdateProfileRequest): Promise<CustomerExtended> => {
+  const { accessToken } = session
+  const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'PUT',
+    body: JSON.stringify(payload)
+  })
+  if (response.status === HttpStatusCode.UNAUTHORIZED) {
+    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
+  }
+  return await response.json()
 }
 
 export const requestCreateCustomerAddress = async (
