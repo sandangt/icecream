@@ -2,7 +2,7 @@ import { IcRuntimeException, UNAUTHORIZED_REQUEST } from '@/exceptions'
 import { API_PATHS, HttpStatusCode, ROUTES } from '@/lib/constants'
 import { generateUrl } from '@/lib/utils'
 import { CONSUL_URL } from '@/settings'
-import { Address, CustomerExtended, Session } from '@/models'
+import { Address, CustomerExtended, Media, Session } from '@/models'
 
 export const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
   const { accessToken } = session
@@ -84,6 +84,24 @@ export const requestDeleteCustomerAddress = async (
       Authorization: `Bearer ${accessToken}`,
     },
     method: 'DELETE',
+  })
+  if (response.status === HttpStatusCode.UNAUTHORIZED) {
+    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
+  }
+  return response.json()
+}
+
+export const requestUploadAvatar = async (session: Session, file: File): Promise<Media> => {
+  const formData = new FormData()
+  formData.append('file', file)
+  const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'avatars'])
+  const { accessToken } = session
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    },
+    method: 'POST',
+    body: formData
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
     throw new IcRuntimeException(UNAUTHORIZED_REQUEST)

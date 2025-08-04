@@ -1,9 +1,8 @@
 import Link from 'next/link'
-import { ShoppingCart, User } from 'lucide-react'
 
+import { ROUTES } from '@/lib/constants'
 import { Logo } from './logo'
 import { AuthSection } from './auth-section'
-import { ROUTES } from '@/lib/constants'
 
 export const Header = () => (
   <header className="bg-background/80 backdrop-blur-md sticky top-0 z-50 border-b">

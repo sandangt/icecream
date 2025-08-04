@@ -1,6 +1,16 @@
+server:
+  address: ${CHRONOS_HOST}
+  port: ${CHRONOS_PORT}
+
 spring:
   application:
     name: chronos
   data:
     mongodb:
       database: ${MONGODB_CHRONOS_DB}
+  cloud:
+    stream:
+      bindings:
+        imageDelete-in-0:
+          binder: rabbit
+          destination: consul.image.delete.queue

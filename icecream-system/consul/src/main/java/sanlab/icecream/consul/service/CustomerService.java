@@ -1,6 +1,7 @@
 package sanlab.icecream.consul.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,19 @@ import sanlab.icecream.consul.dto.core.ImageDto;
 import sanlab.icecream.consul.dto.extended.CustomerExtendedDto;
 import sanlab.icecream.consul.mapper.AddressMapper;
 import sanlab.icecream.consul.mapper.CustomerMapper;
+import sanlab.icecream.consul.mapper.ImageMapper;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.repository.crud.AddressRepository;
 import sanlab.icecream.consul.repository.crud.CustomerRepository;
+import sanlab.icecream.consul.repository.queue.ImageQueueRepository;
 import sanlab.icecream.consul.repository.restclient.IdentityRepository;
 import sanlab.icecream.consul.utils.SecurityContextUtils;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
+import sanlab.icecream.fundamentum.constant.EFileHandlingAction;
+import sanlab.icecream.fundamentum.constant.EFileType;
+import sanlab.icecream.fundamentum.dto.FileHandlingDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;
@@ -29,6 +35,7 @@ import java.util.UUID;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.ADDRESS_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
+import static sanlab.icecream.fundamentum.constant.EImageType.AVATAR;
 import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
 import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 
@@ -42,6 +49,8 @@ public class CustomerService {
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
     private final ImageService imageService;
+    private final ImageMapper imageMapper;
+    private final ImageQueueRepository fileHandlingRepository;
 
     @Transactional(readOnly = true)
     public CollectionQueryResponse<CustomerExtendedDto> getAll(Pageable pageable) {
@@ -174,7 +183,33 @@ public class CustomerService {
     }
 
     public ImageDto uploadAvatar(UUID id, MultipartFile avatarFile) {
-        return imageService.upsertCustomerAvatar(id, avatarFile);
+        Customer customer = customerRepository.findFirstByUserId(id)
+            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
+        var imageDto = imageService.upsertCustomerAvatar(id, avatarFile);
+        var image = imageMapper.dtoToEntity(imageDto);
+        var mediaSet = customer.getMedia();
+        if (!mediaSet.isEmpty()) {
+            mediaSet.removeIf(item -> {
+                if (!AVATAR.equals(item.getType())) return false;
+                if (!StringUtils.equals(item.getRelativePath(), imageDto.getRelativePath())) {
+                    var fileHandlingDto = FileHandlingDto.builder()
+                        .relativePath(item.getRelativePath())
+                        .action(EFileHandlingAction.DELETE)
+                        .fileType(EFileType.IMAGE)
+                        .build();
+                    fileHandlingRepository.delete(fileHandlingDto);
+                }
+                return true;
+            });
+        }
+        try {
+            mediaSet.add(image);
+            customer.setMedia(mediaSet);
+            customerRepository.save(customer);
+            return imageDto;
+        } catch (Exception ex) {
+            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+        }
     }
 
 }

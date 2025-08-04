@@ -5,6 +5,7 @@ export const UNAUTHORIZED_REQUEST = new IcErrorModel('ST0001', 'Unauthorized req
 
 export const PRODUCT_NOT_AVAILABLE = new IcErrorModel('ST1000', 'Product not available')
 export const PROFILE_NOT_FOUND = new IcErrorModel('ST1001', 'Customer profile not found')
+export const MEDIA_NOT_FOUND = new IcErrorModel('ST1002', 'Media not found')
 
 export const SESSION_EXPIRED = new IcErrorModel('ST1001', 'Session UnavalableException')
 export const SESSION_UNAVAILABLE = new IcErrorModel('ST1001', 'Session unvailable')
