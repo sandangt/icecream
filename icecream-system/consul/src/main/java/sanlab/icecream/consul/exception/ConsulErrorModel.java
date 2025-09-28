@@ -15,6 +15,7 @@ public enum ConsulErrorModel implements IcErrorModel {
     STOCK_NOT_FOUND("CONSUL-2003", "Stock not found"),
     FEEDBACK_NOT_FOUND("CONSUL-2004", "Feedback not found"),
     ADDRESS_NOT_FOUND("CONSUL-2005", "Address not found"),
+    CART_NOT_FOUND("CONSUL_2006", "Cart not found"),
     FAIL_TO_STORE_IMAGE_FILE("CONSUL-2100", "Failed to store image file"),
     FAIL_TO_PERSIST_DATA("CONSUL-2101", "Error occurs when persisting data"),
     //endregion

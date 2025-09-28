@@ -5,6 +5,6 @@ spring:
     location: classpath:/banner.txt
   application:
     name: echo
-    version: 0.1.0
+    version: 0.2.0-snapshot
   config:
     import: 'configserver:http://${CODEX_HOST}:${CODEX_PORT}'

@@ -8,7 +8,6 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.model.Stock;
@@ -46,7 +45,7 @@ import java.util.stream.IntStream;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.AVAILABLE;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 
-@Configuration
+//@Configuration
 @Slf4j
 @RequiredArgsConstructor
 public class FakerData {

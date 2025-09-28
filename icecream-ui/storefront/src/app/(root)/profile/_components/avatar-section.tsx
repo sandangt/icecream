@@ -57,7 +57,7 @@ export const AvatarSection: FC<Props> = ({ data }) => {
 
   const handleUpload = async (): Promise<void> => {
     if (!selectedFile) return
-    uploadMutate({ session: sessionHelper.data(), file: selectedFile })
+    uploadMutate({ session: sessionHelper.dataClient(), file: selectedFile })
   }
 
   return (

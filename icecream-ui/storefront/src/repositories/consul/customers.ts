@@ -4,7 +4,7 @@ import { generateUrl } from '@/lib/utils'
 import { CONSUL_URL } from '@/settings'
 import { Address, Customer, CustomerExtended, Media, Session, UpdateProfileRequest } from '@/models'
 
-export const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
+const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
   const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
   const headers = {
@@ -41,7 +41,10 @@ export const fetchCustomerProfile = async (session: Session): Promise<CustomerEx
   }
 }
 
-export const requestUpdateCustomerProfile = async (session: Session, payload: UpdateProfileRequest): Promise<CustomerExtended> => {
+export const requestUpdateCustomerProfile = async (
+  session: Session,
+  payload: UpdateProfileRequest,
+): Promise<CustomerExtended> => {
   const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
   const response = await fetch(url, {
@@ -50,7 +53,7 @@ export const requestUpdateCustomerProfile = async (session: Session, payload: Up
       'Content-Type': 'application/json',
     },
     method: 'PUT',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
     throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
@@ -114,10 +117,10 @@ export const requestUploadAvatar = async (session: Session, file: File): Promise
   const { accessToken } = session
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`,
     },
     method: 'POST',
-    body: formData
+    body: formData,
   })
   if (response.status === HttpStatusCode.UNAUTHORIZED) {
     throw new IcRuntimeException(UNAUTHORIZED_REQUEST)

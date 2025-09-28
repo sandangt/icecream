@@ -50,7 +50,6 @@ type Props = {
 }
 
 export const ProfileForm: FC<Props> = ({ data }) => {
-
   const session = useSession()
   const sessionHelper = new SessionHelper(session)
 
@@ -61,15 +60,19 @@ export const ProfileForm: FC<Props> = ({ data }) => {
   })
 
   const { mutate: profileMutate } = useMutation({
-    mutationFn: async ({session, payload}: {session: Session, payload: UpdateProfileRequest}) => requestUpdateCustomerProfile(session, payload)
+    mutationFn: async ({ session, payload }: { session: Session; payload: UpdateProfileRequest }) =>
+      requestUpdateCustomerProfile(session, payload),
   })
 
   const onSubmit = (data: ProfileFormFields) => {
-    profileMutate({session: sessionHelper.data(), payload: {
-      phone: data.phone,
-      firstName: data.firstName,
-      lastName: data.lastName
-    }})
+    profileMutate({
+      session: sessionHelper.dataClient(),
+      payload: {
+        phone: data.phone,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      },
+    })
     toast.success('Your profile information has been successfully saved.')
     form.reset(data)
   }

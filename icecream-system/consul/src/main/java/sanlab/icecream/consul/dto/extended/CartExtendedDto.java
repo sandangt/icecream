@@ -14,5 +14,5 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartExtendedDto extends CartDto {
-    private List<CartItemDto> cartItems;
+    private List<CartItemExtendedDto> cartItems;
 }

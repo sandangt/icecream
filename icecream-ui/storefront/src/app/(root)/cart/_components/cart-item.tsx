@@ -8,8 +8,8 @@ import { FC } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ProductExtended } from '@/models'
-import { useCartStore } from '@/hooks/states'
 import { ProductHelper } from '@/lib/helpers'
+import { useCart } from '@/hooks'
 
 type Props = {
   item: ProductExtended
@@ -17,9 +17,7 @@ type Props = {
 }
 
 export const CartItem: FC<Props> = ({ item, quantity }) => {
-  const addToCart = useCartStore((state) => state.addToCart)
-  const removeFromCart = useCartStore((state) => state.removeFromCart)
-  const deleteItem = useCartStore((state) => state.deleteItem)
+  const { addToCart, removeFromCart, deleteItemFromCart } = useCart()
   const productService = new ProductHelper(item)
 
   return (
@@ -75,7 +73,7 @@ export const CartItem: FC<Props> = ({ item, quantity }) => {
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => deleteItem(productService.get())}
+        onClick={() => deleteItemFromCart(productService.get())}
         className="text-muted-foreground hover:text-destructive"
         aria-label="Remove item"
       >

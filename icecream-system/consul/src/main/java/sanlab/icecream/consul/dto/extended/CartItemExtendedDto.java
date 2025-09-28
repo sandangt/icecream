@@ -14,5 +14,4 @@ import sanlab.icecream.consul.dto.core.ProductDto;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartItemExtendedDto extends CartItemDto {
     private ProductDto product;
-    private CartDto cart;
 }

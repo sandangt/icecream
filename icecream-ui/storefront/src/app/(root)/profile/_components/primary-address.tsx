@@ -31,10 +31,12 @@ export const PrimaryAddressSection: FC<Props> = ({ data }) => {
       <CardContent className="space-y-4 text-sm text-muted-foreground p-6 border-t">
         {primaryAddress ? (
           <>
+            <p className="font-bold text-foreground">{primaryAddress.contactName}</p>
+            <p className="font-medium text-foreground">{primaryAddress.phone}</p>
             <p className="font-medium text-foreground">{primaryAddress.addressLine1}</p>
             <p className="font-medium text-foreground">{primaryAddress.addressLine2}</p>
             <p>
-              {primaryAddress.city && ','} {primaryAddress.zipCode}
+              {primaryAddress.city}, {primaryAddress.zipCode}
             </p>
             <p>{primaryAddress.country}</p>
           </>

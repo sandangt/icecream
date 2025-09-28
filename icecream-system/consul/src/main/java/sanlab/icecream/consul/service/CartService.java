@@ -1,0 +1,134 @@
+package sanlab.icecream.consul.service;
+
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sanlab.icecream.consul.dto.extended.CartExtendedDto;
+import sanlab.icecream.consul.mapper.CartMapper;
+import sanlab.icecream.consul.model.Cart;
+import sanlab.icecream.consul.model.CartItem;
+import sanlab.icecream.consul.model.Customer;
+import sanlab.icecream.consul.model.Product;
+import sanlab.icecream.consul.repository.crud.CartItemRepository;
+import sanlab.icecream.consul.repository.crud.CartRepository;
+import sanlab.icecream.consul.repository.crud.CustomerRepository;
+import sanlab.icecream.consul.repository.crud.ProductRepository;
+import sanlab.icecream.consul.viewmodel.request.CartRequest;
+import sanlab.icecream.fundamentum.exception.IcRuntimeException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static sanlab.icecream.consul.exception.ConsulErrorModel.CART_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
+
+@Service
+@RequiredArgsConstructor
+public class CartService {
+
+    private final CustomerRepository customerRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final ProductRepository productRepository;
+    private final CartMapper cartMapper;
+
+
+    @Transactional(readOnly = true)
+    public CartExtendedDto get(UUID userId) {
+        return cartRepository.findFirstByCustomer_UserId(userId)
+            .map(cartMapper::entityToExtendedDto)
+            .orElse(null);
+    }
+
+    @Transactional
+    public CartExtendedDto upsert(UUID userId, CartRequest payload) {
+        Customer customer = customerRepository.findFirstByUserId(userId)
+            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(userId)));
+        var requestMapByProductIds = payload.getCartItems()
+            .stream()
+            .collect(Collectors.toMap(CartRequest.CartItemRequest::getProductId, Function.identity()));
+        Optional<Cart> cartOptional = cartRepository.findFirstByCustomer_UserId(userId);
+        Map<UUID, Product> productMap = productRepository.findAllByIdIn(requestMapByProductIds.keySet().stream().toList())
+            .stream().collect(Collectors.toMap(Product::getId, Function.identity()));
+        Cart result;
+        if (cartOptional.isEmpty()) {
+            var itemList = productMap.values().stream()
+                .map(item -> (CartItem) CartItem.builder()
+                    .quantity(requestMapByProductIds.get(item.getId()).getQuantity())
+                    .product(item)
+                    .build()
+                )
+                .toList();
+            itemList = cartItemRepository.saveAll(itemList);
+            result = cartRepository.save(
+                Cart.builder()
+                    .cartItems(itemList)
+                    .customer(customer)
+                    .build()
+                );
+            return cartMapper.entityToExtendedDto(result);
+        }
+        Cart cart = cartOptional.get();
+        var cartItemMapByProductId = cartOptional.map(Cart::getCartItems)
+            .stream()
+            .flatMap(Collection::stream)
+            .collect(Collectors.toMap(item -> item.getProduct().getId(), Function.identity()));
+        List<CartItem> existingItemList = new ArrayList<>();
+        List<CartItem> itemList = new ArrayList<>();
+        List<UUID> deletingItemList = new ArrayList<>();
+        for (var entry : requestMapByProductIds.entrySet()) {
+            if (cartItemMapByProductId.containsKey(entry.getKey())) {
+                var item = cartItemMapByProductId.get(entry.getKey());
+                var newQuantity = entry.getValue().getQuantity();
+                if (newQuantity <= 0) deletingItemList.add(item.getId());
+                else {
+                    item.setQuantity(newQuantity);
+                    existingItemList.add(item);
+                }
+                continue;
+            }
+            if (entry.getValue().getQuantity() > 0) {
+                itemList.add(CartItem.builder()
+                    .cart(cart)
+                    .quantity(entry.getValue().getQuantity())
+                    .product(productMap.get(entry.getKey()))
+                    .build());
+            }
+        }
+        deletingItemList.addAll(cartItemMapByProductId.entrySet()
+            .stream()
+            .filter(inner -> !requestMapByProductIds.containsKey(inner.getKey()))
+            .map(inner -> inner.getValue().getId())
+            .collect(Collectors.toSet()));
+        if (CollectionUtils.isNotEmpty(existingItemList)) cartItemRepository.saveAll(existingItemList);
+        if (CollectionUtils.isNotEmpty(itemList)) cartItemRepository.saveAll(itemList);
+        if (CollectionUtils.isNotEmpty(deletingItemList)) cartItemRepository.deleteAllByIdIn(deletingItemList);
+
+        cart = cartRepository.findFirstByCustomer_UserId(userId)
+            .orElseThrow(() -> new IcRuntimeException(CART_NOT_FOUND));
+
+        return cartMapper.entityToExtendedDto(cart);
+    }
+
+    @Transactional
+    public CartExtendedDto reset(UUID userId) {
+        var cartOptional = cartRepository.findFirstByCustomer_UserId(userId);
+        if (cartOptional.isEmpty()) return null;
+        List<CartItem> cartItems = cartOptional.map(Cart::getCartItems).orElse(Collections.emptyList());
+        Cart savedCart = cartOptional.get();
+        if (CollectionUtils.isNotEmpty(cartItems)) {
+            cartItems.clear();
+            savedCart = cartRepository.save(savedCart);
+        }
+        return cartMapper.entityToExtendedDto(savedCart);
+    }
+
+}

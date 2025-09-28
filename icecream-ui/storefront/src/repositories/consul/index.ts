@@ -1,4 +1,5 @@
-import { requestAllCategories } from './categories'
+import { requestUpsertCart, fetchCart, requestResetCart } from './carts'
+import { fetchAllCategories } from './categories'
 import {
   requestCreateCustomerProfileIfNotExist,
   fetchCustomerProfile,
@@ -16,7 +17,7 @@ import {
 } from './products'
 
 export {
-  requestAllCategories,
+  fetchAllCategories,
   requestCreateCustomerProfileIfNotExist,
   fetchCustomerProfile,
   requestProductBySlug,
@@ -28,4 +29,7 @@ export {
   requestDeleteCustomerAddress,
   requestUploadAvatar,
   requestUpdateCustomerProfile,
+  requestUpsertCart,
+  fetchCart,
+  requestResetCart,
 }

@@ -5,7 +5,7 @@
   <parent>
     <groupId>sanlab.icecream</groupId>
     <artifactId>icecream-system</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-snapshot</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <packaging>jar</packaging>
@@ -102,7 +102,7 @@
     <dependency>
       <groupId>sanlab.icecream</groupId>
       <artifactId>fundamentum</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
       <scope>compile</scope>
     </dependency>
     <!--endregion-->

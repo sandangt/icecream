@@ -3,6 +3,10 @@
 import Image from 'next/image'
 import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+import { FC, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,28 +16,41 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useCartStore } from '@/hooks/states'
-import { ProductHelper } from '@/lib/helpers'
+import { ProductHelper, SessionHelper } from '@/lib/helpers'
+import { FETCH_CART_BY_CUSTOMER_ID } from '@/repositories/query-keys'
+import { fetchCart } from '@/repositories/consul'
+import { useCart } from '@/hooks'
 
-export const CartDropdown = () => {
-  const totalItems = useCartStore((state) => state.totalItems)
-  const totalCost = useCartStore((state) => state.totalCost)
-  const isCartEmpty = useCartStore((state) => state.isEmpty)
-  const productMap = useCartStore((state) => state.productMap)
-  const removeFromCart = useCartStore((state) => state.removeFromCart)
-  const addToCart = useCartStore((state) => state.addToCart)
-  const deleteItem = useCartStore((state) => state.deleteItem)
+type Props = {
+  customerId: string
+}
+
+export const CartDropdown: FC<Props> = ({ customerId }) => {
+  const session = useSession()
+  const { addToCart, deleteItemFromCart, removeFromCart, cart, isCartEmpty, syncUpCart } = useCart()
+  const sessionHelper = new SessionHelper(session)
+  const { data: cartData, isSuccess } = useQuery({
+    queryKey: FETCH_CART_BY_CUSTOMER_ID(customerId),
+    queryFn: () => fetchCart(sessionHelper.dataClient()),
+  })
+
+  useEffect(() => {
+    if (isSuccess && cartData) {
+      syncUpCart(cartData)
+    }
+  }, [isSuccess, cartData, syncUpCart])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" aria-label="Shopping Cart" className="relative">
           <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />
-          {!isCartEmpty ? (
+          {!isCartEmpty() ? (
             <Badge
               variant="destructive"
               className="absolute -top-1 -right-1 px-1.5 h-5 min-w-[20px] flex items-center justify-center text-xs"
             >
-              {totalItems}
+              {cart.totalItems}
             </Badge>
           ) : null}
         </Button>
@@ -41,14 +58,14 @@ export const CartDropdown = () => {
       <DropdownMenuContent align="end" className="w-96">
         <DropdownMenuLabel>My Cart</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {productMap.size ? (
+        {cart.cartItems.length ? (
           <>
             <div className="max-h-[400px] overflow-y-auto p-2 space-y-2">
-              {Array.from(productMap).map(([key, value]) => {
-                const productService = new ProductHelper(value.product)
+              {cart.cartItems.map((inner) => {
+                const productService = new ProductHelper(inner.product)
                 return (
                   <div
-                    key={key}
+                    key={inner.product.id}
                     className="flex items-start gap-4 p-2 rounded-md hover:bg-secondary transition-colors"
                   >
                     <Link href={`/products/${productService.slug}`} className="shrink-0">
@@ -74,7 +91,7 @@ export const CartDropdown = () => {
                           variant="ghost"
                           size="icon"
                           className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
-                          onClick={() => deleteItem(productService.get())}
+                          onClick={() => deleteItemFromCart(productService.get())}
                           aria-label={`Remove ${productService.name}`}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -86,25 +103,25 @@ export const CartDropdown = () => {
                             variant="outline"
                             size="icon"
                             className="h-6 w-6"
-                            onClick={() => removeFromCart(value.product)}
-                            disabled={value.quantity <= 1}
+                            onClick={() => removeFromCart(inner.product)}
+                            disabled={inner.quantity <= 1}
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
                           <span className="text-sm font-medium w-5 text-center">
-                            {value.quantity}
+                            {inner.quantity}
                           </span>
                           <Button
                             variant="outline"
                             size="icon"
                             className="h-6 w-6"
-                            onClick={() => addToCart(value.product)}
+                            onClick={() => addToCart(inner.product)}
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
                         </div>
                         <p className="text-sm font-semibold">
-                          ${((productService?.price || 0) * value.quantity).toFixed(2)}
+                          ${((productService?.price || 0) * inner.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -116,7 +133,7 @@ export const CartDropdown = () => {
             <div className="p-2 space-y-2">
               <div className="flex justify-between font-semibold text-base">
                 <span>Subtotal</span>
-                <span>${totalCost.toFixed(2)}</span>
+                <span>${cart.totalCost.toFixed(2)}</span>
               </div>
               <Button
                 asChild

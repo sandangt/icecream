@@ -8,7 +8,7 @@ export const ROUTES = {
   PROFILE: '/profile',
   PRODUCTS: '/products',
   PRODUCT_DETAILS: (slug: string) => `/products/${slug}`,
-  CART: '/cart',
+  CART: '/carts',
 
   //#region Error pages
   PRODUCT_NOT_FOUND: '/not-found/product',
@@ -20,6 +20,7 @@ export const API_PATHS = {
   PRODUCT: '/console/products',
   CATEGORY: '/console/categories',
   CUSTOMER: '/console/customers',
+  CART: '/console/carts',
 }
 
 export enum CustomerStatus {

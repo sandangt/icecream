@@ -5,17 +5,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { ArrowRight, ShoppingBag, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { CartItem } from './cart-item'
-import { useCartStore } from '@/hooks/states'
+import { useCart } from '@/hooks'
 
 export const CartPage = () => {
-  const productMap = useCartStore((state) => state.productMap)
-  const totalItems = useCartStore((state) => state.totalItems)
-  const totalCost = useCartStore((state) => state.totalCost)
-  const resetCart = useCartStore((state) => state.resetCart)
-  const shippingCost = totalItems > 0 ? 5.0 : 0
-  const grandTotal = totalCost + shippingCost
+  const { cart, resetCart } = useCart()
 
-  if (totalItems === 0) {
+  const shippingCost = cart.totalItems > 0 ? 5.0 : 0
+  const grandTotal = cart.totalCost + shippingCost
+
+  if (cart.totalItems === 0) {
     return (
       <div className="text-center py-20">
         <ShoppingBag className="mx-auto h-24 w-24 text-muted-foreground mb-6" />
@@ -41,11 +39,11 @@ export const CartPage = () => {
         <div className="lg:col-span-2 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">Cart Items ({totalItems})</CardTitle>
+              <CardTitle className="text-2xl">Cart Items ({cart.totalItems})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              {Array.from(productMap).map(([key, value]) => (
-                <CartItem key={key} item={value.product} quantity={value.quantity} />
+              {cart.cartItems.map((inner) => (
+                <CartItem key={inner.product.id} item={inner.product} quantity={inner.quantity} />
               ))}
             </CardContent>
           </Card>
@@ -64,8 +62,8 @@ export const CartPage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Subtotal ({totalItems} items)</span>
-              <span>${totalCost.toFixed(2)}</span>
+              <span className="text-muted-foreground">Subtotal ({cart.totalItems} items)</span>
+              <span>${cart.totalCost.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Estimated Shipping</span>

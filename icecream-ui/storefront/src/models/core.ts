@@ -82,6 +82,13 @@ export interface CartItem {
   quantity: number
   product: ProductExtended
 }
+
+export interface Cart {
+  id: string
+  cartItems: CartItem[]
+  totalItems?: number
+  totalCost?: number
+}
 //#endregion
 
 //#region Extended
