@@ -6,8 +6,8 @@ Monolithic e-commerce system
 
 ## Tech stack
 
-- Java 21 | Spring boot 3.x.x
-- NodeJS 19.xx | NextJS 15
+- Java 25.0 | Spring boot 3.5.x
+- ReactJS 19.x.x | NextJS 15.4.x
 
 ## Architecture
 
