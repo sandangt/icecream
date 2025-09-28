@@ -15,6 +15,8 @@ import { ROUTES } from '@/lib/constants'
 import { SessionHelper } from '@/lib/helpers'
 
 import { CartDropdown } from './cart-dropdown'
+import { Session } from '@/models'
+import { FC } from 'react'
 
 export const AuthSection = async () => {
   const session = await auth()
@@ -35,16 +37,23 @@ const Anonymous = () => (
   </form>
 )
 
-const LoggedIn = async () => (
-  <div className="flex items-center space-x-2 sm:space-x-3">
-    <UserProfileSection />
-    <CartDropdown />
-  </div>
-)
-
-const UserProfileSection = async () => {
+const LoggedIn = async () => {
   const session = await auth()
-  if (!session) return null
+  const sessionHelper = new SessionHelper(session)
+  if (!sessionHelper.isLoggedIn()) return null
+  return (
+    <div className="flex items-center space-x-2 sm:space-x-3">
+      <UserProfileSection session={sessionHelper.data()} />
+      <CartDropdown customerId={sessionHelper.userId} />
+    </div>
+  )
+}
+
+type UserProfileSectionProps = {
+  session: Session
+}
+
+const UserProfileSection: FC<UserProfileSectionProps> = async ({ session }) => {
   const { firstName, lastName, refreshToken } = session
   return (
     <DropdownMenu>

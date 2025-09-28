@@ -71,10 +71,11 @@ export const ManageAddressPage: FC<Props> = ({ data }) => {
     setIsFormOpen(true)
   }
   const handleSaveAddress = (address: Address) =>
-    createAddressMutate({ session: sessionHelper.data(), payload: address })
+    createAddressMutate({ session: sessionHelper.dataClient(), payload: address })
   const handleSetPrimary = (id: string) =>
-    setPrimaryAddressMutate({ session: sessionHelper.data(), primaryId: id })
-  const handleDelete = (id: string) => deleteAddressMutate({ session: sessionHelper.data(), id })
+    setPrimaryAddressMutate({ session: sessionHelper.dataClient(), primaryId: id })
+  const handleDelete = (id: string) =>
+    deleteAddressMutate({ session: sessionHelper.dataClient(), id })
   const handleEdit = (address: Address) => {
     setEditingAddress(address)
     setIsFormOpen(true)

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import sanlab.icecream.consul.model.Product;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,5 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, Product
     long countByIsFeaturedTrue();
     Optional<Product> findFirstByOrderByName();
     Optional<Product> findFirstBySlug(String slug);
+    List<Product> findAllByIdIn(List<UUID> ids);
 
 }

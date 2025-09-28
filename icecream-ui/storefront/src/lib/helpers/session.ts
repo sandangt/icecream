@@ -32,15 +32,31 @@ export class SessionHelper {
     return status === SessionHelper.AUTHENTICATED_STATUS
   }
 
-  dataOrNull(): Session | null {
+  dataClientOrNull(): Session | null {
     if (!this.__session) return null
     return this.__session?.data
   }
 
-  data(): Session {
+  dataClient(): Session {
     if (!this.__session || !this.__session?.data) {
       throw new IcRuntimeException(SESSION_UNAVAILABLE)
     }
     return this.__session.data
+  }
+
+  dataOrNull(): Session | null {
+    if (!this.__session) return null
+    return this.__session
+  }
+
+  data(): Session {
+    if (!this.__session) {
+      throw new IcRuntimeException(SESSION_UNAVAILABLE)
+    }
+    return this.__session
+  }
+
+  get userId(): string {
+    return this?.__session?.userId ?? ''
   }
 }
