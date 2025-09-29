@@ -1,0 +1,6 @@
+# Vaadin
+node_modules/
+generated/
+
+# vscode
+.vscode/
