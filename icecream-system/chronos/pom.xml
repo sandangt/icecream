@@ -11,6 +11,10 @@
   <packaging>jar</packaging>
   <artifactId>chronos</artifactId>
 
+  <properties>
+    <fundamentum.version>0.2.0</fundamentum.version>
+  </properties>
+
   <dependencies>
     <!--region Spring boot-->
     <dependency>
@@ -102,7 +106,7 @@
     <dependency>
       <groupId>sanlab.icecream</groupId>
       <artifactId>fundamentum</artifactId>
-      <version>0.2.0</version>
+      <version>${fundamentum.version}</version>
       <scope>compile</scope>
     </dependency>
     <!--endregion-->

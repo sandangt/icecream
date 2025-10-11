@@ -13,9 +13,3 @@ spring:
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml
-  cloud:
-    stream:
-      bindings:
-        auditlog-in-0:
-          binder: rabbit
-          destination: audit_log_queue

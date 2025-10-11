@@ -9,6 +9,10 @@
   <packaging>jar</packaging>
   <artifactId>memoir</artifactId>
 
+  <properties>
+    <fundamentum.version>0.2.0</fundamentum.version>
+  </properties>
+
   <dependencies>
     <!--region Spring boot-->
     <dependency>
@@ -44,6 +48,10 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-stream-kafka</artifactId>
     </dependency>
     <!--endregion-->
     <!--region Jackson-->
@@ -100,7 +108,7 @@
     <dependency>
       <groupId>sanlab.icecream</groupId>
       <artifactId>fundamentum</artifactId>
-      <version>0.2.0</version>
+      <version>${fundamentum.version}</version>
       <scope>compile</scope>
     </dependency>
     <!--endregion-->

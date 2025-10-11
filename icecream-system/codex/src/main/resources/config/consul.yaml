@@ -33,10 +33,11 @@ spring:
     stream:
       bindings:
         auditlog-out-0:
-          binder: rabbit
+          binder: kafka-binder
           destination: audit_log_queue
+          content-type: application/json
         imageDelete-out-0:
-          binder: rabbit
+          binder: rabbit-binder
           destination: consul.image.delete.queue
 
 jwt:

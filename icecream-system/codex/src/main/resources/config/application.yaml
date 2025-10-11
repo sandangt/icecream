@@ -30,11 +30,65 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: guest
-    password: guest
+  cloud:
+    stream:
+      default-binder: rabbit-binder
+      binders:
+        kafka-binder:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: ${KAFKA_HOST}:${KAFKA_PORT}
+                      auto-create-topics: true
+                      auto-add-partitions: true
+                      configuration:
+                        connections.max.idle.ms: 300000
+                        request.timeout.ms: 30000
+                        retry.backoff.ms: 1000
+                        reconnect.backoff.ms: 1000
+                      consumer-properties:
+                        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                        value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+                        spring.json.trusted.packages: "*"
+                        auto.offset.reset: earliest
+                        enable.auto.commit: true
+                        session.timeout.ms: 30000
+                        heartbeat.interval.ms: 10000
+                        max.poll.interval.ms: 300000
+                      producer-properties:
+                        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                        value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+                        acks: all
+                        retries: 3
+                        retry.backoff.ms: 1000
+                        reconnect.backoff.ms: 1000
+        rabbit-binder:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: ${RABBITMQ_HOST}
+                port: ${RABBITMQ_PORT}
+                username: guest
+                password: guest
+                virtual-host: /
+      bindings:
+        helloRabbit-in-0:
+          binder: rabbit-binder
+          destination: hello.mate.queue
+        helloRabbit-out-0:
+          binder: rabbit-binder
+          destination: hello.mate.queue
+        helloKafka-in-0:
+          binder: kafka-binder
+          destination: hello_mate_queue
+        helloKafka-out-0:
+          binder: kafka-binder
+          destination: hello_mate_queue
 
 logging:
   level:
@@ -43,6 +97,13 @@ logging:
       chronos: INFO
       echo: INFO
       memoir: INFO
+    org.apache.kafka.clients: INFO
+    org.apache.kafka.common.network: INFO
+    org.springframework.cloud.stream.binder.kafka: DEBUG
+    org.springframework.kafka: DEBUG
+    org.springframework.amqp: DEBUG
+    org.springframework.cloud.stream: DEBUG
+    org.springframework.cloud.function: DEBUG
 
 app:
   minio:

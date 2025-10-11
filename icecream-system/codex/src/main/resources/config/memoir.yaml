@@ -14,8 +14,14 @@ spring:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml
   cloud:
+    function:
+      definition: helloKafka;auditlog # Consumer bean name
     stream:
       bindings:
         auditlog-in-0:
-          binder: rabbit
+          binder: kafka-binder
           destination: audit_log_queue
+          content-type: application/json
+          group: memoir-consumer-group
+        helloKafka-in-0:
+          group: memoir-consumer-group

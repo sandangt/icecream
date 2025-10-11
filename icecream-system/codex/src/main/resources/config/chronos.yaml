@@ -9,8 +9,10 @@ spring:
     mongodb:
       database: ${MONGODB_CHRONOS_DB}
   cloud:
+    function:
+      definition: helloRabbit;imageDelete # Consumer bean name
     stream:
       bindings:
         imageDelete-in-0:
-          binder: rabbit
+          binder: rabbit-binder
           destination: consul.image.delete.queue
