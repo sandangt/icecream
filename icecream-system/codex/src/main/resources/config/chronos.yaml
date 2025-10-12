@@ -10,9 +10,9 @@ spring:
       database: ${MONGODB_CHRONOS_DB}
   cloud:
     function:
-      definition: helloRabbit;imageDelete # Consumer bean name
+      definition: helloRabbit;deleteImage # Consumer bean name
     stream:
       bindings:
-        imageDelete-in-0:
+        deleteImage-in-0:
           binder: rabbit-binder
-          destination: consul.image.delete.queue
+          destination: service.media.delete-image.task.queue

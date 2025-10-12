@@ -20,8 +20,7 @@ spring:
       bindings:
         auditlog-in-0:
           binder: kafka-binder
-          destination: audit_log_queue
-          content-type: application/json
+          destination: service.log.audit.queue
           group: memoir-consumer-group
         helloKafka-in-0:
           group: memoir-consumer-group

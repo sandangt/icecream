@@ -14,8 +14,7 @@ public class HelloMateConsumer {
     @Bean
     public Consumer<Message<String>> helloKafka() {
         return message -> {
-            var payload = message.getPayload();
-            log.info("Received message: {}", payload);
+            log.info("Received message: {}", message.getPayload());
         };
     }
 

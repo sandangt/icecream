@@ -11,7 +11,7 @@ Monolithic e-commerce system
 
 ## Architecture
 
-![Architecture](/icecream-document/assets/architecture.png)
+![Architecture](/assets/architecture.png)
 
 ## Repository structure
 

@@ -34,11 +34,10 @@ spring:
       bindings:
         auditlog-out-0:
           binder: kafka-binder
-          destination: audit_log_queue
-          content-type: application/json
-        imageDelete-out-0:
+          destination: service.log.audit.queue
+        deleteImage-out-0:
           binder: rabbit-binder
-          destination: consul.image.delete.queue
+          destination: service.media.delete-image.task.queue
 
 jwt:
   auth:
