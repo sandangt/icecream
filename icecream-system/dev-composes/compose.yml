@@ -152,7 +152,7 @@ services:
     container_name: icecream-zookeeper
     hostname: zookeeper
     ports:
-      - "${ZOOKEEPER_PORT}:2181"
+      - "${ZOOKEEPER_CLIENT_PORT}:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -208,9 +208,13 @@ services:
       - VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
       - KEY_CONVERTER_SCHEMAS_ENABLE=false
       - VALUE_CONVERTER_SCHEMAS_ENABLE=false
-      - PLUGIN_PATH=/kafka/connect
+      - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_REST_ADVERTISED_HOST_NAME=debezium-connect
+      - CONNECT_PLUGIN_PATH=/kafka/connect
     volumes:
       - ${DEBEZIUM_VOLUME}/plugins:/kafka/connect
+      - ./debezium/connectors:/connectors
     networks:
       - icecream-network
 

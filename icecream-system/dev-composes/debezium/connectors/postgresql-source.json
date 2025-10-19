@@ -1,0 +1,26 @@
+{
+  "name": "source-postgresql-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgresql",
+    "database.port": "5432",
+    "database.user": "admin",
+    "database.password": "password1234",
+    "database.dbname": "consul",
+    "database.server.name": "icecream",
+    "table.include.list": "public.product",
+    "topic.prefix": "icecream",
+    "plugin.name": "pgoutput",
+    "slot.name": "debezium_product",
+    "publication.name": "dbz_publication",
+    "publication.autocreate.mode": "filtered",
+    "heartbeat.interval.ms": "10000",
+    "snapshot.mode": "initial",
+    "time.precision.mode": "connect",
+    "decimal.handling.mode": "double",
+    "transforms": "route",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+    "transforms.route.replacement": "icecream.consul.$3"
+  }
+}
