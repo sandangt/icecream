@@ -17,6 +17,16 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
+    elasticsearch:
+      cluster-nodes: ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+      username: ${ELASTICSEARCH_USERNAME}
+      password: ${ELASTICSEARCH_PASSWORD}
+      connection-timeout: 5s
+      socket-timeout: 10s
+  elasticsearch:
+    uris: http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+    username: ${ELASTICSEARCH_USERNAME}
+    password: ${ELASTICSEARCH_PASSWORD}
   datasource:
     username: ${POSTGRESQL_USER}
     password: ${POSTGRESQL_PASSWORD}

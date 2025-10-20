@@ -16,6 +16,7 @@ public class TableName {
     public static final String ORDER_ITEM = "order_item";
     public static final String PRODUCT = "product";
     public static final String STOCK = "stock";
+    public static final String ES_PRODUCT = "icecream.consul.product";
     //endregion
 
     //region Echo
