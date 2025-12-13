@@ -20,6 +20,7 @@ import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.consul.repository.crud.ProductRepository;
 import sanlab.icecream.consul.dto.core.ProductDto;
 import sanlab.icecream.consul.repository.crud.StockRepository;
+import sanlab.icecream.consul.repository.search.ProductSearchRepository;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
@@ -46,6 +47,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final StockRepository stockRepository;
+
+    private final ProductSearchRepository productSearchRepository;
 
     private final FeedbackMapper feedbackMapper;
     private final ProductMapper productMapper;

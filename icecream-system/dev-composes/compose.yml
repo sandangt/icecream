@@ -116,7 +116,7 @@ services:
       - icecream-network
 
   elasticsearch:
-    image: elasticsearch:8.18.7
+    image: elasticsearch:8.19.6
     container_name: icecream-elasticsearch
     environment:
       - discovery.type=single-node
@@ -136,7 +136,7 @@ services:
       - icecream-network
 
   kibana:
-    image: kibana:8.18.7
+    image: kibana:8.19.6
     container_name: icecream-kibana-optional
     ports:
       - "${KIBANA_PORT}:5601"

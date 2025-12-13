@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ProductRepository extends JpaRepository<Product, UUID>, ProductExtendRepository {
+public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @NotNull
     Page<Product> findAll(@NotNull Pageable pageable);

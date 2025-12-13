@@ -20,6 +20,17 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
+  data:
+    elasticsearch:
+      cluster-nodes: ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+      username: ${ELASTICSEARCH_USERNAME}
+      password: ${ELASTICSEARCH_PASSWORD}
+      connection-timeout: 5s
+      socket-timeout: 10s
+  elasticsearch:
+    uris: http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+    username: ${ELASTICSEARCH_USERNAME}
+    password: ${ELASTICSEARCH_PASSWORD}
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml

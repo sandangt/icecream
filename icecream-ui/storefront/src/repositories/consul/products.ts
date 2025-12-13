@@ -5,12 +5,12 @@ import { CONSUL_URL } from '@/settings'
 import { ProductExtended, RequestAllParams, RequestAllResult } from '@/models'
 
 const _requestAllProducts = async (
-  { pagination, sorting }: RequestAllParams,
+  { pagination, sorting, filters }: RequestAllParams,
   featuredOnly?: boolean,
 ): Promise<RequestAllResult<ProductExtended>> => {
   const extendedPath = [API_PATHS.PRODUCT]
   if (featuredOnly) extendedPath.push('featured')
-  const url = generateUrl(CONSUL_URL, extendedPath, { pagination, sorting })
+  const url = generateUrl(CONSUL_URL, extendedPath, { pagination, sorting, filters })
   const response = await fetch(url)
   if (response.status !== HttpStatusCode.OK) throw new IcRuntimeException(FAIL_TO_FETCH)
   return response.json()

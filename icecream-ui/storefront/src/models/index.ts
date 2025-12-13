@@ -15,8 +15,13 @@ import type {
 
 import type { UpdateProfileRequest } from './requests/customer'
 
-import type { RequestAllParams } from './requests/filtering'
-import type { RequestAllResult } from './responses/filtering'
+import type {
+  RequestAllParams,
+  PaginationRequest,
+  SortingRequest,
+  FiltersRequest,
+} from './requests/all'
+import type { RequestAllResult } from './responses/all'
 
 export {
   Session,
@@ -34,4 +39,7 @@ export {
   RequestAllParams,
   RequestAllResult,
   UpdateProfileRequest,
+  PaginationRequest,
+  SortingRequest,
+  FiltersRequest,
 }

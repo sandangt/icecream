@@ -29,6 +29,10 @@ public interface ProductMapper extends BaseMapper {
     List<ProductExtendedDto> entityToExtendedDto(List<Product> products);
     //endregion
 
+    //region To Search DTO
+
+    //endregion
+
     //region To Entity
     @Named("dtoToEntity")
     @BeanMapping(ignoreByDefault = true)
