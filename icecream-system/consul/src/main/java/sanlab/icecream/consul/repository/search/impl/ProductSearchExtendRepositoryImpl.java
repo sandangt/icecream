@@ -27,14 +27,14 @@ public class ProductSearchExtendRepositoryImpl implements ProductSearchExtendRep
     private static final String FIELD_NAME = "name";
     private static final String FIELD_SLUG = "slug";
     private static final String FIELD_DESCRIPTION = "description";
-    private static final String FIELD_BRIEF_DESCRIPTION = "brief_description";
+    private static final String FIELD_BRIEF_DESCRIPTION = "briefDescription";
     private static final String FIELD_STATUS = "status";
     private static final String FIELD_PRICE = "price";
-    private static final String FIELD_CREATED_AT = "created_at";
-    private static final String FIELD_MODIFIED_AT = "modified_at";
+    private static final String FIELD_CREATED_AT = "createdAt";
+    private static final String FIELD_MODIFIED_AT = "modifiedAt";
 
     @Override
-    public CollectionQueryResponse<ProductESearch> searchAndFilter(CollectionQueryRequest req) {
+    public CollectionQueryResponse<ProductESearch> searchAndFilter(CollectionQueryRequest req, boolean isFeatured) {
         var filtersOptional = Optional.ofNullable(req.getFilters());
         var criteria = new Criteria();
         filtersOptional

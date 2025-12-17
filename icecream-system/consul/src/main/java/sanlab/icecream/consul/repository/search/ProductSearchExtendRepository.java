@@ -6,6 +6,6 @@ import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 
 public interface ProductSearchExtendRepository {
 
-    CollectionQueryResponse<ProductESearch> searchAndFilter(CollectionQueryRequest req);
+    CollectionQueryResponse<ProductESearch> searchAndFilter(CollectionQueryRequest req, boolean isFeatured);
 
 }

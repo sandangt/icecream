@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
 import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
@@ -41,8 +42,8 @@ public class WatchProductController {
     private final ProductService productService;
 
     @GetMapping
-    public CollectionQueryResponse<ProductExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
-        return productService.getAll(request.getPageRequest(), false);
+    public CollectionQueryResponse<ProductESearch> getAll(@ModelAttribute CollectionQueryRequest request) {
+        return productService.getAll(request, false);
     }
 
     @GetMapping("/{id}")

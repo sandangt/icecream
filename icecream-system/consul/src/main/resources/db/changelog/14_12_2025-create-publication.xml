@@ -7,7 +7,7 @@
 
   <changeSet id="create-dbz_publication-for-all-tables" author="zoroaster">
     <sql>
-      CREATE PUBLICATION dbz_publication FOR public.product, public.category, public.image, public.product_category, public.product_image;
+      CREATE PUBLICATION dbz_publication FOR TABLE public.product, public.category, public.image, public.product_category, public.product_image;
     </sql>
   </changeSet>
 

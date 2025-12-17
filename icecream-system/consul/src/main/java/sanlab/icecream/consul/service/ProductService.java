@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.mapper.CategoryMapper;
+import sanlab.icecream.consul.model.ProductESearch;
+import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.core.ImageDto;
@@ -57,18 +59,8 @@ public class ProductService {
     private final CategoryMapper categoryMapper;
 
     @Transactional(readOnly = true)
-    public CollectionQueryResponse<ProductExtendedDto> getAll(Pageable pageable, boolean featuredOnly) {
-        Page<Product> paginatedProducts = featuredOnly ?
-            productRepository.findAllByIsFeaturedTrue(pageable) :
-            productRepository.findAll(pageable);
-        long total = featuredOnly ? productRepository.countByIsFeaturedTrue() : productRepository.count();
-        List<ProductExtendedDto> productList = productMapper.entityToExtendedDto(paginatedProducts.stream().toList());
-        return CollectionQueryResponse.<ProductExtendedDto>builder()
-            .total(total)
-            .page(pageable.getPageNumber())
-            .totalPages(calculateTotalPage(total, pageable.getPageSize()))
-            .data(productList)
-            .build();
+    public CollectionQueryResponse<ProductESearch> getAll(CollectionQueryRequest req, boolean isFeatured) {
+        return productSearchRepository.searchAndFilter(req, isFeatured);
     }
 
     @Transactional(readOnly = true)
