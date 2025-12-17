@@ -68,4 +68,9 @@ public class CollectionQueryRequest {
         return pageReq.getPageNumber();
     }
 
+    public long getPageSize() {
+        var pageReq = getPageRequest();
+        return pageReq.getPageSize();
+    }
+
 }

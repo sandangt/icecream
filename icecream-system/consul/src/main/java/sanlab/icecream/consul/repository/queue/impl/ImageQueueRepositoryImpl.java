@@ -5,7 +5,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import sanlab.icecream.consul.repository.queue.ImageQueueRepository;
-import sanlab.icecream.fundamentum.dto.FileHandlingDto;
+import sanlab.icecream.fundamentum.dto.core.FileHandlingDto;
 
 @Component
 @RequiredArgsConstructor

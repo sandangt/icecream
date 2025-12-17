@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.model.Stock;
@@ -108,7 +109,7 @@ public class FakerData {
                 .briefDescription(faker.lorem().sentence(20))
                 .description(faker.lorem().paragraph(5))
                 .price(faker.number().randomDouble(2, 0, 10_000_000L))
-                .status(status)
+                .status(status.name())
                 .isFeatured(false)
                 .sku(faker.lorem().characters(30))
                 .stockQuantity(faker.number().randomNumber())
@@ -158,7 +159,7 @@ public class FakerData {
         var image = Image.builder()
             .description(imageDto.getDescription())
             .relativePath(imageDto.getRelativePath())
-            .type(EImageType.MEDIA).build();
+            .type(EImageType.MEDIA.name()).build();
         return imageRepository.save(image);
     }
 
@@ -384,7 +385,7 @@ public class FakerData {
                 .phone(faker.phoneNumber().cellPhone())
                 .firstName(faker.name().firstName())
                 .lastName(faker.name().lastName())
-                .status(ECustomerStatus.ACTIVE)
+                .status(ECustomerStatus.ACTIVE.name())
                 .build()).toList();
         customerRepository.saveAll(result);
     }
@@ -406,12 +407,12 @@ public class FakerData {
             try {
                 Set<Image> imgSet = new HashSet<>();
                 Image avatar = generateImage();
-                avatar.setType(EImageType.AVATAR);
+                avatar.setType(EImageType.AVATAR.name());
                 imgSet.add(avatar);
                 int imgNum = faker.number().numberBetween(1, 10);
                 for (int i=0;i<imgNum;i++) {
                     Image img = generateImage();
-                    img.setType(EImageType.MEDIA);
+                    img.setType(EImageType.MEDIA.name());
                     imgSet.add(img);
                 }
                 customer.setMedia(imgSet);

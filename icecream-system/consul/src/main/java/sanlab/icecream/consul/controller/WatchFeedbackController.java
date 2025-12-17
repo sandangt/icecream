@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sanlab.icecream.consul.dto.extended.FeedbackExtendedDto;
+import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.exception.HttpServiceUnavailableException;

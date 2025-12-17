@@ -8,7 +8,7 @@ function create_database_with_postgres_user() {
   psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     CREATE DATABASE $database;
     GRANT ALL ON DATABASE $database TO $POSTGRES_USER;
-  EOSQL
+EOSQL
 }
 
 if [ -n "$POSTGRES_MULTIPLE_DATABASES" ]; then

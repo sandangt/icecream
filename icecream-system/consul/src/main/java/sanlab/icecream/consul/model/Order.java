@@ -14,11 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import sanlab.icecream.fundamentum.constant.EDeliveryMethod;
-import sanlab.icecream.fundamentum.constant.EDeliveryStatus;
-import sanlab.icecream.fundamentum.constant.EOrderStatus;
-import sanlab.icecream.fundamentum.constant.EPaymentMethod;
-import sanlab.icecream.fundamentum.constant.EPaymentStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +41,15 @@ public class Order extends AbstractAuditEntity {
     @Column(name = "delivery_fee")
     private Double deliveryFee;
     @Column(name = "delivery_method")
-    private EDeliveryMethod deliveryMethod;
+    private String deliveryMethod;
     @Column(name = "payment_method")
-    private EPaymentMethod paymentMethod;
+    private String paymentMethod;
     @Column(name = "order_status")
-    private EOrderStatus orderStatus;
+    private String orderStatus;
     @Column(name = "delivery_status")
-    private EDeliveryStatus deliveryStatus;
+    private String deliveryStatus;
     @Column(name = "payment_status")
-    private EPaymentStatus paymentStatus;
+    private String paymentStatus;
 
     @OneToMany(mappedBy = "order", fetch = EAGER, orphanRemoval = true)
     @Builder.Default

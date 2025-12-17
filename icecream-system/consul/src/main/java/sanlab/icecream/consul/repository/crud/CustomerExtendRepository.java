@@ -1,6 +1,6 @@
 package sanlab.icecream.consul.repository.crud;
 
-import sanlab.icecream.consul.dto.core.CustomerDto;
+import sanlab.icecream.fundamentum.dto.core.CustomerDto;
 
 import java.util.UUID;
 

@@ -8,10 +8,10 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.consul.repository.search.ProductSearchExtendRepository;
-import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.constant.EProductStatus;
+import sanlab.icecream.fundamentum.utils.RequestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +84,7 @@ public class ProductSearchExtendRepositoryImpl implements ProductSearchExtendRep
             .toList();
         long total = searchHits.getTotalHits();
         long page = req.getPageNumber();
-        long totalPages = CollectionQueryUtils.calculateTotalPages(req, total);
+        long totalPages = RequestUtils.calculateTotalPage(total, req.getPageSize());
 
         return CollectionQueryResponse.<ProductESearch>builder()
             .total(total)

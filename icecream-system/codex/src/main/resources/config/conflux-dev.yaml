@@ -1,0 +1,44 @@
+server:
+  address: ${CONFLUX_HOST}
+  port: ${CONFLUX_PORT}
+
+spring:
+  application:
+    name: conflux
+  cloud:
+    function:
+      definition: enrichProduct;helloKafka
+    stream:
+      bindings:
+        enrichProduct-in-0:
+          binder: kafka-binder
+          destination: icecream.consul.product
+          group: conflux-consumer-group
+        enrichProduct-out-0:
+          binder: kafka-binder
+          destination: icecream.conflux.enriched.product
+          producer:
+            use-native-encoding: true
+        helloKafka-in-0:
+          group: conflux-consumer-group
+      kafka:
+        streams:
+          binder:
+            brokers: ${KAFKA_HOST}:${KAFKA_PORT}
+            processing.guarantee: exactly_once_v2
+            commit.interval.ms: 1000
+            num.stream.threads: ${KAFKA_STREAMS_THREADS:3}
+            replication.factor: ${KAFKA_REPLICATION_FACTOR:1}
+            default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+            default.value.serde: org.apache.kafka.common.serialization.Serdes$ByteArraySerde
+            consumer.auto.offset.reset: earliest
+            consumer.max.poll.records: 500
+            producer.acks: all
+            producer.retries: 3
+            producer.compression.type: snappy
+            rocksdb.config.setter: com.icecream.enrichment.config.RocksDBConfigSetter
+        bindings:
+          enrichProduct-out-0:
+            producer:
+              configuration:
+                key.serializer: org.springframework.kafka.support.serializer.JsonSerializer

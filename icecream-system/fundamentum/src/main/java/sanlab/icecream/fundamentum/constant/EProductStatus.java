@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,10 @@ public enum EProductStatus {
 
     public static EProductStatus fromName(String name) {
         return MAP_BY_NAME.getOrDefault(StringUtils.upperCase(name), UNKNOWN);
+    }
+
+    public static String toName(EProductStatus status) {
+        return Optional.ofNullable(status).map(Enum::name).orElse(UNKNOWN.name());
     }
 
 }

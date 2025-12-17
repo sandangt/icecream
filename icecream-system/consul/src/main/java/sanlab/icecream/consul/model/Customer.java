@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +41,7 @@ public class Customer extends AbstractAuditEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    private ECustomerStatus status;
+    private String status;
 
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "customer_image",

@@ -6,7 +6,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import sanlab.icecream.consul.repository.queue.AuditLogQueueRepository;
-import sanlab.icecream.fundamentum.dto.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
 
 @Component
 @RequiredArgsConstructor

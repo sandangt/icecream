@@ -1,9 +1,13 @@
 FROM debezium/connect:2.7.3.Final
 
-# Install Confluent Elasticsearch Sink Connector
-RUN #confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:14
+USER root
 
-# Optional: Install other useful connectors
-RUN confluent-hub install --no-prompt debezium/debezium-connector-postgresql:2.7.3
-# RUN confluent-hub install --no-prompt debezium/debezium-connector-mysql:2.7.3
-# RUN confluent-hub install --no-prompt debezium/debezium-connector-mongodb:2.7.3
+COPY --chown=kafka:kafka debezium/plugins /kafka/connect
+
+RUN cd /kafka/connect && \
+        for f in ./*.zip; do [ -e "$f" ] && unzip -o "$f" -d . || true; done && \
+        for f in ./*.tar.gz; do [ -e "$f" ] && tar -xzf "$f" -C . || true; done
+
+RUN chown -R kafka:kafka /kafka/connect
+
+USER kafka

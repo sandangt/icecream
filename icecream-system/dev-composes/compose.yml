@@ -160,7 +160,10 @@ services:
       - icecream-network
 
   kafka:
-    image: confluentinc/cp-kafka:7.8.4
+#    image: confluentinc/cp-kafka:7.8.4
+    build:
+      context: .
+      dockerfile: kafka/Dockerfile
     container_name: icecream-kafka
     hostname: kafka
     depends_on:
@@ -179,8 +182,18 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_CLEANUP_POLICY: "compact,delete"
+      KAFKA_LOG_CLEANER_MIN_CLEANABLE_RATIO: 0.01
+      KAFKA_LOG_SEGMENT_MS: 600000
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      TOPIC_PARTITIONS: 1
+      TOPIC_REPLICATION_FACTOR: 1
+      TOPIC_INIT_RETRY_INTERVAL: 5
+      TOPIC_INIT_MAX_ATTEMPTS: 60
+    volumes:
+      - ${KAFKA_VOLUME}:/var/lib/kafka/data
     healthcheck:
-      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:29002" ]
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:29092" ]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -189,7 +202,10 @@ services:
       - icecream-network
 
   debezium-connect:
-    image: debezium/connect:2.7.3.Final
+#    image: debezium/connect:2.7.3.Final
+    build:
+      context: .
+      dockerfile: debezium/Dockerfile
     container_name: icecream-debezium-connect
     depends_on:
       - kafka
@@ -213,7 +229,7 @@ services:
       - CONNECT_REST_ADVERTISED_HOST_NAME=debezium-connect
       - CONNECT_PLUGIN_PATH=/kafka/connect
     volumes:
-      - ${DEBEZIUM_VOLUME}/plugins:/kafka/connect
+#      - ${DEBEZIUM_VOLUME}/plugins:/kafka/connect
       - ./debezium/connectors:/connectors
     networks:
       - icecream-network

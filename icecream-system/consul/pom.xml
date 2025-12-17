@@ -17,6 +17,7 @@
   </properties>
 
   <dependencies>
+
     <!--region Spring boot-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -59,6 +60,7 @@
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Spring cloud-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -73,12 +75,7 @@
       <artifactId>spring-cloud-starter-stream-kafka</artifactId>
     </dependency>
     <!--endregion-->
-    <!--region Spring doc-->
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    </dependency>
-    <!--endregion-->
+
     <!--region Database-->
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -89,12 +86,14 @@
       <artifactId>liquibase-core</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Minio-->
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Jackson-->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -108,7 +107,12 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-cbor</artifactId>
+    </dependency>
     <!--endregion-->
+
     <!--region Utils-->
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -140,6 +144,7 @@
       <artifactId>javafaker</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region INTERNAL-->
     <dependency>
       <groupId>sanlab.icecream</groupId>
@@ -148,6 +153,7 @@
       <scope>compile</scope>
     </dependency>
     <!--endregion-->
+
     <dependency>
       <groupId>com.twelvemonkeys.imageio</groupId>
       <artifactId>imageio-jpeg</artifactId>
@@ -158,6 +164,7 @@
       <artifactId>imageio-core</artifactId>
       <version>${twelve.monkeys.version}</version>
     </dependency>
+
     <!--region TESTING-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -185,6 +192,7 @@
       <scope>test</scope>
     </dependency>
     <!--endregion-->
+
   </dependencies>
 
   <build>
@@ -192,6 +200,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>sanlab.icecream.consul.Application</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

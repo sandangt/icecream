@@ -103,6 +103,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>sanlab.icecream.echo.Application</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

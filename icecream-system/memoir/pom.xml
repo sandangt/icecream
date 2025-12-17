@@ -14,6 +14,7 @@
   </properties>
 
   <dependencies>
+
     <!--region Spring boot-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -40,6 +41,7 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Spring cloud-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -54,6 +56,7 @@
       <artifactId>spring-cloud-starter-stream-kafka</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Jackson-->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -68,6 +71,7 @@
       <artifactId>jackson-databind</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Utils-->
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -94,6 +98,7 @@
       <artifactId>slugify</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Database-->
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -104,6 +109,7 @@
       <artifactId>liquibase-core</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region INTERNAL-->
     <dependency>
       <groupId>sanlab.icecream</groupId>
@@ -112,6 +118,7 @@
       <scope>compile</scope>
     </dependency>
     <!--endregion-->
+
   </dependencies>
 
   <build>
@@ -119,6 +126,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>sanlab.icecream.memoir.Application</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

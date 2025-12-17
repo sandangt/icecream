@@ -5,15 +5,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import sanlab.icecream.consul.dto.core.ProductDto;
-import sanlab.icecream.consul.dto.extended.CategoryExtendedDto;
+import sanlab.icecream.fundamentum.dto.core.ProductDto;
+import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
 import sanlab.icecream.consul.mapper.CategoryMapper;
 import sanlab.icecream.consul.mapper.ImageMapper;
 import sanlab.icecream.consul.mapper.ProductMapper;
 import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.repository.crud.CategoryRepository;
-import sanlab.icecream.consul.dto.core.CategoryDto;
+import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;
@@ -47,6 +48,32 @@ public class CategoryService {
         return categoryRepository.findById(id)
             .map(categoryMapper::entityToExtendedDto)
             .orElseThrow(() -> new IcRuntimeException(CATEGORY_NOT_FOUND, "id: %s".formatted(id)));
+    }
+
+    @Transactional(readOnly = true)
+    public CollectionQueryResponse<ProductDto> getAllProducts(UUID categoryId, Pageable pageable) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new IcRuntimeException(CATEGORY_NOT_FOUND, "id: %s".formatted(categoryId)));
+        long total = category.getProducts().size();
+        List<ProductDto> productList = category.getProducts().parallelStream()
+            .map(productMapper::entityToDto)
+            .toList();
+        return CollectionQueryResponse.<ProductDto>builder()
+            .total(total)
+            .page(pageable.getPageNumber())
+            .totalPages(calculateTotalPage(total, pageable.getPageSize()))
+            .data(productList)
+            .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductExtendedDto> getAllProducts(UUID categoryId) {
+        if (!categoryRepository.existsById(categoryId))
+            throw new IcRuntimeException(CATEGORY_NOT_FOUND, "id: %s".formatted(categoryId));
+        return categoryRepository.findAllProductsById(categoryId)
+            .parallelStream()
+            .map(productMapper::entityToExtendedDto)
+            .toList();
     }
 
     @Transactional
@@ -87,22 +114,6 @@ public class CategoryService {
         } catch (Exception ex) {
             throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "saving category's avatar");
         }
-    }
-
-    @Transactional(readOnly = true)
-    public CollectionQueryResponse<ProductDto> getAllProducts(UUID categoryId, Pageable pageable) {
-        Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new IcRuntimeException(CATEGORY_NOT_FOUND, "id: %s".formatted(categoryId)));
-        long total = category.getProducts().size();
-        List<ProductDto> productList = category.getProducts().parallelStream()
-            .map(productMapper::entityToDto)
-            .toList();
-        return CollectionQueryResponse.<ProductDto>builder()
-            .total(total)
-            .page(pageable.getPageNumber())
-            .totalPages(calculateTotalPage(total, pageable.getPageSize()))
-            .data(productList)
-            .build();
     }
 
 }

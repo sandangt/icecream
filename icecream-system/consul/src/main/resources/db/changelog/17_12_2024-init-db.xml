@@ -54,6 +54,7 @@
         meta_title VARCHAR,
         meta_keyword VARCHAR,
         meta_description TEXT,
+        featured_banner UUID DEFAULT NULL,
         created_at BIGINT,
         modified_at BIGINT
       );

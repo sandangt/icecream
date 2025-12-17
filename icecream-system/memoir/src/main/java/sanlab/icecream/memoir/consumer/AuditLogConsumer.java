@@ -3,7 +3,7 @@ package sanlab.icecream.memoir.consumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
-import sanlab.icecream.fundamentum.dto.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
 
 import java.util.function.Consumer;
 

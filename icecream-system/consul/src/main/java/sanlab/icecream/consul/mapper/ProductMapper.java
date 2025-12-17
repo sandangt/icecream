@@ -3,18 +3,20 @@ package sanlab.icecream.consul.mapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.extended.ProductExtendedDto;
+import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.consul.model.Product;
-import sanlab.icecream.consul.dto.core.ProductDto;
+import sanlab.icecream.fundamentum.dto.core.ProductDto;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { CategoryMapper.class, ImageMapper.class, StockMapper.class })
-public interface ProductMapper extends BaseMapper {
+@Mapper(componentModel = "spring", uses = { SharedMapper.class, CategoryMapper.class, ImageMapper.class, StockMapper.class })
+public interface ProductMapper {
 
     //region To DTO
     @Named("entityToDto")
+    @Mapping(target = "status", source = "status", qualifiedByName = "nameToEProductStatus")
     ProductDto entityToDto(Product product);
 
     @Named("entityToDtoIter")
@@ -22,6 +24,7 @@ public interface ProductMapper extends BaseMapper {
     List<ProductDto> entityToDto(List<Product> products);
 
     @Named("entityToExtendedDto")
+    @Mapping(target = "status", source = "status", qualifiedByName = "nameToEProductStatus")
     ProductExtendedDto entityToExtendedDto(Product product);
 
     @Named("entityToExtendedDtoIter")
@@ -36,6 +39,7 @@ public interface ProductMapper extends BaseMapper {
     //region To Entity
     @Named("dtoToEntity")
     @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "status", source = "status", qualifiedByName = "eProductStatusToName")
     Product dtoToEntity(ProductDto productDto);
 
     @Named("dtoToEntityIter")

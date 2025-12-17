@@ -4,8 +4,8 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.core.StockDto;
-import sanlab.icecream.consul.dto.extended.StockExtendedDto;
+import sanlab.icecream.fundamentum.dto.core.StockDto;
+import sanlab.icecream.fundamentum.dto.exntended.StockExtendedDto;
 import sanlab.icecream.consul.model.Stock;
 
 import java.util.List;

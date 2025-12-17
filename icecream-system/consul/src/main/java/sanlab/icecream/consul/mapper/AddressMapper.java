@@ -4,7 +4,7 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.core.AddressDto;
+import sanlab.icecream.fundamentum.dto.core.AddressDto;
 import sanlab.icecream.consul.model.Address;
 
 import java.util.List;
