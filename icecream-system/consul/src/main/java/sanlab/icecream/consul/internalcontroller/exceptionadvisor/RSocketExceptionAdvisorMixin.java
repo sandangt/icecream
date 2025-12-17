@@ -15,6 +15,7 @@ import static sanlab.icecream.consul.exception.ConsulErrorModel.BAD_INPUT_REQUES
 
 public interface RSocketExceptionAdvisorMixin {
 
+    //region Custom exceptions
     @MessageExceptionHandler
     default Mono<ErrorResponse> notFound(HttpNotFoundException ex) {
         return composeErrorResponse(ex.getInnerEx());

@@ -12,7 +12,7 @@ spring:
       bindings:
         enrichProduct-in-0:
           binder: kafka-binder
-          destination: icecream.consul.product
+          destination: icecream.consul.product,icecream.consul.category,icecream.consul.image,icecream.consul.product_category,icecream.consul.product_image
           group: conflux-consumer-group
         enrichProduct-out-0:
           binder: kafka-binder
