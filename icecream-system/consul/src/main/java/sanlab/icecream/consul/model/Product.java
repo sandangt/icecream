@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import sanlab.icecream.fundamentum.constant.EProductStatus;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +44,7 @@ public class Product extends AbstractAuditEntity {
     @Column(name = "brief_description")
     private String briefDescription;
     private String description;
-    private EProductStatus status;
+    private String status;
     private Double price;
     private String sku;
     @Column(name = "is_featured")

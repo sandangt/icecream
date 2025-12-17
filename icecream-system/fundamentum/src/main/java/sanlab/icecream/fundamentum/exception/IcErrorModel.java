@@ -6,5 +6,6 @@ public interface IcErrorModel extends Serializable {
 
     String getCode();
     String getMsg();
+    int getRSocketCode(); // Should be < -2 or > 769
 
 }

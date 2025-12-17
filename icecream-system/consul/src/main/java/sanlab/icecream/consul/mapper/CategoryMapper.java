@@ -4,9 +4,9 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.extended.CategoryExtendedDto;
+import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
 import sanlab.icecream.consul.model.Category;
-import sanlab.icecream.consul.dto.core.CategoryDto;
+import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 
 import java.util.List;
 

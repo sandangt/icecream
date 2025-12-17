@@ -6,9 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import sanlab.icecream.consul.dto.core.FeedbackDto;
-import sanlab.icecream.consul.dto.core.ImageDto;
-import sanlab.icecream.consul.dto.extended.ProductExtendedDto;
+import sanlab.icecream.consul.mapper.CategoryMapper;
+import sanlab.icecream.consul.model.ProductESearch;
+import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
+import sanlab.icecream.fundamentum.dto.core.CategoryDto;
+import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
+import sanlab.icecream.fundamentum.dto.core.ImageDto;
+import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.consul.mapper.FeedbackMapper;
 import sanlab.icecream.consul.mapper.ImageMapper;
 import sanlab.icecream.consul.mapper.ProductMapper;
@@ -18,8 +22,9 @@ import sanlab.icecream.consul.model.Product;
 import sanlab.icecream.consul.model.Stock;
 import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.consul.repository.crud.ProductRepository;
-import sanlab.icecream.consul.dto.core.ProductDto;
+import sanlab.icecream.fundamentum.dto.core.ProductDto;
 import sanlab.icecream.consul.repository.crud.StockRepository;
+import sanlab.icecream.consul.repository.search.ProductSearchRepository;
 import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
@@ -46,24 +51,16 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final StockRepository stockRepository;
+    private final ProductSearchRepository productSearchRepository;
 
     private final FeedbackMapper feedbackMapper;
     private final ProductMapper productMapper;
     private final ImageMapper imageMapper;
+    private final CategoryMapper categoryMapper;
 
     @Transactional(readOnly = true)
-    public CollectionQueryResponse<ProductExtendedDto> getAll(Pageable pageable, boolean featuredOnly) {
-        Page<Product> paginatedProducts = featuredOnly ?
-            productRepository.findAllByIsFeaturedTrue(pageable) :
-            productRepository.findAll(pageable);
-        long total = featuredOnly ? productRepository.countByIsFeaturedTrue() : productRepository.count();
-        List<ProductExtendedDto> productList = productMapper.entityToExtendedDto(paginatedProducts.stream().toList());
-        return CollectionQueryResponse.<ProductExtendedDto>builder()
-            .total(total)
-            .page(pageable.getPageNumber())
-            .totalPages(calculateTotalPage(total, pageable.getPageSize()))
-            .data(productList)
-            .build();
+    public CollectionQueryResponse<ProductESearch> getAll(CollectionQueryRequest req, boolean isFeatured) {
+        return productSearchRepository.searchAndFilter(req, isFeatured);
     }
 
     @Transactional(readOnly = true)
@@ -94,6 +91,32 @@ public class ProductService {
             .totalPages(calculateTotalPage(total, pageable.getPageSize()))
             .data(feedbackList)
             .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryDto> getCategoriesByProductId(UUID productId) {
+        if (!productRepository.existsById(productId))
+            throw new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
+        return categoryRepository.findAllByProducts_Id(productId).stream()
+            .map(categoryMapper::entityToDto)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ImageDto> getMediaByProductId(UUID productId) {
+        if (!productRepository.existsById(productId))
+            throw new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
+        return productRepository.findAllMediaById(productId).stream()
+            .map(imageMapper::entityToDto)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ImageDto> getFeaturedBannerByProductId(UUID productId) {
+        if (!productRepository.existsById(productId))
+            throw new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
+        return productRepository.findFirstFeaturedBannerById(productId)
+            .map(imageMapper::entityToDto);
     }
 
     @Transactional

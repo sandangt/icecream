@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import sanlab.icecream.chronos.repository.storage.StorageRepository;
-import sanlab.icecream.fundamentum.dto.FileHandlingDto;
+import sanlab.icecream.fundamentum.dto.core.FileHandlingDto;
 
 import java.util.function.Consumer;
 
@@ -17,8 +17,8 @@ public class ImageConsumer {
         this.minIOStorageRepository = minIOStorageRepository;
     }
 
-    @Bean(name = "imageDelete")
-    public Consumer<Message<FileHandlingDto>> delete() {
+    @Bean
+    public Consumer<Message<FileHandlingDto>> deleteImage() {
         return message -> {
             FileHandlingDto payload = message.getPayload();
             minIOStorageRepository.deleteImage(payload.getRelativePath());

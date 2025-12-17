@@ -10,6 +10,7 @@ import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.exception.HttpServiceUnavailableException;
 import sanlab.icecream.consul.exception.HttpUnauthorizedException;
+import sanlab.icecream.fundamentum.contractmodel.response.ErrorResponse;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -46,7 +47,7 @@ public class ExceptionAdvisor {
     }
 
     @ExceptionHandler({HttpServiceUnavailableException.class})
-    public ResponseEntity<ErrorResponse> internalServerError(HttpServiceUnavailableException ex) {
+    public ResponseEntity<ErrorResponse> serviceUnavailable(HttpServiceUnavailableException ex) {
         var innerEx = ex.getInnerEx();
         return new ResponseEntity<>(new ErrorResponse(innerEx.code(), innerEx.message()), SERVICE_UNAVAILABLE);
     }

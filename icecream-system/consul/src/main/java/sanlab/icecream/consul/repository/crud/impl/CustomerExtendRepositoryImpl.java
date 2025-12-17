@@ -5,7 +5,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
-import sanlab.icecream.consul.dto.core.CustomerDto;
+import sanlab.icecream.fundamentum.dto.core.CustomerDto;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.repository.crud.CustomerExtendRepository;

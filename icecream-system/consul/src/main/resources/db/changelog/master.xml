@@ -6,7 +6,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
   <include file="db/changelog/17_12_2024-init-db.xml"/>
-  <include file="db/changelog/04_01_2025-add-banner-col-to-product.xml"/>
   <include file="db/changelog/20_07_2025-add-primary-address-col-to-customer.xml"/>
+  <include file="db/changelog/09_08_2025-remove-primary-key-CarItem-and-OrderItem.xml"/>
+  <include file="db/changelog/14_12_2025-create-publication.xml"/>
 
 </databaseChangeLog>

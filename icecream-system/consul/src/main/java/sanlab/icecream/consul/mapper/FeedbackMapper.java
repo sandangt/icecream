@@ -4,8 +4,8 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.core.FeedbackDto;
-import sanlab.icecream.consul.dto.extended.FeedbackExtendedDto;
+import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
+import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
 import sanlab.icecream.consul.model.Feedback;
 
 import java.util.List;

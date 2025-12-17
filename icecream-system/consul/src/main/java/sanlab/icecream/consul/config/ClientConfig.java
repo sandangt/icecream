@@ -4,77 +4,76 @@ import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.MediaType;
 import org.springframework.messaging.rsocket.RSocketRequester;
-import org.springframework.util.MimeType;
+import org.springframework.messaging.rsocket.RSocketStrategies;
 import org.springframework.web.client.RestClient;
 
 @Configuration
 public class ClientConfig {
 
-    @Value("${app.minio.url}")
-    private String minioUrl;
-    @Value("${app.minio.access.key}")
-    private String accessKey;
-    @Value("${app.minio.access.secret}")
-    private String accessSecret;
-
-    @Value("${app.echo.rsocket.port}")
-    private String echoRsockPort;
-    @Value("${app.echo.rsocket.host}")
-    private String echoRsockHost;
-
-    @Value("${app.memoir.rsocket.port}")
-    private String memoirRsockPort;
-    @Value("${app.memoir.rsocket.host}")
-    private String memoirRsockHost;
-
-    @Value("${app.chronos.rsocket.port}")
-    private String chronosRsockPort;
-    @Value("${app.chronos.rsocket.host}")
-    private String chronosRsockHost;
-
-    @Value("${app.identity.url}")
-    private String identityUrl;
-
-    private static final String APPLICATION_CBOR = "application/cbor";
-
+    @Lazy
     @Bean
     public RestClient restClient() {
         return RestClient.create();
     }
 
     @Bean
-    public RestClient identityClient() {
+    public RestClient identityClient(@Value("${app.identity.url}") String identityUrl) {
         return RestClient.create(identityUrl);
     }
 
+    @Lazy
     @Bean
-    public MinioClient minioClient() {
+    public MinioClient minioClient(
+        @Value("${app.minio.url}") String url,
+        @Value("${app.minio.access.key}") String accessKey,
+        @Value("${app.minio.access.secret}") String accessSecret
+    ) {
         return MinioClient.builder()
-            .endpoint(minioUrl)
+            .endpoint(url)
             .credentials(accessKey, accessSecret)
             .build();
     }
 
+    @Lazy
     @Bean
-    public RSocketRequester echoRsockClient(RSocketRequester.Builder builder) {
-        return builder
-            .dataMimeType(MimeType.valueOf(APPLICATION_CBOR))
-            .tcp(echoRsockHost, Integer.parseInt(echoRsockPort));
+    public RSocketRequester echoRSocketClient(
+        RSocketStrategies rSocketStrategies,
+        @Value("${app.echo.rsocket.port}") String port,
+        @Value("${app.echo.rsocket.host}") String host
+    ) {
+        return RSocketRequester.builder()
+            .rsocketStrategies(rSocketStrategies)
+            .dataMimeType(MediaType.APPLICATION_CBOR)
+            .tcp(host, Integer.parseInt(port));
     }
 
+    @Lazy
     @Bean
-    public RSocketRequester memoirRsockClient(RSocketRequester.Builder builder) {
-        return builder
-            .dataMimeType(MimeType.valueOf(APPLICATION_CBOR))
-            .tcp(memoirRsockHost, Integer.parseInt(memoirRsockPort));
+    public RSocketRequester memoirRSocketClient(
+        RSocketStrategies rSocketStrategies,
+        @Value("${app.memoir.rsocket.port}") String port,
+        @Value("${app.memoir.rsocket.host}") String host
+    ) {
+        return RSocketRequester.builder()
+            .rsocketStrategies(rSocketStrategies)
+            .dataMimeType(MediaType.APPLICATION_CBOR)
+            .tcp(host, Integer.parseInt(port));
     }
 
+    @Lazy
     @Bean
-    public RSocketRequester chronosRsockClient(RSocketRequester.Builder builder) {
-        return builder
-            .dataMimeType(MimeType.valueOf(APPLICATION_CBOR))
-            .tcp(chronosRsockHost, Integer.parseInt(chronosRsockPort));
+    public RSocketRequester chronosRSocketClient(
+        RSocketStrategies rSocketStrategies,
+        @Value("${app.chronos.rsocket.port}") String port,
+        @Value("${app.chronos.rsocket.host}") String host
+    ) {
+        return RSocketRequester.builder()
+            .rsocketStrategies(rSocketStrategies)
+            .dataMimeType(MediaType.APPLICATION_CBOR)
+            .tcp(host, Integer.parseInt(port));
     }
 
 }

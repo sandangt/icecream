@@ -9,6 +9,7 @@ x-icecream-minio-common: &minio-common
 
 networks:
   icecream-network:
+    driver: bridge
 
 services:
 
@@ -114,45 +115,124 @@ services:
     networks:
       - icecream-network
 
-  # zookeeper:
-  #   image: confluentinc/cp-zookeeper:7.3.3
-  #   container_name: icecream-zookeeper
-  #   hostname: zookeeper
-  #   ports:
-  #     - "${ZOOKEEPER_CLIENT_PORT}:2181"
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 2181
-  #     ZOOKEEPER_SERVER_ID: 1
-  #     ZOOKEEPER_TICK_TIME: 2000
-  #   networks:
-  #     - icecream-network
+  elasticsearch:
+    image: elasticsearch:8.19.6
+    container_name: icecream-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    ports:
+      - "${ELASTICSEARCH_PORT}:9200"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ${ELASTICSEARCH_VOLUME}:/usr/share/elasticsearch/data
+    networks:
+      - icecream-network
 
-  # kafka:
-  #   image: confluentinc/cp-kafka:7.3.3
-  #   container_name: icecream-kafka
-  #   hostname: kafka
-  #   depends_on:
-  #     - zookeeper
-  #   ports:
-  #     - "${KAFKA_PORT}:${KAFKA_PORT}"
-  #     - "19092:19092"
-  #     - "9999:9999"
-  #   environment:
-  #     KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-  #     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:19092,EXTERNAL://127.0.0.1:${KAFKA_PORT}
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-  #     KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  #     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-  #     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-  #     KAFKA_JMX_PORT: 9999
-  #     KAFKA_JMX_HOSTNAME: "127.0.0.1"
-  #     KAFKA_AUTHORIZER_CLASS_NAME: "kafka.security.authorizer.AclAuthorizer"
-  #     KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
-  #   networks:
-  #     - icecream-network
+  kibana:
+    image: kibana:8.19.6
+    container_name: icecream-kibana-optional
+    ports:
+      - "${KIBANA_PORT}:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - icecream-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.8.4
+    container_name: icecream-zookeeper
+    hostname: zookeeper
+    ports:
+      - "${ZOOKEEPER_CLIENT_PORT}:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - icecream-network
+
+  kafka:
+#    image: confluentinc/cp-kafka:7.8.4
+    build:
+      context: .
+      dockerfile: kafka/Dockerfile
+    container_name: icecream-kafka
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "${KAFKA_PORT}:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://${KAFKA_HOST}:${KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_CLEANUP_POLICY: "compact,delete"
+      KAFKA_LOG_CLEANER_MIN_CLEANABLE_RATIO: 0.01
+      KAFKA_LOG_SEGMENT_MS: 600000
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      TOPIC_PARTITIONS: 1
+      TOPIC_REPLICATION_FACTOR: 1
+      TOPIC_INIT_RETRY_INTERVAL: 5
+      TOPIC_INIT_MAX_ATTEMPTS: 60
+    volumes:
+      - ${KAFKA_VOLUME}:/var/lib/kafka/data
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:29092" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - icecream-network
+
+  debezium-connect:
+#    image: debezium/connect:2.7.3.Final
+    build:
+      context: .
+      dockerfile: debezium/Dockerfile
+    container_name: icecream-debezium-connect
+    depends_on:
+      - kafka
+      - zookeeper
+      - postgresql
+      - elasticsearch
+    ports:
+      - "${DEBEZIUM_CONNECT_PORT}:8083"
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:29092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=connect-configs
+      - OFFSET_STORAGE_TOPIC=connect-offsets
+      - STATUS_STORAGE_TOPIC=connect-status
+      - KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - KEY_CONVERTER_SCHEMAS_ENABLE=false
+      - VALUE_CONVERTER_SCHEMAS_ENABLE=false
+      - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_REST_ADVERTISED_HOST_NAME=debezium-connect
+      - CONNECT_PLUGIN_PATH=/kafka/connect
+    volumes:
+#      - ${DEBEZIUM_VOLUME}/plugins:/kafka/connect
+      - ./debezium/connectors:/connectors
+    networks:
+      - icecream-network
 
   # schema-registry:
   #   image: confluentinc/cp-schema-registry:7.3.3

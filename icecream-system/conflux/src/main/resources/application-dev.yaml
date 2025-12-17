@@ -1,0 +1,10 @@
+spring:
+  main:
+    banner-mode: console
+  banner:
+    location: classpath:/banner.txt
+  application:
+    name: conflux
+    version: 0.2.0-snapshot
+  config:
+    import: 'configserver:http://${CODEX_HOST}:${CODEX_PORT}'

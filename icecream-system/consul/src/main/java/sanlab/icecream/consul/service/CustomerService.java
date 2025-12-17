@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import sanlab.icecream.consul.dto.core.AddressDto;
-import sanlab.icecream.consul.dto.core.CustomerDto;
-import sanlab.icecream.consul.dto.core.ImageDto;
-import sanlab.icecream.consul.dto.extended.CustomerExtendedDto;
+import sanlab.icecream.fundamentum.dto.core.AddressDto;
+import sanlab.icecream.fundamentum.dto.core.CustomerDto;
+import sanlab.icecream.fundamentum.dto.core.ImageDto;
+import sanlab.icecream.fundamentum.dto.exntended.CustomerExtendedDto;
 import sanlab.icecream.consul.mapper.AddressMapper;
 import sanlab.icecream.consul.mapper.CustomerMapper;
 import sanlab.icecream.consul.mapper.ImageMapper;
@@ -25,7 +25,7 @@ import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 import sanlab.icecream.fundamentum.constant.EFileHandlingAction;
 import sanlab.icecream.fundamentum.constant.EFileType;
-import sanlab.icecream.fundamentum.dto.FileHandlingDto;
+import sanlab.icecream.fundamentum.dto.core.FileHandlingDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;
@@ -91,7 +91,7 @@ public class CustomerService {
         }
         try {
             var customerEntity = customerMapper.userDetailsToEntity(userDetails);
-            customerEntity.setStatus(ECustomerStatus.ACTIVE);
+            customerEntity.setStatus(ECustomerStatus.ACTIVE.name());
             var result = customerRepository.save(customerEntity);
             return customerMapper.entityToExtendedDto(result);
         } catch (Exception ex) {

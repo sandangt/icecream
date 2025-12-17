@@ -11,7 +11,13 @@
   <packaging>jar</packaging>
   <artifactId>consul</artifactId>
 
+  <properties>
+    <fundamentum.version>0.2.0</fundamentum.version>
+    <twelve.monkeys.version>3.9.4</twelve.monkeys.version>
+  </properties>
+
   <dependencies>
+
     <!--region Spring boot-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -24,6 +30,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -50,6 +60,7 @@
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Spring cloud-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -59,13 +70,12 @@
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
     </dependency>
-    <!--endregion-->
-    <!--region Spring doc-->
     <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-stream-kafka</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Database-->
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -76,12 +86,14 @@
       <artifactId>liquibase-core</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Minio-->
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Jackson-->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -95,7 +107,12 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-cbor</artifactId>
+    </dependency>
     <!--endregion-->
+
     <!--region Utils-->
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -127,24 +144,27 @@
       <artifactId>javafaker</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region INTERNAL-->
     <dependency>
       <groupId>sanlab.icecream</groupId>
       <artifactId>fundamentum</artifactId>
-      <version>0.2.0</version>
+      <version>${fundamentum.version}</version>
       <scope>compile</scope>
     </dependency>
     <!--endregion-->
+
     <dependency>
       <groupId>com.twelvemonkeys.imageio</groupId>
       <artifactId>imageio-jpeg</artifactId>
-      <version>3.9.4</version>
+      <version>${twelve.monkeys.version}</version>
     </dependency>
     <dependency>
       <groupId>com.twelvemonkeys.imageio</groupId>
       <artifactId>imageio-core</artifactId>
-      <version>3.9.4</version>
+      <version>${twelve.monkeys.version}</version>
     </dependency>
+
     <!--region TESTING-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -172,6 +192,7 @@
       <scope>test</scope>
     </dependency>
     <!--endregion-->
+
   </dependencies>
 
   <build>
@@ -179,6 +200,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>sanlab.icecream.consul.Application</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>
