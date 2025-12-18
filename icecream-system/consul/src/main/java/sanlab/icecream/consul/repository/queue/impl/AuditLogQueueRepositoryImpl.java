@@ -14,7 +14,7 @@ public class AuditLogQueueRepositoryImpl implements AuditLogQueueRepository {
 
     private final StreamBridge streamBridge;
 
-    private static final String OUT_CHANNEL = "auditlog-out-0";
+    private static final String OUT_CHANNEL = "auditLog-out-0";
 
     @Override
     public void send() {

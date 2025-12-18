@@ -1,4 +1,4 @@
-package sanlab.icecream.consul.viewmodel.request;
+package sanlab.icecream.fundamentum.contractmodel.request;
 
 import lombok.Builder;
 import lombok.Data;

@@ -10,7 +10,7 @@ import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
 import sanlab.icecream.consul.mapper.FeedbackMapper;
 import sanlab.icecream.consul.model.Feedback;
 import sanlab.icecream.consul.repository.crud.FeedbackRepository;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;

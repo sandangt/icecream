@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Component;
 import sanlab.icecream.consul.repository.rsocketclient.AuditLogRSocketRepository;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
 
 import java.util.List;
@@ -20,8 +21,26 @@ public class AuditLogRSocketRepositoryImpl implements AuditLogRSocketRepository 
 
     @Override
     public List<AuditLogDto> getAll() {
+        var paginationReq = CollectionQueryRequest.PaginationRequest.builder()
+            .limit(10)
+            .offset(1)
+            .build();
+        var filtersReq = CollectionQueryRequest.FiltersRequest
+            .builder()
+            .build();
+        var sortingReq = CollectionQueryRequest.SortingRequest
+            .builder()
+            .field("createdAt")
+            .order(sanlab.icecream.fundamentum.constant.ESortingOrder.DESC)
+            .build();
+        CollectionQueryRequest req = CollectionQueryRequest.builder()
+            .pagination(paginationReq)
+            .filters(filtersReq)
+            .sorting(sortingReq)
+            .build();
         var response = memoirRSocketClient
             .route(ROUTE_GET_ALL)
+            .data(req)
             .retrieveFlux(AuditLogDto.class);
         return response.toStream()
             .toList();

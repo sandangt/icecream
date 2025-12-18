@@ -9,7 +9,7 @@ import sanlab.icecream.fundamentum.dto.exntended.StockExtendedDto;
 import sanlab.icecream.consul.mapper.StockMapper;
 import sanlab.icecream.consul.model.Stock;
 import sanlab.icecream.consul.repository.crud.StockRepository;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;

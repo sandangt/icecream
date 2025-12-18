@@ -46,7 +46,7 @@ spring:
   cloud:
     stream:
       bindings:
-        auditlog-out-0:
+        auditLog-out-0:
           binder: kafka-binder
           destination: service.log.audit.queue
         deleteImage-out-0:

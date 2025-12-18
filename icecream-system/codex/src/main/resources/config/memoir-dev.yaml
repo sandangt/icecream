@@ -15,10 +15,10 @@ spring:
     changeLog: classpath:/db/changelog/master.xml
   cloud:
     function:
-      definition: helloKafka;auditlog # Consumer bean name
+      definition: helloKafka;auditLog # Consumer bean name
     stream:
       bindings:
-        auditlog-in-0:
+        auditLog-in-0:
           binder: kafka-binder
           destination: service.log.audit.queue
           group: memoir-consumer-group

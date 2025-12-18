@@ -1,9 +1,11 @@
 package sanlab.icecream.memoir.internalcontroller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class AuditLogRSocketController {
     );
 
     @MessageMapping(ROUTE_GET_ALL)
-    public Flux<AuditLogDto> get() {
+    public Flux<AuditLogDto> get(@Payload CollectionQueryRequest req) {
         return Flux.fromIterable(LIST_RESPONSE);
     }
 

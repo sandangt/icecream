@@ -1,14 +1,13 @@
 package sanlab.icecream.consul.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.mapper.CategoryMapper;
 import sanlab.icecream.consul.model.ProductESearch;
-import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.core.ImageDto;
@@ -25,7 +24,7 @@ import sanlab.icecream.consul.repository.crud.ProductRepository;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
 import sanlab.icecream.consul.repository.crud.StockRepository;
 import sanlab.icecream.consul.repository.search.ProductSearchRepository;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.ArrayDeque;

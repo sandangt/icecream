@@ -13,7 +13,7 @@ import sanlab.icecream.consul.mapper.ProductMapper;
 import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 

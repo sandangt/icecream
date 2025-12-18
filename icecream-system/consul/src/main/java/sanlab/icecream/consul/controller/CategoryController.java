@@ -13,8 +13,8 @@ import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.service.CategoryService;
-import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;

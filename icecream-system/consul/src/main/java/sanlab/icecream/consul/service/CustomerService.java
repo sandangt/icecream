@@ -21,7 +21,7 @@ import sanlab.icecream.consul.repository.crud.CustomerRepository;
 import sanlab.icecream.consul.repository.queue.ImageQueueRepository;
 import sanlab.icecream.consul.repository.restclient.IdentityRepository;
 import sanlab.icecream.consul.utils.SecurityContextUtils;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 import sanlab.icecream.fundamentum.constant.EFileHandlingAction;
 import sanlab.icecream.fundamentum.constant.EFileType;

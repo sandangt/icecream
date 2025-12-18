@@ -8,8 +8,8 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.consul.repository.search.ProductSearchExtendRepository;
-import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.constant.EProductStatus;
 import sanlab.icecream.fundamentum.utils.RequestUtils;
 
