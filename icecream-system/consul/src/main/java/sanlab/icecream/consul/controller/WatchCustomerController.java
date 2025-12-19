@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.CustomerDto;
 import sanlab.icecream.fundamentum.dto.exntended.CustomerExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
@@ -37,7 +38,7 @@ public class WatchCustomerController {
 
     @GetMapping
     public CollectionQueryResponse<CustomerExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
-        return customerService.getAll(request.getPageRequest());
+        return customerService.getAll(CollectionQueryUtils.getPageRequest(request));
     }
 
     @GetMapping("/{id}")

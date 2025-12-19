@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.StockDto;
 import sanlab.icecream.fundamentum.dto.exntended.StockExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
@@ -35,7 +36,7 @@ public class StockController {
 
     @GetMapping
     public CollectionQueryResponse<StockExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
-        return stockService.getAll(request.getPageRequest());
+        return stockService.getAll(CollectionQueryUtils.getPageRequest(request));
     }
 
     @GetMapping("/{id}")

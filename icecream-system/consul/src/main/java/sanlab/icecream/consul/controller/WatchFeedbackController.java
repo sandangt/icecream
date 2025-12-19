@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
@@ -34,7 +35,7 @@ public class WatchFeedbackController {
 
     @GetMapping
     public CollectionQueryResponse<FeedbackExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
-        return feedbackService.getAll(request.getPageRequest());
+        return feedbackService.getAll(CollectionQueryUtils.getPageRequest(request));
     }
 
     @GetMapping("/{id}")

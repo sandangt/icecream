@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
@@ -36,7 +37,7 @@ public class FeedbackController {
 
     @GetMapping
     public CollectionQueryResponse<FeedbackExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
-        return feedbackService.getAll(request.getPageRequest());
+        return feedbackService.getAll(CollectionQueryUtils.getPageRequest(request));
     }
 
     @GetMapping("/{id}")

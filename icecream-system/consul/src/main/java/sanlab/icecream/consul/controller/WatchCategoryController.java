@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
 import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
@@ -60,7 +61,7 @@ public class WatchCategoryController {
     @GetMapping("/{id}/products")
     public CollectionQueryResponse<ProductDto> getAllProducts(@PathVariable UUID id,
                                                               @ModelAttribute CollectionQueryRequest request) {
-        return categoryService.getAllProducts(id, request.getPageRequest());
+        return categoryService.getAllProducts(id, CollectionQueryUtils.getPageRequest(request));
     }
 
     @PostMapping

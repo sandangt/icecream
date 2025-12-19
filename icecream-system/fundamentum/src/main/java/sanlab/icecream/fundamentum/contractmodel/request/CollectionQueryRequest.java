@@ -2,12 +2,9 @@ package sanlab.icecream.fundamentum.contractmodel.request;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import sanlab.icecream.fundamentum.constant.ESortingOrder;
 
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Builder
@@ -17,8 +14,8 @@ public class CollectionQueryRequest {
     private SortingRequest sorting;
     private FiltersRequest filters;
 
-    private static final int DEFAULT_PAGE_NUMBER = 1;
-    private static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int DEFAULT_PAGE_NUMBER = 1;
+    public static final int DEFAULT_PAGE_SIZE = 10;
 
     @Data
     @Builder
@@ -46,31 +43,6 @@ public class CollectionQueryRequest {
         private Long createdAfter;
         private Long modifiedBefore;
         private Long modifiedAfter;
-    }
-
-    public PageRequest getPageRequest() {
-        var paginationOptional = Optional.ofNullable(pagination);
-        int pageNumber = paginationOptional
-            .map(PaginationRequest::getOffset)
-            .filter(inner -> inner>0)
-            .orElse(DEFAULT_PAGE_NUMBER);
-        int pageSize = paginationOptional
-            .map(PaginationRequest::getLimit)
-            .filter(inner -> inner>0)
-            .orElse(DEFAULT_PAGE_SIZE);
-        var sortBy = Sort.by(sorting.getField());
-        sortBy = sorting.getOrder() == ESortingOrder.ASC ? sortBy.ascending(): sortBy.descending();
-        return PageRequest.of(pageNumber, pageSize, sortBy);
-    }
-
-    public long getPageNumber() {
-        var pageReq = getPageRequest();
-        return pageReq.getPageNumber();
-    }
-
-    public long getPageSize() {
-        var pageReq = getPageRequest();
-        return pageReq.getPageSize();
     }
 
 }

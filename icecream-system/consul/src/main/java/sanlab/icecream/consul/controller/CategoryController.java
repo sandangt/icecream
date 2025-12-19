@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
 import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
@@ -54,7 +55,7 @@ public class CategoryController {
     public CollectionQueryResponse<ProductDto> getAllProducts(@PathVariable UUID id,
                                                               @ModelAttribute CollectionQueryRequest request) {
         try {
-            return categoryService.getAllProducts(id, request.getPageRequest());
+            return categoryService.getAllProducts(id, CollectionQueryUtils.getPageRequest(request));
         } catch (IcRuntimeException ex) {
             var err = ex.getError();
             if (CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);

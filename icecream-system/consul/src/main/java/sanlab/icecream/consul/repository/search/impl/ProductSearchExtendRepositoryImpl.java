@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.consul.repository.search.ProductSearchExtendRepository;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.constant.EProductStatus;
@@ -77,14 +78,14 @@ public class ProductSearchExtendRepositoryImpl implements ProductSearchExtendRep
             .ifPresent(modifiedAfter -> criteria.and(new Criteria(FIELD_MODIFIED_AT).lessThanEqual(modifiedAfter)));
 
         CriteriaQuery searchQuery = new CriteriaQuery(criteria);
-        searchQuery.setPageable(req.getPageRequest());
+        searchQuery.setPageable(CollectionQueryUtils.getPageRequest(req));
         var searchHits = elasticsearchOperations.search(searchQuery, ProductESearch.class);
         List<ProductESearch> content = searchHits.getSearchHits().stream()
             .map(SearchHit::getContent)
             .toList();
         long total = searchHits.getTotalHits();
-        long page = req.getPageNumber();
-        long totalPages = RequestUtils.calculateTotalPage(total, req.getPageSize());
+        long page = CollectionQueryUtils.getPageNumber(req);
+        long totalPages = RequestUtils.calculateTotalPage(total, CollectionQueryUtils.getPageSize(req));
 
         return CollectionQueryResponse.<ProductESearch>builder()
             .total(total)

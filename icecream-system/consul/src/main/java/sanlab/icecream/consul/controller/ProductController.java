@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sanlab.icecream.consul.model.ProductESearch;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
@@ -60,7 +61,7 @@ public class ProductController {
     public CollectionQueryResponse<FeedbackDto> getAllFeedbacks(@PathVariable UUID id,
                                                                 @ModelAttribute CollectionQueryRequest request) {
         try {
-            return productService.getAllFeedbacks(id, request.getPageRequest());
+            return productService.getAllFeedbacks(id, CollectionQueryUtils.getPageRequest(request));
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
