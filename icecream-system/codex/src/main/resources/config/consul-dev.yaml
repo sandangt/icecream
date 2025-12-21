@@ -48,10 +48,10 @@ spring:
       bindings:
         auditLog-out-0:
           binder: kafka-binder
-          destination: service.log.audit.queue
+          destination: icecream.consul.audit-log
         deleteImage-out-0:
           binder: rabbit-binder
-          destination: service.media.delete-image.task.queue
+          destination: icecream.consul.media.delete-image
   rsocket:
     server:
       port: ${CONSUL_RSOCKET_PORT}

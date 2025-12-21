@@ -19,6 +19,7 @@ until kafka-topics --bootstrap-server "${BROKER}" --list >/dev/null 2>&1; do
 done
 
 topics=(
+  "infra.hello-mate.ping"
   "icecream.consul.product"
   "icecream.consul.category"
   "icecream.consul.image"

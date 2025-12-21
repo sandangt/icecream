@@ -85,16 +85,16 @@ spring:
       bindings:
         helloRabbit-in-0:
           binder: rabbit-binder
-          destination: infra.hello-mate.ping.queue
+          destination: infra.hello-mate.ping
         helloRabbit-out-0:
           binder: rabbit-binder
-          destination: infra.hello-mate.ping.queue
+          destination: infra.hello-mate.ping
         helloKafka-in-0:
           binder: kafka-binder
-          destination: infra.hello-mate.ping.queue
+          destination: infra.hello-mate.ping
         helloKafka-out-0:
           binder: kafka-binder
-          destination: infra.hello-mate.ping.queue
+          destination: infra.hello-mate.ping
 
 logging:
   level:

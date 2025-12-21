@@ -20,7 +20,7 @@ spring:
       bindings:
         auditLog-in-0:
           binder: kafka-binder
-          destination: service.log.audit.queue
+          destination: icecream.consul.audit-log
           group: memoir-consumer-group
         helloKafka-in-0:
           group: memoir-consumer-group

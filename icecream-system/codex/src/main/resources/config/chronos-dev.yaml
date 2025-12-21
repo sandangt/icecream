@@ -17,4 +17,4 @@ spring:
       bindings:
         deleteImage-in-0:
           binder: rabbit-binder
-          destination: service.media.delete-image.task.queue
+          destination: icecream.consul.media.delete-image
