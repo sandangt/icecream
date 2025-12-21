@@ -8,6 +8,8 @@ spring:
   data:
     mongodb:
       database: ${MONGODB_CHRONOS_DB}
+    redis:
+      database: 2
   cloud:
     function:
       definition: helloRabbit;deleteImage # Consumer bean name

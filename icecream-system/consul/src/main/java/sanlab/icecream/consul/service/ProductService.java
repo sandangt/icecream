@@ -1,6 +1,7 @@
 package sanlab.icecream.consul.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "productDetails", key = "#id")
     public ProductExtendedDto getById(UUID id) {
         return productRepository.findById(id)
             .map(productMapper::entityToExtendedDto)
@@ -70,6 +72,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "productDetails", key = "#slug")
     public ProductExtendedDto getBySlug(String slug) {
         return productRepository.findFirstBySlug(slug)
             .map(productMapper::entityToExtendedDto)

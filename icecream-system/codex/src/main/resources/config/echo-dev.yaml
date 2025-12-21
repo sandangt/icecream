@@ -10,6 +10,9 @@ spring:
       port: ${ECHO_RSOCKET_PORT}
   datasource:
     url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_ECHO_DB}
+  data:
+    redis:
+      database: 3
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml

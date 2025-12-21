@@ -4,7 +4,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
 
-public class ObjectUtils {
+public final class ObjectUtils {
 
     private ObjectUtils() {}
 

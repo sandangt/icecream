@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_USER_PRINCIPAL;
 
-public class SecurityContextUtils {
+public final class SecurityContextUtils {
 
     private SecurityContextUtils() {}
 

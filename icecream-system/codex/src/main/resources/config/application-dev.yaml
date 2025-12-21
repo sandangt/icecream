@@ -18,6 +18,9 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
+      database: 0
+    cache:
+      type: redis
   datasource:
     username: ${POSTGRESQL_USER}
     password: ${POSTGRESQL_PASSWORD}

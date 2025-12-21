@@ -5,6 +5,9 @@ server:
 spring:
   application:
     name: conflux
+  data:
+    redis:
+      database: 1
   cloud:
     function:
       definition: enrichProduct;helloKafka

@@ -2,6 +2,9 @@ package sanlab.icecream.consul.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -65,6 +68,7 @@ public class CustomerService {
             .build();
     }
 
+    @Cacheable(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     @Transactional(readOnly = true)
     public CustomerExtendedDto getById(UUID id) {
         var customer = customerRepository.findFirstByUserId(id)
@@ -99,6 +103,7 @@ public class CustomerService {
         }
     }
 
+    @CachePut(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     @Transactional
     public CustomerExtendedDto update(UUID id, CustomerDto request) {
         identityRepository.updateUserInfoByUserId(id, customerMapper.dtoToKeycloakUserInfo(request));
@@ -114,6 +119,7 @@ public class CustomerService {
         }
     }
 
+    @CachePut(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     @Transactional
     public CustomerExtendedDto addAddress(UUID id, AddressDto request) {
         Customer targetCustomer = customerRepository.findFirstByUserId(id)
@@ -130,6 +136,7 @@ public class CustomerService {
         }
     }
 
+    @CacheEvict(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     @Transactional
     public AddressDto updateAddress(UUID id, AddressDto request) {
         if (!customerRepository.existsByUserId(id)) {
@@ -147,6 +154,7 @@ public class CustomerService {
         }
     }
 
+    @CacheEvict(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     @Transactional
     public void setPrimaryAddress(UUID id, UUID addressId) {
         if (!customerRepository.existsByUserId(id)) {
@@ -162,6 +170,7 @@ public class CustomerService {
         }
     }
 
+    @CachePut(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     @Transactional
     public CustomerExtendedDto deleteAddress(UUID id, UUID addressId) {
         Customer customer = customerRepository.findFirstByUserId(id)
@@ -183,6 +192,7 @@ public class CustomerService {
         }
     }
 
+    @CacheEvict(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     public ImageDto uploadAvatar(UUID id, MultipartFile avatarFile) {
         Customer customer = customerRepository.findFirstByUserId(id)
             .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
