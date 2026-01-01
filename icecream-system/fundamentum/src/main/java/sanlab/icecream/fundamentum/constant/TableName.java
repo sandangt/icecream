@@ -17,7 +17,7 @@ public class TableName {
     public static final String ORDER_ITEM = "order_item";
     public static final String PRODUCT = "product";
     public static final String STOCK = "stock";
-    public static final String ES_PRODUCT = "test_idx";
+    public static final String ES_PRODUCT = "icecream.conflux.enriched.product";
     //endregion
 
     //region consul CDC queue name

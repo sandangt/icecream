@@ -160,7 +160,6 @@ services:
       - icecream-network
 
   kafka:
-#    image: confluentinc/cp-kafka:7.8.4
     build:
       context: .
       dockerfile: kafka/Dockerfile
@@ -272,4 +271,74 @@ services:
   #   networks:
   #     - icecream-network
 
+  tempo:
+    image: grafana/tempo:2.8.2
+    container_name: icecream-tempo
+#    ports:
+#      - "${TEMPO_PORT}:3200"
+#      - "${TEMPO_HTTP_PORT}:4318"
+    volumes:
+      - ./tempo/tempo-config.yaml:/etc/tempo-config.yaml
+      - ${TEMPO_VOLUME}:/tmp/tempo
+    command: -config.file=/etc/tempo-config.yaml
+    networks:
+      - icecream-network
 
+  prometheus:
+    image: prom/prometheus:v3.8.1
+    container_name: icecream-prometheus
+#    ports:
+#      - "${PROMETHEUS_PORT}:9090"
+    volumes:
+      - ./prometheus/prometheus-config.yaml:/etc/prometheus/prometheus-config.yaml
+      - ${PROMETHEUS_VOLUME}:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus-config.yaml"
+      - "--storage.tsdb.path=/prometheus"
+    networks:
+      - icecream-network
+
+  loki:
+    image: grafana/loki:main-993b3ae
+    container_name: icecream-loki
+#    ports:
+#      - "${LOKI_PORT}:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - ${LOKI_VOLUME}:/loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    networks:
+      - icecream-network
+
+  grafana:
+    image: grafana/grafana:12.3.1
+    container_name: icecream-grafana
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    volumes:
+      - ${GRAFANA_VOLUME}:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks:
+      - icecream-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.142.0
+    container_name: icecream-otel-collector
+    command: [ "--config=/etc/otelcol/config.yml" ]
+    volumes:
+      - ./otel-collector/otel-collector-config.yaml:/etc/otelcol/config.yml
+    ports:
+      - "${OTEL_COLLECTOR_PORT}:4318"   # OTLP HTTP
+#      - "9464:9464"   # Prometheus scrape
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks:
+      - icecream-network

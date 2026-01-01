@@ -76,3 +76,33 @@ app:
     client:
       storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
       backoffice: ${IDENTITY_BACKOFFICE_CLIENT_ID}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampler:
+      probability: 1.0
+  otlp:
+    metrics:
+      export.url: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/traces
+    logging:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/logs
+
+logging:
+  level:
+    io.opentelemetry: DEBUG
+    io.micrometer: DEBUG
