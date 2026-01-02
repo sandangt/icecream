@@ -16,9 +16,15 @@ ingester:
 
 storage:
   trace:
-    backend: local
-    local:
-      path: /tmp/tempo
+    backend: s3
+    s3:
+      endpoint: minio:9000
+      bucket: icecream-traces
+      access_key: ${AWS_ACCESS_KEY_ID}
+      secret_key: ${AWS_SECRET_ACCESS_KEY}
+      insecure: true
+    wal:
+      path: /tmp/tempo/wal
 
 compactor:
   compaction:
