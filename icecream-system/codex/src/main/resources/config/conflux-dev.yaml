@@ -46,15 +46,15 @@ spring:
               configuration:
                 key.serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-logging:
-  level:
-    sanlab.icecream:
-      conflux: INFO
-    org.apache.kafka.clients: INFO
-    org.apache.kafka.common.network: INFO
-    org.springframework.cloud.stream.binder.kafka: DEBUG
-    org.springframework.kafka: DEBUG
-    org.springframework.amqp: DEBUG
-    org.springframework.cloud.stream: DEBUG
-    org.springframework.cloud.function: DEBUG
+#logging:
+#  level:
+#    sanlab.icecream:
+#      conflux: INFO
+#    org.apache.kafka.clients: INFO
+#    org.apache.kafka.common.network: INFO
+#    org.springframework.cloud.stream.binder.kafka: DEBUG
+#    org.springframework.kafka: DEBUG
+#    org.springframework.amqp: DEBUG
+#    org.springframework.cloud.stream: DEBUG
+#    org.springframework.cloud.function: DEBUG
 

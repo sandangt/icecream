@@ -21,6 +21,35 @@ At a glance:
 
 ---
 
+## Observability architecture
+
+![Observability Architecture Diagram](/assets/observability-architecture.png)
+
+1. **Data Sources**
+
+    Six core services — `codex`, `consul`, `conflux`, `memoir`, `chronos`, and `echo` — each run an OpenTelemetry Agent (otel-agent) that emits telemetry data tagged with their respective service_name (e.g., icecream-codex).
+
+1. **Centralized Collection**
+
+    All agents send data to a single OpenTelemetry Collector (otel-collector), which acts as the ingestion and processing hub.
+
+1. **Processing & Exporting**
+
+    The collector exports data to four specialized backends:
+    - `Prometheus` + `Mimir` → Metrics
+    - `Loki` → Logs
+    - `Tempo` → Distributed Traces
+
+1. **Long-Term Storage**
+
+    An Object Storage layer (MinIO) is used for durable, scalable retention of raw or processed telemetry data, feeding into the processing systems as needed.
+
+1. **Unified Visualization**
+
+    All telemetry streams converge in Grafana, providing a single-pane-of-glass view for dashboards, alerts, and correlation across metrics, logs, and traces.
+
+---
+
 ## Languages & frameworks
 
 - Java 25.0 | Spring boot 3.5.x & Spring cloud 2025.1.x | Vaadin

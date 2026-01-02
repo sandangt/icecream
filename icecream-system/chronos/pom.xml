@@ -16,6 +16,7 @@
   </properties>
 
   <dependencies>
+
     <!--region Spring boot-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -42,6 +43,7 @@
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Spring cloud-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -52,6 +54,31 @@
       <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
     </dependency>
     <!--endregion-->
+
+    <!--region OpenTelemetry-->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-otel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-otlp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-otlp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--endregion-->
+
     <!--region Jackson-->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -66,12 +93,14 @@
       <artifactId>jackson-databind</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Minio-->
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Utils-->
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -106,6 +135,7 @@
       <artifactId>javafaker</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region INTERNAL-->
     <dependency>
       <groupId>sanlab.icecream</groupId>
@@ -114,6 +144,7 @@
       <scope>compile</scope>
     </dependency>
     <!--endregion-->
+
   </dependencies>
 
   <build>
