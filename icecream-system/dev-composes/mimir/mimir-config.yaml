@@ -30,6 +30,9 @@ ruler_storage:
 alertmanager_storage:
   storage_prefix: alertmanager
 
+limits:
+  compactor_blocks_retention_period: 3d
+
 compactor:
   data_dir: /data/mimir/compactor
   compaction_interval: 1h

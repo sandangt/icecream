@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-  <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
   <appender name="OTLP" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
     <captureExperimentalAttributes>true</captureExperimentalAttributes>
     <captureKeyValuePairAttributes>true</captureKeyValuePairAttributes>
+  </appender>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <timestamp>
+          <timeZone>UTC</timeZone>
+        </timestamp>
+        <logLevel/>
+        <threadName/>
+        <loggerName/>
+        <message/>
+        <mdc/>
+        <arguments/>
+        <stackTrace/>
+        <globalCustomFields>
+          {"service.name":"${spring.application.name:-unknown-service}"}
+        </globalCustomFields>
+      </providers>
+    </encoder>
   </appender>
 
   <root level="INFO">

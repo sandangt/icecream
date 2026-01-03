@@ -82,8 +82,6 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
-    networks:
-      - icecream-network
     container_name: icecream-minio
     hostname: minio
     ports:
@@ -91,9 +89,10 @@ services:
       - "${MINIO_CONSOLE_PORT}:9001"
     volumes:
       - ${MINIO_VOLUME}:/data
+    networks:
+      - icecream-network
     healthcheck:
-      # This command checks if the bucket 'icecream-logs' exists
-      test: ["CMD-SHELL", "mc ls local/icecream-logs || exit 1"]
+      test: ["CMD-SHELL", "mc ls local/images || exit 1"]
       interval: 5s # Check more frequently during startup
       timeout: 5s
       retries: 10
@@ -109,6 +108,12 @@ services:
       - ${RABBITMQ_VOLUME}:/var/lib/rabbitmq
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   mongodb:
     container_name: icecream-mongodb
@@ -123,6 +128,12 @@ services:
       - ${MONGODB_VOLUME}:/data/db
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   elasticsearch:
     image: elasticsearch:8.19.6
@@ -143,6 +154,12 @@ services:
       - ${ELASTICSEARCH_VOLUME}:/usr/share/elasticsearch/data
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   kibana:
     image: kibana:8.19.6
@@ -155,6 +172,12 @@ services:
       - elasticsearch
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.8.4
@@ -167,6 +190,12 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD", "zkServer.sh", "status" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   kafka:
     build:
@@ -200,14 +229,14 @@ services:
       TOPIC_INIT_MAX_ATTEMPTS: 60
     volumes:
       - ${KAFKA_VOLUME}:/var/lib/kafka/data
+    networks:
+      - icecream-network
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:29092" ]
       interval: 10s
       timeout: 10s
       retries: 5
       start_period: 40s
-    networks:
-      - icecream-network
 
   debezium-connect:
 #    image: debezium/connect:2.7.3.Final
@@ -314,6 +343,12 @@ services:
       - mimir
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --spider -q http://localhost:9090/-/ready || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   loki:
     image: grafana/loki:main-993b3ae
@@ -333,6 +368,12 @@ services:
         condition: service_healthy
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --quiet --tries=1 --output-document=- http://localhost:3100/ready | grep -q -w ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   grafana:
     image: grafana/grafana:12.3.1
@@ -350,6 +391,12 @@ services:
       - tempo
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   mimir:
     image: grafana/mimir:2.17.4
@@ -374,7 +421,7 @@ services:
     volumes:
       - ./otel-collector/otel-collector-config.yaml:/etc/otelcol/config.yml
     ports:
-      - "${OTEL_COLLECTOR_PORT}:4318"   # OTLP HTTP
+      - "${OTEL_COLLECTOR_PORT}:4318"
 #      - "9464:9464"   # Prometheus scrape
     depends_on:
       - prometheus
@@ -382,3 +429,9 @@ services:
       - tempo
     networks:
       - icecream-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:13133/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

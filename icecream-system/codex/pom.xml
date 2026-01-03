@@ -54,6 +54,13 @@
     </dependency>
     <!--endregion-->
 
+    <!--region Logging-->
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+    </dependency>
+    <!--endregion-->
+
   </dependencies>
 
   <build>

@@ -12,11 +12,6 @@
   <artifactId>fundamentum</artifactId>
   <version>0.2.0</version>
 
-  <properties>
-    <protobuf-plugin.version>0.6.1</protobuf-plugin.version>
-    <os.mvn.version>1.7.1</os.mvn.version>
-  </properties>
-
   <dependencies>
     <!--region Spring-->
     <dependency>

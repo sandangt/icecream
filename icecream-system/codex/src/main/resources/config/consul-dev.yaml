@@ -80,4 +80,8 @@ app:
 otel:
   instrumentation:
     jdbc.enabled: true
+    hikaricp.enabled: true
     elasticsearch.enabled: true
+    redis.enabled: true
+    kafka.enabled: true
+    rabbitmq-ampq.enabled: true

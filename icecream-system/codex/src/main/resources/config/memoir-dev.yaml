@@ -24,15 +24,3 @@ spring:
           group: memoir-consumer-group
         helloKafka-in-0:
           group: memoir-consumer-group
-
-#logging:
-#  level:
-#    sanlab.icecream:
-#      memoir: INFO
-#    org.apache.kafka.clients: INFO
-#    org.apache.kafka.common.network: INFO
-#    org.springframework.cloud.stream.binder.kafka: DEBUG
-#    org.springframework.kafka: DEBUG
-#    org.springframework.amqp: DEBUG
-#    org.springframework.cloud.stream: DEBUG
-#    org.springframework.cloud.function: DEBUG

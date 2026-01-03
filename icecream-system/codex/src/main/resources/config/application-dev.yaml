@@ -150,6 +150,9 @@ management:
       export:
         otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/logs
 
-logging:
-  pattern:
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+otel:
+  instrumentation:
+    spring-webmvc.enabled: true
+    spring-webflux.enabled: true
+    spring-web.enabled: true
+    servlet.enabled: true

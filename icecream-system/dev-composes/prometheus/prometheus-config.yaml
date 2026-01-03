@@ -11,6 +11,7 @@ scrape_configs:
       - targets: ["grafana:3000"]
 
   - job_name: "otel-collector"
+    honor_labels: true
     static_configs:
       - targets: [ "otel-collector:9464" ]
 

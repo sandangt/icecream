@@ -5,10 +5,17 @@ receivers:
         endpoint: 0.0.0.0:4318
       grpc:
         endpoint: 0.0.0.0:4317
+
 processors:
   batch:
     timeout: 10s
     send_batch_size: 1024
+  resource:
+    attributes:
+      - key: job
+        from_attribute: service.name
+        action: upsert
+
 exporters:
   otlphttp/loki:
     endpoint: http://loki:3100/otlp
@@ -17,11 +24,17 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:9464"
   debug:
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
 service:
+  extensions: [health_check]
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [batch]
+      processors: [resource,batch]
       exporters: [prometheus]
     traces:
       receivers: [otlp]
