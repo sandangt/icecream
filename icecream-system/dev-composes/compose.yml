@@ -161,23 +161,23 @@ services:
       retries: 5
       start_period: 30s
 
-  kibana:
-    image: kibana:8.19.6
-    container_name: icecream-kibana-optional
-    ports:
-      - "${KIBANA_PORT}:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    networks:
-      - icecream-network
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
+#  kibana:
+#    image: kibana:8.19.6
+#    container_name: icecream-kibana-optional
+#    ports:
+#      - "${KIBANA_PORT}:5601"
+#    environment:
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - icecream-network
+#    healthcheck:
+#      test: [ "CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1" ]
+#      interval: 10s
+#      timeout: 10s
+#      retries: 5
+#      start_period: 30s
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.8.4
@@ -270,44 +270,6 @@ services:
       - ./debezium/connectors:/connectors
     networks:
       - icecream-network
-
-  # schema-registry:
-  #   image: confluentinc/cp-schema-registry:7.3.3
-  #   hostname: schema-registry
-  #   container_name: icecream-schema-registry
-  #   depends_on:
-  #     - zookeeper
-  #     - kafka
-  #   ports:
-  #     - "${SCHEMA_REGISTRY_PORT}:8081"
-  #   environment:
-  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:19092
-  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
-  #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-  #   networks:
-  #     - icecream-network
-
-  # ops-control-center:
-  #   image: confluentinc/cp-enterprise-control-center:7.3.3
-  #   container_name: icecream-ops-control-center
-  #   hostname: ops-control-center
-  #   depends_on:
-  #     - zookeeper
-  #     - kafka
-  #     - schema-registry
-  #   ports:
-  #     - "${CP_CONTROL_CENTER_PORT}:9021"
-  #   environment:
-  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:19092"
-  #     CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
-  #     CONTROL_CENTER_SCHEMA_REGISTRY_URL: "schema-registry:8081"
-  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
-  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
-  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
-  #     CONFLUENT_METRICS_TOPIC_REPLICATION: 1
-  #     PORT: 9021
-  #   networks:
-  #     - icecream-network
 
   tempo:
     image: grafana/tempo:2.8.2

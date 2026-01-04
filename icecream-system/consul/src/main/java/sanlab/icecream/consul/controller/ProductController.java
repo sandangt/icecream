@@ -22,7 +22,7 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 import java.util.UUID;
 
 import static sanlab.icecream.consul.exception.ConsulErrorModel.PRODUCT_NOT_FOUND;
-import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.PERMIT_ALL;
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.PERMIT_ALL;
 
 @RestController
 @RequestMapping("/products")

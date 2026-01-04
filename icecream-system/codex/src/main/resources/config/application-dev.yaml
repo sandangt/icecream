@@ -124,15 +124,19 @@ app:
     rsocket:
       host: ${CONFLUX_RSOCKET_HOST}
       port: ${CONFLUX_RSOCKET_PORT}
+  temp-dir: ${ICECREAM_VOLUME}/tmp
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: 'info,health,env,beans,threaddump,heapdump'
+      base-path: /actuator
   endpoint:
-    health:
-      show-details: always
+    startup:
+      enabled: false
+    shutdown:
+      enabled: false
     tags:
       application: ${spring.application.name}
   tracing:

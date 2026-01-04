@@ -18,6 +18,8 @@ public enum ConsulErrorModel implements IcErrorModel {
 
     //region Security layer
     INVALID_USER_PRINCIPAL("CONSUL-0000", "Invalid user principal", 771),
+    INVALID_API_KEY("CONSUL-0001", "Invalid api key", 0),
+    EMPTY_API_KEY("CONSUL-0002", "Empty api key", 0),
     //region
 
     //region Repository layer
@@ -42,7 +44,9 @@ public enum ConsulErrorModel implements IcErrorModel {
     ;
 
     private static final Map<Integer, ConsulErrorModel> MAP_BY_RSOCKET_CODE = Arrays.stream(values())
-        .collect(Collectors.toMap(IcErrorModel::getRSocketCode, Function.identity()));
+        .collect(
+            Collectors.toMap(IcErrorModel::getRSocketCode, Function.identity(), (_, item2) -> item2)
+        );
 
     private final String code;
     private final String msg;

@@ -56,17 +56,17 @@ spring:
     server:
       port: ${CONSUL_RSOCKET_PORT}
 
-jwt:
-  auth:
-    converter:
-      resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
-      principle-attribute: email
-
 app:
+  info:
+    name: ${spring.application.name}
+    description: 'Icecream Consul service'
+    version: '@project.version@'
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      version: '@java.version@'
   cors:
     allowed-origins: >
-      ${STOREFRONT_URL},
-  temp-dir: ${CONSUL_TEMP_DIR}
+      ${STOREFRONT_URL}
   identity:
     url: ${IDENTITY_URL}
     admin:
@@ -76,6 +76,14 @@ app:
     client:
       storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
       backoffice: ${IDENTITY_BACKOFFICE_CLIENT_ID}
+  security:
+    api-key: 'user-api-key-456'
+    api-keys: >
+      ${CONSUL_API_KEY_0},${CONSUL_API_KEY_1}
+    jwt:
+      converter:
+        resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
+        principle-attribute: email
 
 otel:
   instrumentation:

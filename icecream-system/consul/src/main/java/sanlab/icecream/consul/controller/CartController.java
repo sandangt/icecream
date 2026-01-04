@@ -16,11 +16,11 @@ import sanlab.icecream.consul.viewmodel.request.CartRequest;
 
 import java.util.UUID;
 
-import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.NORMIE;
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_NORMIE_AND_WATCHER;
 
 @RestController
 @RequestMapping("/carts")
-@PreAuthorize(NORMIE)
+@PreAuthorize(HAS_ROLE_NORMIE_AND_WATCHER)
 @RequiredArgsConstructor
 public class CartController {
 

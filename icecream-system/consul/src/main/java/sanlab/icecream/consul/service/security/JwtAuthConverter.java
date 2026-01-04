@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
-    @Value("${jwt.auth.converter.principle-attribute}")
+    @Value("${app.security.jwt.converter.principle-attribute}")
     private String principleAttribute;
 
-    @Value("${jwt.auth.converter.resource-id}")
+    @Value("${app.security.jwt.converter.resource-id}")
     private String resourceId;
 
     @Override

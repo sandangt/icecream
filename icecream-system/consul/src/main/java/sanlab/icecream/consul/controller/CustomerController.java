@@ -35,11 +35,11 @@ import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOU
 import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_UPDATE_USER_INFO_REQUEST;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_USER_PRINCIPAL;
-import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.NORMIE;
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_NORMIE;
 
 @RestController
 @RequestMapping("/customers")
-@PreAuthorize(NORMIE)
+@PreAuthorize(HAS_ROLE_NORMIE)
 @RequiredArgsConstructor
 public class CustomerController {
 

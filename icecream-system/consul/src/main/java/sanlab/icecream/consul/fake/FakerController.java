@@ -1,31 +1,31 @@
-package sanlab.icecream.consul.script;
+package sanlab.icecream.consul.fake;
 
 import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import sanlab.icecream.consul.model.Address;
+import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.model.Customer;
+import sanlab.icecream.consul.model.Image;
+import sanlab.icecream.consul.model.Product;
 import sanlab.icecream.consul.model.Stock;
 import sanlab.icecream.consul.repository.crud.AddressRepository;
+import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.consul.repository.crud.CustomerRepository;
+import sanlab.icecream.consul.repository.crud.ImageRepository;
+import sanlab.icecream.consul.repository.crud.ProductRepository;
 import sanlab.icecream.consul.repository.crud.StockRepository;
 import sanlab.icecream.consul.service.ImageService;
 import sanlab.icecream.consul.viewmodel.request.IcMultipartFileRequest;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 import sanlab.icecream.fundamentum.constant.EImageType;
 import sanlab.icecream.fundamentum.constant.EProductStatus;
-import sanlab.icecream.consul.model.Category;
-import sanlab.icecream.consul.model.Image;
-import sanlab.icecream.consul.model.Product;
-import sanlab.icecream.consul.repository.crud.CategoryRepository;
-import sanlab.icecream.consul.repository.crud.ImageRepository;
-import sanlab.icecream.consul.repository.crud.ProductRepository;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -46,10 +46,10 @@ import java.util.stream.IntStream;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.AVAILABLE;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 
-//@Configuration
-@Slf4j
+@RestController
+@RequestMapping("/api/fake")
 @RequiredArgsConstructor
-public class FakerData {
+public class FakerController {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
@@ -72,25 +72,22 @@ public class FakerData {
         return new Faker();
     }
 
-    @Bean
-    CommandLineRunner seedData() {
-        seedImage(8326);
-        seedAddress(7512);
-        seedCategory(8);
-        seedProduct(1000);
-        seedStock(3101);
-        seedCustomer(1);
-        seedProductImage();
-        seedProductCategory();
-        seedCategoryImage();
-        seedStockAddress();
-        seedProductStock();
-        seedCustomerImage();
-        return args -> {
-            var tmpPath = Path.of(tmpDir);
-            if (Files.exists(tmpPath)) FileUtils.deleteDirectory(tmpPath.toFile());
-            log.info("SEED DATA Done.");
-        };
+    @PostMapping("/seed")
+    public ResponseEntity<Void> seedData() {
+//        seedImage(8326);
+//        seedAddress(7512);
+//        seedCategory(8);
+//        seedProduct(1000);
+//        seedStock(3101);
+//        seedCustomer(1);
+//        seedProductImage();
+//        seedProductCategory();
+//        seedCategoryImage();
+//        seedStockAddress();
+//        seedProductStock();
+//        seedCustomerImage();
+        System.out.println("Hello World");
+        return ResponseEntity.ok().build();
     }
 
     private void seedProduct(int number) {
@@ -193,7 +190,7 @@ public class FakerData {
                 .quantity(faker.number().numberBetween(1L, 999_999_999L))
                 .reservedQuantity(faker.number().numberBetween(1L, 999_999_999L))
                 .build()
-        ).toList();
+            ).toList();
         stockRepository.saveAll(result);
     }
 
@@ -379,14 +376,14 @@ public class FakerData {
         }
         var faker = getFaker();
         var result = IntStream.range(0, number).mapToObj(ignore -> Customer.builder()
-                .userId(UUID.randomUUID())
-                .email(faker.internet().emailAddress())
-                .username(faker.name().username())
-                .phone(faker.phoneNumber().cellPhone())
-                .firstName(faker.name().firstName())
-                .lastName(faker.name().lastName())
-                .status(ECustomerStatus.ACTIVE.name())
-                .build()).toList();
+            .userId(UUID.randomUUID())
+            .email(faker.internet().emailAddress())
+            .username(faker.name().username())
+            .phone(faker.phoneNumber().cellPhone())
+            .firstName(faker.name().firstName())
+            .lastName(faker.name().lastName())
+            .status(ECustomerStatus.ACTIVE.name())
+            .build()).toList();
         customerRepository.saveAll(result);
     }
 
@@ -422,4 +419,3 @@ public class FakerData {
     }
 
 }
-

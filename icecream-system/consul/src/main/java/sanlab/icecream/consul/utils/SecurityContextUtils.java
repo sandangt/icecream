@@ -34,4 +34,9 @@ public final class SecurityContextUtils {
         return registeredUserInfo().isPresent();
     }
 
+    public static void setAuthentication(Authentication authentication) {
+        Optional.ofNullable(authentication)
+            .ifPresent(inner -> SecurityContextHolder.getContext().setAuthentication(inner));
+    }
+
 }
