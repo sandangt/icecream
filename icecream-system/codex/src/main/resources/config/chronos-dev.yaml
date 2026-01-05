@@ -18,3 +18,7 @@ spring:
         deleteImage-in-0:
           binder: rabbit-binder
           destination: icecream.consul.media.delete-image
+
+otel:
+  instrumentation:
+    mongodb.enabled: true

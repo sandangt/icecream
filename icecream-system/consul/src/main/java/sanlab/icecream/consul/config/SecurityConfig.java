@@ -7,9 +7,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import sanlab.icecream.consul.controller.filter.ApiKeyAuthFilter;
 import sanlab.icecream.consul.service.security.JwtAuthConverter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import sanlab.icecream.consul.service.security.StorefrontAuthorizationManager;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -20,7 +21,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter;
-    private final StorefrontAuthorizationManager authorizationManager;
+    private final ApiKeyAuthFilter apiKeyFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,6 +29,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
             .oauth2ResourceServer(auth -> auth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+            .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 

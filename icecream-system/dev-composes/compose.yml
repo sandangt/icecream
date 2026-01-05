@@ -1,11 +1,11 @@
-x-icecream-minio-common: &minio-common
-  image: minio/minio:RELEASE.2025-04-22T22-12-26Z
-  command: server --address ":9000" --console-address ":9001" /data
-  environment:
-    MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
-    MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
-  networks:
-    - icecream-network
+#x-icecream-minio-common: &minio-common
+#  image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+#  command: server --address ":9000" --console-address ":9001" /data
+#  environment:
+#    MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+#    MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+#  networks:
+#    - icecream-network
 
 networks:
   icecream-network:
@@ -75,7 +75,13 @@ services:
       - icecream-network
 
   minio:
-    <<: *minio-common
+    build:
+      context: .
+      dockerfile: minio/Dockerfile
+    command: server --address ":9000" --console-address ":9001" /data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
     container_name: icecream-minio
     hostname: minio
     ports:
@@ -83,11 +89,13 @@ services:
       - "${MINIO_CONSOLE_PORT}:9001"
     volumes:
       - ${MINIO_VOLUME}:/data
+    networks:
+      - icecream-network
     healthcheck:
-      test: ["CMD", "curl", "-I", "http://localhost:${MINIO_API_PORT}/minio/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+      test: ["CMD-SHELL", "mc ls local/images || exit 1"]
+      interval: 5s # Check more frequently during startup
+      timeout: 5s
+      retries: 10
 
   rabbitmq:
     container_name: icecream-rabbitmq
@@ -100,6 +108,12 @@ services:
       - ${RABBITMQ_VOLUME}:/var/lib/rabbitmq
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   mongodb:
     container_name: icecream-mongodb
@@ -114,6 +128,12 @@ services:
       - ${MONGODB_VOLUME}:/data/db
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   elasticsearch:
     image: elasticsearch:8.19.6
@@ -134,18 +154,30 @@ services:
       - ${ELASTICSEARCH_VOLUME}:/usr/share/elasticsearch/data
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
-  kibana:
-    image: kibana:8.19.6
-    container_name: icecream-kibana-optional
-    ports:
-      - "${KIBANA_PORT}:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    networks:
-      - icecream-network
+#  kibana:
+#    image: kibana:8.19.6
+#    container_name: icecream-kibana-optional
+#    ports:
+#      - "${KIBANA_PORT}:5601"
+#    environment:
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - icecream-network
+#    healthcheck:
+#      test: [ "CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1" ]
+#      interval: 10s
+#      timeout: 10s
+#      retries: 5
+#      start_period: 30s
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.8.4
@@ -158,9 +190,14 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     networks:
       - icecream-network
+    healthcheck:
+      test: [ "CMD", "zkServer.sh", "status" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   kafka:
-#    image: confluentinc/cp-kafka:7.8.4
     build:
       context: .
       dockerfile: kafka/Dockerfile
@@ -192,14 +229,14 @@ services:
       TOPIC_INIT_MAX_ATTEMPTS: 60
     volumes:
       - ${KAFKA_VOLUME}:/var/lib/kafka/data
+    networks:
+      - icecream-network
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:29092" ]
       interval: 10s
       timeout: 10s
       retries: 5
       start_period: 40s
-    networks:
-      - icecream-network
 
   debezium-connect:
 #    image: debezium/connect:2.7.3.Final
@@ -234,42 +271,129 @@ services:
     networks:
       - icecream-network
 
-  # schema-registry:
-  #   image: confluentinc/cp-schema-registry:7.3.3
-  #   hostname: schema-registry
-  #   container_name: icecream-schema-registry
-  #   depends_on:
-  #     - zookeeper
-  #     - kafka
-  #   ports:
-  #     - "${SCHEMA_REGISTRY_PORT}:8081"
-  #   environment:
-  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:19092
-  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
-  #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-  #   networks:
-  #     - icecream-network
+  tempo:
+    image: grafana/tempo:2.8.2
+    container_name: icecream-tempo
+#    ports:
+#      - "${TEMPO_PORT}:3200"
+#      - "${TEMPO_HTTP_PORT}:4318"
+    environment:
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
+    volumes:
+      - ./tempo/tempo-config.yaml:/etc/tempo-config.yaml
+      - ${TEMPO_VOLUME}:/tmp/tempo
+    command: ["-config.file=/etc/tempo-config.yaml", "-config.expand-env=true"]
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - icecream-network
 
-  # ops-control-center:
-  #   image: confluentinc/cp-enterprise-control-center:7.3.3
-  #   container_name: icecream-ops-control-center
-  #   hostname: ops-control-center
-  #   depends_on:
-  #     - zookeeper
-  #     - kafka
-  #     - schema-registry
-  #   ports:
-  #     - "${CP_CONTROL_CENTER_PORT}:9021"
-  #   environment:
-  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:19092"
-  #     CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
-  #     CONTROL_CENTER_SCHEMA_REGISTRY_URL: "schema-registry:8081"
-  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
-  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
-  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
-  #     CONFLUENT_METRICS_TOPIC_REPLICATION: 1
-  #     PORT: 9021
-  #   networks:
-  #     - icecream-network
+  prometheus:
+    image: prom/prometheus:v3.8.1
+    container_name: icecream-prometheus
+#    ports:
+#      - "${PROMETHEUS_PORT}:9090"
+    volumes:
+      - ./prometheus/prometheus-config.yaml:/etc/prometheus/prometheus-config.yaml
+      - ${PROMETHEUS_VOLUME}:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus-config.yaml"
+      - "--storage.tsdb.path=/prometheus"
+    depends_on:
+      - mimir
+    networks:
+      - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --spider -q http://localhost:9090/-/ready || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
+  loki:
+    image: grafana/loki:main-993b3ae
+    container_name: icecream-loki
+    user: "0:0"
+    environment:
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
+#    ports:
+#      - "${LOKI_PORT}:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - ${LOKI_VOLUME}:/loki
+    command: -config.file=/etc/loki/loki-config.yaml -config.expand-env=true
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --quiet --tries=1 --output-document=- http://localhost:3100/ready | grep -q -w ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
+  grafana:
+    image: grafana/grafana:12.3.1
+    container_name: icecream-grafana
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    volumes:
+      - ${GRAFANA_VOLUME}:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks:
+      - icecream-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  mimir:
+    image: grafana/mimir:2.17.4
+    container_name: icecream-mimir
+    volumes:
+      - ${MIMIR_VOLUME}:/data/mimir
+      - ./mimir/mimir-config.yaml:/etc/mimir/mimir-config.yaml
+    environment:
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
+    command: [ "-config.file=/etc/mimir/mimir-config.yaml", "-config.expand-env=true" ]
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - icecream-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.142.0
+    container_name: icecream-otel-collector
+    command: [ "--config=/etc/otelcol/config.yml" ]
+    volumes:
+      - ./otel-collector/otel-collector-config.yaml:/etc/otelcol/config.yml
+    ports:
+      - "${OTEL_COLLECTOR_PORT}:4318"
+#      - "9464:9464"   # Prometheus scrape
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks:
+      - icecream-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:13133/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

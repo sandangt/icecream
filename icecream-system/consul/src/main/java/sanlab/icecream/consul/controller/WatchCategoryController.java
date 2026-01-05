@@ -31,11 +31,11 @@ import java.util.UUID;
 
 import static sanlab.icecream.consul.exception.ConsulErrorModel.CATEGORY_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.WATCHER;
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_WATCHER;
 
 @RestController
 @RequestMapping("/watcher/categories")
-@PreAuthorize(WATCHER)
+@PreAuthorize(HAS_ROLE_WATCHER)
 @RequiredArgsConstructor
 public class WatchCategoryController {
 

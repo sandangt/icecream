@@ -96,21 +96,6 @@ spring:
           binder: kafka-binder
           destination: infra.hello-mate.ping
 
-logging:
-  level:
-    sanlab.icecream:
-      consul: INFO
-      chronos: INFO
-      echo: INFO
-      memoir: INFO
-    org.apache.kafka.clients: INFO
-    org.apache.kafka.common.network: INFO
-    org.springframework.cloud.stream.binder.kafka: DEBUG
-    org.springframework.kafka: DEBUG
-    org.springframework.amqp: DEBUG
-    org.springframework.cloud.stream: DEBUG
-    org.springframework.cloud.function: DEBUG
-
 app:
   minio:
     url: ${STORAGE_URL}
@@ -139,3 +124,43 @@ app:
     rsocket:
       host: ${CONFLUX_RSOCKET_HOST}
       port: ${CONFLUX_RSOCKET_PORT}
+  temp-dir: ${ICECREAM_VOLUME}/tmp
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'info,health,env,beans,threaddump,heapdump'
+      base-path: /actuator
+  endpoint:
+    startup:
+      enabled: false
+    shutdown:
+      enabled: false
+    heapdump:
+      enabled: true
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampler:
+      probability: 1.0
+    propagation:
+      type: W3C
+  otlp:
+    metrics:
+      export.url: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/traces
+    logging:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/logs
+
+otel:
+  instrumentation:
+    spring-webmvc.enabled: true
+    spring-webflux.enabled: true
+    spring-web.enabled: true
+    servlet.enabled: true

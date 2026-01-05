@@ -1,0 +1,38 @@
+multitenancy_enabled: false
+
+server:
+  http_listen_port: 9009
+
+ingester:
+  ring:
+    replication_factor: 1
+
+common:
+  storage:
+    backend: s3
+    s3:
+      endpoint: minio:9000
+      bucket_name: icecream-metrics
+      access_key_id: ${AWS_ACCESS_KEY_ID}
+      secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+      insecure: true
+
+blocks_storage:
+  tsdb:
+    dir: /data/mimir/tsdb
+  bucket_store:
+    sync_dir: /data/mimir/tsdb-sync
+  storage_prefix: blocks
+
+ruler_storage:
+  storage_prefix: ruler
+
+alertmanager_storage:
+  storage_prefix: alertmanager
+
+limits:
+  compactor_blocks_retention_period: 3d
+
+compactor:
+  data_dir: /data/mimir/compactor
+  compaction_interval: 1h

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static sanlab.icecream.consul.exception.ConsulErrorModel.CATEGORY_NOT_FOUND;
-import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.PERMIT_ALL;
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.PERMIT_ALL;
 
 @RestController
 @RequestMapping("/categories")
