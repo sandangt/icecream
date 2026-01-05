@@ -72,6 +72,10 @@
       <artifactId>opentelemetry-logback-appender-1.0</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-kafka-clients-2.6</artifactId>
+    </dependency>
     <!--endregion-->
 
     <!--region Jackson-->

@@ -1,7 +1,9 @@
 package sanlab.icecream.consul.repository.queue.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,7 @@ public class AuditLogQueueRepositoryImpl implements AuditLogQueueRepository {
             .build();
         Message<AuditLogDto> message = MessageBuilder
             .withPayload(payload)
+            .setHeader(KafkaHeaders.KEY, StringUtils.EMPTY)
             .build();
         streamBridge.send(OUT_CHANNEL, message);
     }

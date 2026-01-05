@@ -1,14 +1,14 @@
 package sanlab.icecream.consul.repository.queue.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import sanlab.icecream.consul.repository.queue.HelloMateQueueRepository;
 
+import java.util.Collections;
 import java.util.function.Supplier;
 
 @Component
@@ -22,7 +22,10 @@ public class HelloMateQueueRepositoryImpl implements HelloMateQueueRepository {
 
     @Override
     public void sayHelloKafka() {
-        var message = MessageBuilder.withPayload("Hello Kafka from Consul!").build();
+        var message = MessageBuilder
+            .withPayload("Hello Kafka from Consul!")
+            .setHeader(KafkaHeaders.KEY, StringUtils.EMPTY)
+            .build();
         streamBridge.send(KAFKA_OUT_CHANNEL, message);
     }
 

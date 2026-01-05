@@ -77,6 +77,10 @@
       <artifactId>opentelemetry-logback-appender-1.0</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.javaagent.instrumentation</groupId>
+      <artifactId>opentelemetry-javaagent-spring-rabbit-1.0</artifactId>
+    </dependency>
     <!--endregion-->
 
     <!--region Logging-->
