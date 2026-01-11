@@ -3,6 +3,7 @@ package sanlab.icecream.consul.fake;
 import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import sanlab.icecream.consul.viewmodel.request.IcMultipartFileRequest;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 import sanlab.icecream.fundamentum.constant.EImageType;
 import sanlab.icecream.fundamentum.constant.EProductStatus;
+import sanlab.icecream.fundamentum.utils.LogUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -49,6 +51,7 @@ import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 @RestController
 @RequestMapping("/api/fake")
 @RequiredArgsConstructor
+@Slf4j
 public class FakerController {
 
     private final ProductRepository productRepository;
@@ -74,19 +77,18 @@ public class FakerController {
 
     @PostMapping("/seed")
     public ResponseEntity<Void> seedData() {
-//        seedImage(8326);
-//        seedAddress(7512);
-//        seedCategory(8);
-//        seedProduct(1000);
-//        seedStock(3101);
-//        seedCustomer(1);
-//        seedProductImage();
-//        seedProductCategory();
-//        seedCategoryImage();
-//        seedStockAddress();
-//        seedProductStock();
-//        seedCustomerImage();
-        System.out.println("Hello World");
+        seedImage(8326);
+        seedAddress(7512);
+        seedCategory(8);
+        seedProduct(1000);
+        seedStock(3101);
+        seedCustomer(1);
+        seedProductImage();
+        seedProductCategory();
+        seedCategoryImage();
+        seedStockAddress();
+        seedProductStock();
+        seedCustomerImage();
         return ResponseEntity.ok().build();
     }
 
@@ -116,6 +118,7 @@ public class FakerController {
                 .build();
         }).toList();
         productRepository.saveAll(result);
+        LogUtils.logInfo(log, "seedProduct finished");
     }
 
     private void seedCategory(int number) {
@@ -133,6 +136,7 @@ public class FakerController {
             return new Category(name, faker.lorem().characters(5, 50));
         }).toList();
         categoryRepository.saveAll(result);
+        LogUtils.logInfo(log, "seedCategory finished");
     }
 
     private void seedImage(int number) {
@@ -144,20 +148,7 @@ public class FakerController {
                 generateImage();
             } catch (IOException ignored) {}
         });
-    }
-
-    private Image generateImage() throws IOException {
-        var faker = getFaker();
-        String fileName = "%s.%s".formatted(UUID.randomUUID(), IMAGE_EXT);
-        Path filePath = Path.of(LOREM_IMAGE_ENTITY_PATH, fileName);
-        var imageDto = imageService.upsertImage(filePath,
-            genRandomImg(400, 400, filePath.toString()),
-            faker.lorem().sentence(10));
-        var image = Image.builder()
-            .description(imageDto.getDescription())
-            .relativePath(imageDto.getRelativePath())
-            .type(EImageType.MEDIA.name()).build();
-        return imageRepository.save(image);
+        LogUtils.logInfo(log, "seedImage finished");
     }
 
     private void seedAddress(int number) {
@@ -178,6 +169,7 @@ public class FakerController {
             .build()
         ).toList();
         addressRepository.saveAll(result);
+        LogUtils.logInfo(log, "seedAddress finished");
     }
 
     private void seedStock(int number) {
@@ -192,6 +184,7 @@ public class FakerController {
                 .build()
             ).toList();
         stockRepository.saveAll(result);
+        LogUtils.logInfo(log, "seedStock finished");
     }
 
     private void seedProductCategory() {
@@ -249,6 +242,7 @@ public class FakerController {
             }
         }
         productRepository.saveAll(products);
+        LogUtils.logInfo(log, "seedProductImage finished");
     }
 
     private void seedCategoryImage() {
@@ -264,6 +258,7 @@ public class FakerController {
             } catch (IOException ignored) {}
         }
         categoryRepository.saveAll(categories);
+        LogUtils.logInfo(log, "seedCategoryImage finished");
     }
 
     private void seedStockAddress() {
@@ -304,6 +299,7 @@ public class FakerController {
             }
         }
         stockRepository.saveAll(stocks);
+        LogUtils.logInfo(log, "seedStockAddress finished");
     }
 
     private void seedProductStock() {
@@ -342,32 +338,7 @@ public class FakerController {
             }
         }
         stockRepository.saveAll(stocks);
-    }
-
-    private IcMultipartFileRequest genRandomImg(int width, int height, String relativeFilePath) throws IOException {
-        var faker = getFaker();
-        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = img.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Color bgColor = new Color((int)(Math.random() * 0x1000000));
-        g.setColor(bgColor);
-        g.fillRect(0, 0, width, height);
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("SansSerif", Font.BOLD, 28));
-        faker.lorem().words(6);
-        String productName = "#%s".formatted(faker.lorem().word());
-        g.drawString(productName, 20, height / 2);
-        g.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        String sku = "SKU-%s".formatted(faker.lorem().words(6));
-        g.drawString(sku, 20, height / 2 + 30);
-        g.dispose();
-        Path filePath = Path.of(tmpDir, relativeFilePath);
-        if (!Files.exists(filePath.getParent())) {
-            Files.createDirectories(filePath.getParent());
-        }
-        File file = filePath.toFile();
-        ImageIO.write(img, "jpg", file);
-        return new IcMultipartFileRequest(file);
+        LogUtils.logInfo(log, "seedProductStock finished");
     }
 
     private void seedCustomer(int number) {
@@ -385,6 +356,7 @@ public class FakerController {
             .status(ECustomerStatus.ACTIVE.name())
             .build()).toList();
         customerRepository.saveAll(result);
+        LogUtils.logInfo(log, "seedCustomer finished");
     }
 
     private void seedCustomerImage() {
@@ -416,6 +388,47 @@ public class FakerController {
                 customerRepository.save(customer);
             } catch (IOException ignored) {}
         }
+        LogUtils.logInfo(log, "seedCustomerImage finished");
+    }
+
+    private Image generateImage() throws IOException {
+        var faker = getFaker();
+        String fileName = "%s.%s".formatted(UUID.randomUUID(), IMAGE_EXT);
+        Path filePath = Path.of(LOREM_IMAGE_ENTITY_PATH, fileName);
+        var imageDto = imageService.upsertImage(filePath,
+            genRandomImg(400, 400, filePath.toString()),
+            faker.lorem().sentence(10));
+        var image = Image.builder()
+            .description(imageDto.getDescription())
+            .relativePath(imageDto.getRelativePath())
+            .type(EImageType.MEDIA.name()).build();
+        return imageRepository.save(image);
+    }
+
+    private IcMultipartFileRequest genRandomImg(int width, int height, String relativeFilePath) throws IOException {
+        var faker = getFaker();
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = img.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Color bgColor = new Color((int)(Math.random() * 0x1000000));
+        g.setColor(bgColor);
+        g.fillRect(0, 0, width, height);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("SansSerif", Font.BOLD, 28));
+        faker.lorem().words(6);
+        String productName = "#%s".formatted(faker.lorem().word());
+        g.drawString(productName, 20, height / 2);
+        g.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        String sku = "SKU-%s".formatted(faker.lorem().words(6));
+        g.drawString(sku, 20, height / 2 + 30);
+        g.dispose();
+        Path filePath = Path.of(tmpDir, relativeFilePath);
+        if (!Files.exists(filePath.getParent())) {
+            Files.createDirectories(filePath.getParent());
+        }
+        File file = filePath.toFile();
+        ImageIO.write(img, "jpg", file);
+        return new IcMultipartFileRequest(file);
     }
 
 }

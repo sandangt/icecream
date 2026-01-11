@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.mapper.CategoryMapper;
-import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
@@ -24,7 +23,7 @@ import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.consul.repository.crud.ProductRepository;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
 import sanlab.icecream.consul.repository.crud.StockRepository;
-import sanlab.icecream.consul.repository.search.ProductSearchRepository;
+import sanlab.icecream.consul.repository.crud.ProductESearchRepository;
 import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
@@ -51,7 +50,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final StockRepository stockRepository;
-    private final ProductSearchRepository productSearchRepository;
+    private final ProductESearchRepository productSearchRepository;
 
     private final FeedbackMapper feedbackMapper;
     private final ProductMapper productMapper;
@@ -59,8 +58,14 @@ public class ProductService {
     private final CategoryMapper categoryMapper;
 
     @Transactional(readOnly = true)
-    public CollectionQueryResponse<ProductESearch> getAll(CollectionQueryRequest req, boolean isFeatured) {
-        return productSearchRepository.searchAndFilter(req, isFeatured);
+    public CollectionQueryResponse<ProductExtendedDto> getAll(CollectionQueryRequest req, boolean isFeatured) {
+        var result = productSearchRepository.searchAndFilter(req, isFeatured);
+        return CollectionQueryResponse.<ProductExtendedDto>builder()
+            .total(result.getTotal())
+            .page(result.getPage())
+            .totalPages(result.getTotalPages())
+            .data(productMapper.searchEntityToDto(result.getData()))
+            .build();
     }
 
     @Transactional(readOnly = true)

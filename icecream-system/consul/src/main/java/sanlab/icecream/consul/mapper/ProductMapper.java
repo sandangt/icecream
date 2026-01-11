@@ -5,6 +5,7 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.consul.model.Product;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
@@ -30,10 +31,17 @@ public interface ProductMapper {
     @Named("entityToExtendedDtoIter")
     @IterableMapping(qualifiedByName = "entityToExtendedDto")
     List<ProductExtendedDto> entityToExtendedDto(List<Product> products);
-    //endregion
 
-    //region To Search DTO
+    @Named("searchEntityToDto")
+    @Mapping(target = "id", source = "id", qualifiedByName = "stringToUuid")
+    @Mapping(target = "status", source = "status", qualifiedByName = "nameToEProductStatus")
+    @Mapping(target = "stockQuantity", ignore = true)
+    @Mapping(target = "stocks", ignore = true)
+    ProductExtendedDto searchEntityToDto(ProductESearch product);
 
+    @Named("searchEntityToDtoIter")
+    @IterableMapping(qualifiedByName = "searchEntityToDto")
+    List<ProductExtendedDto> searchEntityToDto(List<ProductESearch> product);
     //endregion
 
     //region To Entity
