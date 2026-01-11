@@ -31,7 +31,7 @@
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>
-        %highlight(%-5level) %cyan(%d{yyyy-MM-dd HH:mm:ss.SSS}) %magenta([%thread]) %yellow(%logger{36}) - %msg%n
+        %d{HH:mm:ss.SSS} %highlight(%-5level) %magenta([%thread]) %cyan(%logger{36}) %green([trace:%X{trace_id} span:%X{span_id}]) : %msg%n
       </pattern>
     </encoder>
   </appender>
@@ -40,7 +40,6 @@
     <appender-ref ref="CONSOLE"/>
     <appender-ref ref="OTLP"/>
   </root>
-
   <logger name="sanlab.icecream" level="DEBUG" additivity="false">
     <appender-ref ref="CONSOLE"/>
     <appender-ref ref="OTLP"/>

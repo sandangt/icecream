@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sanlab.icecream.consul.model.ProductESearch;
 import sanlab.icecream.consul.utils.CollectionQueryUtils;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
@@ -33,13 +32,13 @@ public class ProductController {
 
     @GetMapping
     @PreAuthorize(PERMIT_ALL)
-    public CollectionQueryResponse<ProductESearch> getAll(@ModelAttribute CollectionQueryRequest request) {
+    public CollectionQueryResponse<ProductExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
         return productService.getAll(request, false);
     }
 
     @GetMapping("/featured")
     @PreAuthorize(PERMIT_ALL)
-    public CollectionQueryResponse<ProductESearch> getAllFeatured(@ModelAttribute CollectionQueryRequest request) {
+    public CollectionQueryResponse<ProductExtendedDto> getAllFeatured(@ModelAttribute CollectionQueryRequest request) {
         return productService.getAll(request, true);
     }
 

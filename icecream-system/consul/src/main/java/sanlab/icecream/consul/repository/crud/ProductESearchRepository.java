@@ -1,4 +1,4 @@
-package sanlab.icecream.consul.repository.search;
+package sanlab.icecream.consul.repository.crud;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import sanlab.icecream.consul.model.ProductESearch;
@@ -6,7 +6,7 @@ import sanlab.icecream.consul.model.ProductESearch;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductSearchRepository extends ElasticsearchRepository<ProductESearch, String>, ProductSearchExtendRepository {
+public interface ProductESearchRepository extends ElasticsearchRepository<ProductESearch, String>, ProductESearchExtendRepository {
 
     List<ProductESearch> findByIdIn(List<String> ids);
     List<ProductESearch> findByNameContaining(String name);

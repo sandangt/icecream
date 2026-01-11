@@ -1,41 +1,73 @@
 {
-  "index": {
-    "number_of_shards": 3,
-    "number_of_replicas": 1,
-    "analysis": {
-      "analyzer": {
-        "product_text_analyzer": {
-          "type": "custom",
-          "tokenizer": "standard",
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "product_edge_ngram"
-          ]
-        },
-        "product_search_analyzer": {
-          "type": "custom",
-          "tokenizer": "standard",
-          "filter": [
-            "lowercase",
-            "asciifolding"
-          ]
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+
+      "name": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
         }
       },
-      "normalizer": {
-        "product_keyword_normalizer": {
-          "type": "custom",
-          "filter": [
-            "lowercase",
-            "asciifolding"
-          ]
+      "slug": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
         }
       },
-      "filter": {
-        "product_edge_ngram": {
-          "type": "edge_ngram",
-          "min_gram": 2,
-          "max_gram": 15
+      "description": { "type": "text", "analyzer": "standard" },
+      "briefDescription": { "type": "text", "analyzer": "standard" },
+
+      "sku": { "type": "keyword" },
+
+      "price": { "type": "double" },
+
+      "metaTitle": { "type": "text" },
+      "metaDescription": { "type": "text" },
+      "metaKeyword": { "type": "text" },
+
+      "isFeatured": { "type": "boolean" },
+
+      "status": { "type": "keyword" },
+
+      "createdAt": { "type": "long" },
+      "modifiedAt": { "type": "long" },
+
+      "categories": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "keyword" },
+          "name": { "type": "text" },
+          "slug": { "type": "text" },
+          "description": { "type": "text" },
+          "createdAt": { "type": "long" },
+          "modifiedAt": { "type": "long" }
+        }
+      },
+
+      "media": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "keyword" },
+          "type": { "type": "keyword" },
+          "description": { "type": "text" },
+          "relativePath": { "type": "text" },
+          "createdAt": { "type": "long" },
+          "modifiedAt": { "type": "long" }
+        }
+      },
+
+      "featuredBanner": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "keyword" },
+          "type": { "type": "keyword" },
+          "description": { "type": "text" },
+          "relativePath": { "type": "text" },
+          "createdAt": { "type": "long" },
+          "modifiedAt": { "type": "long" }
         }
       }
     }

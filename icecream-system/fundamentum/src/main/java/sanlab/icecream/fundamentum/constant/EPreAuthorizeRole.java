@@ -9,7 +9,7 @@ import java.util.Map;
 public enum EPreAuthorizeRole {
     NORMIE("ROLE_normie", "Normie", "normie"),
     WATCHER("ROLE_watcher", "Watcher", "watcher"),
-    GARDENER("ROLE_gerdener", "Gardener", "gardener"),
+    GARDENER("ROLE_gardener", "Gardener", "gardener"),
     ANON("ROLE_ANONYMOUS", "Anonymous", "anon"),
     ;
 
