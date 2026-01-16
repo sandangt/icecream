@@ -20,6 +20,10 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final String[] IGNORE_AUTH_MATCHERS = new String[] {
+        "/webhook/**"
+    };
+
     private final JwtAuthConverter jwtAuthConverter;
     private final ApiKeyAuthFilter apiKeyFilter;
 
@@ -28,6 +32,10 @@ public class SecurityConfig {
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(IGNORE_AUTH_MATCHERS).permitAll()
+                .anyRequest().authenticated()
+            )
             .oauth2ResourceServer(auth -> auth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
             .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

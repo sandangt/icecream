@@ -52,6 +52,9 @@ spring:
         deleteImage-out-0:
           binder: rabbit-binder
           destination: icecream.consul.media.delete-image
+        paymentSuccess-out-0:
+          binder: rabbit-binder
+          destination: icecream.consul.payment.sucess
   rsocket:
     server:
       port: ${CONSUL_RSOCKET_PORT}
@@ -84,6 +87,10 @@ app:
       converter:
         resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
         principle-attribute: email
+  payment:
+    url: ${PAYMENT_URL}
+    webhook:
+      secret: ${PAYMENT_WEBHOOK_SECRET}
 
 otel:
   instrumentation:

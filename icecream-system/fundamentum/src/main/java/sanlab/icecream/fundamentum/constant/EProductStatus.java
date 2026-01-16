@@ -15,7 +15,7 @@ public enum EProductStatus {
     AVAILABLE(2, "Available"),
     INVALID(3, "Invalid"),
     ARCHIVED(4, "Archived"),
-    UNKNOWN(-1, "Unknown");
+    UNKNOWN(-1, "Unknown"),
     ;
 
     private final int code;

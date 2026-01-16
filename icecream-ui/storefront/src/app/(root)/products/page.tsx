@@ -6,7 +6,6 @@ import { ProductHelper } from '@/lib/helpers'
 import { FilterGroup, PaginationControls } from './_components'
 import { ProductCard } from '../_components'
 import { FiltersRequest } from '@/models'
-import { fi } from 'date-fns/locale'
 
 type Props = {
   searchParams?: {

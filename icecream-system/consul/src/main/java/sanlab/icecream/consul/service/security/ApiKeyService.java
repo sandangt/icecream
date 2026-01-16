@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import sanlab.icecream.consul.exception.HttpUnauthorizedException;
+import sanlab.icecream.consul.exception.HttpForbiddenException;
 import sanlab.icecream.consul.utils.SecurityContextUtils;
 import sanlab.icecream.fundamentum.constant.EPreAuthorizeRole;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
@@ -38,11 +38,11 @@ public class ApiKeyService {
         String reqApiKey = StringUtils.trimToEmpty(req.getHeader(HEADER_KEY));
         if (StringUtils.isEmpty(reqApiKey)) {
             var ex = new IcRuntimeException(EMPTY_API_KEY);
-            throw new HttpUnauthorizedException(ex);
+            throw new HttpForbiddenException(ex);
         }
         if (!apiKeys.contains(reqApiKey)) {
             var ex = new IcRuntimeException(INVALID_API_KEY);
-            throw new HttpUnauthorizedException(ex);
+            throw new HttpForbiddenException(ex);
         }
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
             new SimpleGrantedAuthority(EPreAuthorizeRole.GARDENER.getRaw())

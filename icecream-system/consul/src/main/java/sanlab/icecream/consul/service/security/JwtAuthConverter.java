@@ -22,13 +22,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
-    @Value("${app.security.jwt.converter.principle-attribute}")
-    private String principleAttribute;
+    private final String principleAttribute;
+    private final String resourceId;
+    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
 
-    @Value("${app.security.jwt.converter.resource-id}")
-    private String resourceId;
+    public JwtAuthConverter(@Value("${app.security.jwt.converter.principle-attribute}") String principleAttribute,
+                            @Value("${app.security.jwt.converter.resource-id}") String resourceId) {
+        this.principleAttribute = principleAttribute;
+        this.resourceId = resourceId;
+        this.jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    }
 
     @Override
     public AbstractAuthenticationToken convert(@NonNull Jwt source) {

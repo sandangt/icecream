@@ -12,6 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemDto {
-    protected UUID id;
+    protected String id;
     protected Long quantity;
 }

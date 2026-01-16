@@ -10,11 +10,12 @@ import sanlab.icecream.consul.model.CartItem;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { CartMapper.class, ProductMapper.class })
+@Mapper(componentModel = "spring", uses = { ProductMapper.class })
 public interface CartItemMapper {
 
     //region To DTO
     @Named("entityToDto")
+    @Mapping(target = "id", source = ".", qualifiedByName = "makeId")
     CartItemDto entityToDto(CartItem cartItem);
 
     @Named("entityToDtoIter")
@@ -22,6 +23,7 @@ public interface CartItemMapper {
     List<CartItemDto> entityToDto(List<CartItem> cartItems);
 
     @Named("entityToExtendedDto")
+    @Mapping(target = "id", source = ".", qualifiedByName = "makeId")
     CartItemExtendedDto entityToExtendedDto(CartItem cartItem);
 
     @Named("entityToExtendedDtoIter")
@@ -41,5 +43,10 @@ public interface CartItemMapper {
     @IterableMapping(qualifiedByName = "dtoToEntity")
     List<CartItem> dtoToEntity(List<CartItemDto> cartItemDtos);
     //endregion
+
+    @Named("makeId")
+    default String makeId(CartItem cartItem) {
+        return cartItem.getCart().getId().toString() + '|' + cartItem.getProduct().getId().toString();
+    }
 
 }

@@ -16,7 +16,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-      POSTGRES_MULTIPLE_DATABASES: ${POSTGRESQL_CONSUL_DB},${POSTGRESQL_ECHO_DB},${POSTGRESQL_MEMOIR_DB},${POSTGRESQL_IDENTITY_DB},${POSTGRESQL_PAYMENT_DB}
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRESQL_CONSUL_DB},${POSTGRESQL_MEMOIR_DB},${POSTGRESQL_IDENTITY_DB},${POSTGRESQL_PAYMENT_DB}
     networks:
       - icecream-network
     healthcheck:
@@ -262,19 +262,35 @@ services:
     networks:
       - icecream-network
 
-  stripe:
+  payment:
     build: ./stripe
-    container_name: icecream-stripe
+    container_name: icecream-payment
     ports:
-      - "${STRIPE_PORT}:8000"
+      - "${PAYMENT_PORT}:8000"
     environment:
-      - DATABASE_URL=${STRIPE_DATABASE_URL}
-      - WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
-      - BASE_URL=${BASE_URL:-http://localhost:8000}
+      - DATABASE_URL=${PAYMENT_DATABASE_URL}
+      - WEBHOOK_SECRET=${PAYMENT_WEBHOOK_SECRET}
+      - BASE_URL=${PAYMENT_URL}
       - CURRENCY_CODE=${CURRENCY_CODE:-USD}
       - CURRENCY_SYMBOL=${CURRENCY_SYMBOL:-$}
     depends_on:
       - postgresql
+    networks:
+      - icecream-network
+
+  mailpit:
+    image: axllent/mailpit:v1.28.2
+    container_name: icecream-mailpit
+    ports:
+      - "${MAILPIT_UI_PORT}:8025"
+      - "${MAILPIT_PORT}:1025"
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    volumes:
+      - ${MAILPIT_VOLUME}:/data
     networks:
       - icecream-network
 

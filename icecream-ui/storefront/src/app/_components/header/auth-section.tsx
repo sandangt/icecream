@@ -12,11 +12,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ROUTES } from '@/lib/constants'
-import { SessionHelper } from '@/lib/helpers'
+import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 
 import { CartDropdown } from './cart-dropdown'
 import { Session } from '@/models'
 import { FC } from 'react'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export const AuthSection = async () => {
   const session = await auth()
@@ -43,8 +45,8 @@ const LoggedIn = async () => {
   if (!sessionHelper.isLoggedIn()) return null
   return (
     <div className="flex items-center space-x-2 sm:space-x-3">
-      <UserProfileSection session={sessionHelper.data()} />
       <CartDropdown customerId={sessionHelper.userId} />
+      <UserProfileSection session={sessionHelper.data()} />
     </div>
   )
 }
@@ -54,17 +56,24 @@ type UserProfileSectionProps = {
 }
 
 const UserProfileSection: FC<UserProfileSectionProps> = async ({ session }) => {
-  const { firstName, lastName, refreshToken } = session
+  const customer = await fetchCustomerProfile(session as unknown as Session)
+  const helper = new CustomerHelper(customer)
+  const { refreshToken } = session
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Open user menu">
-          <User className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />
+        <Button variant="ghost" size="icon" aria-label="Open user menu" className="rounded-full">
+          <Avatar className="rounded-lg">
+            <AvatarImage src={helper.avatarUrl} />
+            <AvatarFallback>
+              <User className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />
+            </AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-50">
         <DropdownMenuLabel>
-          Hello, {firstName} {lastName}
+          Hello, {helper.firstName} {helper.lastName}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

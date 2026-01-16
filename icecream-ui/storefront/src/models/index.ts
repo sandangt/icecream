@@ -13,15 +13,15 @@ import type {
   CustomerExtended,
 } from './core'
 
-import type { UpdateProfileRequest } from './requests/customer'
-
 import type {
+  UpdateProfileRequest,
   RequestAllParams,
   PaginationRequest,
   SortingRequest,
   FiltersRequest,
-} from './requests/all'
-import type { RequestAllResult } from './responses/all'
+} from './requests'
+
+import type { RequestAllResult } from './responses'
 
 export {
   Session,

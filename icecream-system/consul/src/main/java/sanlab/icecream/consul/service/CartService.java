@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import static sanlab.icecream.consul.exception.ConsulErrorModel.CART_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
 
 @Service
 @RequiredArgsConstructor
@@ -60,18 +61,22 @@ public class CartService {
             .stream().collect(Collectors.toMap(Product::getId, Function.identity()));
 
         if (cartOptional.isEmpty()) {
-            Cart cart = cartRepository.save(Cart.builder().customer(customer).build());
-            var itemList = productMap.values().stream()
-                .map(item -> (CartItem) CartItem.builder()
-                    .quantity(requestMapByProductIds.get(item.getId()).getQuantity())
-                    .cart(cart)
-                    .product(item)
-                    .build()
-                )
-                .toList();
-            itemList = cartItemRepository.saveAll(itemList);
-            cart.setCartItems(itemList);
-            return cartMapper.entityToExtendedDto(cart);
+            try {
+                Cart cart = cartRepository.save(Cart.builder().customer(customer).build());
+                var itemList = productMap.values().stream()
+                    .map(item -> (CartItem) CartItem.builder()
+                        .quantity(requestMapByProductIds.get(item.getId()).getQuantity())
+                        .cart(cart)
+                        .product(item)
+                        .build()
+                    )
+                    .toList();
+                itemList = cartItemRepository.saveAll(itemList);
+                cart.setCartItems(itemList);
+                return cartMapper.entityToExtendedDto(cart);
+            } catch (Exception ex) {
+                throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "Failed to create cart");
+            }
         }
         Cart cart = cartOptional.get();
         var cartItemMapByProductId = cartOptional.map(Cart::getCartItems)
@@ -105,9 +110,13 @@ public class CartService {
             .filter(inner -> !requestMapByProductIds.containsKey(inner.getKey()))
             .map(Map.Entry::getValue)
             .collect(Collectors.toSet()));
-        if (CollectionUtils.isNotEmpty(existingItemList)) cartItemRepository.saveAll(existingItemList);
-        if (CollectionUtils.isNotEmpty(itemList)) cartItemRepository.saveAll(itemList);
-        if (CollectionUtils.isNotEmpty(deletingItemList)) cartItemRepository.deleteAll(deletingItemList);
+        try {
+            if (CollectionUtils.isNotEmpty(existingItemList)) cartItemRepository.saveAll(existingItemList);
+            if (CollectionUtils.isNotEmpty(itemList)) cartItemRepository.saveAll(itemList);
+            if (CollectionUtils.isNotEmpty(deletingItemList)) cartItemRepository.deleteAll(deletingItemList);
+        } catch (Exception ex) {
+            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "Failed to update cart");
+        }
 
         cart = cartRepository.findFirstByCustomer_UserId(userId)
             .orElseThrow(() -> new IcRuntimeException(CART_NOT_FOUND));
@@ -121,11 +130,15 @@ public class CartService {
         if (cartOptional.isEmpty()) return null;
         List<CartItem> cartItems = cartOptional.map(Cart::getCartItems).orElse(Collections.emptyList());
         Cart savedCart = cartOptional.get();
-        if (CollectionUtils.isNotEmpty(cartItems)) {
-            cartItems.clear();
-            savedCart = cartRepository.save(savedCart);
+        try {
+            if (CollectionUtils.isNotEmpty(cartItems)) {
+                cartItems.clear();
+                savedCart = cartRepository.save(savedCart);
+            }
+            return cartMapper.entityToExtendedDto(savedCart);
+        } catch (Exception ex) {
+            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "Failed to clear cart");
         }
-        return cartMapper.entityToExtendedDto(savedCart);
     }
 
 }

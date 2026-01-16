@@ -8,11 +8,20 @@ spring:
   rsocket:
     server:
       port: ${ECHO_RSOCKET_PORT}
-  datasource:
-    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_ECHO_DB}
   data:
     redis:
       database: 3
-  liquibase:
-    enabled: true
-    changeLog: classpath:/db/changelog/master.xml
+    mongodb:
+      database: ${MONGODB_ECHO_DB}
+    cloud:
+      function:
+        definition: helloRabbit;paymentSuccess
+      stream:
+        bindings:
+          paymentSuccess-in-0:
+            binder: rabbit-binder
+            destination: icecream.consul.payment.sucess
+
+otel:
+  instrumentation:
+    mongodb.enabled: true

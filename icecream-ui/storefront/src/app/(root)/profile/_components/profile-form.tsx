@@ -167,7 +167,7 @@ export const ProfileForm: FC<Props> = ({ data }) => {
               type="submit"
               size="lg"
               className="w-full md:w-auto"
-              disabled={!form.formState.isDirty || !form.formState.isValid}
+              disabled={!form.formState.isDirty || !form.formState.isValid || !form.formState.isReady}
             >
               Save Personal Details
             </Button>

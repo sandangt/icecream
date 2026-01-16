@@ -35,10 +35,19 @@ public enum ConsulErrorModel implements IcErrorModel {
     FAIL_TO_PERSIST_DATA("CONSUL-2101", "Error occurs when persisting data", 780),
     //endregion
 
+    //region Service layer
+    HASH_ALGORITHM_EXCEPTION("CONSUL-5000", "Hash algorithm misconfigured", 0),
+    INVALID_PAYMENT_WEBHOOK_SIGNATURE("CONSUL-5001", "Invalid payment webhook signature", 0),
+    //endregion
+
     //region External service identity
     INVALID_IDENTITY_ADMIN_TOKEN("CONSUL-3000", "Failed to get admin token", 781),
     INVALID_UPDATE_USER_INFO_REQUEST("CONSUL-3001", "Invalid request for updating user info", 782),
     UNAVAILABLE_IDENTITY_SERVICE("CONSUL-3002", "Identity service currently not available", 783),
+    //endregion
+
+    //region External service payment
+    FAILED_TO_REQUEST_INVOICE("CONSUL-4000", "Failed to create invoice", 0);
     //endregion
 
     ;
