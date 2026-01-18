@@ -13,14 +13,23 @@ spring:
       database: 3
     mongodb:
       database: ${MONGODB_ECHO_DB}
-    cloud:
-      function:
-        definition: helloRabbit;paymentSuccess
-      stream:
-        bindings:
-          paymentSuccess-in-0:
-            binder: rabbit-binder
-            destination: icecream.consul.payment.sucess
+  cloud:
+    function:
+      definition: helloRabbit;notifyPayment
+    stream:
+      bindings:
+        notifyPayment-in-0:
+          binder: rabbit-binder
+          destination: icecream.consul.payment.notify
+  mail:
+    host: ${MAILPIT_HOST}
+    port: ${MAILPIT_PORT}
+    protocol: smtp
+
+app:
+  mail:
+    from: caretaker@icecream.com
+    from-name: Iceceam Care Taker
 
 otel:
   instrumentation:

@@ -3,7 +3,7 @@ package sanlab.icecream.memoir.mapper;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.AuditLogDto;
 import sanlab.icecream.memoir.model.AuditLog;
 
 import java.util.List;

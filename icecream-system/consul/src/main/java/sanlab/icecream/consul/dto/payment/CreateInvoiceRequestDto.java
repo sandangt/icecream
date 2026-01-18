@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateInvoiceRequestDto {
-    private Double amount;
+    private Long amount;
     private String reference;
     private String webhookUrl;
     private String redirectUrl;

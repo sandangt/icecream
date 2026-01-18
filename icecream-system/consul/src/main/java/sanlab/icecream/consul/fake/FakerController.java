@@ -5,8 +5,8 @@ import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +30,10 @@ import sanlab.icecream.fundamentum.constant.EProductStatus;
 import sanlab.icecream.fundamentum.utils.LogUtils;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -45,13 +48,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_GARDENER;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.AVAILABLE;
 import static sanlab.icecream.fundamentum.constant.EProductStatus.UNAVAILABLE;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/fake")
 @RequiredArgsConstructor
-@Slf4j
+@PreAuthorize(HAS_ROLE_GARDENER)
 public class FakerController {
 
     private final ProductRepository productRepository;
@@ -60,7 +65,6 @@ public class FakerController {
     private final AddressRepository addressRepository;
     private final StockRepository stockRepository;
     private final CustomerRepository customerRepository;
-
     private final ImageService imageService;
 
     @Value("${app.temp-dir:''}")
@@ -70,7 +74,6 @@ public class FakerController {
     private static final String IMAGE_EXT = "jpg";
     private final Slugify slugMaker = Slugify.builder().build();
 
-    @Bean
     public Faker getFaker() {
         return new Faker();
     }

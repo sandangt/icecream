@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_STORE_IMAGE_FILE;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_STORE_IMAGE_FAILED;
 
 @Component("minIOStorageRepository")
 public class MinIOStorageRepositoryImpl implements StorageRepository {
@@ -47,7 +47,7 @@ public class MinIOStorageRepositoryImpl implements StorageRepository {
         } catch (ServerException | InsufficientDataException | ErrorResponseException | NoSuchAlgorithmException |
                  InvalidKeyException | InvalidResponseException | XmlParserException | InternalException |
                  IOException ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_STORE_IMAGE_FILE);
+            throw new IcRuntimeException(ex, REPOSITORY_STORE_IMAGE_FAILED);
         }
         return Path.of(bucketName, filePath.toString());
     }

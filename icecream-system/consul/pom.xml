@@ -12,7 +12,7 @@
   <artifactId>consul</artifactId>
 
   <properties>
-    <fundamentum.version>0.2.0</fundamentum.version>
+    <fundamentum.version>0.2.0-snapshot</fundamentum.version>
     <twelve.monkeys.version>3.9.4</twelve.monkeys.version>
   </properties>
 

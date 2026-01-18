@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import sanlab.icecream.chronos.repository.storage.StorageRepository;
-import sanlab.icecream.fundamentum.dto.core.FileHandlingDto;
+import sanlab.icecream.fundamentum.dto.FileHandlingDto;
 
 import java.util.function.Consumer;
 

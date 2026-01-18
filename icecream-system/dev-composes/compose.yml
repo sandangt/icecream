@@ -269,12 +269,15 @@ services:
       - "${PAYMENT_PORT}:8000"
     environment:
       - DATABASE_URL=${PAYMENT_DATABASE_URL}
-      - WEBHOOK_SECRET=${PAYMENT_WEBHOOK_SECRET}
+      - WEBHOOK_SECRET='${PAYMENT_WEBHOOK_SECRET}'
       - BASE_URL=${PAYMENT_URL}
       - CURRENCY_CODE=${CURRENCY_CODE:-USD}
       - CURRENCY_SYMBOL=${CURRENCY_SYMBOL:-$}
+      - API_KEY=${CONSUL_API_KEY_0}
     depends_on:
       - postgresql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - icecream-network
 

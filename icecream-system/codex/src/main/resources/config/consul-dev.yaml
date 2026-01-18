@@ -52,9 +52,9 @@ spring:
         deleteImage-out-0:
           binder: rabbit-binder
           destination: icecream.consul.media.delete-image
-        paymentSuccess-out-0:
+        notifyPayment-out-0:
           binder: rabbit-binder
-          destination: icecream.consul.payment.sucess
+          destination: icecream.consul.payment.notify
   rsocket:
     server:
       port: ${CONSUL_RSOCKET_PORT}
@@ -91,6 +91,9 @@ app:
     url: ${PAYMENT_URL}
     webhook:
       secret: ${PAYMENT_WEBHOOK_SECRET}
+      host: 'host.docker.internal'
+  storefront:
+    url: ${STOREFRONT_URL}
 
 otel:
   instrumentation:

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import sanlab.icecream.fundamentum.utils.PriceCalculationUtils;
 
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ public class OrderItem {
     @GeneratedValue(strategy =  GenerationType.UUID)
     private UUID id;
 
-    private Long quantity;
     private String note;
+    private Long quantity;
     private Double price;
     private Double discount;
 
@@ -52,6 +53,10 @@ public class OrderItem {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public Double getFinalPrice() {
+        return PriceCalculationUtils.discountedPrice(price, discount) * quantity;
     }
 
 }

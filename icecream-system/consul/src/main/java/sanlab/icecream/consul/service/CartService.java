@@ -27,9 +27,9 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CART_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CART_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CUSTOMER_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ public class CartService {
     @Transactional
     public CartExtendedDto upsert(UUID userId, CartRequest payload) {
         Customer customer = customerRepository.findFirstByUserId(userId)
-            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(userId)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(userId)));
         var requestMapByProductIds = payload.getCartItems()
             .stream()
             .collect(Collectors.toMap(CartRequest.CartItemRequest::getProductId, Function.identity()));
@@ -75,7 +75,7 @@ public class CartService {
                 cart.setCartItems(itemList);
                 return cartMapper.entityToExtendedDto(cart);
             } catch (Exception ex) {
-                throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "Failed to create cart");
+                throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "Failed to create cart");
             }
         }
         Cart cart = cartOptional.get();
@@ -115,11 +115,11 @@ public class CartService {
             if (CollectionUtils.isNotEmpty(itemList)) cartItemRepository.saveAll(itemList);
             if (CollectionUtils.isNotEmpty(deletingItemList)) cartItemRepository.deleteAll(deletingItemList);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "Failed to update cart");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "Failed to update cart");
         }
 
         cart = cartRepository.findFirstByCustomer_UserId(userId)
-            .orElseThrow(() -> new IcRuntimeException(CART_NOT_FOUND));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CART_NOT_FOUND));
 
         return cartMapper.entityToExtendedDto(cart);
     }
@@ -137,7 +137,7 @@ public class CartService {
             }
             return cartMapper.entityToExtendedDto(savedCart);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "Failed to clear cart");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "Failed to clear cart");
         }
     }
 

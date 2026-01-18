@@ -101,6 +101,7 @@
         order_status VARCHAR,
         delivery_status VARCHAR,
         payment_status VARCHAR,
+        payment_id UUID,
         created_at BIGINT,
         modified_at BIGINT,
         CONSTRAINT fk_customer__order FOREIGN KEY(customer_id) REFERENCES customer(user_id),

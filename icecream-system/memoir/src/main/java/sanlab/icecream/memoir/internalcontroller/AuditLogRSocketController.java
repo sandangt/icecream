@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
-import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.AuditLogDto;
 
 import java.util.List;
 import java.util.UUID;

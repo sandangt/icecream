@@ -10,6 +10,6 @@ public interface PaymentRepository {
 
     Optional<HealthResponseDto> getHealth();
 
-    Optional<CreateInvoiceResponseDto> createInvoice(CreateInvoiceRequestDto req);
+    CreateInvoiceResponseDto createInvoice(CreateInvoiceRequestDto req);
 
 }

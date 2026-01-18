@@ -30,11 +30,11 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.ADDRESS_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_UPDATE_USER_INFO_REQUEST;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_USER_PRINCIPAL;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_ADDRESS_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CUSTOMER_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.SECURITY_USER_PRINCIPAL_INVALID;
 import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_NORMIE;
 
 @RestController
@@ -53,7 +53,7 @@ public class CustomerController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (INVALID_USER_PRINCIPAL.equals(error)) throw new HttpUnauthorizedException(ex);
+            if (SECURITY_USER_PRINCIPAL_INVALID.equals(error)) throw new HttpUnauthorizedException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -66,8 +66,8 @@ public class CustomerController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case INVALID_USER_PRINCIPAL -> new HttpUnauthorizedException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case SECURITY_USER_PRINCIPAL_INVALID -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -82,9 +82,9 @@ public class CustomerController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
-                case INVALID_UPDATE_USER_INFO_REQUEST -> new HttpBadRequestException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED -> new HttpBadRequestException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -99,8 +99,8 @@ public class CustomerController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -117,9 +117,9 @@ public class CustomerController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
-                case ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -135,9 +135,9 @@ public class CustomerController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
-                case ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -153,9 +153,9 @@ public class CustomerController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
-                case ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_ADDRESS_NOT_FOUND -> new HttpNotFoundException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -169,7 +169,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (FAIL_TO_PERSIST_DATA.equals(error)) {
+            if (REPOSITORY_PERSIST_DATA_FAILED.equals(error)) {
                 throw new HttpServiceUnavailableException(ex);
             }
             throw new HttpInternalServerErrorException(ex);

@@ -13,41 +13,39 @@ public enum ConsulErrorModel implements IcErrorModel {
 
     //region General errors
     INTERNAL_SERVER_ERROR("CONSUL-1000", "Internal server error", -3),
-    BAD_INPUT_REQUEST("CONSUL-1001", "Bad request", 770),
+    BAD_INPUT_REQUEST("CONSUL-1001", "Bad request", -4),
     //endregion
 
     //region Security layer
-    INVALID_USER_PRINCIPAL("CONSUL-0000", "Invalid user principal", 771),
-    INVALID_API_KEY("CONSUL-0001", "Invalid api key", 0),
-    EMPTY_API_KEY("CONSUL-0002", "Empty api key", 0),
+    SECURITY_USER_PRINCIPAL_INVALID("CONSUL-0000", "Invalid user principal", 770),
+    SECURITY_API_KEY_INVALID("CONSUL-0001", "Invalid api key", 771),
     //region
 
     //region Repository layer
-    CUSTOMER_NOT_FOUND("CONSUL-2000", "Customer not found", 772),
-    PRODUCT_NOT_FOUND("CONSUL-2001", "Product not found", 773),
-    CATEGORY_NOT_FOUND("CONSUL-2002", "Category not found", 774),
-    STOCK_NOT_FOUND("CONSUL-2003", "Stock not found", 775),
-    FEEDBACK_NOT_FOUND("CONSUL-2004", "Feedback not found", 776),
-    ADDRESS_NOT_FOUND("CONSUL-2005", "Address not found", 777),
-    CART_NOT_FOUND("CONSUL-2006", "Cart not found", 778),
-    IMAGE_NOT_FOUND("CONSUL-2007", "Image not found", 784),
-    FAIL_TO_STORE_IMAGE_FILE("CONSUL-2100", "Failed to store image file", 779),
-    FAIL_TO_PERSIST_DATA("CONSUL-2101", "Error occurs when persisting data", 780),
+    REPOSITORY_CUSTOMER_NOT_FOUND("CONSUL-2000", "Customer not found", 790),
+    REPOSITORY_PRODUCT_NOT_FOUND("CONSUL-2001", "Product not found", 791),
+    REPOSITORY_CATEGORY_NOT_FOUND("CONSUL-2002", "Category not found", 792),
+    REPOSITORY_STOCK_NOT_FOUND("CONSUL-2003", "Stock not found", 793),
+    REPOSITORY_FEEDBACK_NOT_FOUND("CONSUL-2004", "Feedback not found", 794),
+    REPOSITORY_ADDRESS_NOT_FOUND("CONSUL-2005", "Address not found", 795),
+    REPOSITORY_CART_NOT_FOUND("CONSUL-2006", "Cart not found", 796),
+    REPOSITORY_IMAGE_NOT_FOUND("CONSUL-2007", "Image not found", 797),
+    REPOSITORY_PAYMENT_NOT_FOUND("CONSUL-2008", "Payment ID not found", 798),
+    REPOSITORY_STORE_IMAGE_FAILED("CONSUL-2009", "Failed to store image file", 799),
+    REPOSITORY_PERSIST_DATA_FAILED("CONSUL-2010", "Error occurs when persisting data", 800),
     //endregion
 
     //region Service layer
-    HASH_ALGORITHM_EXCEPTION("CONSUL-5000", "Hash algorithm misconfigured", 0),
-    INVALID_PAYMENT_WEBHOOK_SIGNATURE("CONSUL-5001", "Invalid payment webhook signature", 0),
     //endregion
 
     //region External service identity
-    INVALID_IDENTITY_ADMIN_TOKEN("CONSUL-3000", "Failed to get admin token", 781),
-    INVALID_UPDATE_USER_INFO_REQUEST("CONSUL-3001", "Invalid request for updating user info", 782),
-    UNAVAILABLE_IDENTITY_SERVICE("CONSUL-3002", "Identity service currently not available", 783),
+    IDENTITY_IDENTITY_ADMIN_TOKEN_FAILED("CONSUL-3000", "Failed to get admin token", 810),
+    IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED("CONSUL-3001", "Invalid request for updating user info", 811),
+    IDENTITY_IDENTITY_SERVICE_UNAVAILABLE("CONSUL-3002", "Identity service currently not available", 812),
     //endregion
 
     //region External service payment
-    FAILED_TO_REQUEST_INVOICE("CONSUL-4000", "Failed to create invoice", 0);
+    PAYMENT_REQUEST_INVOICE_FAILED("CONSUL-4000", "Failed to create invoice", 830);
     //endregion
 
     ;

@@ -21,7 +21,7 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 import java.util.List;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CATEGORY_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CATEGORY_NOT_FOUND;
 import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.PERMIT_ALL;
 
 @RestController
@@ -45,7 +45,7 @@ public class CategoryController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var err = ex.getError();
-            if (CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -58,7 +58,7 @@ public class CategoryController {
             return categoryService.getAllProducts(id, CollectionQueryUtils.getPageRequest(request));
         } catch (IcRuntimeException ex) {
             var err = ex.getError();
-            if (CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sanlab.icecream.fundamentum.utils.PriceCalculationUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,6 +36,12 @@ public class OrderRequest {
         private String note;
         private Double discount;
         private Double price;
+
+        public Double getFinalPrice() {
+            return PriceCalculationUtils.discountedPrice(price, discount) * quantity;
+        }
+
+
     }
 
     public List<OrderItemRequest> getOrderItems() {
@@ -45,10 +52,14 @@ public class OrderRequest {
                 .quantity(item1.getQuantity() + item2.getQuantity())
                 .note(item1.getNote())
                 .discount(item1.getDiscount())
-                .price(item1.getPrice() + item2.getPrice())
+                .price(item1.getPrice())
                 .build()
         ));
         return map.values().stream().toList();
+    }
+
+    public Double getTotalPrice() {
+        return getOrderItems().stream().mapToDouble(OrderItemRequest::getFinalPrice).sum();
     }
 
 }

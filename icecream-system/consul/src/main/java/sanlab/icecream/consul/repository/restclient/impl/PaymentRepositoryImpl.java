@@ -14,7 +14,7 @@ import sanlab.icecream.fundamentum.utils.LogUtils;
 
 import java.util.Optional;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAILED_TO_REQUEST_INVOICE;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.PAYMENT_REQUEST_INVOICE_FAILED;
 
 @Component
 @Slf4j
@@ -40,18 +40,17 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     }
 
     @Override
-    public Optional<CreateInvoiceResponseDto> createInvoice(CreateInvoiceRequestDto req) {
+    public CreateInvoiceResponseDto createInvoice(CreateInvoiceRequestDto req) {
         try {
-            var result = paymentClient.post()
+            return paymentClient.post()
                 .uri("/api/create-invoice")
                 .body(req)
                 .contentType(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(CreateInvoiceResponseDto.class);
-            return Optional.ofNullable(result);
         } catch (HttpClientErrorException ex) {
             LogUtils.logException(log, ex);
-            throw new IcRuntimeException(ex, FAILED_TO_REQUEST_INVOICE);
+            throw new IcRuntimeException(ex, PAYMENT_REQUEST_INVOICE_FAILED);
         }
     }
 }

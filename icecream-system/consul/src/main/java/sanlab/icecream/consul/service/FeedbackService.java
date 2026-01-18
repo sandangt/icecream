@@ -16,8 +16,8 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 import java.util.List;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FEEDBACK_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_FEEDBACK_NOT_FOUND;
 import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
 import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 
@@ -47,7 +47,7 @@ public class FeedbackService {
     public FeedbackExtendedDto getById(UUID id) {
         return feedbackRepository.findById(id)
             .map(feedbackMapper::entityToExtendedDto)
-            .orElseThrow(() -> new IcRuntimeException(FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
     }
 
     @Transactional
@@ -56,32 +56,32 @@ public class FeedbackService {
             Feedback feedback = feedbackRepository.save(feedbackMapper.dtoToEntity(request));
             return feedbackMapper.entityToExtendedDto(feedback);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "feedback");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "feedback");
         }
     }
 
     @Transactional
     public FeedbackExtendedDto update(UUID id, FeedbackDto request) {
         Feedback targetFeedback = feedbackRepository.findById(id)
-            .orElseThrow(() -> new IcRuntimeException(FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
         try {
             Feedback sourceFeedback = feedbackMapper.dtoToEntity(request);
             copyNotNull(sourceFeedback, targetFeedback);
             return feedbackMapper.entityToExtendedDto(feedbackRepository.save(targetFeedback));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "feedback");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "feedback");
         }
     }
 
     @Transactional
     public FeedbackExtendedDto delete(UUID id) {
         Feedback feedback = feedbackRepository.findById(id)
-            .orElseThrow(() -> new IcRuntimeException(FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
         try {
             feedbackRepository.deleteById(id);
             return feedbackMapper.entityToExtendedDto(feedback);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "feedback");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "feedback");
         }
     }
 

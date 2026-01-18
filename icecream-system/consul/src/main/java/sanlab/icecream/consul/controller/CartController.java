@@ -21,11 +21,10 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CART_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_USER_PRINCIPAL;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.PRODUCT_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CART_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CUSTOMER_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.SECURITY_USER_PRINCIPAL_INVALID;
 import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_NORMIE_AND_WATCHER;
 
 @RestController
@@ -44,7 +43,7 @@ public class CartController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (INVALID_USER_PRINCIPAL.equals(error)) throw new HttpUnauthorizedException(ex);
+            if (SECURITY_USER_PRINCIPAL_INVALID.equals(error)) throw new HttpUnauthorizedException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -58,9 +57,9 @@ public class CartController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch(error) {
-                case INVALID_USER_PRINCIPAL, CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
-                case CART_NOT_FOUND -> new HttpNotFoundException(ex);
+                case SECURITY_USER_PRINCIPAL_INVALID, REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_CART_NOT_FOUND -> new HttpNotFoundException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }
@@ -75,8 +74,8 @@ public class CartController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch(error) {
-                case INVALID_USER_PRINCIPAL -> new HttpUnauthorizedException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case SECURITY_USER_PRINCIPAL_INVALID -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }

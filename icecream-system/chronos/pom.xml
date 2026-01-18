@@ -12,7 +12,7 @@
   <artifactId>chronos</artifactId>
 
   <properties>
-    <fundamentum.version>0.2.0</fundamentum.version>
+    <fundamentum.version>0.2.0-snapshot</fundamentum.version>
   </properties>
 
   <dependencies>

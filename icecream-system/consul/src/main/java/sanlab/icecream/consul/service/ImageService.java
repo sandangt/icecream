@@ -23,10 +23,9 @@ import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CATEGORY_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_STORE_IMAGE_FILE;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.IMAGE_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_STORE_IMAGE_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_IMAGE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class ImageService {
     @Transactional(readOnly = true)
     public List<ProductExtendedDto> getAllProducts(UUID id) {
         if (!imageRepository.existsById(id))
-            throw new IcRuntimeException(IMAGE_NOT_FOUND, "id: %s".formatted(id));
+            throw new IcRuntimeException(REPOSITORY_IMAGE_NOT_FOUND, "id: %s".formatted(id));
         return imageRepository.findAllProductsById(id)
             .parallelStream()
             .map(productMapper::entityToExtendedDto)
@@ -62,7 +61,7 @@ public class ImageService {
                     .build()));
             return imageMapper.entityToDto(image);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "image");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "image");
         }
     }
 
@@ -113,7 +112,7 @@ public class ImageService {
             result.addAll(imageMapper.entityToDto(newImgs));
             return result;
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_STORE_IMAGE_FILE);
+            throw new IcRuntimeException(ex, REPOSITORY_STORE_IMAGE_FAILED);
         }
     }
 
