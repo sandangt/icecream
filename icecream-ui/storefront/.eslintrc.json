@@ -1,3 +1,19 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-empty-object-type": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["external", "internal", "parent", "sibling"],
+        "newlines-between": "ignore"
+      }
+    ]
+  },
+  "plugins": ["import"],
+  "settings": {
+    "import/internal-regex": "^@/"
+  }
 }

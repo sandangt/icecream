@@ -55,6 +55,9 @@ spring:
         notifyPayment-out-0:
           binder: rabbit-binder
           destination: icecream.consul.payment.notify
+        notifyCheckout-out-0:
+          binder: rabbit-binder
+          destination: icecream.consul.checkout.notify
   rsocket:
     server:
       port: ${CONSUL_RSOCKET_PORT}

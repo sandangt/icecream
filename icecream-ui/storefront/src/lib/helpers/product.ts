@@ -1,7 +1,7 @@
 import { IcRuntimeException, PRODUCT_NOT_AVAILABLE } from '@/exceptions'
-import { Category, Media, ProductExtended, Stock } from '@/models'
 import { ImageType } from '@/lib/constants'
 import { makeStorageUrl } from '@/lib/utils'
+import { Category, Media, ProductExtended, Stock } from '@/models'
 
 export class ProductHelper {
   private __product: ProductExtended | undefined | null

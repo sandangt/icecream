@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, type FC, type ReactNode } from 'react'
-import { CookiesProvider } from 'react-cookie'
-import { SessionProvider, signOut, useSession } from 'next-auth/react'
 import { fromUnixTime, isAfter } from 'date-fns'
+import { SessionProvider, signOut, useSession } from 'next-auth/react'
+import { type FC, type ReactNode, useEffect } from 'react'
+import { CookiesProvider } from 'react-cookie'
+
 import { ROUTES } from '@/lib/constants'
 
 type Props = {

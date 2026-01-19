@@ -1,10 +1,11 @@
 import { NextPage } from 'next'
 import { redirect } from 'next/navigation'
 
-import { requestProductBySlug } from '@/repositories/consul'
 import { ROUTES } from '@/lib/constants'
-import { DetailsProductCard } from '../../_components'
 import { ProductHelper } from '@/lib/helpers'
+import { requestProductBySlug } from '@/repositories/consul'
+
+import { DetailsProductCard } from '../../_components'
 
 type Props = {
   params: {

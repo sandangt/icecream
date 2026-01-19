@@ -1,8 +1,9 @@
 import Link from 'next/link'
 
 import { ROUTES } from '@/lib/constants'
-import { Logo } from './logo'
+
 import { AuthSection } from './auth-section'
+import { Logo } from './logo'
 
 export const Header = () => (
   <header className="bg-background/80 backdrop-blur-md sticky top-0 z-50 border-b">

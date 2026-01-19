@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation'
 
-import { fetchCustomerProfile } from '@/repositories/consul'
-import { auth } from '@/repositories/identity'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ROUTES } from '@/lib/constants'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { Session } from '@/models'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { auth } from '@/repositories/identity'
 
 import { AvatarSection, PrimaryAddressSection, ProfileForm } from './_components'
 

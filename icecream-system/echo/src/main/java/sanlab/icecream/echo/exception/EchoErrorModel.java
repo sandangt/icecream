@@ -5,7 +5,7 @@ import sanlab.icecream.fundamentum.exception.IcErrorModel;
 
 @Getter
 public enum EchoErrorModel implements IcErrorModel {
-    SERVICE_SUCCESSFUL_PAYMENT_PAYLOAD_INVALID("ECHO-1000", "Invalid payload from successful payment message", 770),
+    SERVICE_NOTIFICATION_PAYLOAD_INVALID("ECHO-1000", "Invalid payload", 770),
 
     MAIL_SEND_EMAIL_FAILED("ECHO-2000", "Failed to send email", -3),
     ;

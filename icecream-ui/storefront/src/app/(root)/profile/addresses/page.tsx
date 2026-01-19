@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
-import { auth } from '@/repositories/identity'
-import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { ROUTES } from '@/lib/constants'
-import { fetchCustomerProfile } from '@/repositories/consul'
+import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { Session } from '@/models'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { auth } from '@/repositories/identity'
 
 import { ManageAddressPage } from './_components'
 

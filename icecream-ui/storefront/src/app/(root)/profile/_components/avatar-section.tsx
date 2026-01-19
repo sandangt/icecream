@@ -4,13 +4,13 @@ import { useMutation } from '@tanstack/react-query'
 import { Camera, ReceiptEuroIcon, UploadCloud, UserCircle } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { ChangeEvent, FC, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { CustomerHelper, MediaHelper, SessionHelper } from '@/lib/helpers'
 import { CustomerExtended, Media, Session } from '@/models'
 import { requestUploadAvatar } from '@/repositories/consul'
-import { toast } from 'react-toastify'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
 const MAX_FILE_SIZE = 10 * 1024 * 1024

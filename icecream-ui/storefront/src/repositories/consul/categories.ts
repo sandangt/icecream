@@ -1,7 +1,7 @@
 import { API_PATHS } from '@/lib/constants'
 import { generateUrl } from '@/lib/utils'
-import { CONSUL_URL } from '@/settings'
 import { CategoryExtended } from '@/models'
+import { CONSUL_URL } from '@/settings'
 
 export const fetchAllCategories = async (): Promise<CategoryExtended[]> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CATEGORY])

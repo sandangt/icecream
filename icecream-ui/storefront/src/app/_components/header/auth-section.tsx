@@ -1,8 +1,9 @@
 import { LogOut, User } from 'lucide-react'
 import Link from 'next/link'
+import { FC } from 'react'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { auth, requestSSOSignOut, signIn, signOut } from '@/repositories/identity'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,12 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ROUTES } from '@/lib/constants'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
+import { Session } from '@/models'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { auth, requestSSOSignOut, signIn, signOut } from '@/repositories/identity'
 
 import { CartDropdown } from './cart-dropdown'
-import { Session } from '@/models'
-import { FC } from 'react'
-import { fetchCustomerProfile } from '@/repositories/consul'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export const AuthSection = async () => {
   const session = await auth()

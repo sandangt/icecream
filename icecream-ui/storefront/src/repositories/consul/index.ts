@@ -1,19 +1,19 @@
-import { requestUpsertCart, fetchCart, requestResetCart } from './carts'
+import { fetchCart, requestResetCart, requestUpsertCart } from './carts'
 import { fetchAllCategories } from './categories'
 import {
-  requestCreateCustomerProfileIfNotExist,
   fetchCustomerProfile,
   requestCreateCustomerAddress,
-  requestSetCustomerPrimaryAddress,
+  requestCreateCustomerProfileIfNotExist,
   requestDeleteCustomerAddress,
-  requestUploadAvatar,
+  requestSetCustomerPrimaryAddress,
   requestUpdateCustomerProfile,
+  requestUploadAvatar,
 } from './customers'
 import {
-  requestProductBySlug,
+  queryProducts,
   requestFeaturedProducts,
   requestNewProducts,
-  queryProducts,
+  requestProductBySlug,
 } from './products'
 
 export {

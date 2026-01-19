@@ -1,8 +1,8 @@
 import { IcRuntimeException, UNAUTHORIZED_REQUEST } from '@/exceptions'
 import { API_PATHS, HttpStatusCode, ROUTES } from '@/lib/constants'
 import { generateUrl } from '@/lib/utils'
-import { CONSUL_URL } from '@/settings'
 import { Address, Customer, CustomerExtended, Media, Session, UpdateProfileRequest } from '@/models'
+import { CONSUL_URL } from '@/settings'
 
 const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
   const { accessToken } = session

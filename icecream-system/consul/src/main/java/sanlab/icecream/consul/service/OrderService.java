@@ -20,12 +20,13 @@ import sanlab.icecream.consul.repository.crud.CustomerRepository;
 import sanlab.icecream.consul.repository.crud.OrderItemRepository;
 import sanlab.icecream.consul.repository.crud.OrderRepository;
 import sanlab.icecream.consul.repository.crud.ProductRepository;
-import sanlab.icecream.consul.repository.queue.PaymentNotificationQueueRepository;
+import sanlab.icecream.consul.repository.queue.OrderNotificationQueueRepository;
 import sanlab.icecream.consul.repository.restclient.PaymentRepository;
 import sanlab.icecream.consul.viewmodel.request.OrderRequest;
 import sanlab.icecream.consul.viewmodel.response.CreateOrderResponse;
 import sanlab.icecream.fundamentum.constant.EOrderStatus;
 import sanlab.icecream.fundamentum.constant.EPaymentStatus;
+import sanlab.icecream.fundamentum.dto.CheckoutNotificationDto;
 import sanlab.icecream.fundamentum.dto.PaymentNotificationDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 import sanlab.icecream.fundamentum.utils.PathUtils;
@@ -54,9 +55,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final PaymentRepository paymentRepository;
-    private final PaymentNotificationQueueRepository paymentNotiRepository;
+    private final OrderNotificationQueueRepository orderNotiRepository;
     private final OrderMapper orderMapper;
-    private final String webhookSecret;
     private final String webhookHost;
     private final String storefrontUrl;
 
@@ -68,11 +68,10 @@ public class OrderService {
         OrderRepository orderRepository,
         OrderItemRepository orderItemRepository,
         PaymentRepository paymentRepository,
-        PaymentNotificationQueueRepository paymentNotiRepository,
+        OrderNotificationQueueRepository orderNotiRepository,
         OrderMapper orderMapper,
         @Value("${app.storefront.url}") String storefrontUrl,
-        @Value("${app.payment.webhook.host}") String webhookHost,
-        @Value("${app.payment.webhook.secret}") String webhookSecret
+        @Value("${app.payment.webhook.host}") String webhookHost
     ) {
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
@@ -80,10 +79,9 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.paymentRepository = paymentRepository;
-        this.paymentNotiRepository = paymentNotiRepository;
+        this.orderNotiRepository = orderNotiRepository;
         this.cartService = cartService;
         this.orderMapper = orderMapper;
-        this.webhookSecret = webhookSecret;
         this.storefrontUrl = storefrontUrl;
         this.webhookHost = webhookHost;
     }
@@ -138,10 +136,11 @@ public class OrderService {
         } catch (Exception ex) {
             throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "Persistent error happen when creating order");
         }
+        Long finalPrice = Math.round(savedOrder.getFinalPrice());
         String paymentUrl = null;
         if (!COD.name().equals(savedOrder.getPaymentMethod())) {
             var invoiceResp = paymentRepository.createInvoice(CreateInvoiceRequestDto.builder()
-                    .amount(Math.round(savedOrder.getFinalPrice()))
+                    .amount(finalPrice)
                     .reference(savedOrder.getId().toString())
                     .webhookUrl(buildWebhookUrl())
                     .redirectUrl(this.storefrontUrl)
@@ -154,6 +153,20 @@ public class OrderService {
             }
             paymentUrl = invoiceResp.getPageUrl();
         }
+        orderNotiRepository.notifyCheckout(CheckoutNotificationDto.builder()
+            .userId(customer.getUserId())
+            .email(customer.getEmail())
+            .username(customer.getUsername())
+            .firstName(customer.getFirstName())
+            .lastName(customer.getLastName())
+            .orderId(savedOrder.getId())
+            .amount(String.valueOf(finalPrice))
+            .deliveryMethod(savedOrder.getDeliveryMethod())
+            .paymentMethod(savedOrder.getPaymentMethod())
+            .paymentStatus(savedOrder.getPaymentStatus())
+            .orderStatus(savedOrder.getOrderStatus())
+            .checkoutTime(Instant.now().toEpochMilli())
+            .build());
         return new CreateOrderResponse(paymentUrl, EOrderStatus.ACCEPTED.name());
     }
 
@@ -171,7 +184,7 @@ public class OrderService {
             throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "Failed to update order status after customer paid");
         }
         Customer customer = order.getCustomer();
-        paymentNotiRepository.notifyPayment(PaymentNotificationDto.builder()
+        orderNotiRepository.notifyPayment(PaymentNotificationDto.builder()
             .userId(customer.getUserId())
             .username(customer.getUsername())
             .email(customer.getEmail())

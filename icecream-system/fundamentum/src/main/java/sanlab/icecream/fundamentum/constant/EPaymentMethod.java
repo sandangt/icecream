@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public enum EPaymentMethod {
     COD("Collect on Delivery"),
-    ICECREAM_PAY("Icecream E-Pay"),
+    ICECREAM_PAY("IceCream E-Pay"),
     UNKNOWN(""),
     ;
 

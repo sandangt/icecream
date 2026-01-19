@@ -1,8 +1,8 @@
-import { CartItem } from "@/models";
-import { ProductHelper } from "./product";
+import { CartItem } from '@/models'
+
+import { ProductHelper } from './product'
 
 export class CartItemHelper {
-
   private __cartItem: CartItem | undefined | null
   private __productHelper: ProductHelper | null
 
@@ -37,5 +37,4 @@ export class CartItemHelper {
   get totalPrice(): number {
     return this.__productHelper?.price ?? 0 * this.quantity
   }
-
 }

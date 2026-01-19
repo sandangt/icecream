@@ -1,14 +1,15 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 import { FC } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCart } from '@/hooks'
-import { CartItem, CustomerExtended } from '@/models'
 import { CartItemHelper, CustomerHelper } from '@/lib/helpers'
+import { CartItem, CustomerExtended } from '@/models'
+
 import { CheckoutForm } from './checkout-form'
 
 type Props = {
@@ -84,9 +85,7 @@ export const CheckoutPage: FC<Props> = ({ customer }) => {
                         </p>
                       </div>
                     </div>
-                    <p className="text-sm font-medium">
-                      ${itemHelper.totalPrice.toFixed(2)}
-                    </p>
+                    <p className="text-sm font-medium">${itemHelper.totalPrice.toFixed(2)}</p>
                   </div>
                 )
               })}

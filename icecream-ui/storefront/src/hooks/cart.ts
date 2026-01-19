@@ -4,9 +4,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
 
+import { SessionHelper } from '@/lib/helpers'
 import { Cart, ProductExtended, Session } from '@/models'
 import { requestResetCart, requestUpsertCart } from '@/repositories/consul'
-import { SessionHelper } from '@/lib/helpers'
+
 import { useCartStore } from './states'
 
 export const useCart = () => {

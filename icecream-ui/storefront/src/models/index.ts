@@ -1,26 +1,24 @@
 import type {
-  Session,
-  Customer,
-  Category,
-  Product,
-  Media,
   Address,
-  Stock,
-  CartItem,
   Cart,
+  CartItem,
+  Category,
   CategoryExtended,
-  ProductExtended,
+  Customer,
   CustomerExtended,
+  Media,
+  Product,
+  ProductExtended,
+  Session,
+  Stock,
 } from './core'
-
 import type {
-  UpdateProfileRequest,
-  RequestAllParams,
-  PaginationRequest,
-  SortingRequest,
   FiltersRequest,
+  PaginationRequest,
+  RequestAllParams,
+  SortingRequest,
+  UpdateProfileRequest,
 } from './requests'
-
 import type { RequestAllResult } from './responses'
 
 export {

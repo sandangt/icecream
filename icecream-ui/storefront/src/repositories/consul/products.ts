@@ -1,8 +1,8 @@
 import { FAIL_TO_FETCH, IcRuntimeException } from '@/exceptions'
 import { API_PATHS, HttpStatusCode } from '@/lib/constants'
 import { generateUrl } from '@/lib/utils'
-import { CONSUL_URL } from '@/settings'
 import { ProductExtended, RequestAllParams, RequestAllResult } from '@/models'
+import { CONSUL_URL } from '@/settings'
 
 const _requestAllProducts = async (
   { pagination, sorting, filters }: RequestAllParams,

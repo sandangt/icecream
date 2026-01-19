@@ -1,7 +1,7 @@
 import { enableMapSet } from 'immer'
 
-enableMapSet()
-
 import { useCartStore } from './cart'
+
+enableMapSet()
 
 export { useCartStore }

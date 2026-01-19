@@ -1,13 +1,15 @@
 'use client'
 
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { FC } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
 import { toast } from 'react-toastify'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -16,12 +18,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Customer, CustomerExtended, Session, UpdateProfileRequest } from '@/models'
+import { Input } from '@/components/ui/input'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
-import { useMutation } from '@tanstack/react-query'
+import { Customer, CustomerExtended, Session, UpdateProfileRequest } from '@/models'
 import { requestUpdateCustomerProfile } from '@/repositories/consul'
-import { useSession } from 'next-auth/react'
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters.' }).max(50),
@@ -167,7 +167,9 @@ export const ProfileForm: FC<Props> = ({ data }) => {
               type="submit"
               size="lg"
               className="w-full md:w-auto"
-              disabled={!form.formState.isDirty || !form.formState.isValid || !form.formState.isReady}
+              disabled={
+                !form.formState.isDirty || !form.formState.isValid || !form.formState.isReady
+              }
             >
               Save Personal Details
             </Button>

@@ -15,12 +15,15 @@ spring:
       database: ${MONGODB_ECHO_DB}
   cloud:
     function:
-      definition: helloRabbit;notifyPayment
+      definition: helloRabbit;notifyPayment;notifyCheckout
     stream:
       bindings:
         notifyPayment-in-0:
           binder: rabbit-binder
           destination: icecream.consul.payment.notify
+        notifyCheckout-in-0:
+          binder: rabbit-binder
+          destination: icecream.consul.checkout.notify
   mail:
     host: ${MAILPIT_HOST}
     port: ${MAILPIT_PORT}
@@ -29,7 +32,7 @@ spring:
 app:
   mail:
     from: caretaker@icecream.com
-    from-name: Iceceam Care Taker
+    from-name: IceCream Care Taker
 
 otel:
   instrumentation:

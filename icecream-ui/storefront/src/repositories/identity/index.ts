@@ -1,9 +1,10 @@
 import NextAuth from 'next-auth'
 
-import authConfig from './auth.config'
-import { AUTH_KEYCLOAK_ID, AUTH_KEYCLOAK_ISSUER, AUTH_KEYCLOAK_SECRET } from '@/settings'
-import { requestCreateCustomerProfileIfNotExist } from '@/repositories/consul'
 import { encodeBase64Str } from '@/lib/utils'
+import { requestCreateCustomerProfileIfNotExist } from '@/repositories/consul'
+import { AUTH_KEYCLOAK_ID, AUTH_KEYCLOAK_ISSUER, AUTH_KEYCLOAK_SECRET } from '@/settings'
+
+import authConfig from './auth.config'
 
 export const {
   handlers: { GET, POST },

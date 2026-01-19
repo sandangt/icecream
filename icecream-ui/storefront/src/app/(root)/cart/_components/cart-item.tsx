@@ -7,9 +7,9 @@ import { FC } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ProductExtended } from '@/models'
-import { ProductHelper } from '@/lib/helpers'
 import { useCart } from '@/hooks'
+import { ProductHelper } from '@/lib/helpers'
+import { ProductExtended } from '@/models'
 
 type Props = {
   item: ProductExtended

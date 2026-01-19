@@ -1,7 +1,7 @@
-import { SessionHelper } from './session'
-import { ProductHelper } from './product'
+import { CartItemHelper } from './cart-item'
 import { CustomerHelper } from './customer'
 import { MediaHelper } from './media'
-import { CartItemHelper } from './cart-item'
+import { ProductHelper } from './product'
+import { SessionHelper } from './session'
 
 export { ProductHelper, CustomerHelper, SessionHelper, MediaHelper, CartItemHelper }

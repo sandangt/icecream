@@ -1,12 +1,12 @@
 'use client'
 
-import { Filter, X, ChevronUp, SlidersHorizontal, Search } from 'lucide-react'
-import { FC, useCallback, useState } from 'react'
+import { ChevronUp, Filter, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { FC, useCallback, useState } from 'react'
 
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -52,7 +52,7 @@ export const FilterGroup: FC<Props> = ({ path, categories }) => {
 
       router.push(`${path}?${params.toString()}`)
     },
-    [path, router, searchParams]
+    [path, router, searchParams],
   )
 
   const handleSearch = useCallback(
@@ -63,7 +63,7 @@ export const FilterGroup: FC<Props> = ({ path, categories }) => {
       }, 500)
       return () => clearTimeout(timeout)
     },
-    [updateURL]
+    [updateURL],
   )
 
   const handleCategoryChange = (value: string) => {
@@ -91,7 +91,7 @@ export const FilterGroup: FC<Props> = ({ path, categories }) => {
 
   const hasActiveFilters = search || category !== 'all' || status !== 'all' || minPrice || maxPrice
   const activeFilterCount = Object.values({ search, category, status, minPrice, maxPrice }).filter(
-    (v) => v && v !== 'all'
+    (v) => v && v !== 'all',
   ).length
 
   return (

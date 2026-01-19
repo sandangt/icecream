@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Payment Successful</title>
+  <title>Checkout Confirmation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -53,21 +53,21 @@
 <body>
 <div class="email-container">
   <div class="header">
-    <h1>Payment Confirmation</h1>
+    <h1>Checkout Confirmation</h1>
   </div>
   <div class="content">
     <p>Dear <span th:text="${firstName} + ' ' + ${lastName}">Customer Name</span>,</p>
-    <p>Thank you for shopping with us! We are pleased to inform you that your payment has been successfully processed.</p>
+    <p>You have successfully reviewed your items and proceeded to checkout. Below is a summary of your order:</p>
 
-    <h2>Order Summary</h2>
+    <h2>Order Details</h2>
     <table class="details-table">
       <tr>
         <th>Order ID:</th>
         <td th:text="${orderId}">123456</td>
       </tr>
       <tr>
-        <th>Amount Paid:</th>
-        <td th:text="${amount}">$100.00</td>
+        <th>Total Amount:</th>
+        <td th:text="${amount}">$150.00</td>
       </tr>
       <tr>
         <th>Payment Method:</th>
@@ -86,20 +86,21 @@
         <td th:text="${deliveryMethod}">Standard</td>
       </tr>
       <tr>
-        <th>Delivery Fee:</th>
-        <td th:text="${deliveryFee}">$5.00</td>
+        <th>Estimated Delivery:</th>
+        <td th:text="${estimatedDeliveryDate}">25 Jan 2026</td>
       </tr>
       <tr>
-        <th>Transaction Time:</th>
-        <td th:text="${time}">18 Jan 2026 16:51</td>
+        <th>Checkout Time:</th>
+        <td th:text="${checkoutTime}">19 Jan 2026 07:30</td>
       </tr>
     </table>
 
-    <p>We will notify you once your order has been shipped. You can track your order status anytime by logging into your account.</p>
-    <p>Thank you for choosing our store!</p>
+    <p>Please proceed with payment to complete your purchase. Once payment is confirmed, we will send you another email
+      with your payment details and shipping updates.</p>
+    <p>We appreciate your trust in our store!</p>
   </div>
   <div class="footer">
-    &copy; <span th:text="${#dates.format(time, 'yyyy')}">2026</span> IceCream Store. All rights reserved.
+    &copy; <span th:text="${#dates.format(checkoutTime, 'yyyy')}">2026</span> IceCream Store. All rights reserved.
   </div>
 </div>
 </body>

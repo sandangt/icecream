@@ -1,9 +1,8 @@
-import { type ReactNode, type FC } from 'react'
+import { type FC, type ReactNode } from 'react'
 
-import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/constants'
 import { AuthProvider, QueryProvider, ToastMessageProvider } from '@/components/providers'
-
 import '@/global.css'
+import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/constants'
 
 export const metadata = {
   title: SITE_NAME,
