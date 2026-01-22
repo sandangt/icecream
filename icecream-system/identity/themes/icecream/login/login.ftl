@@ -23,7 +23,7 @@
 
         <div class="box-container">
             <div>
-                <p class="application-name">Welcome to Icecream shop</p>
+                <p class="application-name">Welcome to IceCream shop</p>
             </div>
         <#if realm.password>
             <div>
@@ -43,7 +43,7 @@
             </div>
         </#if>
         <div>
-          <p class="copyright">Icecream Shop ${.now?string('yyyy')}</p>
+          <p class="copyright">IceCream Shop ${.now?string('yyyy')}</p>
         </div>
     </#if>
 </@layout.registrationLayout>

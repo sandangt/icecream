@@ -1,4 +1,4 @@
-package sanlab.icecream.fundamentum.dto.core;
+package sanlab.icecream.fundamentum.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

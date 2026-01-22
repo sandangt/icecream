@@ -18,11 +18,13 @@ type Action = {
   resetCart: () => void
   setCartId: (id: string) => void
   clearCartId: () => void
-  syncUpCart: (cart: Cart) => void
+  syncUp: (cart: Cart) => void
   getProductMap: () => Map<string, CartItem>
   getCartId: () => string
   getTotalItems: () => number
   getTotalCost: () => number
+  getShippingCost: () => number
+  getDiscount: () => number
   isEmpty: () => boolean
 }
 
@@ -54,7 +56,7 @@ export const useCartStore = create<State & Action>()(
 
         state.totalItems += 1
         state.totalCost += item.price
-        state.empty = false
+        state.empty = !state.totalItems
       }),
 
     removeFromCart: (item: ProductExtended) =>
@@ -69,9 +71,7 @@ export const useCartStore = create<State & Action>()(
         if (cartItem.quantity === 0) {
           state.productMap.delete(item.id)
         }
-        if (state.totalItems === 0) {
-          state.empty = true
-        }
+        state.empty = !state.totalItems
       }),
 
     resetCart: () => set(() => EMPTY_CART_STATE),
@@ -84,13 +84,10 @@ export const useCartStore = create<State & Action>()(
         state.totalItems -= cartItem.quantity
         state.totalCost -= item.price * cartItem.quantity
         state.productMap.delete(item.id)
-
-        if (state.totalItems === 0) {
-          state.empty = true
-        }
+        state.empty = !state.totalItems
       }),
 
-    syncUpCart: (cart: Cart) =>
+    syncUp: (cart: Cart) =>
       set((state) => {
         const cartItems = cart.cartItems ?? []
         const map = new Map<string, CartItem>()
@@ -101,7 +98,9 @@ export const useCartStore = create<State & Action>()(
           cartItem = map.get(item.product.id)
           if (cartItem !== undefined) {
             cartItem = map.get(item.product.id)
-            cartItem.quantity += item.quantity
+            if (cartItem) {
+              cartItem.quantity += item.quantity
+            }
           } else {
             map.set(item.product.id, item)
           }
@@ -112,7 +111,7 @@ export const useCartStore = create<State & Action>()(
         state.productMap = map
         state.totalItems = size
         state.totalCost = cost
-        state.empty = false
+        state.empty = !state.totalItems
       }),
 
     setCartId: (id: string) =>
@@ -130,5 +129,16 @@ export const useCartStore = create<State & Action>()(
     getTotalItems: () => get().totalItems,
     getTotalCost: () => get().totalCost,
     isEmpty: () => get().empty,
+    getShippingCost: () => {
+      if (get().totalItems > 10) {
+        return get().totalCost * 0.35
+      } else if (get().totalItems > 2 && get().totalItems <= 10) {
+        return get().totalCost * 0.25
+      }
+      return get().totalCost * 0.1
+    },
+    getDiscount: () => {
+      return get().totalItems > 10 ? 0.1 : 0
+    },
   })),
 )

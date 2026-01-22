@@ -15,8 +15,8 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 import java.util.List;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.STOCK_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_STOCK_NOT_FOUND;
 import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
 import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 
@@ -43,7 +43,7 @@ public class StockService {
     public StockExtendedDto getById(UUID id) {
         return stockRepository.findById(id)
             .map(stockMapper::entityToExtendedDto)
-            .orElseThrow(() -> new IcRuntimeException(STOCK_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_STOCK_NOT_FOUND, "id: %s".formatted(id)));
     }
 
     public StockExtendedDto create(StockDto request) {
@@ -51,19 +51,19 @@ public class StockService {
             Stock stock = stockRepository.save(stockMapper.dtoToEntity(request));
             return stockMapper.entityToExtendedDto(stock);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "stock");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "stock");
         }
     }
 
     public StockExtendedDto update(UUID id, StockDto request) {
         Stock targetStock = stockRepository.findById(id)
-            .orElseThrow(() -> new IcRuntimeException(STOCK_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_STOCK_NOT_FOUND, "id: %s".formatted(id)));
         try {
             Stock sourceStock = stockMapper.dtoToEntity(request);
             copyNotNull(sourceStock, targetStock);
             return stockMapper.entityToExtendedDto(stockRepository.save(targetStock));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "stock");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "stock");
         }
     }
 

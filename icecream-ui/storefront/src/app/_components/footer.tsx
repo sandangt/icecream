@@ -1,6 +1,8 @@
+'use server'
+
 import { SITE_NAME } from '@/lib/constants'
 
-export const Footer = () => (
+export const Footer = async () => (
   <footer className="bg-secondary text-secondary-foreground py-8 border-t">
     <div className="container mx-auto px-4 text-center">
       <p className="text-sm">

@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import sanlab.icecream.fundamentum.utils.PriceCalculationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,8 @@ public class Order extends AbstractAuditEntity {
     private String deliveryStatus;
     @Column(name = "payment_status")
     private String paymentStatus;
+    @Column(name = "payment_id")
+    private UUID paymentId;
 
     @OneToMany(mappedBy = "order", fetch = EAGER, orphanRemoval = true)
     @Builder.Default
@@ -73,6 +76,10 @@ public class Order extends AbstractAuditEntity {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public Double getFinalPrice() {
+        return PriceCalculationUtils.discountedPrice(totalPrice, discount) + deliveryFee;
     }
 
 }

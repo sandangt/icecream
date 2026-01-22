@@ -1,6 +1,7 @@
 server:
   address: ${ECHO_HOST}
   port: ${ECHO_PORT}
+  servlet.context-path: /echo
 
 spring:
   application:
@@ -8,11 +9,33 @@ spring:
   rsocket:
     server:
       port: ${ECHO_RSOCKET_PORT}
-  datasource:
-    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_ECHO_DB}
   data:
     redis:
       database: 3
-  liquibase:
-    enabled: true
-    changeLog: classpath:/db/changelog/master.xml
+    mongodb:
+      database: ${MONGODB_ECHO_DB}
+      uri: mongodb://admin:password1234@localhost:38001/echo?authSource=admin
+  cloud:
+    function:
+      definition: helloRabbit;notifyPayment;notifyCheckout
+    stream:
+      bindings:
+        notifyPayment-in-0:
+          binder: rabbit-binder
+          destination: icecream.consul.payment.notify
+        notifyCheckout-in-0:
+          binder: rabbit-binder
+          destination: icecream.consul.checkout.notify
+  mail:
+    host: ${MAILPIT_HOST}
+    port: ${MAILPIT_PORT}
+    protocol: smtp
+
+app:
+  mail:
+    from: caretaker@icecream.com
+    from-name: IceCream Care Taker
+
+otel:
+  instrumentation:
+    mongodb.enabled: true

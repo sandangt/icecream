@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import sanlab.icecream.consul.exception.HttpUnauthorizedException;
+import sanlab.icecream.consul.exception.HttpForbiddenException;
 import sanlab.icecream.consul.utils.SecurityContextUtils;
 import sanlab.icecream.fundamentum.constant.EPreAuthorizeRole;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.EMPTY_API_KEY;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_API_KEY;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.SECURITY_API_KEY_INVALID;
 
 @Service
 public class ApiKeyService {
 
     private static final String HEADER_KEY = "X-API-KEY";
-    private static final String[] FILTER_PATH_START_WITH = new String[] {"/api", "/actuator"};
+    private static final String[] FILTER_PATH_START_WITH = new String[] {"/api", "/actuator", "/webhook"};
 
     @Getter
     private final Set<String> apiKeys;
@@ -36,13 +35,9 @@ public class ApiKeyService {
 
     public void validateAndSetSecCtx(HttpServletRequest req) {
         String reqApiKey = StringUtils.trimToEmpty(req.getHeader(HEADER_KEY));
-        if (StringUtils.isEmpty(reqApiKey)) {
-            var ex = new IcRuntimeException(EMPTY_API_KEY);
-            throw new HttpUnauthorizedException(ex);
-        }
         if (!apiKeys.contains(reqApiKey)) {
-            var ex = new IcRuntimeException(INVALID_API_KEY);
-            throw new HttpUnauthorizedException(ex);
+            var ex = new IcRuntimeException(SECURITY_API_KEY_INVALID);
+            throw new HttpForbiddenException(ex);
         }
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
             new SimpleGrantedAuthority(EPreAuthorizeRole.GARDENER.getRaw())

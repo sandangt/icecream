@@ -1,8 +1,8 @@
-import { FAIL_TO_FETCH, IcRuntimeException } from '@/exceptions'
-import { API_PATHS, HttpStatusCode } from '@/lib/constants'
+import { API_PATHS } from '@/lib/constants'
+import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
-import { CONSUL_URL } from '@/settings'
 import { ProductExtended, RequestAllParams, RequestAllResult } from '@/models'
+import { CONSUL_URL } from '@/settings'
 
 const _requestAllProducts = async (
   { pagination, sorting, filters }: RequestAllParams,
@@ -11,17 +11,13 @@ const _requestAllProducts = async (
   const extendedPath = [API_PATHS.PRODUCT]
   if (featuredOnly) extendedPath.push('featured')
   const url = generateUrl(CONSUL_URL, extendedPath, { pagination, sorting, filters })
-  const response = await fetch(url)
-  if (response.status !== HttpStatusCode.OK) throw new IcRuntimeException(FAIL_TO_FETCH)
-  return response.json()
+  return await api.get<RequestAllResult<ProductExtended>>(url, undefined)
 }
 
 const _requestProductBySlug = async (slug: string): Promise<ProductExtended> => {
   const extendedPath = [API_PATHS.PRODUCT, slug]
   const url = generateUrl(CONSUL_URL, extendedPath, null)
-  const response = await fetch(url)
-  if (response.status !== HttpStatusCode.OK) throw new IcRuntimeException(FAIL_TO_FETCH)
-  return response.json()
+  return await api.get<ProductExtended>(url, undefined)
 }
 
 export const requestProductBySlug = async (slug: string): Promise<ProductExtended | null> => {

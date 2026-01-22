@@ -1,6 +1,6 @@
 package sanlab.icecream.consul.repository.rsocketclient;
 
-import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.AuditLogDto;
 
 import java.util.List;
 import java.util.Optional;

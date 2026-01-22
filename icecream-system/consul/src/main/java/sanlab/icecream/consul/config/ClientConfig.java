@@ -15,10 +15,11 @@ public class ClientConfig {
 
     @Lazy
     @Bean
-    public RestClient restClient() {
-        return RestClient.create();
+    public RestClient paymentClient(@Value("${app.payment.url}") String paymentUrl) {
+        return RestClient.create(paymentUrl);
     }
 
+    @Lazy
     @Bean
     public RestClient identityClient(@Value("${app.identity.url}") String identityUrl) {
         return RestClient.create(identityUrl);

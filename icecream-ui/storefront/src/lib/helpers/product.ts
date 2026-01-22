@@ -1,7 +1,7 @@
-import { IcRuntimeException, PRODUCT_NOT_AVAILABLE } from '@/exceptions'
-import { Category, Media, ProductExtended, Stock } from '@/models'
+import { NotFoundError } from '@/exceptions'
 import { ImageType } from '@/lib/constants'
 import { makeStorageUrl } from '@/lib/utils'
+import { Category, Media, ProductExtended, Stock } from '@/models'
 
 export class ProductHelper {
   private __product: ProductExtended | undefined | null
@@ -9,7 +9,7 @@ export class ProductHelper {
 
   constructor(product: ProductExtended | undefined | null) {
     this.__product = product
-    this.__avatar = this.__product?.media?.find((item) => item.type === ImageType.AVATAR)
+    this.__avatar = this.__product?.media?.find((item) => item.type === ImageType.Avatar)
   }
 
   isEmpty(): boolean {
@@ -18,7 +18,7 @@ export class ProductHelper {
 
   get(): ProductExtended {
     if (!this.__product) {
-      throw new IcRuntimeException(PRODUCT_NOT_AVAILABLE)
+      throw new NotFoundError()
     }
     return this.__product
   }

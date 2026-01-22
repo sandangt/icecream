@@ -12,7 +12,7 @@
   <artifactId>consul</artifactId>
 
   <properties>
-    <fundamentum.version>0.2.0</fundamentum.version>
+    <fundamentum.version>0.2.0-snapshot</fundamentum.version>
     <twelve.monkeys.version>3.9.4</twelve.monkeys.version>
   </properties>
 
@@ -120,6 +120,17 @@
     </dependency>
     <!--endregion-->
 
+    <!--region Mapstruct-->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct.extensions.spring</groupId>
+      <artifactId>mapstruct-spring-annotations</artifactId>
+    </dependency>
+    <!--endregion-->
+
     <!--region Utils-->
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -137,10 +148,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.slugify</groupId>

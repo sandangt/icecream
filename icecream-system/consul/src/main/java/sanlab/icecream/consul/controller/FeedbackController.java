@@ -25,8 +25,8 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FEEDBACK_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_FEEDBACK_NOT_FOUND;
 
 @RestController
 @RequestMapping("/feedbacks")
@@ -47,7 +47,7 @@ public class FeedbackController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (FEEDBACK_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_FEEDBACK_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -59,7 +59,7 @@ public class FeedbackController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (FAIL_TO_PERSIST_DATA.equals(error)) throw new HttpServiceUnavailableException(ex);
+            if (REPOSITORY_PERSIST_DATA_FAILED.equals(error)) throw new HttpServiceUnavailableException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -72,7 +72,7 @@ public class FeedbackController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (FAIL_TO_PERSIST_DATA.equals(error)) throw new HttpServiceUnavailableException(ex);
+            if (REPOSITORY_PERSIST_DATA_FAILED.equals(error)) throw new HttpServiceUnavailableException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -85,8 +85,8 @@ public class FeedbackController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case FEEDBACK_NOT_FOUND -> new HttpNotFoundException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_FEEDBACK_NOT_FOUND -> new HttpNotFoundException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }

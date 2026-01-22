@@ -29,9 +29,12 @@ public class TableName {
     public static final String QUEUE_PRODUCT_IMAGE = QUEUE_PREFIX + "product_image";
     //endregion
 
-    //region Echo
+    //region Memoir
     public static final String AUDIT_LOG = "audit_log";
     //endregion
 
+    //region Echo
+    public static final String BELL_NOTIFICATION_MESSAGE = "bell_notification_message";
+    //endregion
 
 }

@@ -1,36 +1,26 @@
-import { IcRuntimeException, UNAUTHORIZED_REQUEST } from '@/exceptions'
-import { API_PATHS, HttpStatusCode, ROUTES } from '@/lib/constants'
+import {
+  BadRequestError,
+  ForbiddenError,
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError,
+} from '@/exceptions'
+import { ALRIGHT_STATUSES, API_PATHS, HttpStatusCode } from '@/lib/constants'
+import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
+import { Address, CustomerExtended, Media, Session, UpdateProfileRequest } from '@/models'
 import { CONSUL_URL } from '@/settings'
-import { Address, Customer, CustomerExtended, Media, Session, UpdateProfileRequest } from '@/models'
 
 const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
-  const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  }
-  const response = await fetch(url, { headers })
-  if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
-  }
-  return response.json()
+  return await api.get<CustomerExtended>(url, session)
 }
 
 export const requestCreateCustomerProfileIfNotExist = async (
-  accessToken: string,
+  session: Session,
 ): Promise<CustomerExtended> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: 'POST',
-  })
-  if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
-  }
-  return await response.json()
+  return await api.post<CustomerExtended>(url, session, undefined)
 }
 
 export const fetchCustomerProfile = async (session: Session): Promise<CustomerExtended | null> => {
@@ -45,69 +35,52 @@ export const requestUpdateCustomerProfile = async (
   session: Session,
   payload: UpdateProfileRequest,
 ): Promise<CustomerExtended> => {
-  const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'PUT',
-    body: JSON.stringify(payload),
-  })
-  if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
-  }
-  return await response.json()
+  return await api.put<CustomerExtended>(url, session, payload)
 }
 
 export const requestCreateCustomerAddress = async (
   session: Session,
   payload: Address,
 ): Promise<CustomerExtended> => {
-  const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'addresses'])
+  return await api.post<CustomerExtended>(url, session, payload)
+}
+
+export const requestSetCustomerPrimaryAddress = async (
+  session: Session,
+  primaryId: string,
+): Promise<void> => {
+  const { accessToken } = session
+  const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'addresses', 'primary', primaryId])
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: JSON.stringify(payload),
   })
-  if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
+  if (!ALRIGHT_STATUSES.has(response.status)) {
+    switch (response.status) {
+      case HttpStatusCode.BadRequest:
+        throw new BadRequestError()
+      case HttpStatusCode.Unauthorized:
+        throw new UnauthorizedError()
+      case HttpStatusCode.Forbidden:
+        throw new ForbiddenError()
+      case HttpStatusCode.NotFound:
+        throw new NotFoundError()
+      default:
+        throw new InternalServerError()
+    }
   }
-  return response.json()
-}
-
-export const requestSetCustomerPrimaryAddress = (session: Session, primaryId: string): void => {
-  const { accessToken } = session
-  const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'addresses', 'primary', primaryId])
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: 'POST',
-  })
 }
 
 export const requestDeleteCustomerAddress = async (
   session: Session,
   id: string,
 ): Promise<CustomerExtended> => {
-  const { accessToken } = session
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER, 'addresses', id])
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: 'DELETE',
-  })
-  if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
-  }
-  return response.json()
+  return await api.delete<CustomerExtended>(url, session, undefined)
 }
 
 export const requestUploadAvatar = async (session: Session, file: File): Promise<Media> => {
@@ -122,8 +95,19 @@ export const requestUploadAvatar = async (session: Session, file: File): Promise
     method: 'POST',
     body: formData,
   })
-  if (response.status === HttpStatusCode.UNAUTHORIZED) {
-    throw new IcRuntimeException(UNAUTHORIZED_REQUEST)
+  if (!ALRIGHT_STATUSES.has(response.status)) {
+    switch (response.status) {
+      case HttpStatusCode.BadRequest:
+        throw new BadRequestError()
+      case HttpStatusCode.Unauthorized:
+        throw new UnauthorizedError()
+      case HttpStatusCode.Forbidden:
+        throw new ForbiddenError()
+      case HttpStatusCode.NotFound:
+        throw new NotFoundError()
+      default:
+        throw new InternalServerError()
+    }
   }
   return response.json()
 }

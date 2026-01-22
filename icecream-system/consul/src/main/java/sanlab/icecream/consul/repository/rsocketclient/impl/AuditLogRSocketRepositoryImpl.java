@@ -5,7 +5,7 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Component;
 import sanlab.icecream.consul.repository.rsocketclient.AuditLogRSocketRepository;
 import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
-import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.AuditLogDto;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,8 +1,9 @@
+import { CheckCircle, Package } from 'lucide-react'
+import Link from 'next/link'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ROUTES } from '@/lib/constants'
-import { CheckCircle, Package } from 'lucide-react'
-import Link from 'next/link'
 
 export default function OrderConfirmationPage() {
   // In a real app, you might fetch order details using an ID from query params

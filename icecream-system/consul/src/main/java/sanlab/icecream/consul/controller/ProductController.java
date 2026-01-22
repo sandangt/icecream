@@ -20,7 +20,7 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.PRODUCT_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PRODUCT_NOT_FOUND;
 import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.PERMIT_ALL;
 
 @RestController
@@ -50,7 +50,7 @@ public class ProductController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -63,7 +63,7 @@ public class ProductController {
             return productService.getAllFeedbacks(id, CollectionQueryUtils.getPageRequest(request));
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }

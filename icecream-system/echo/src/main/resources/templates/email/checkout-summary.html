@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout Confirmation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f6f6;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .header {
+      background-color: #FFAF70;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+    }
+    .content {
+      padding: 20px;
+      color: #333333;
+    }
+    .content h2 {
+      color: #FFAF70;
+    }
+    .details-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    .details-table th, .details-table td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #dddddd;
+    }
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 12px;
+      color: #777777;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+<div class="email-container">
+  <div class="header">
+    <h1>Checkout Confirmation</h1>
+  </div>
+  <div class="content">
+    <p>Dear <span th:text="${firstName} + ' ' + ${lastName}">Customer Name</span>,</p>
+    <p>You have successfully reviewed your items and proceeded to checkout. Below is a summary of your order:</p>
+
+    <h2>Order Details</h2>
+    <table class="details-table">
+      <tr>
+        <th>Order ID:</th>
+        <td th:text="${orderId}">123456</td>
+      </tr>
+      <tr>
+        <th>Total Amount:</th>
+        <td th:text="${amount}">$150.00</td>
+      </tr>
+      <tr>
+        <th>Payment Method:</th>
+        <td th:text="${paymentMethod}">IceCream E-Pay</td>
+      </tr>
+      <tr>
+        <th>Payment Status:</th>
+        <td th:text="${paymentStatus}">Completed</td>
+      </tr>
+      <tr>
+        <th>Order Status:</th>
+        <td th:text="${orderStatus}">Processing</td>
+      </tr>
+      <tr>
+        <th>Delivery Method:</th>
+        <td th:text="${deliveryMethod}">Standard</td>
+      </tr>
+      <tr>
+        <th>Estimated Delivery:</th>
+        <td th:text="${estimatedDeliveryDate}">25 Jan 2026</td>
+      </tr>
+      <tr>
+        <th>Checkout Time:</th>
+        <td th:text="${checkoutTime}">19 Jan 2026 07:30</td>
+      </tr>
+    </table>
+
+    <p>Please proceed with payment to complete your purchase. Once payment is confirmed, we will send you another email
+      with your payment details and shipping updates.</p>
+    <p>We appreciate your trust in our store!</p>
+  </div>
+  <div class="footer">
+    &copy; <span th:text="${#dates.format(checkoutTime, 'yyyy')}">2026</span> IceCream Store. All rights reserved.
+  </div>
+</div>
+</body>
+</html>

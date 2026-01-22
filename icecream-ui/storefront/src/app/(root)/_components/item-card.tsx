@@ -1,27 +1,19 @@
+import { Minus, Plus, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type FC } from 'react'
 
-import { cn, makeStorageUrl } from '@/lib/utils'
-import { CategoryExtended, Product, ProductExtended } from '@/models'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { cn, makeStorageUrl } from '@/lib/utils'
+import { CategoryExtended } from '@/models'
 
 type CategoryCardProps = {
   data: CategoryExtended
 }
 
 export const CategoryCard: FC<CategoryCardProps> = ({ data }) => {
-  const { avatar, name, slug } = data
+  const { avatar, name } = data
   return (
     <div className="relative rounded-sm overflow-hidden group">
       <div className="w-52 h-72">
@@ -49,7 +41,7 @@ type ProductPriceProps = {
 
 const ProductPrice: FC<ProductPriceProps> = ({ value, className }) => {
   const stringValue = value.toFixed(2)
-  const [intValue, floatValue] = stringValue.split('.')
+  const [intValue, _] = stringValue.split('.')
   return (
     <p className={cn('text-2xl', className)}>
       <span className="text-xs align-super">$</span>

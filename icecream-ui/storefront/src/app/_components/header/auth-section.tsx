@@ -1,8 +1,9 @@
 import { LogOut, User } from 'lucide-react'
 import Link from 'next/link'
+import { FC } from 'react'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { auth, requestSSOSignOut, signIn, signOut } from '@/repositories/identity'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +13,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ROUTES } from '@/lib/constants'
-import { SessionHelper } from '@/lib/helpers'
-
-import { CartDropdown } from './cart-dropdown'
+import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { Session } from '@/models'
-import { FC } from 'react'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { auth, requestSSOSignOut, signIn, signOut } from '@/repositories/identity'
+
+import { BellNotification } from './bell-notification'
+import { CartDropdown } from './cart-dropdown'
 
 export const AuthSection = async () => {
   const session = await auth()
@@ -24,7 +27,7 @@ export const AuthSection = async () => {
   return <>{sessionHelper.isLoggedIn() ? <LoggedIn /> : <Anonymous />}</>
 }
 
-const Anonymous = () => (
+const Anonymous = async () => (
   <form
     action={async () => {
       'use server'
@@ -43,8 +46,9 @@ const LoggedIn = async () => {
   if (!sessionHelper.isLoggedIn()) return null
   return (
     <div className="flex items-center space-x-2 sm:space-x-3">
+      <CartDropdown />
+      <BellNotification />
       <UserProfileSection session={sessionHelper.data()} />
-      <CartDropdown customerId={sessionHelper.userId} />
     </div>
   )
 }
@@ -54,17 +58,24 @@ type UserProfileSectionProps = {
 }
 
 const UserProfileSection: FC<UserProfileSectionProps> = async ({ session }) => {
-  const { firstName, lastName, refreshToken } = session
+  const customer = await fetchCustomerProfile(session as unknown as Session)
+  const helper = new CustomerHelper(customer)
+  const { refreshToken } = session
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Open user menu">
-          <User className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />
+        <Button variant="ghost" size="icon" aria-label="Open user menu" className="rounded-full">
+          <Avatar className="rounded-lg">
+            <AvatarImage src={helper.avatarUrl} />
+            <AvatarFallback>
+              <User className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />
+            </AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-50">
         <DropdownMenuLabel>
-          Hello, {firstName} {lastName}
+          Hello, {helper.firstName} {helper.lastName}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

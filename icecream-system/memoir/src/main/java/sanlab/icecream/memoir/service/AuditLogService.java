@@ -2,7 +2,7 @@ package sanlab.icecream.memoir.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sanlab.icecream.fundamentum.dto.core.AuditLogDto;
+import sanlab.icecream.fundamentum.dto.AuditLogDto;
 import sanlab.icecream.memoir.mapper.AuditLogMapper;
 import sanlab.icecream.memoir.repository.crud.AuditLogRepository;
 

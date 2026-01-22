@@ -37,12 +37,6 @@ spring:
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${IDENTITY_ISSUER}
-          jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
   cloud:
     stream:
       bindings:
@@ -52,6 +46,12 @@ spring:
         deleteImage-out-0:
           binder: rabbit-binder
           destination: icecream.consul.media.delete-image
+        notifyPayment-out-0:
+          binder: rabbit-binder
+          destination: icecream.consul.payment.notify
+        notifyCheckout-out-0:
+          binder: rabbit-binder
+          destination: icecream.consul.checkout.notify
   rsocket:
     server:
       port: ${CONSUL_RSOCKET_PORT}
@@ -64,26 +64,16 @@ app:
     encoding: '@project.build.sourceEncoding@'
     java:
       version: '@java.version@'
-  cors:
-    allowed-origins: >
-      ${STOREFRONT_URL}
-  identity:
-    url: ${IDENTITY_URL}
-    admin:
-      username: ${KEYCLOAK_ADMIN}
-      password: ${KEYCLOAK_ADMIN_PASSWORD}
-    realm: ${IDENTITY_REALM}
-    client:
-      storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
-      backoffice: ${IDENTITY_BACKOFFICE_CLIENT_ID}
   security:
-    api-key: 'user-api-key-456'
     api-keys: >
       ${CONSUL_API_KEY_0},${CONSUL_API_KEY_1}
-    jwt:
-      converter:
-        resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
-        principle-attribute: email
+  payment:
+    url: ${PAYMENT_URL}
+    webhook:
+      secret: ${PAYMENT_WEBHOOK_SECRET}
+      host: 'host.docker.internal'
+  storefront:
+    url: ${STOREFRONT_URL}
 
 otel:
   instrumentation:

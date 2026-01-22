@@ -36,8 +36,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.PRODUCT_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PRODUCT_NOT_FOUND;
 import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
 import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 
@@ -73,7 +73,7 @@ public class ProductService {
     public ProductExtendedDto getById(UUID id) {
         return productRepository.findById(id)
             .map(productMapper::entityToExtendedDto)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(id)));
     }
 
     @Transactional(readOnly = true)
@@ -81,13 +81,13 @@ public class ProductService {
     public ProductExtendedDto getBySlug(String slug) {
         return productRepository.findFirstBySlug(slug)
             .map(productMapper::entityToExtendedDto)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "slug: %s".formatted(slug)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "slug: %s".formatted(slug)));
     }
 
     @Transactional(readOnly = true)
     public CollectionQueryResponse<FeedbackDto> getAllFeedbacks(UUID productId, Pageable pageable) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
         long total = product.getFeedbacks().size();
         List<FeedbackDto> feedbackList = product.getFeedbacks().parallelStream()
             .map(feedbackMapper::entityToDto)
@@ -103,7 +103,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<CategoryDto> getCategoriesByProductId(UUID productId) {
         if (!productRepository.existsById(productId))
-            throw new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
+            throw new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
         return categoryRepository.findAllByProducts_Id(productId).stream()
             .map(categoryMapper::entityToDto)
             .toList();
@@ -112,7 +112,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ImageDto> getMediaByProductId(UUID productId) {
         if (!productRepository.existsById(productId))
-            throw new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
+            throw new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
         return productRepository.findAllMediaById(productId).stream()
             .map(imageMapper::entityToDto)
             .toList();
@@ -121,7 +121,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Optional<ImageDto> getFeaturedBannerByProductId(UUID productId) {
         if (!productRepository.existsById(productId))
-            throw new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
+            throw new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId));
         return productRepository.findFirstFeaturedBannerById(productId)
             .map(imageMapper::entityToDto);
     }
@@ -132,27 +132,27 @@ public class ProductService {
             Product product = productRepository.save(productMapper.dtoToEntity(request));
             return productMapper.entityToExtendedDto(product);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "product");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "product");
         }
     }
 
     @Transactional
     public ProductExtendedDto update(UUID id, ProductDto request) {
         Product targetProduct = productRepository.findById(id)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(id)));
         try {
             Product sourceProduct = productMapper.dtoToEntity(request);
             copyNotNull(sourceProduct, targetProduct);
             return productMapper.entityToExtendedDto(productRepository.save(targetProduct));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "product");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "product");
         }
     }
 
     @Transactional
     public ProductExtendedDto setCategories(UUID productId, List<UUID> categoryIdList) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
         Set<Category> categories = categoryRepository.findByIdIn(categoryIdList).stream()
             .filter(category -> Optional.ofNullable(category).isPresent())
             .collect(Collectors.toSet());
@@ -160,14 +160,14 @@ public class ProductService {
             product.setCategories(categories);
             return productMapper.entityToExtendedDto(productRepository.save(product));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "setting product's categories");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "setting product's categories");
         }
     }
 
     @Transactional
     public ProductExtendedDto setMedia(UUID productId, MultipartFile avatar, MultipartFile[] otherMedia) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
         Deque<Image> savedDQ = new ArrayDeque<>();
         Optional.ofNullable(avatar).ifPresent(img -> {
             if (!img.isEmpty()) {
@@ -183,14 +183,14 @@ public class ProductService {
             product.setMedia(new HashSet<>(savedDQ));
             return productMapper.entityToExtendedDto(productRepository.save(product));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "setting product's media");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "setting product's media");
         }
     }
 
     @Transactional
     public ProductExtendedDto setStocks(UUID productId, List<UUID> stockIdList) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new IcRuntimeException(PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
         List<Stock> stocks = stockRepository.findByIdIn(stockIdList).stream()
             .filter(stock -> Optional.ofNullable(stock).isPresent())
             .toList();
@@ -198,7 +198,7 @@ public class ProductService {
             product.setStocks(stocks);
             return productMapper.entityToExtendedDto(productRepository.save(product));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "setting product's stocks");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "setting product's stocks");
         }
     }
 

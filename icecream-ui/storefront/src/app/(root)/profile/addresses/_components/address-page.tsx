@@ -1,8 +1,13 @@
 'use client'
 
-import { useState, type FC } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { CheckCircle, Edit, PlusCircle, Trash2 } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { type FC, useState } from 'react'
+import { toast } from 'react-toastify'
 
-import { Address, CustomerExtended, Session } from '@/models'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,19 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { CheckCircle, Edit, PlusCircle, Trash2 } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
-import { toast } from 'react-toastify'
-
-import { Badge } from '@/components/ui/badge'
+import { CustomerHelper, SessionHelper } from '@/lib/helpers'
+import { Address, CustomerExtended, Session } from '@/models'
 import {
   requestCreateCustomerAddress,
-  requestSetCustomerPrimaryAddress,
   requestDeleteCustomerAddress,
+  requestSetCustomerPrimaryAddress,
 } from '@/repositories/consul'
-import { CustomerHelper, SessionHelper } from '@/lib/helpers'
+
 import { AddressForm } from './address-form'
 
 type Props = {
@@ -128,9 +128,9 @@ const AddressList = ({ addresses, onEdit, onDelete, onSetPrimary }: AddressListP
   if (addresses.length === 0) {
     return (
       <div className="text-center py-10 border-dashed border-2 rounded-lg">
-        <p className="text-muted-foreground">You don't have any saved addresses yet.</p>
+        <p className="text-muted-foreground">You don&apos;t have any saved addresses yet.</p>
         <p className="text-sm text-muted-foreground mt-2">
-          Click "Add New Address" to get started.
+          Click &quot;Add New Address&quot; to get started.
         </p>
       </div>
     )

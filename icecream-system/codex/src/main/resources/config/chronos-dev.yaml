@@ -1,6 +1,7 @@
 server:
   address: ${CHRONOS_HOST}
   port: ${CHRONOS_PORT}
+  servlet.context-path: /scheduler
 
 spring:
   application:

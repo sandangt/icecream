@@ -1,12 +1,11 @@
 import { FC } from 'react'
 
-import { fetchAllCategories, queryProducts } from '@/repositories/consul'
 import { ProductHelper } from '@/lib/helpers'
-
-import { FilterGroup, PaginationControls } from './_components'
-import { ProductCard } from '../_components'
 import { FiltersRequest } from '@/models'
-import { fi } from 'date-fns/locale'
+import { fetchAllCategories, queryProducts } from '@/repositories/consul'
+
+import { ProductCard } from '../_components'
+import { FilterGroup, PaginationControls } from './_components'
 
 type Props = {
   searchParams?: {

@@ -28,16 +28,16 @@ import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryRespons
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
 import sanlab.icecream.fundamentum.constant.EFileHandlingAction;
 import sanlab.icecream.fundamentum.constant.EFileType;
-import sanlab.icecream.fundamentum.dto.core.FileHandlingDto;
+import sanlab.icecream.fundamentum.dto.FileHandlingDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.ADDRESS_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CUSTOMER_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_ADDRESS_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CUSTOMER_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
 import static sanlab.icecream.fundamentum.constant.EImageType.AVATAR;
 import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
 import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
@@ -72,7 +72,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public CustomerExtendedDto getById(UUID id) {
         var customer = customerRepository.findFirstByUserId(id)
-            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
         return customerMapper.entityToExtendedDto(customer);
     }
 
@@ -82,7 +82,7 @@ public class CustomerService {
             Customer customer = customerRepository.save(customerMapper.dtoToEntity(request));
             return customerMapper.entityToExtendedDto(customer);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer");
         }
     }
 
@@ -99,7 +99,7 @@ public class CustomerService {
             var result = customerRepository.save(customerEntity);
             return customerMapper.entityToExtendedDto(result);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer");
         }
     }
 
@@ -112,10 +112,10 @@ public class CustomerService {
             return customerMapper.entityToExtendedDto(
                 customerRepository
                     .findFirstByUserId(id)
-                    .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)))
+                    .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id)))
             );
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer");
         }
     }
 
@@ -123,7 +123,7 @@ public class CustomerService {
     @Transactional
     public CustomerExtendedDto addAddress(UUID id, AddressDto request) {
         Customer targetCustomer = customerRepository.findFirstByUserId(id)
-            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
         Address requestAddress = addressMapper.dtoToEntity(request);
         try {
             Address savedAddress = addressRepository.save(requestAddress);
@@ -132,7 +132,7 @@ public class CustomerService {
             targetCustomer.setAddresses(addressSet);
             return customerMapper.entityToExtendedDto(customerRepository.save(targetCustomer));
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer");
         }
     }
 
@@ -140,17 +140,17 @@ public class CustomerService {
     @Transactional
     public AddressDto updateAddress(UUID id, AddressDto request) {
         if (!customerRepository.existsByUserId(id)) {
-            throw new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id));
+            throw new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id));
         }
         Address targetAddress = addressRepository.findFirstById(request.getId())
-            .orElseThrow(() -> new IcRuntimeException(ADDRESS_NOT_FOUND, "id: %s".formatted(request.getId())));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_ADDRESS_NOT_FOUND, "id: %s".formatted(request.getId())));
         try {
             Address sourceAddress = addressMapper.dtoToEntity(request);
             copyNotNull(sourceAddress, targetAddress);
             Address result = addressRepository.save(targetAddress);
             return addressMapper.entityToDto(result);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "address");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "address");
         }
     }
 
@@ -158,15 +158,15 @@ public class CustomerService {
     @Transactional
     public void setPrimaryAddress(UUID id, UUID addressId) {
         if (!customerRepository.existsByUserId(id)) {
-            throw new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id));
+            throw new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id));
         }
         if (!addressRepository.existsById(addressId)) {
-            throw new IcRuntimeException(ADDRESS_NOT_FOUND, "id: %s".formatted(addressId));
+            throw new IcRuntimeException(REPOSITORY_ADDRESS_NOT_FOUND, "id: %s".formatted(addressId));
         }
         try {
             customerRepository.setPrimaryAddress(id, addressId);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer");
         }
     }
 
@@ -174,9 +174,9 @@ public class CustomerService {
     @Transactional
     public CustomerExtendedDto deleteAddress(UUID id, UUID addressId) {
         Customer customer = customerRepository.findFirstByUserId(id)
-            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
         Address address = addressRepository.findFirstById(addressId)
-            .orElseThrow(() -> new IcRuntimeException(ADDRESS_NOT_FOUND, "id: %s".formatted(addressId)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_ADDRESS_NOT_FOUND, "id: %s".formatted(addressId)));
         Set<Address> addresses = customer.getAddresses();
         Address primaryAddress = customer.getPrimaryAddress();
         addresses.remove(address);
@@ -188,14 +188,14 @@ public class CustomerService {
             addressRepository.deleteById(addressId);
             return customerMapper.entityToExtendedDto(result);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer & address");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer & address");
         }
     }
 
     @CacheEvict(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
     public ImageDto uploadAvatar(UUID id, MultipartFile avatarFile) {
         Customer customer = customerRepository.findFirstByUserId(id)
-            .orElseThrow(() -> new IcRuntimeException(CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));
         var imageDto = imageService.upsertCustomerAvatar(id, avatarFile);
         var image = imageMapper.dtoToEntity(imageDto);
         var mediaSet = customer.getMedia();
@@ -219,7 +219,7 @@ public class CustomerService {
             customerRepository.save(customer);
             return imageDto;
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "customer");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "customer");
         }
     }
 

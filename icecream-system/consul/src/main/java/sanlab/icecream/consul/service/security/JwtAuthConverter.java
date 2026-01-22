@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Service;
 import sanlab.icecream.consul.dto.core.RegisteredUserInfoDto;
 
@@ -22,13 +21,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
-    @Value("${app.security.jwt.converter.principle-attribute}")
-    private String principleAttribute;
+    private final String principleAttribute;
 
-    @Value("${app.security.jwt.converter.resource-id}")
-    private String resourceId;
+    public JwtAuthConverter(@Value("${app.security.jwt.converter.principle-attribute}") String principleAttribute) {
+        this.principleAttribute = principleAttribute;
+    }
 
     @Override
     public AbstractAuthenticationToken convert(@NonNull Jwt source) {

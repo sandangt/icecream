@@ -21,9 +21,9 @@ import sanlab.icecream.fundamentum.utils.LogUtils;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CATEGORY_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.IMAGE_NOT_FOUND;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.PRODUCT_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CATEGORY_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_IMAGE_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PRODUCT_NOT_FOUND;
 import static sanlab.icecream.fundamentum.constant.ConsulRSocketRoute.GET_CATEGORIES_BY_PRODUCT_ID;
 import static sanlab.icecream.fundamentum.constant.ConsulRSocketRoute.GET_FEATURED_BANNER_BY_PRODUCT_ID;
 import static sanlab.icecream.fundamentum.constant.ConsulRSocketRoute.GET_MEDIA_BY_PRODUCT_ID;
@@ -48,7 +48,7 @@ public class ProductEnrichmentRSocketController implements RSocketExceptionAdvis
         } catch (IcRuntimeException ex) {
             LogUtils.logError(log, "Error retrieving product with id: {}", id, ex);
             var error = ex.getError();
-            if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -61,7 +61,7 @@ public class ProductEnrichmentRSocketController implements RSocketExceptionAdvis
         } catch (IcRuntimeException ex) {
             LogUtils.logError(log, "Error retrieving categories for product id: {}", id, ex);
             var error = ex.getError();
-            if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -75,7 +75,7 @@ public class ProductEnrichmentRSocketController implements RSocketExceptionAdvis
         } catch (IcRuntimeException ex) {
             LogUtils.logError(log, "Error retrieving media for product id: {}", id, ex);
             var error = ex.getError();
-            if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -88,7 +88,7 @@ public class ProductEnrichmentRSocketController implements RSocketExceptionAdvis
         } catch (IcRuntimeException ex) {
             LogUtils.logError(log, "Error retrieving featured banner for product id: {}", id, ex);
             var error = ex.getError();
-            if (PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_PRODUCT_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -101,7 +101,7 @@ public class ProductEnrichmentRSocketController implements RSocketExceptionAdvis
         } catch (IcRuntimeException ex) {
             LogUtils.logError(log, "Error retrieving products for category id: {}", id, ex);
             var error = ex.getError();
-            if (CATEGORY_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_CATEGORY_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -114,7 +114,7 @@ public class ProductEnrichmentRSocketController implements RSocketExceptionAdvis
         } catch (IcRuntimeException ex) {
             LogUtils.logError(log, "Error retrieving products for image id: {}", id, ex);
             var error = ex.getError();
-            if (IMAGE_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_IMAGE_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }

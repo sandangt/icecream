@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemDto {
-    protected UUID id;
+    protected String id;
     protected Long quantity;
 }
