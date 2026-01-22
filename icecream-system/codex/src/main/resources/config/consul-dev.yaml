@@ -37,12 +37,6 @@ spring:
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/master.xml
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${IDENTITY_ISSUER}
-          jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
   cloud:
     stream:
       bindings:
@@ -70,26 +64,9 @@ app:
     encoding: '@project.build.sourceEncoding@'
     java:
       version: '@java.version@'
-  cors:
-    allowed-origins: >
-      ${STOREFRONT_URL}
-  identity:
-    url: ${IDENTITY_URL}
-    admin:
-      username: ${KEYCLOAK_ADMIN}
-      password: ${KEYCLOAK_ADMIN_PASSWORD}
-    realm: ${IDENTITY_REALM}
-    client:
-      storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
-      backoffice: ${IDENTITY_BACKOFFICE_CLIENT_ID}
   security:
-    api-key: 'user-api-key-456'
     api-keys: >
       ${CONSUL_API_KEY_0},${CONSUL_API_KEY_1}
-    jwt:
-      converter:
-        resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
-        principle-attribute: email
   payment:
     url: ${PAYMENT_URL}
     webhook:

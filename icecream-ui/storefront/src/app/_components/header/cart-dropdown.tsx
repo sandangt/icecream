@@ -1,11 +1,8 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC, useEffect } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -17,29 +14,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useCart } from '@/hooks'
-import { ProductHelper, SessionHelper } from '@/lib/helpers'
-import { fetchCart } from '@/repositories/consul'
-import { FETCH_CART_BY_CUSTOMER_ID } from '@/repositories/query-keys'
+import { ProductHelper } from '@/lib/helpers'
 
-type Props = {
-  customerId: string
-}
-
-export const CartDropdown: FC<Props> = ({ customerId }) => {
-  const session = useSession()
-  const { addToCart, deleteItemFromCart, removeFromCart, cart, isCartEmpty, syncUpCart } = useCart()
-  const sessionHelper = new SessionHelper(session)
-  const { data: cartData, isSuccess } = useQuery({
-    queryKey: FETCH_CART_BY_CUSTOMER_ID(customerId),
-    queryFn: () => fetchCart(sessionHelper.dataClient()),
-  })
-
-  useEffect(() => {
-    if (isSuccess && cartData) {
-      syncUpCart(cartData)
-    }
-  }, [isSuccess, cartData, syncUpCart])
-
+export const CartDropdown = () => {
+  const { addToCart, deleteItemFromCart, removeFromCart, cart, isCartEmpty } = useCart()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -1,3 +1,5 @@
+'use server'
+
 import Link from 'next/link'
 
 import { ROUTES } from '@/lib/constants'
@@ -5,7 +7,7 @@ import { ROUTES } from '@/lib/constants'
 import { AuthSection } from './auth-section'
 import { Logo } from './logo'
 
-export const Header = () => (
+export const Header = async () => (
   <header className="bg-background/80 backdrop-blur-md sticky top-0 z-50 border-b">
     <div className="container mx-auto px-4 h-20 flex items-center justify-between">
       <Logo />
@@ -18,7 +20,7 @@ export const Header = () => (
   </header>
 )
 
-const HomeSection = () => (
+const HomeSection = async () => (
   <Link
     href={ROUTES.HOME}
     className="text-foreground hover:text-primary transition-colors font-medium"
@@ -27,7 +29,7 @@ const HomeSection = () => (
   </Link>
 )
 
-const ProductSection = () => (
+const ProductSection = async () => (
   <Link
     href={ROUTES.PRODUCTS}
     className="text-foreground hover:text-primary transition-colors font-medium"

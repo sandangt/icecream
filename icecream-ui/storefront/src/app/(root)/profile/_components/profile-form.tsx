@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
-import { Customer, CustomerExtended, Session, UpdateProfileRequest } from '@/models'
+import { CustomerExtended, Session, UpdateProfileRequest } from '@/models'
 import { requestUpdateCustomerProfile } from '@/repositories/consul'
 
 const profileFormSchema = z.object({

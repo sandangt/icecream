@@ -1,4 +1,4 @@
-//#region Core
+//#region Core entites
 export interface Session {
   accessToken: string
   refreshToken: string
@@ -89,9 +89,18 @@ export interface Cart {
   totalItems?: number
   totalCost?: number
 }
+
+export interface NotificationMessage {
+  id: string
+  seen: boolean
+  title: string
+  content: string
+  type: string
+  createdAt: number
+}
 //#endregion
 
-//#region Extended
+//#region Extended entities
 export interface CategoryExtended extends Category {
   avatar: Media
 }

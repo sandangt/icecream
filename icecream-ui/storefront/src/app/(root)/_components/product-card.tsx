@@ -1,10 +1,9 @@
 'use client'
 
 import { ChevronLeft, ShoppingCart } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { FC } from 'react'
 
 import { Badge } from '@/components/ui/badge'
@@ -127,7 +126,6 @@ export const DetailsProductCard: FC<Props> = ({ data }) => {
 }
 
 const AddToCartButton = (props: ButtonProps & { data: ProductExtended }) => {
-  const router = useRouter()
   const { addToCart } = useCart()
   const session = useSession()
   const sessionHelper = new SessionHelper(session)
@@ -135,15 +133,17 @@ const AddToCartButton = (props: ButtonProps & { data: ProductExtended }) => {
 
   const handleAddCart = () => {
     if (!sessionHelper.isLoggedInClient()) {
-      router.push(ROUTES.UNAUTHORIZED)
+      signIn('keycloak')
       return
     }
     addToCart(productService.get())
   }
 
   return (
-    <Button {...props} onClick={handleAddCart}>
-      {props?.children}
-    </Button>
+    <div>
+      <Button {...props} onClick={handleAddCart}>
+        {props?.children}
+      </Button>
+    </div>
   )
 }

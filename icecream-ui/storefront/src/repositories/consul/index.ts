@@ -9,6 +9,7 @@ import {
   requestUpdateCustomerProfile,
   requestUploadAvatar,
 } from './customers'
+import { requestCreateOrder } from './orders'
 import {
   queryProducts,
   requestFeaturedProducts,
@@ -32,4 +33,5 @@ export {
   requestUpsertCart,
   fetchCart,
   requestResetCart,
+  requestCreateOrder,
 }

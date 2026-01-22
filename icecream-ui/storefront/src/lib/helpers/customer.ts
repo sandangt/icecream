@@ -1,4 +1,4 @@
-import { IcRuntimeException, PROFILE_NOT_FOUND } from '@/exceptions'
+import { UnauthorizedError } from '@/exceptions'
 import { ImageType } from '@/lib/constants'
 import { makeStorageUrl } from '@/lib/utils'
 import { Address, CustomerExtended, Media } from '@/models'
@@ -9,7 +9,7 @@ export class CustomerHelper {
 
   constructor(customer: CustomerExtended | undefined | null) {
     this.__customer = customer
-    this.__avatar = this.__customer?.media?.find((item) => item.type === ImageType.AVATAR)
+    this.__avatar = this.__customer?.media?.find((item) => item.type === ImageType.Avatar)
     if (!!this.__customer?.primaryAddress) {
       this.__customer.primaryAddress.isPrimary = true
       this.__customer.addresses = this.__customer.addresses.map((item) => ({
@@ -25,7 +25,7 @@ export class CustomerHelper {
 
   get(): CustomerExtended {
     if (!this.__customer) {
-      throw new IcRuntimeException(PROFILE_NOT_FOUND)
+      throw new UnauthorizedError()
     }
     return this.__customer
   }

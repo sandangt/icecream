@@ -46,3 +46,7 @@ export function decodeBase64Str(encoded: string): string {
   const obj = Buffer.from(encoded, 'base64')
   return obj.toString('utf8')
 }
+
+export function truncateTxt(txt: string, maxLen: number) {
+  return txt?.length > maxLen ? txt.substring(0, maxLen) + '...' : txt
+}

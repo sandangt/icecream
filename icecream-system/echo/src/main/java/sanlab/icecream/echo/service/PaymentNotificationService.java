@@ -5,7 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import sanlab.icecream.echo.model.BellNotificationMessage;
+import sanlab.icecream.echo.repository.crud.BellNotificationMessageRepository;
 import sanlab.icecream.echo.repository.mail.EMailRepository;
+import sanlab.icecream.echo.repository.ws.WSRepository;
+import sanlab.icecream.fundamentum.constant.EBellNotificationMessageType;
 import sanlab.icecream.fundamentum.constant.EDeliveryMethod;
 import sanlab.icecream.fundamentum.constant.EOrderStatus;
 import sanlab.icecream.fundamentum.constant.EPaymentMethod;
@@ -15,6 +19,7 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 import sanlab.icecream.fundamentum.utils.DatetimeUtils;
 import sanlab.icecream.fundamentum.utils.LogUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,11 +30,13 @@ import static sanlab.icecream.echo.exception.EchoErrorModel.SERVICE_NOTIFICATION
 import static sanlab.icecream.fundamentum.utils.DatetimeUtils.PatternType.TYPE_1;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class PaymentNotificationService {
 
     private final EMailRepository emailRepository;
+    private final BellNotificationMessageRepository notiRepository;
+    private final WSRepository wsRepository;
 
     public void notifyPayment(PaymentNotificationDto payload) {
         sendSuccessfulPaymentEmail(payload);
@@ -41,15 +48,18 @@ public class PaymentNotificationService {
             throw new IcRuntimeException(SERVICE_NOTIFICATION_PAYLOAD_INVALID, "Empty email from successful payment notification");
         }
         var variables = getVariableMap(payload);
+        var notiMessage = buildNotiMessage(payload);
         try {
             emailRepository.sendToSingle(payload.getEmail(), PAYMENT_NOTIFICATION.getSubject(), PAYMENT_NOTIFICATION.getTemplatePath(), variables);
+            var savedMessage = notiRepository.save(notiMessage);
+            wsRepository.sendFENotificationByEmail(payload.getEmail(), Collections.singletonList(savedMessage));
         } catch (MessagingException ex) {
             LogUtils.logException(log, ex);
             throw new IcRuntimeException(MAIL_SEND_EMAIL_FAILED, "Failed to send email for successful payment notification");
         }
     }
 
-    private Map<String, String> getVariableMap(PaymentNotificationDto payload) {
+    private static Map<String, String> getVariableMap(PaymentNotificationDto payload) {
         var payloadOptional = Optional.ofNullable(payload);
         Map<String, String> args = new HashMap<>();
         payloadOptional.map(PaymentNotificationDto::getFirstName).ifPresent(inner -> args.put("firstName", inner));
@@ -74,5 +84,13 @@ public class PaymentNotificationService {
         return args;
     }
 
-
+    private static BellNotificationMessage buildNotiMessage(PaymentNotificationDto payload) {
+        return BellNotificationMessage.builder()
+            .email(payload.getEmail())
+            .seen(false)
+            .title("Payment completed")
+            .content("You paid %s for this".formatted(payload.getAmount()))
+            .type(EBellNotificationMessageType.PAYMENT.name())
+            .build();
+    }
 }

@@ -1,9 +1,8 @@
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { unauthorized } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/lib/constants'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { Session } from '@/models'
 import { fetchCustomerProfile } from '@/repositories/consul'
@@ -15,12 +14,12 @@ const Page = async () => {
   const session = await auth()
   const sessionHelper = new SessionHelper(session)
   if (!sessionHelper.isLoggedIn()) {
-    redirect(ROUTES.UNAUTHORIZED)
+    unauthorized()
   }
   const customer = await fetchCustomerProfile(session as unknown as Session)
   const customerHelper = new CustomerHelper(customer)
   if (customerHelper.isEmpty()) {
-    redirect(ROUTES.UNAUTHORIZED)
+    unauthorized()
   }
 
   return (

@@ -18,6 +18,7 @@ import { Session } from '@/models'
 import { fetchCustomerProfile } from '@/repositories/consul'
 import { auth, requestSSOSignOut, signIn, signOut } from '@/repositories/identity'
 
+import { BellNotification } from './bell-notification'
 import { CartDropdown } from './cart-dropdown'
 
 export const AuthSection = async () => {
@@ -26,7 +27,7 @@ export const AuthSection = async () => {
   return <>{sessionHelper.isLoggedIn() ? <LoggedIn /> : <Anonymous />}</>
 }
 
-const Anonymous = () => (
+const Anonymous = async () => (
   <form
     action={async () => {
       'use server'
@@ -45,7 +46,8 @@ const LoggedIn = async () => {
   if (!sessionHelper.isLoggedIn()) return null
   return (
     <div className="flex items-center space-x-2 sm:space-x-3">
-      <CartDropdown customerId={sessionHelper.userId} />
+      <CartDropdown />
+      <BellNotification />
       <UserProfileSection session={sessionHelper.data()} />
     </div>
   )

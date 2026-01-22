@@ -48,7 +48,6 @@ import static sanlab.icecream.fundamentum.constant.EPaymentMethod.COD;
 @Slf4j
 public class OrderService {
 
-    private final CartService cartService;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
@@ -61,7 +60,6 @@ public class OrderService {
     private final String storefrontUrl;
 
     public OrderService(
-        CartService cartService,
         ProductRepository productRepository,
         CustomerRepository customerRepository,
         AddressRepository addressRepository,
@@ -80,7 +78,6 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
         this.paymentRepository = paymentRepository;
         this.orderNotiRepository = orderNotiRepository;
-        this.cartService = cartService;
         this.orderMapper = orderMapper;
         this.storefrontUrl = storefrontUrl;
         this.webhookHost = webhookHost;
@@ -132,7 +129,6 @@ public class OrderService {
                 })
                 .toList();
             orderItemRepository.saveAll(orderItems);
-            cartService.reset(userId);
         } catch (Exception ex) {
             throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "Persistent error happen when creating order");
         }

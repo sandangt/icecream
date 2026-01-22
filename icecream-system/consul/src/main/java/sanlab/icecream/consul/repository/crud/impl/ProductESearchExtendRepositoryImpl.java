@@ -36,7 +36,7 @@ public class ProductESearchExtendRepositoryImpl implements ProductESearchExtendR
     }
 
     private static final String FIELD_NAME = "name^2";
-    private static final String FIELD_SLUG = "slug^5";
+    private static final String FIELD_SLUG = "slug^2";
     private static final String FIELD_DESCRIPTION = "description";
     private static final String FIELD_BRIEF_DESCRIPTION = "briefDescription";
     private static final String FIELD_STATUS = "status";

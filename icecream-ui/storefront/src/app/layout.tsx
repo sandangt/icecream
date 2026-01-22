@@ -1,6 +1,11 @@
 import { type FC, type ReactNode } from 'react'
 
-import { AuthProvider, QueryProvider, ToastMessageProvider } from '@/components/providers'
+import {
+  AuthProvider,
+  ContextProvider,
+  QueryProvider,
+  ToastMessageProvider,
+} from '@/components/providers'
 import '@/global.css'
 import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/constants'
 
@@ -28,7 +33,7 @@ const RootLayout: FC<Props> = ({ children }) => (
       />
       <link rel="icon" href="/img/favicon.ico" sizes="any" />
     </head>
-    <body className="font-body antialiased flex flex-col min-h-screen">
+    <body className="font-body antialiased flex flex-col min-h-screen" cz-shortcut-listen="true">
       <AppProvider>{children}</AppProvider>
     </body>
   </html>
@@ -42,7 +47,9 @@ type AppProviderProps = {
 const AppProvider: FC<AppProviderProps> = async ({ children }) => (
   <AuthProvider>
     <QueryProvider>
-      <ToastMessageProvider>{children}</ToastMessageProvider>
+      <ContextProvider>
+        <ToastMessageProvider>{children}</ToastMessageProvider>
+      </ContextProvider>
     </QueryProvider>
   </AuthProvider>
 )

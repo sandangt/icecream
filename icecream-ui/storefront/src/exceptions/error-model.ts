@@ -1,17 +1,23 @@
 export class IcErrorModel {
-  private readonly _message: string
-  private readonly _code: string
+  private readonly __name: string
+  private readonly __code: string
+  private readonly __message: string
 
-  constructor(code: string, message: string) {
-    this._message = message
-    this._code = code
+  constructor(name: string, code: string, message: string) {
+    this.__name = name
+    this.__message = message
+    this.__code = code
   }
 
   get message() {
-    return this._message
+    return this.__message
   }
 
   get code() {
-    return this._code
+    return this.__code
+  }
+
+  get name() {
+    return this.__name
   }
 }

@@ -17,7 +17,8 @@ export const {
     signIn: async (params) => {
       const { account } = params
       if (account && account?.access_token) {
-        requestCreateCustomerProfileIfNotExist(account.access_token)
+        //@ts-ignore
+        requestCreateCustomerProfileIfNotExist({ accessToken: account.access_token })
       }
       return params
     },

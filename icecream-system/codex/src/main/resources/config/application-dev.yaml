@@ -96,6 +96,12 @@ spring:
         helloKafka-out-0:
           binder: kafka-binder
           destination: infra.hello-mate.ping
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IDENTITY_ISSUER}
+          jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
 
 app:
   minio:
@@ -126,6 +132,23 @@ app:
       host: ${CONFLUX_RSOCKET_HOST}
       port: ${CONFLUX_RSOCKET_PORT}
   temp-dir: ${ICECREAM_VOLUME}/tmp
+  cors:
+    allowed-origins: >
+      ${STOREFRONT_URL}
+  identity:
+    url: ${IDENTITY_URL}
+    admin:
+      username: ${KEYCLOAK_ADMIN}
+      password: ${KEYCLOAK_ADMIN_PASSWORD}
+    realm: ${IDENTITY_REALM}
+    client:
+      storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
+  security:
+    jwt:
+      converter:
+        resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
+        principle-attribute: email
+
 
 management:
   endpoints:

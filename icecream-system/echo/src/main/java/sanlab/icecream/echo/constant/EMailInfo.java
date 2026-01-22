@@ -17,5 +17,4 @@ public enum EMailInfo {
         this.templatePath = templatePath;
     }
 
-
 }

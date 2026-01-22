@@ -108,13 +108,15 @@ services:
 
   mongodb:
     container_name: icecream-mongodb
-    image: mongo:8.0.10
+    build:
+      context: ./mongodb
+      dockerfile: Dockerfile
     ports:
       - ${MONGODB_PORT}:27017
     environment:
-      MONGO_INITDB_DATABASE: ${MONGODB_CHRONOS_DB}
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_MULTIPLE_DATABASES: ${MONGODB_ECHO_DB},${MONGODB_CHRONOS_DB}
     volumes:
       - ${MONGODB_VOLUME}:/data/db
     networks:

@@ -7,19 +7,22 @@ import type {
   Customer,
   CustomerExtended,
   Media,
+  NotificationMessage,
   Product,
   ProductExtended,
   Session,
   Stock,
 } from './core'
 import type {
+  CreateOrderItemRequest,
+  CreateOrderRequest,
   FiltersRequest,
   PaginationRequest,
   RequestAllParams,
   SortingRequest,
   UpdateProfileRequest,
 } from './requests'
-import type { RequestAllResult } from './responses'
+import type { CreateOrderResponse, RequestAllResult } from './responses'
 
 export {
   Session,
@@ -40,4 +43,8 @@ export {
   PaginationRequest,
   SortingRequest,
   FiltersRequest,
+  CreateOrderItemRequest,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  NotificationMessage,
 }
