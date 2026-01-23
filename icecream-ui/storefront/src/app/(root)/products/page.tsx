@@ -1,30 +1,66 @@
 import { FC } from 'react'
 
-import { queryProducts } from '@/repositories/consul'
 import { ProductHelper } from '@/lib/helpers'
+import { FiltersRequest } from '@/models'
+import { fetchAllCategories, queryProducts } from '@/repositories/consul'
 
-import { PaginationControls } from './_components'
 import { ProductCard } from '../_components'
+import { FilterGroup, PaginationControls } from './_components'
 
 type Props = {
   searchParams?: {
-    page: string
-    size: string
+    page?: string
+    size?: string
+    search?: string
+    category?: string
+    status?: string
+    minPrice?: string
+    maxPrice?: string
+    createdAfter?: string
+    createdBefore?: string
+    modifiedAfter?: string
+    modifiedBefore?: string
   }
 }
 
+const DEFAULT_FIRST_PAGE = 1
+const DEFAULT_PAGE_SIZE = 10
+
 const Page: FC<Props> = async ({ searchParams }) => {
-  const { page: rawPage, size: rawSize } = await searchParams
-  const page = parseInt(rawPage || '1')
-  const size = parseInt(rawSize || '10')
+  const params = await searchParams
+
+  const page = parseInt(params?.page || DEFAULT_FIRST_PAGE.toString())
+  const size = parseInt(params?.size || DEFAULT_PAGE_SIZE.toString())
+
+  const filters: FiltersRequest = {}
+
+  if (params?.search) filters.searchText = params.search
+  if (params?.category && params.category !== 'all') {
+    filters.categories = params.category.split(',').filter(Boolean)
+  }
+  if (params?.status && params.status !== 'all') {
+    filters.statuses = params.status.split(',').filter(Boolean)
+  }
+  if (params?.minPrice) filters.minPrice = parseFloat(params.minPrice)
+  if (params?.maxPrice) filters.maxPrice = parseFloat(params.maxPrice)
+  if (params?.createdAfter) filters.createdAfter = parseInt(params.createdAfter)
+  if (params?.createdBefore) filters.createdBefore = parseInt(params.createdBefore)
+  if (params?.modifiedAfter) filters.modifiedAfter = parseInt(params.modifiedAfter)
+  if (params?.modifiedBefore) filters.modifiedBefore = parseInt(params.modifiedBefore)
+
   const { totalPages, data } = await queryProducts({
     pagination: { limit: size, offset: page - 1 },
     sorting: { field: 'createdAt', order: 'DESC' },
+    filters: filters,
   })
+
+  const categories = await fetchAllCategories()
+
   const paginatedProducts = data
     ?.map((item) => new ProductHelper(item))
     .filter((item) => !item.isEmpty())
     .map((item) => item.get())
+
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -35,7 +71,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
         </p>
       </div>
 
-      {/* <FilterGroup /> */}
+      <FilterGroup path="/products" categories={categories || []} />
 
       {paginatedProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

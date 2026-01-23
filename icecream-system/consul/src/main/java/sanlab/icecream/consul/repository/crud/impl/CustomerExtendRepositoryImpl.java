@@ -5,7 +5,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
-import sanlab.icecream.consul.dto.core.CustomerDto;
+import sanlab.icecream.fundamentum.dto.core.CustomerDto;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.repository.crud.CustomerExtendRepository;
@@ -13,7 +13,7 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.ADDRESS_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_ADDRESS_NOT_FOUND;
 
 public class CustomerExtendRepositoryImpl implements CustomerExtendRepository {
 
@@ -46,7 +46,7 @@ public class CustomerExtendRepositoryImpl implements CustomerExtendRepository {
     public void setPrimaryAddress(UUID id, UUID addressId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         Address address = entityManager.getReference(Address.class, addressId);
-        if (address == null) throw new IcRuntimeException(ADDRESS_NOT_FOUND);
+        if (address == null) throw new IcRuntimeException(REPOSITORY_ADDRESS_NOT_FOUND);
         CriteriaUpdate<Customer> criteriaUpdate = cb.createCriteriaUpdate(Customer.class);
         Root<Customer> root = criteriaUpdate.from(Customer.class);
         criteriaUpdate

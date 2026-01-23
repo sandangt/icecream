@@ -11,15 +11,24 @@
   <packaging>jar</packaging>
   <artifactId>chronos</artifactId>
 
+  <properties>
+    <fundamentum.version>0.2.0-snapshot</fundamentum.version>
+  </properties>
+
   <dependencies>
+
     <!--region Spring boot-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-rsocket</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId> <!-- Optional -->
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -38,6 +47,7 @@
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Spring cloud-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -48,6 +58,42 @@
       <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
     </dependency>
     <!--endregion-->
+
+    <!--region OpenTelemetry-->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-otel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-otlp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-otlp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.javaagent.instrumentation</groupId>
+      <artifactId>opentelemetry-javaagent-spring-rabbit-1.0</artifactId>
+    </dependency>
+    <!--endregion-->
+
+    <!--region Logging-->
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+    </dependency>
+    <!--endregion-->
+
     <!--region Jackson-->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -62,12 +108,14 @@
       <artifactId>jackson-databind</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Minio-->
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region Utils-->
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -86,6 +134,10 @@
       <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
     </dependency>
@@ -98,14 +150,16 @@
       <artifactId>javafaker</artifactId>
     </dependency>
     <!--endregion-->
+
     <!--region INTERNAL-->
     <dependency>
       <groupId>sanlab.icecream</groupId>
       <artifactId>fundamentum</artifactId>
-      <version>0.2.0</version>
+      <version>${fundamentum.version}</version>
       <scope>compile</scope>
     </dependency>
     <!--endregion-->
+
   </dependencies>
 
   <build>
@@ -113,6 +167,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>sanlab.icecream.chronos.Application</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

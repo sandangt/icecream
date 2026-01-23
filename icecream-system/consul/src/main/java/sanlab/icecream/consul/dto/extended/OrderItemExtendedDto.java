@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import sanlab.icecream.consul.dto.core.OrderDto;
 import sanlab.icecream.consul.dto.core.OrderItemDto;
-import sanlab.icecream.consul.dto.core.ProductDto;
+import sanlab.icecream.fundamentum.dto.core.ProductDto;
 
 @SuperBuilder
 @Data

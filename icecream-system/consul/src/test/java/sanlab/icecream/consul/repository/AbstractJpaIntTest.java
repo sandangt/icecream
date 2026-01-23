@@ -76,7 +76,7 @@ abstract class AbstractJpaIntTest {
                 .phone(FAKER.phoneNumber().cellPhone())
                 .firstName(FAKER.name().firstName())
                 .lastName(FAKER.name().firstName())
-                .status(ECustomerStatus.ACTIVE)
+                .status(ECustomerStatus.ACTIVE.name())
                 .build());
         }
         return customers;
@@ -94,7 +94,7 @@ abstract class AbstractJpaIntTest {
                 .slug(SLUG_BUILDER.slugify(name))
                 .briefDescription(FAKER.lorem().characters(5, 30))
                 .description(description)
-                .status(status)
+                .status(status.name())
                 .price(FAKER.number().randomDouble(2, 0, 10_000_000L))
                 .sku(FAKER.lorem().characters(50))
                 .isFeatured(false)
@@ -127,7 +127,7 @@ abstract class AbstractJpaIntTest {
             images.add(Image.builder()
                 .description(FAKER.lorem().characters(5, 1000))
                 .relativePath(FAKER.file().fileName())
-                .type(EImageType.MEDIA)
+                .type(EImageType.MEDIA.name())
                 .build());
         }
         return images;
@@ -184,11 +184,11 @@ abstract class AbstractJpaIntTest {
                 .discount(discount)
                 .totalPrice(totalPrice)
                 .deliveryFee(deliveryFee)
-                .deliveryMethod(FAKER.options().option(EDeliveryMethod.class))
-                .paymentMethod(FAKER.options().option(EPaymentMethod.class))
-                .orderStatus(FAKER.options().option(EOrderStatus.class))
-                .deliveryStatus(FAKER.options().option(EDeliveryStatus.class))
-                .paymentStatus(FAKER.options().option(EPaymentStatus.class))
+                .deliveryMethod(String.valueOf(FAKER.options().option(EDeliveryMethod.class)))
+                .paymentMethod(String.valueOf(FAKER.options().option(EPaymentMethod.class)))
+                .orderStatus(String.valueOf(FAKER.options().option(EOrderStatus.class)))
+                .deliveryStatus(String.valueOf(FAKER.options().option(EDeliveryStatus.class)))
+                .paymentStatus(String.valueOf(FAKER.options().option(EPaymentStatus.class)))
                 .build());
         }
         return orders;

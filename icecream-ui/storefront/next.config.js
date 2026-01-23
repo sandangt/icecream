@@ -23,6 +23,10 @@ const nextConfig = {
       fullUrl: true,
       hmrRefreshes: true
     }
+  },
+  experimental: {
+    authInterrupts: true,
+    instrumentationHook: true,
   }
 }
 

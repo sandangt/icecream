@@ -17,8 +17,8 @@ public class ImageConsumer {
         this.minIOStorageRepository = minIOStorageRepository;
     }
 
-    @Bean(name = "imageDelete")
-    public Consumer<Message<FileHandlingDto>> delete() {
+    @Bean
+    public Consumer<Message<FileHandlingDto>> deleteImage() {
         return message -> {
             FileHandlingDto payload = message.getPayload();
             minIOStorageRepository.deleteImage(payload.getRelativePath());

@@ -1,11 +1,10 @@
-import { redirect } from 'next/navigation'
+import { unauthorized } from 'next/navigation'
 
-import { fetchCustomerProfile } from '@/repositories/consul'
-import { auth } from '@/repositories/identity'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ROUTES } from '@/lib/constants'
 import { CustomerHelper, SessionHelper } from '@/lib/helpers'
 import { Session } from '@/models'
+import { fetchCustomerProfile } from '@/repositories/consul'
+import { auth } from '@/repositories/identity'
 
 import { AvatarSection, PrimaryAddressSection, ProfileForm } from './_components'
 
@@ -13,12 +12,12 @@ const Page = async () => {
   const session = await auth()
   const sessionHelper = new SessionHelper(session)
   if (!sessionHelper.isLoggedIn()) {
-    redirect(ROUTES.UNAUTHORIZED)
+    unauthorized()
   }
   const customer = await fetchCustomerProfile(session as unknown as Session)
   const customerHelper = new CustomerHelper(customer)
   if (customerHelper.isEmpty()) {
-    redirect(ROUTES.UNAUTHORIZED)
+    unauthorized()
   }
 
   return (

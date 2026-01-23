@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import sanlab.icecream.consul.dto.core.AddressDto;
+import sanlab.icecream.fundamentum.dto.core.AddressDto;
 import sanlab.icecream.consul.dto.core.OrderDto;
 import sanlab.icecream.consul.dto.core.OrderItemDto;
 

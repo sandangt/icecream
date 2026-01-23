@@ -1,12 +1,12 @@
 'use client'
 
+import { ChevronLeft, ShoppingCart } from 'lucide-react'
+import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
-import { ChevronLeft, ShoppingCart } from 'lucide-react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
+import { Badge } from '@/components/ui/badge'
 import { Button, ButtonProps } from '@/components/ui/button'
 import {
   Card,
@@ -16,11 +16,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { ProductExtended } from '@/models'
-import { ROUTES } from '@/lib/constants'
-import { Badge } from '@/components/ui/badge'
-import { ProductHelper, SessionHelper } from '@/lib/helpers'
 import { useCart } from '@/hooks'
+import { ROUTES } from '@/lib/constants'
+import { ProductHelper, SessionHelper } from '@/lib/helpers'
+import { ProductExtended } from '@/models'
 
 type Props = {
   data: ProductExtended
@@ -127,7 +126,6 @@ export const DetailsProductCard: FC<Props> = ({ data }) => {
 }
 
 const AddToCartButton = (props: ButtonProps & { data: ProductExtended }) => {
-  const router = useRouter()
   const { addToCart } = useCart()
   const session = useSession()
   const sessionHelper = new SessionHelper(session)
@@ -135,15 +133,17 @@ const AddToCartButton = (props: ButtonProps & { data: ProductExtended }) => {
 
   const handleAddCart = () => {
     if (!sessionHelper.isLoggedInClient()) {
-      router.push(ROUTES.UNAUTHORIZED)
+      signIn('keycloak')
       return
     }
     addToCart(productService.get())
   }
 
   return (
-    <Button {...props} onClick={handleAddCart}>
-      {props?.children}
-    </Button>
+    <div>
+      <Button {...props} onClick={handleAddCart}>
+        {props?.children}
+      </Button>
+    </div>
   )
 }

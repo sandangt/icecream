@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.mapper.ImageMapper;
+import sanlab.icecream.consul.mapper.ProductMapper;
 import sanlab.icecream.fundamentum.constant.EImageType;
 import sanlab.icecream.fundamentum.constant.StoragePath;
-import sanlab.icecream.consul.dto.core.ImageDto;
+import sanlab.icecream.fundamentum.dto.core.ImageDto;
 import sanlab.icecream.consul.model.Image;
 import sanlab.icecream.consul.repository.crud.ImageRepository;
 import sanlab.icecream.consul.repository.storage.StorageRepository;
+import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.nio.file.Path;
@@ -21,8 +23,9 @@ import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_STORE_IMAGE_FILE;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_STORE_IMAGE_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_IMAGE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +34,20 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final StorageRepository minIOStorageRepository;
     private final ImageMapper imageMapper;
+    private final ProductMapper productMapper;
 
     private static final String AVATAR_PIC_NAME = "avatar";
     private static final String MEDIA_PIC_PATTERN = "media-%s";
+
+    @Transactional(readOnly = true)
+    public List<ProductExtendedDto> getAllProducts(UUID id) {
+        if (!imageRepository.existsById(id))
+            throw new IcRuntimeException(REPOSITORY_IMAGE_NOT_FOUND, "id: %s".formatted(id));
+        return imageRepository.findAllProductsById(id)
+            .parallelStream()
+            .map(productMapper::entityToExtendedDto)
+            .toList();
+    }
 
     @Transactional
     public ImageDto upsertImage(Path filePath, MultipartFile img, String description) {
@@ -43,11 +57,11 @@ public class ImageService {
                 .orElseGet(() -> imageRepository.save(Image.builder()
                     .description(description)
                     .relativePath(relativePath.toString())
-                    .type(EImageType.AVATAR)
+                    .type(EImageType.AVATAR.name())
                     .build()));
             return imageMapper.entityToDto(image);
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_PERSIST_DATA, "image");
+            throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "image");
         }
     }
 
@@ -88,7 +102,7 @@ public class ImageService {
                 var newImage = Image.builder()
                     .description("Image of product with id %s".formatted(productId.toString()))
                     .relativePath(relativePath.toString())
-                    .type(EImageType.MEDIA)
+                    .type(EImageType.MEDIA.name())
                     .build();
                 savedDQ.add(newImage);
             });
@@ -98,7 +112,7 @@ public class ImageService {
             result.addAll(imageMapper.entityToDto(newImgs));
             return result;
         } catch (Exception ex) {
-            throw new IcRuntimeException(ex, FAIL_TO_STORE_IMAGE_FILE);
+            throw new IcRuntimeException(ex, REPOSITORY_STORE_IMAGE_FAILED);
         }
     }
 

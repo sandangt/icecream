@@ -1,0 +1,3 @@
+[submodule "icecream-system/dev-composes/stripe"]
+	path = icecream-system/dev-composes/stripe
+	url = https://github.com/sandangt/acquiremock.git

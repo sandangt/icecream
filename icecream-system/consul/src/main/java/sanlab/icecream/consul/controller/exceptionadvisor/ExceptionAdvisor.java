@@ -6,12 +6,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import sanlab.icecream.consul.exception.HttpBadRequestException;
+import sanlab.icecream.consul.exception.HttpForbiddenException;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.exception.HttpServiceUnavailableException;
 import sanlab.icecream.consul.exception.HttpUnauthorizedException;
+import sanlab.icecream.fundamentum.contractmodel.response.ErrorResponse;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
@@ -39,6 +42,12 @@ public class ExceptionAdvisor {
         return new ResponseEntity<>(new ErrorResponse(innerEx.code(), innerEx.message()), UNAUTHORIZED);
     }
 
+    @ExceptionHandler({HttpForbiddenException.class})
+    public ResponseEntity<ErrorResponse> forbidden(HttpForbiddenException ex) {
+        var innerEx = ex.getInnerEx();
+        return new ResponseEntity<>(new ErrorResponse(innerEx.code(), innerEx.message()), FORBIDDEN);
+    }
+
     @ExceptionHandler({HttpInternalServerErrorException.class})
     public ResponseEntity<ErrorResponse> internalServerError(HttpInternalServerErrorException ex) {
         var innerEx = ex.getInnerEx();
@@ -46,7 +55,7 @@ public class ExceptionAdvisor {
     }
 
     @ExceptionHandler({HttpServiceUnavailableException.class})
-    public ResponseEntity<ErrorResponse> internalServerError(HttpServiceUnavailableException ex) {
+    public ResponseEntity<ErrorResponse> serviceUnavailable(HttpServiceUnavailableException ex) {
         var innerEx = ex.getInnerEx();
         return new ResponseEntity<>(new ErrorResponse(innerEx.code(), innerEx.message()), SERVICE_UNAVAILABLE);
     }

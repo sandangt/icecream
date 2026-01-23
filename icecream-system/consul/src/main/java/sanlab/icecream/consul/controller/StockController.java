@@ -11,20 +11,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sanlab.icecream.consul.dto.core.StockDto;
-import sanlab.icecream.consul.dto.extended.StockExtendedDto;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
+import sanlab.icecream.fundamentum.dto.core.StockDto;
+import sanlab.icecream.fundamentum.dto.exntended.StockExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.exception.HttpServiceUnavailableException;
 import sanlab.icecream.consul.service.StockService;
-import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.FAIL_TO_PERSIST_DATA;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.STOCK_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_STOCK_NOT_FOUND;
 
 @RestController
 @RequestMapping("/stocks")
@@ -35,7 +36,7 @@ public class StockController {
 
     @GetMapping
     public CollectionQueryResponse<StockExtendedDto> getAll(@ModelAttribute CollectionQueryRequest request) {
-        return stockService.getAll(request.getPageRequest());
+        return stockService.getAll(CollectionQueryUtils.getPageRequest(request));
     }
 
     @GetMapping("/{id}")
@@ -45,7 +46,7 @@ public class StockController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (STOCK_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_STOCK_NOT_FOUND.equals(error)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -57,7 +58,7 @@ public class StockController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
-            if (FAIL_TO_PERSIST_DATA.equals(error)) throw new HttpServiceUnavailableException(ex);
+            if (REPOSITORY_PERSIST_DATA_FAILED.equals(error)) throw new HttpServiceUnavailableException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -71,8 +72,8 @@ public class StockController {
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
-                case STOCK_NOT_FOUND -> new HttpNotFoundException(ex);
-                case FAIL_TO_PERSIST_DATA -> new HttpServiceUnavailableException(ex);
+                case REPOSITORY_STOCK_NOT_FOUND -> new HttpNotFoundException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };
         }

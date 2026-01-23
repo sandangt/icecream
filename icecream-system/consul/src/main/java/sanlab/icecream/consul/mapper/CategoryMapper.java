@@ -4,13 +4,14 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.extended.CategoryExtendedDto;
+import sanlab.icecream.consul.model.CategoryESearch;
+import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
 import sanlab.icecream.consul.model.Category;
-import sanlab.icecream.consul.dto.core.CategoryDto;
+import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { ImageMapper.class })
+@Mapper(componentModel = "spring", uses = { SharedMapper.class, ImageMapper.class })
 public interface CategoryMapper {
 
     //region To DTO
@@ -27,6 +28,14 @@ public interface CategoryMapper {
     @Named("entityToExtendedDtoIter")
     @IterableMapping(qualifiedByName = "entityToExtendedDto")
     List<CategoryExtendedDto> entityToExtendedDto(List<Category> categories);
+
+    @Named("searchEntityToDto")
+    @Mapping(target = "id", source = "id", qualifiedByName = "stringToUuid")
+    CategoryDto searchEntityToDto(CategoryESearch category);
+
+    @Named("searchEntityToDtoIter")
+    @IterableMapping(qualifiedByName = "searchEntityToDto")
+    List<CategoryDto> searchEntityToDto(List<CategoryESearch> categories);
     //endregion
 
     //region To Entity

@@ -1,22 +1,28 @@
 import type {
-  Session,
-  Customer,
-  Category,
-  Product,
-  Media,
   Address,
-  Stock,
-  CartItem,
   Cart,
+  CartItem,
+  Category,
   CategoryExtended,
-  ProductExtended,
+  Customer,
   CustomerExtended,
+  Media,
+  NotificationMessage,
+  Product,
+  ProductExtended,
+  Session,
+  Stock,
 } from './core'
-
-import type { UpdateProfileRequest } from './requests/customer'
-
-import type { RequestAllParams } from './requests/filtering'
-import type { RequestAllResult } from './responses/filtering'
+import type {
+  CreateOrderItemRequest,
+  CreateOrderRequest,
+  FiltersRequest,
+  PaginationRequest,
+  RequestAllParams,
+  SortingRequest,
+  UpdateProfileRequest,
+} from './requests'
+import type { CreateOrderResponse, RequestAllResult } from './responses'
 
 export {
   Session,
@@ -34,4 +40,11 @@ export {
   RequestAllParams,
   RequestAllResult,
   UpdateProfileRequest,
+  PaginationRequest,
+  SortingRequest,
+  FiltersRequest,
+  CreateOrderItemRequest,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  NotificationMessage,
 }

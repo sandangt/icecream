@@ -1,11 +1,13 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight, ShoppingBag, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-import { CartItem } from './cart-item'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCart } from '@/hooks'
+
+import { CartItem } from './cart-item'
 
 export const CartPage = () => {
   const { cart, resetCart } = useCart()
@@ -19,7 +21,7 @@ export const CartPage = () => {
         <ShoppingBag className="mx-auto h-24 w-24 text-muted-foreground mb-6" />
         <h1 className="text-3xl font-headline font-semibold mb-4">Your Cart is Empty</h1>
         <p className="text-muted-foreground mb-8">
-          Looks like you haven't added anything to your cart yet.
+          Looks like you haven&apos;t added anything to your cart yet.
         </p>
         <Button
           asChild

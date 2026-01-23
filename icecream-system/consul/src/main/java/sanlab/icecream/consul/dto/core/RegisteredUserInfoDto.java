@@ -2,15 +2,12 @@ package sanlab.icecream.consul.dto.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Collection;
-import java.util.List;
 
 @Builder
 @Getter

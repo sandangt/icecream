@@ -8,9 +8,9 @@ import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.Optional;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_USER_PRINCIPAL;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.SECURITY_USER_PRINCIPAL_INVALID;
 
-public class SecurityContextUtils {
+public final class SecurityContextUtils {
 
     private SecurityContextUtils() {}
 
@@ -27,11 +27,16 @@ public class SecurityContextUtils {
     }
 
     public static RegisteredUserInfoDto getRegisteredUserInfo() {
-        return registeredUserInfo().orElseThrow(() -> new IcRuntimeException(INVALID_USER_PRINCIPAL));
+        return registeredUserInfo().orElseThrow(() -> new IcRuntimeException(SECURITY_USER_PRINCIPAL_INVALID));
     }
 
     public static boolean isLoggedIn() {
         return registeredUserInfo().isPresent();
+    }
+
+    public static void setAuthentication(Authentication authentication) {
+        Optional.ofNullable(authentication)
+            .ifPresent(inner -> SecurityContextHolder.getContext().setAuthentication(inner));
     }
 
 }

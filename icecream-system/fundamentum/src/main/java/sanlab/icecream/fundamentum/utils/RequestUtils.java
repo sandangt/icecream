@@ -1,6 +1,6 @@
 package sanlab.icecream.fundamentum.utils;
 
-public class RequestUtils {
+public final class RequestUtils {
 
     private RequestUtils() {}
 

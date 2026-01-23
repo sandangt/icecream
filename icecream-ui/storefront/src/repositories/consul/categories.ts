@@ -1,13 +1,13 @@
 import { API_PATHS } from '@/lib/constants'
+import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
-import { CONSUL_URL } from '@/settings'
 import { CategoryExtended } from '@/models'
+import { CONSUL_URL } from '@/settings'
 
 export const fetchAllCategories = async (): Promise<CategoryExtended[]> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CATEGORY])
   try {
-    const response = await fetch(url)
-    return await response.json()
+    return await api.get<CategoryExtended[]>(url, undefined)
   } catch (err) {
     return []
   }

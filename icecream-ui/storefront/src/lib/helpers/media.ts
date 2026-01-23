@@ -1,5 +1,6 @@
-import { IcRuntimeException, MEDIA_NOT_FOUND } from '@/exceptions'
+import { NotFoundError } from '@/exceptions'
 import { Media } from '@/models'
+
 import { makeStorageUrl } from '../utils'
 
 export class MediaHelper {
@@ -15,7 +16,7 @@ export class MediaHelper {
 
   get(): Media {
     if (!this.__media) {
-      throw new IcRuntimeException(MEDIA_NOT_FOUND)
+      throw new NotFoundError()
     }
     return this.__media
   }

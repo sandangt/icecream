@@ -1,0 +1,25 @@
+server:
+  address: ${CHRONOS_HOST}
+  port: ${CHRONOS_PORT}
+  servlet.context-path: /scheduler
+
+spring:
+  application:
+    name: chronos
+  data:
+    mongodb:
+      database: ${MONGODB_CHRONOS_DB}
+    redis:
+      database: 2
+  cloud:
+    function:
+      definition: helloRabbit;deleteImage # Consumer bean name
+    stream:
+      bindings:
+        deleteImage-in-0:
+          binder: rabbit-binder
+          destination: icecream.consul.media.delete-image
+
+otel:
+  instrumentation:
+    mongodb.enabled: true

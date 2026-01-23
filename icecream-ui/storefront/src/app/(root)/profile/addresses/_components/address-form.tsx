@@ -1,9 +1,9 @@
-import { FC } from 'react'
-import z from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { FC } from 'react'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
 
-import { Address } from '@/models'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
+import { Address } from '@/models'
 
 const addressFormSchema = z.object({
   contactName: z.string().min(5, { message: 'Please enter contact name.' }),

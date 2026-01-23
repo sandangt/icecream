@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sanlab.icecream.consul.dto.core.ProductDto;
-import sanlab.icecream.consul.dto.extended.CategoryExtendedDto;
+import sanlab.icecream.consul.utils.CollectionQueryUtils;
+import sanlab.icecream.fundamentum.dto.core.ProductDto;
+import sanlab.icecream.fundamentum.dto.exntended.CategoryExtendedDto;
 import sanlab.icecream.consul.exception.HttpInternalServerErrorException;
 import sanlab.icecream.consul.exception.HttpNotFoundException;
 import sanlab.icecream.consul.service.CategoryService;
-import sanlab.icecream.consul.viewmodel.request.CollectionQueryRequest;
-import sanlab.icecream.consul.viewmodel.response.CollectionQueryResponse;
+import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
+import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryResponse;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.CATEGORY_NOT_FOUND;
-import static sanlab.icecream.fundamentum.constant.PreAuthorizedAuthExp.PERMIT_ALL;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CATEGORY_NOT_FOUND;
+import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.PERMIT_ALL;
 
 @RestController
 @RequestMapping("/categories")
@@ -44,7 +45,7 @@ public class CategoryController {
             return ResponseEntity.ok(result);
         } catch (IcRuntimeException ex) {
             var err = ex.getError();
-            if (CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }
@@ -54,10 +55,10 @@ public class CategoryController {
     public CollectionQueryResponse<ProductDto> getAllProducts(@PathVariable UUID id,
                                                               @ModelAttribute CollectionQueryRequest request) {
         try {
-            return categoryService.getAllProducts(id, request.getPageRequest());
+            return categoryService.getAllProducts(id, CollectionQueryUtils.getPageRequest(request));
         } catch (IcRuntimeException ex) {
             var err = ex.getError();
-            if (CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
+            if (REPOSITORY_CATEGORY_NOT_FOUND.equals(err)) throw new HttpNotFoundException(ex);
             throw new HttpInternalServerErrorException(ex);
         }
     }

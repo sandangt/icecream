@@ -1,18 +1,26 @@
 package sanlab.icecream.memoir.consumer;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
-import org.springframework.stereotype.Component;
 import sanlab.icecream.fundamentum.dto.AuditLogDto;
+import sanlab.icecream.memoir.service.AuditLogService;
 
 import java.util.function.Consumer;
 
-@Component("auditlog")
-public class AuditLogConsumer implements Consumer<Message<AuditLogDto>> {
+@Configuration
+@RequiredArgsConstructor
+public class AuditLogConsumer {
 
-    @Override
-    public void accept(Message<AuditLogDto> message) {
-        var payload = message.getPayload();
-        System.out.println(payload);
+    private final AuditLogService auditLogService;
+
+    @Bean(name = "auditLog")
+    public Consumer<Message<AuditLogDto>> receive() {
+        return message -> {
+            var payload = message.getPayload();
+            auditLogService.save(payload);
+        };
     }
 
 }

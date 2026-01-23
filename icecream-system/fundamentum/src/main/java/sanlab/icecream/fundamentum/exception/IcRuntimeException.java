@@ -1,5 +1,6 @@
 package sanlab.icecream.fundamentum.exception;
 
+import io.rsocket.exceptions.CustomRSocketException;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -61,6 +62,14 @@ public class IcRuntimeException extends RuntimeException {
 
     public String code() {
         return error.getCode();
+    }
+
+    public int rSocketCode() {
+        return error.getRSocketCode();
+    }
+
+    public CustomRSocketException toRSocketException() {
+        return new CustomRSocketException(error.getRSocketCode(), StringUtils.EMPTY);
     }
 
 }

@@ -22,7 +22,7 @@
     <#elseif section = "form">
       <div class="box-container">
             <div>
-                <p class="application-name">Welcome to Icecream Shop</p>
+                <p class="application-name">Welcome to IceCream Shop</p>
             </div>
 
         <form id="kc-register-form" class="form" onsubmit="return true;" action="${url.registrationAction}" method="post">
@@ -123,7 +123,7 @@
             </div>
         </form>
         <div>
-          <p class="copyright">Icecream Shop ${.now?string('yyyy')}</p>
+          <p class="copyright">IceCream Shop ${.now?string('yyyy')}</p>
         </div>
     </#if>
 </@layout.registrationLayout>

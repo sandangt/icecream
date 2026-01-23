@@ -14,6 +14,7 @@
     <module>fundamentum</module>
     <module>codex</module>
     <module>memoir</module>
+    <module>conflux</module>
   </modules>
 
   <properties>
@@ -23,27 +24,62 @@
     <maven.version>3.13.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.5.6</spring.boot.version>
+    <spring.boot.version>3.5.9</spring.boot.version>
     <spring.cloud.version>2025.0.0</spring.cloud.version>
-    <spring.doc.version>2.8.9</spring.doc.version>
     <postgresql.version>42.7.8</postgresql.version>
     <lombok.version>1.18.42</lombok.version>
     <guava.version>33.5.0-jre</guava.version>
-    <apache.commons.lang.version>3.19.0</apache.commons.lang.version>
-    <apache.commons.io.version>2.20.0</apache.commons.io.version>
+    <apache.commons.lang.version>3.20.0</apache.commons.lang.version>
+    <apache.commons.io.version>2.21.0</apache.commons.io.version>
     <apache.commons.collections.version>4.5.0</apache.commons.collections.version>
-    <apache.commons.compress.version>1.28.0</apache.commons.compress.version>
-    <fasterxml.jackson.version>2.20.0</fasterxml.jackson.version>
+    <fasterxml.jackson.version>2.20.1</fasterxml.jackson.version>
     <mapstruct.version>1.6.3</mapstruct.version>
+    <mapstruct.spring.extension.version>2.0.0</mapstruct.spring.extension.version>
     <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
     <liquibase.version>4.33.0</liquibase.version>
     <slugify.version>3.0.6</slugify.version>
     <faker.version>1.0.2</faker.version>
     <minio.version>8.5.17</minio.version>
+    <micrometer-tracing.version>1.6.1</micrometer-tracing.version>
+    <opentelemetry.version>1.57.0</opentelemetry.version>
+    <opentelemetry.instrumentation.version>2.23.0-alpha</opentelemetry.instrumentation.version>
+    <logstash.logback.version>9.0</logstash.logback.version>
     <testcontainers.version>1.19.8</testcontainers.version>
   </properties>
+
   <dependencyManagement>
     <dependencies>
+      <!--region OpenTelemetry-->
+      <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-tracing-bom</artifactId>
+        <version>${micrometer-tracing.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>${opentelemetry.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry.instrumentation</groupId>
+        <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+        <version>${opentelemetry.instrumentation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry.javaagent.instrumentation</groupId>
+        <artifactId>opentelemetry-javaagent-spring-rabbit-1.0</artifactId>
+        <version>${opentelemetry.instrumentation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry.instrumentation</groupId>
+        <artifactId>opentelemetry-kafka-clients-2.6</artifactId>
+        <version>${opentelemetry.instrumentation.version}</version>
+      </dependency>
+      <!--endregion-->
       <!--region Spring-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -60,11 +96,11 @@
         <scope>import</scope>
       </dependency>
       <!--endregion-->
-      <!--region Openapi-->
+      <!--region Logging-->
       <dependency>
-        <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-        <version>${spring.doc.version}</version>
+        <groupId>net.logstash.logback</groupId>
+        <artifactId>logstash-logback-encoder</artifactId>
+        <version>${logstash.logback.version}</version>
       </dependency>
       <!--endregion-->
       <!--region Postgres-->
@@ -85,6 +121,18 @@
         <groupId>io.minio</groupId>
         <artifactId>minio</artifactId>
         <version>${minio.version}</version>
+      </dependency>
+      <!--endregion-->
+      <!--region Mapstruct-->
+      <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct</artifactId>
+        <version>${mapstruct.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mapstruct.extensions.spring</groupId>
+        <artifactId>mapstruct-spring-annotations</artifactId>
+        <version>${mapstruct.spring.extension.version}</version>
       </dependency>
       <!--endregion-->
       <!--region Utils-->
@@ -116,19 +164,9 @@
         <version>${apache.commons.collections.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-compress</artifactId>
-        <version>${apache.commons.compress.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mapstruct</groupId>
-        <artifactId>mapstruct</artifactId>
-        <version>${mapstruct.version}</version>
       </dependency>
       <dependency>
         <groupId>com.github.slugify</groupId>
@@ -141,7 +179,7 @@
         <version>${faker.version}</version>
       </dependency>
       <!--endregion-->
-      <!--region Testcontainers-->
+      <!--region TESTING-->
       <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers-bom</artifactId>
@@ -184,6 +222,11 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct-processor</artifactId>
               <version>${mapstruct.version}</version>
+            </path>
+            <path>
+              <groupId>org.mapstruct.extensions.spring</groupId>
+              <artifactId>mapstruct-spring-extensions</artifactId>
+              <version>${mapstruct.spring.extension.version}</version>
             </path>
             <path>
               <groupId>org.projectlombok</groupId>

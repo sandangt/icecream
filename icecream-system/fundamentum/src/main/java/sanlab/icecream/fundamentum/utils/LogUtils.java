@@ -3,7 +3,7 @@ package sanlab.icecream.fundamentum.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-public class LogUtils {
+public final class LogUtils {
 
     private LogUtils() {}
 

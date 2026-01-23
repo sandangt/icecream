@@ -1,0 +1,79 @@
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+
+      "name": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "keyword": { "type": "keyword" }
+        }
+      },
+      "slug": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "keyword": { "type": "keyword" }
+        }
+      },
+      "description": { "type": "text", "analyzer": "standard" },
+
+      "briefDescription": { "type": "text", "analyzer": "standard" },
+
+      "sku": { "type": "keyword" },
+
+      "price": { "type": "double" },
+
+      "metaTitle": { "type": "text" },
+
+      "metaDescription": { "type": "text" },
+
+      "metaKeyword": { "type": "text" },
+
+      "isFeatured": { "type": "boolean" },
+
+      "status": { "type": "keyword" },
+
+      "createdAt": { "type": "long" },
+
+      "modifiedAt": { "type": "long" },
+
+      "categories": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "keyword" },
+          "name": { "type": "keyword" },
+          "slug": { "type": "keyword" },
+          "description": { "type": "text" },
+          "createdAt": { "type": "long" },
+          "modifiedAt": { "type": "long" }
+        }
+      },
+
+      "media": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "keyword" },
+          "type": { "type": "keyword" },
+          "description": { "type": "text" },
+          "relativePath": { "type": "text" },
+          "createdAt": { "type": "long" },
+          "modifiedAt": { "type": "long" }
+        }
+      },
+
+      "featuredBanner": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "keyword" },
+          "type": { "type": "keyword" },
+          "description": { "type": "text" },
+          "relativePath": { "type": "text" },
+          "createdAt": { "type": "long" },
+          "modifiedAt": { "type": "long" }
+        }
+      }
+    }
+  }
+}

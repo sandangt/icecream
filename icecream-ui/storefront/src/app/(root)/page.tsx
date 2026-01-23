@@ -1,13 +1,14 @@
-import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import { type FC } from 'react'
 
-import { requestFeaturedProducts, requestNewProducts } from '@/repositories/consul'
 import { Button } from '@/components/ui/button'
-import { ProductExtended } from '@/models'
-import { ProductCard } from './_components'
 import { ROUTES, SITE_NAME } from '@/lib/constants'
 import { ProductHelper } from '@/lib/helpers'
+import { ProductExtended } from '@/models'
+import { requestFeaturedProducts, requestNewProducts } from '@/repositories/consul'
+
+import { ProductCard } from './_components'
 
 const Page = async () => {
   const newProducts = (await requestNewProducts())

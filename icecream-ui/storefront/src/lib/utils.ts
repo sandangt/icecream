@@ -1,7 +1,9 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+// eslint-disable-next-line
 import path from 'path'
+
+import { type ClassValue, clsx } from 'clsx'
 import qs from 'qs'
+import { twMerge } from 'tailwind-merge'
 
 import { STORAGE_URL } from '@/settings'
 
@@ -43,4 +45,8 @@ export function encodeBase64Str(origin: string): string {
 export function decodeBase64Str(encoded: string): string {
   const obj = Buffer.from(encoded, 'base64')
   return obj.toString('utf8')
+}
+
+export function truncateTxt(txt: string, maxLen: number) {
+  return txt?.length > maxLen ? txt.substring(0, maxLen) + '...' : txt
 }

@@ -1,0 +1,190 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      resolve-lazily: true
+  rsocket:
+    server:
+      transport: tcp
+    mime-type: application/cbor
+    fragment-size: 65536
+  data:
+    mongodb:
+      username: ${MONGODB_USER}
+      password: ${MONGODB_PASSWORD}
+      host: ${MONGODB_HOST}
+      port: ${MONGODB_PORT}
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      database: 0
+    cache:
+      type: redis
+  datasource:
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
+    host: ${POSTGRESQL_HOST}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  cloud:
+    stream:
+      default-binder: rabbit-binder
+      binders:
+        kafka-binder:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: ${KAFKA_HOST}:${KAFKA_PORT}
+                      auto-create-topics: true
+                      auto-add-partitions: true
+                      configuration:
+                        connections.max.idle.ms: 300000
+                        request.timeout.ms: 30000
+                        retry.backoff.ms: 1000
+                        reconnect.backoff.ms: 1000
+                      consumer-properties:
+                        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                        value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+                        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+                        spring.json.trusted.packages: "*"
+                        spring.json.value.default.type: com.fasterxml.jackson.databind.JsonNode
+                        auto.offset.reset: earliest
+                        enable.auto.commit: true
+                        session.timeout.ms: 30000
+                        heartbeat.interval.ms: 10000
+                        max.poll.interval.ms: 300000
+                      producer-properties:
+                        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                        value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+                        acks: all
+                        retries: 3
+                        retry.backoff.ms: 1000
+                        reconnect.backoff.ms: 1000
+        rabbit-binder:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: ${RABBITMQ_HOST}
+                port: ${RABBITMQ_PORT}
+                username: guest
+                password: guest
+                virtual-host: /
+      bindings:
+        helloRabbit-in-0:
+          binder: rabbit-binder
+          destination: infra.hello-mate.ping
+        helloRabbit-out-0:
+          binder: rabbit-binder
+          destination: infra.hello-mate.ping
+        helloKafka-in-0:
+          binder: kafka-binder
+          destination: infra.hello-mate.ping
+        helloKafka-out-0:
+          binder: kafka-binder
+          destination: infra.hello-mate.ping
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IDENTITY_ISSUER}
+          jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
+
+app:
+  minio:
+    url: ${STORAGE_URL}
+    access:
+      key: ${MINIO_ACCESS_KEY}
+      secret: ${MINIO_SECRET_KEY}
+    bucket:
+      image: images
+  consul:
+    rsocket:
+      host: ${CONSUL_RSOCKET_HOST}
+      port: ${CONSUL_RSOCKET_PORT}
+  memoir:
+    rsocket:
+      host: ${MEMOIR_RSOCKET_HOST}
+      port: ${MEMOIR_RSOCKET_PORT}
+  echo:
+    rsocket:
+      host: ${ECHO_RSOCKET_HOST}
+      port: ${ECHO_RSOCKET_PORT}
+  chronos:
+    rsocket:
+      host: ${CHRONOS_RSOCKET_HOST}
+      port: ${CHRONOS_RSOCKET_PORT}
+  conflux:
+    rsocket:
+      host: ${CONFLUX_RSOCKET_HOST}
+      port: ${CONFLUX_RSOCKET_PORT}
+  temp-dir: ${ICECREAM_VOLUME}/tmp
+  cors:
+    allowed-origins: >
+      ${STOREFRONT_URL}
+  identity:
+    url: ${IDENTITY_URL}
+    admin:
+      username: ${KEYCLOAK_ADMIN}
+      password: ${KEYCLOAK_ADMIN_PASSWORD}
+    realm: ${IDENTITY_REALM}
+    client:
+      storefront: ${IDENTITY_STOREFRONT_CLIENT_ID}
+  security:
+    jwt:
+      converter:
+        resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
+        principle-attribute: email
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'info,health,env,beans,threaddump,heapdump'
+      base-path: /actuator
+  endpoint:
+    startup:
+      enabled: false
+    shutdown:
+      enabled: false
+    heapdump:
+      enabled: true
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampler:
+      probability: 1.0
+    propagation:
+      type: W3C
+  otlp:
+    metrics:
+      export.url: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/traces
+    logging:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/logs
+
+otel:
+  instrumentation:
+    spring-webmvc.enabled: true
+    spring-webflux.enabled: true
+    spring-web.enabled: true
+    servlet.enabled: true

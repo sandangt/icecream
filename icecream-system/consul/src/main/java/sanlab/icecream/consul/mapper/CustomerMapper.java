@@ -4,9 +4,9 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import sanlab.icecream.consul.dto.core.CustomerDto;
+import sanlab.icecream.fundamentum.dto.core.CustomerDto;
 import sanlab.icecream.consul.dto.core.RegisteredUserInfoDto;
-import sanlab.icecream.consul.dto.extended.CustomerExtendedDto;
+import sanlab.icecream.fundamentum.dto.exntended.CustomerExtendedDto;
 import sanlab.icecream.consul.dto.keycloak.KeycloakUserInfoDto;
 import sanlab.icecream.consul.model.Customer;
 
@@ -16,11 +16,12 @@ import java.util.UUID;
 
 import static sanlab.icecream.fundamentum.constant.ECustomerStatus.ACTIVE;
 
-@Mapper(componentModel = "spring", uses = { ImageMapper.class, AddressMapper.class })
+@Mapper(componentModel = "spring", uses = { SharedMapper.class, ImageMapper.class, AddressMapper.class })
 public interface CustomerMapper {
 
     //region To DTO
     @Named("entityToDto")
+    @Mapping(target = "status", source = "status", qualifiedByName = "nameToECustomerStatus")
     CustomerDto entityToDto(Customer customer);
 
     @Named("entityToDtoIter")
@@ -28,6 +29,7 @@ public interface CustomerMapper {
     List<CustomerDto> entityToDto(List<Customer> customers);
 
     @Named("entityToExtendedDto")
+    @Mapping(target = "status", source = "status", qualifiedByName = "nameToECustomerStatus")
     CustomerExtendedDto entityToExtendedDto(Customer customer);
 
     @Named("entityToExtendedDtoIter")
@@ -42,6 +44,7 @@ public interface CustomerMapper {
     @Mapping(target = "modifiedAt", ignore = true)
     @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "primaryAddress", ignore = true)
+    @Mapping(target = "status", source = "status", qualifiedByName = "eCustomerStatusToName")
     Customer dtoToEntity(CustomerDto customerDto);
 
     @Named("dtoToEntityIter")

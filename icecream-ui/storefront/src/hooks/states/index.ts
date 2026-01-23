@@ -1,7 +1,8 @@
 import { enableMapSet } from 'immer'
 
+import { useCartStore } from './cart'
+import { useNotiStore } from './notification'
+
 enableMapSet()
 
-import { useCartStore } from './cart'
-
-export { useCartStore }
+export { useCartStore, useNotiStore }

@@ -3,8 +3,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { FC } from 'react'
 import qs from 'qs'
+import { FC } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { generateUrlPath } from '@/lib/utils'
@@ -17,10 +17,10 @@ type Props = {
 const RANGE = 2
 
 export const PaginationControls: FC<Props> = ({ currentPage, totalPages }) => {
-  if (!totalPages) return null
-
   const currentPath = usePathname()
   const queryParams = useSearchParams()
+
+  if (!totalPages) return null
   let dotAfter = false
   let dotBefore = false
 

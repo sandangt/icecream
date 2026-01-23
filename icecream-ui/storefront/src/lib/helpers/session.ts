@@ -1,4 +1,4 @@
-import { IcRuntimeException, SESSION_UNAVAILABLE } from '@/exceptions'
+import { UnauthorizedError } from '@/exceptions'
 import { Session } from '@/models'
 
 export class SessionHelper {
@@ -39,7 +39,7 @@ export class SessionHelper {
 
   dataClient(): Session {
     if (!this.__session || !this.__session?.data) {
-      throw new IcRuntimeException(SESSION_UNAVAILABLE)
+      throw new UnauthorizedError()
     }
     return this.__session.data
   }
@@ -51,7 +51,7 @@ export class SessionHelper {
 
   data(): Session {
     if (!this.__session) {
-      throw new IcRuntimeException(SESSION_UNAVAILABLE)
+      throw new UnauthorizedError()
     }
     return this.__session
   }

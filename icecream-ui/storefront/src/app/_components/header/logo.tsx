@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import { LOGO_NAME, ROUTES } from '@/lib/constants'
 
 export const Logo = () => (

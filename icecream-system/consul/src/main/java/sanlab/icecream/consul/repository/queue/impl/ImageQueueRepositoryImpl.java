@@ -13,7 +13,7 @@ public class ImageQueueRepositoryImpl implements ImageQueueRepository {
 
     private final StreamBridge streamBridge;
 
-    private static final String DELETE_FILE_OUT_CHANNEL = "imageDelete-out-0";
+    private static final String DELETE_FILE_OUT_CHANNEL = "deleteImage-out-0";
 
     @Override
     public void delete(FileHandlingDto fileHandlingDto) {

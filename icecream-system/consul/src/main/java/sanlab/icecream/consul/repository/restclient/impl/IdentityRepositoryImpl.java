@@ -16,9 +16,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_IDENTITY_ADMIN_TOKEN;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.INVALID_UPDATE_USER_INFO_REQUEST;
-import static sanlab.icecream.consul.exception.ConsulErrorModel.UNAVAILABLE_IDENTITY_SERVICE;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_IDENTITY_ADMIN_TOKEN_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_IDENTITY_SERVICE_UNAVAILABLE;
 
 @Component
 public class IdentityRepositoryImpl implements IdentityRepository {
@@ -58,7 +58,7 @@ public class IdentityRepositoryImpl implements IdentityRepository {
                 .retrieve()
                 .body(TokenResponseDto.class);
         } catch (HttpClientErrorException ex) {
-            throw new IcRuntimeException(ex, INVALID_IDENTITY_ADMIN_TOKEN);
+            throw new IcRuntimeException(ex, IDENTITY_IDENTITY_ADMIN_TOKEN_FAILED);
         }
     }
 
@@ -87,10 +87,10 @@ public class IdentityRepositoryImpl implements IdentityRepository {
             .contentType(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
-                throw new IcRuntimeException(INVALID_UPDATE_USER_INFO_REQUEST);
+                throw new IcRuntimeException(IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED);
             })
             .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
-                throw new IcRuntimeException(UNAVAILABLE_IDENTITY_SERVICE);
+                throw new IcRuntimeException(IDENTITY_IDENTITY_SERVICE_UNAVAILABLE);
             })
             .toBodilessEntity();
     }

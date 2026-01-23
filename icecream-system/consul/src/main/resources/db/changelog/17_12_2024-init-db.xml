@@ -54,6 +54,7 @@
         meta_title VARCHAR,
         meta_keyword VARCHAR,
         meta_description TEXT,
+        featured_banner UUID DEFAULT NULL,
         created_at BIGINT,
         modified_at BIGINT
       );
@@ -100,6 +101,7 @@
         order_status VARCHAR,
         delivery_status VARCHAR,
         payment_status VARCHAR,
+        payment_id UUID,
         created_at BIGINT,
         modified_at BIGINT,
         CONSTRAINT fk_customer__order FOREIGN KEY(customer_id) REFERENCES customer(user_id),
@@ -128,14 +130,14 @@
         CONSTRAINT fk_order__cart FOREIGN KEY(order_id) REFERENCES order_tbl(id)
       );
       CREATE TABLE cart_item (
-        id UUID PRIMARY KEY,
-        product_id UUID,
-        cart_id UUID,
-        quantity BIGINT,
-        created_at BIGINT,
-        modified_at BIGINT,
-        CONSTRAINT fk_product__cart_item FOREIGN KEY(product_id) REFERENCES product(id),
-        CONSTRAINT fk_cart__cart_item FOREIGN KEY(cart_id) REFERENCES cart(id)
+        cart_id UUID NOT NULL,
+        product_id UUID NOT NULL,
+        quantity BIGINT NOT NULL,
+        created_at BIGINT NOT NULL,
+        modified_at BIGINT NOT NULL,
+        PRIMARY KEY (cart_id, product_id),
+        CONSTRAINT fk_cart__cart_item FOREIGN KEY(cart_id) REFERENCES cart(id) ON DELETE CASCADE,
+        CONSTRAINT fk_product__cart_item FOREIGN KEY(product_id) REFERENCES product(id) ON DELETE CASCADE
       );
       CREATE TABLE product_category (
         product_id UUID,

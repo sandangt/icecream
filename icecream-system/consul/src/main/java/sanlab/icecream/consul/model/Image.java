@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import sanlab.icecream.fundamentum.constant.EImageType;
 
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class Image extends AbstractAuditEntity {
     private String description;
     @Column(name = "relative_path", nullable = false)
     private String relativePath;
-    private EImageType type;
+    private String type;
 
     @Override
     public boolean equals(Object o) {
