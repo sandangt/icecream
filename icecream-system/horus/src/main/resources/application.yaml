@@ -1,3 +1,7 @@
+server:
+  address: ${HORUS_HOST}
+  port: ${HORUS_PORT}
+
 spring:
   main:
     banner-mode: console
@@ -5,4 +9,46 @@ spring:
     location: classpath:/banner.txt
   application:
     name: horus
-    version: 0.2.0-snapshot
+    version: 0.0.1-snapshot
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      resolve-lazily: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      database: 6
+    cache:
+      type: redis
+  datasource:
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
+    host: ${POSTGRESQL_HOST}
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_CONSUL_DB}
+    hikari:
+      pool-name: ConsulHikariPool
+      maximum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 60000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    enabled: true
+    changeLog: classpath:/db/changelog/master.xml
+
+vaadin:
+  launch-browser: true
