@@ -5,7 +5,8 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.9</version>
+    <version>4.0.2</version>
+    <relativePath/>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <packaging>jar</packaging>
@@ -19,20 +20,19 @@
     <maven.version>3.13.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.5.9</spring.boot.version>
-    <spring.cloud.version>2025.0.0</spring.cloud.version>
-    <vaadin.version>24.9.9</vaadin.version>
+    <spring.boot.version>4.0.2</spring.boot.version>
+    <spring.cloud.version>2025.1.1</spring.cloud.version>
+    <vaadin.version>25.0.4</vaadin.version>
     <postgresql.version>42.7.8</postgresql.version>
     <lombok.version>1.18.42</lombok.version>
     <guava.version>33.5.0-jre</guava.version>
     <apache.commons.lang.version>3.20.0</apache.commons.lang.version>
     <apache.commons.io.version>2.21.0</apache.commons.io.version>
     <apache.commons.collections.version>4.5.0</apache.commons.collections.version>
-    <fasterxml.jackson.version>2.20.1</fasterxml.jackson.version>
+    <tools.jackson.version>3.0.4</tools.jackson.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <mapstruct.spring.extension.version>2.0.0</mapstruct.spring.extension.version>
     <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
-    <liquibase.version>4.33.0</liquibase.version>
     <slugify.version>3.0.6</slugify.version>
     <faker.version>1.0.2</faker.version>
     <minio.version>8.5.17</minio.version>
@@ -59,14 +59,15 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!--endregion-->
 
       <!--region Utils-->
       <dependency>
-        <groupId>com.fasterxml.jackson</groupId>
+        <groupId>tools.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
-        <version>${fasterxml.jackson.version}</version>
-        <scope>import</scope>
+        <version>${tools.jackson.version}</version>
         <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <!--endregion-->
 
@@ -78,6 +79,15 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>hilla-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>                                                       
+      <groupId>com.vaadin</groupId>                                  
+      <artifactId>vaadin-dev</artifactId>                            
+      <optional>true</optional>                                      
     </dependency>
     <!--endregion-->
 
@@ -106,6 +116,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-rsocket</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
     <!--endregion-->
 
     <!--region Logging-->
@@ -122,11 +138,6 @@
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.liquibase</groupId>
-      <artifactId>liquibase-core</artifactId>
-      <version>${liquibase.version}</version>
     </dependency>
     <!--endregion-->
 
@@ -243,14 +254,15 @@
         <version>${vaadin.version}</version>
         <executions>
           <execution>
-            <id>frontend</id>
-            <phase>compile</phase>
             <goals>
               <goal>prepare-frontend</goal>
               <goal>build-frontend</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <reactEnable>true</reactEnable>
+        </configuration>
       </plugin>
     </plugins>
   </build>

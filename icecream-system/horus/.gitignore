@@ -1,6 +1,8 @@
 # Vaadin
 node_modules/
 generated/
+bundles/
+package-lock.json
 
 # vscode
 .vscode/

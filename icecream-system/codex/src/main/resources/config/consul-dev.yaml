@@ -56,6 +56,15 @@ spring:
     server:
       port: ${CONSUL_RSOCKET_PORT}
 
+otel:
+  instrumentation:
+    jdbc.enabled: true
+    hikaricp.enabled: true
+    elasticsearch.enabled: true
+    redis.enabled: true
+    kafka.enabled: true
+    rabbitmq-ampq.enabled: true
+
 app:
   info:
     name: ${spring.application.name}
@@ -74,12 +83,3 @@ app:
       host: 'host.docker.internal'
   storefront:
     url: ${STOREFRONT_URL}
-
-otel:
-  instrumentation:
-    jdbc.enabled: true
-    hikaricp.enabled: true
-    elasticsearch.enabled: true
-    redis.enabled: true
-    kafka.enabled: true
-    rabbitmq-ampq.enabled: true

@@ -103,6 +103,45 @@ spring:
           issuer-uri: ${IDENTITY_ISSUER}
           jwk-set-uri: ${IDENTITY_ISSUER}/protocol/openid-connect/certs
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'info,health,env,beans,threaddump,heapdump'
+      base-path: /actuator
+  endpoint:
+    startup:
+      enabled: false
+    shutdown:
+      enabled: false
+    heapdump:
+      enabled: true
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampler:
+      probability: 1.0
+    propagation:
+      type: W3C
+  otlp:
+    metrics:
+      export.url: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/traces
+    logging:
+      export:
+        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/logs
+
+otel:
+  instrumentation:
+    spring-webmvc.enabled: true
+    spring-webflux.enabled: true
+    spring-web.enabled: true
+    servlet.enabled: true
+
 app:
   minio:
     url: ${STORAGE_URL}
@@ -148,43 +187,3 @@ app:
       converter:
         resource-id: ${IDENTITY_STOREFRONT_CLIENT_ID}
         principle-attribute: email
-
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: 'info,health,env,beans,threaddump,heapdump'
-      base-path: /actuator
-  endpoint:
-    startup:
-      enabled: false
-    shutdown:
-      enabled: false
-    heapdump:
-      enabled: true
-    tags:
-      application: ${spring.application.name}
-  tracing:
-    enabled: true
-    sampler:
-      probability: 1.0
-    propagation:
-      type: W3C
-  otlp:
-    metrics:
-      export.url: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/metrics
-  opentelemetry:
-    tracing:
-      export:
-        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/traces
-    logging:
-      export:
-        otlp.endpoint: http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT}/v1/logs
-
-otel:
-  instrumentation:
-    spring-webmvc.enabled: true
-    spring-webflux.enabled: true
-    spring-web.enabled: true
-    servlet.enabled: true
