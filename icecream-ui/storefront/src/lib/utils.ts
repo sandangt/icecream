@@ -50,3 +50,10 @@ export function decodeBase64Str(encoded: string): string {
 export function truncateTxt(txt: string, maxLen: number) {
   return txt?.length > maxLen ? txt.substring(0, maxLen) + '...' : txt
 }
+
+export const extractInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+}

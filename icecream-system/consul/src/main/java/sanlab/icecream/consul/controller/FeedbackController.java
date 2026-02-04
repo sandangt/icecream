@@ -52,31 +52,6 @@ public class FeedbackController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<FeedbackExtendedDto> create(@Valid @RequestBody FeedbackDto requestBody) {
-        try {
-            var result = feedbackService.create(requestBody);
-            return ResponseEntity.ok(result);
-        } catch (IcRuntimeException ex) {
-            var error = ex.getError();
-            if (REPOSITORY_PERSIST_DATA_FAILED.equals(error)) throw new HttpServiceUnavailableException(ex);
-            throw new HttpInternalServerErrorException(ex);
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<FeedbackExtendedDto> update(@PathVariable UUID id,
-                                                    @Valid @RequestBody FeedbackDto requestBody) {
-        try {
-            var result = feedbackService.update(id, requestBody);
-            return ResponseEntity.ok(result);
-        } catch (IcRuntimeException ex) {
-            var error = ex.getError();
-            if (REPOSITORY_PERSIST_DATA_FAILED.equals(error)) throw new HttpServiceUnavailableException(ex);
-            throw new HttpInternalServerErrorException(ex);
-        }
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<FeedbackExtendedDto> delete(@PathVariable UUID id) {
         try {

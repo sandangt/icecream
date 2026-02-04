@@ -193,6 +193,7 @@ public class CustomerService {
     }
 
     @CacheEvict(cacheNames = "customerDetails", key="#id", cacheManager = "longLivedCacheManager")
+    @Transactional
     public ImageDto uploadAvatar(UUID id, MultipartFile avatarFile) {
         Customer customer = customerRepository.findFirstByUserId(id)
             .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(id)));

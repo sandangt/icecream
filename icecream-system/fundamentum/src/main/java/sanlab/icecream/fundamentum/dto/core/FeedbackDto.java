@@ -15,4 +15,6 @@ public class FeedbackDto {
     protected UUID id;
     protected String content;
     protected Integer star;
+    protected Long createdAt;
+    protected Long modifiedAt;
 }

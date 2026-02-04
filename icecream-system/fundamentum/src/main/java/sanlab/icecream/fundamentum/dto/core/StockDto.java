@@ -15,4 +15,6 @@ public class StockDto {
     protected UUID id;
     protected Long quantity;
     protected Long reservedQuantity;
+    protected Long createdAt;
+    protected Long modifiedAt;
 }

@@ -24,7 +24,7 @@
     <maven.version>3.13.0</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <spring.boot.version>3.5.9</spring.boot.version>
+    <spring.boot.version>3.5.10</spring.boot.version>
     <spring.cloud.version>2025.0.0</spring.cloud.version>
     <postgresql.version>42.7.8</postgresql.version>
     <lombok.version>1.18.42</lombok.version>

@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sanlab.icecream.consul.mapper.CategoryMapper;
+import sanlab.icecream.consul.repository.crud.FeedbackRepository;
 import sanlab.icecream.fundamentum.contractmodel.request.CollectionQueryRequest;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
-import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.core.ImageDto;
+import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
 import sanlab.icecream.fundamentum.dto.exntended.ProductExtendedDto;
 import sanlab.icecream.consul.mapper.FeedbackMapper;
 import sanlab.icecream.consul.mapper.ImageMapper;
@@ -39,7 +40,6 @@ import java.util.stream.Collectors;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PRODUCT_NOT_FOUND;
 import static sanlab.icecream.fundamentum.utils.ObjectUtils.copyNotNull;
-import static sanlab.icecream.fundamentum.utils.RequestUtils.calculateTotalPage;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +51,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final StockRepository stockRepository;
     private final ProductESearchRepository productSearchRepository;
+    private final FeedbackRepository feedbackRepository;
 
     private final FeedbackMapper feedbackMapper;
     private final ProductMapper productMapper;
@@ -82,22 +83,6 @@ public class ProductService {
         return productRepository.findFirstBySlug(slug)
             .map(productMapper::entityToExtendedDto)
             .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "slug: %s".formatted(slug)));
-    }
-
-    @Transactional(readOnly = true)
-    public CollectionQueryResponse<FeedbackDto> getAllFeedbacks(UUID productId, Pageable pageable) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
-        long total = product.getFeedbacks().size();
-        List<FeedbackDto> feedbackList = product.getFeedbacks().parallelStream()
-            .map(feedbackMapper::entityToDto)
-            .toList();
-        return CollectionQueryResponse.<FeedbackDto>builder()
-            .total(total)
-            .page(pageable.getPageNumber())
-            .totalPages(calculateTotalPage(total, pageable.getPageSize()))
-            .data(feedbackList)
-            .build();
     }
 
     @Transactional(readOnly = true)

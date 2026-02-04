@@ -36,12 +36,14 @@ public enum ConsulErrorModel implements IcErrorModel {
     //endregion
 
     //region Service layer
+    SERVICE_UPDATE_FEEDBACK_FORBIDDEN("CONSUL-5000", "Customer does not have permission to update this feedback", 831),
     //endregion
 
     //region External service identity
     IDENTITY_IDENTITY_ADMIN_TOKEN_FAILED("CONSUL-3000", "Failed to get admin token", 810),
     IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED("CONSUL-3001", "Invalid request for updating user info", 811),
     IDENTITY_IDENTITY_SERVICE_UNAVAILABLE("CONSUL-3002", "Identity service currently not available", 812),
+    IDENTITY_CREATE_USER_REQUEST_FAILED("CONSUL-3003", "Invalid request for creating user", 813),
     //endregion
 
     //region External service payment

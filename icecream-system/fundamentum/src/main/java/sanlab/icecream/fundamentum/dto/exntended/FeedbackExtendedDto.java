@@ -18,5 +18,5 @@ import sanlab.icecream.fundamentum.dto.core.ProductDto;
 @AllArgsConstructor
 public class FeedbackExtendedDto extends FeedbackDto {
     private ProductDto product;
-    private CustomerDto customer;
+    private CustomerExtendedDto customer;
 }

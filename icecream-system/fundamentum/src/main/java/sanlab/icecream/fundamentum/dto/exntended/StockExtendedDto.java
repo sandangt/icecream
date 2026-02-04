@@ -9,8 +9,6 @@ import lombok.experimental.SuperBuilder;
 import sanlab.icecream.fundamentum.dto.core.AddressDto;
 import sanlab.icecream.fundamentum.dto.core.StockDto;
 
-import java.util.List;
-
 @SuperBuilder
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,5 +16,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StockExtendedDto extends StockDto {
-    private List<AddressDto> addresses;
+    private AddressDto address;
 }

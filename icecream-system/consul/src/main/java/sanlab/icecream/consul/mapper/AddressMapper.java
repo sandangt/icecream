@@ -1,5 +1,6 @@
 package sanlab.icecream.consul.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,6 +9,7 @@ import sanlab.icecream.fundamentum.dto.core.AddressDto;
 import sanlab.icecream.consul.model.Address;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
@@ -31,5 +33,12 @@ public interface AddressMapper {
     @IterableMapping(qualifiedByName = "dtoToEntity")
     List<Address> dtoToEntity(List<AddressDto> addressDtos);
     //endregion
+
+    @Named("singleOutAddress")
+    default AddressDto singleOutAddress(Set<Address> addresses) {
+        return addresses.stream().findFirst()
+            .map(this::entityToDto)
+            .orElse(null);
+    }
 
 }
