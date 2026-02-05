@@ -12,9 +12,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedbackDto {
-    protected UUID id;
-    protected String content;
-    protected Integer star;
-    protected Long createdAt;
-    protected Long modifiedAt;
+    private UUID id;
+    private String content;
+    private Integer star;
+    private Long createdAt;
+    private Long modifiedAt;
 }

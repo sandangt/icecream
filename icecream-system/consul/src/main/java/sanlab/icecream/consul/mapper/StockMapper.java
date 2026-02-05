@@ -34,7 +34,6 @@ public interface StockMapper {
 
     //region To Entity
     @Named("dtoToEntity")
-    @BeanMapping(ignoreByDefault = true)
     Stock dtoToEntity(StockDto stockDto);
 
     @Named("dtoToEntityIter")

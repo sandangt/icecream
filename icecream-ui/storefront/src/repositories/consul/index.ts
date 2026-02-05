@@ -11,8 +11,10 @@ import {
 } from './customers'
 import {
   requestCreateFeedback,
+  requestDeleteFeedback,
   requestFeedbackStatByProductId,
   requestFeedbacksByProductId,
+  requestUpdateFeedback,
 } from './feedbacks'
 import { requestCreateOrder } from './orders'
 import {
@@ -42,4 +44,6 @@ export {
   requestFeedbacksByProductId,
   requestFeedbackStatByProductId,
   requestCreateFeedback,
+  requestUpdateFeedback,
+  requestDeleteFeedback,
 }

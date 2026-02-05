@@ -47,7 +47,6 @@ public interface ProductMapper {
 
     //region To Entity
     @Named("dtoToEntity")
-    @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "status", source = "status", qualifiedByName = "eProductStatusToName")
     Product dtoToEntity(ProductDto productDto);
 

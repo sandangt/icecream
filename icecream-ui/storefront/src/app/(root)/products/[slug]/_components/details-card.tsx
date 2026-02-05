@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StarRating } from '@/components/ui/star-rating'
 import { ProductHelper } from '@/lib/helpers'
-import { FeedbackExtended, ProductExtended } from '@/models'
+import { ProductExtended } from '@/models'
 
 import { StockInfo } from './stock-info'
 

@@ -31,7 +31,7 @@ export const {
       const { session, token } = params
       const result = {
         ...session,
-        userId: token?.id,
+        userId: token?.sub,
         name: token?.name,
         email: token?.email,
         username: token?.preferred_username,

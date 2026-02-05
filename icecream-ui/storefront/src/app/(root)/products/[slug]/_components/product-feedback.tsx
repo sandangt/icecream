@@ -2,15 +2,34 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { ChevronsUpDown, MessageSquare, Pencil, PenSquare, Trash2, X } from 'lucide-react'
+import { ChevronsUpDown, MessageSquare, PenSquare, Pencil, Trash2, X } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { FC, useEffect, useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { PaginationProps, SortingProps } from '@/app/_models'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,13 +44,16 @@ import { Textarea } from '@/components/ui/textarea'
 import { DATETIME_FORMATS } from '@/lib/constants'
 import { CustomerHelper, ProductHelper, SessionHelper } from '@/lib/helpers'
 import { extractInitials } from '@/lib/utils'
-import { Feedback, FeedbackExtended, ProductExtended, Session } from '@/models'
-import { requestCreateFeedback, requestFeedbacksByProductId } from '@/repositories/consul'
+import { FeedbackExtended, FeedbackRequest, ProductExtended, Session } from '@/models'
+import {
+  requestCreateFeedback,
+  requestDeleteFeedback,
+  requestFeedbacksByProductId,
+  requestUpdateFeedback,
+} from '@/repositories/consul'
 import { FETCH_FEEDBACK_BY_PRODUCT_ID_WITH_PAGINATION_SORTING } from '@/repositories/query-keys'
 
 import { PaginationControlsClient } from '../../_components'
-import { useProfile } from '@/hooks'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 
 type Props = {
   product: ProductExtended
@@ -81,15 +103,15 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
   useEffect(() => {
     if (isSuccess) {
       const { data, totalPages, total } = feedbackResponse
-      setFeedbackList(data)
       setPaginationObj({
         ...paginationObj,
         totalPages: totalPages,
         totalItems: total,
       })
+      setFeedbackList(data)
     }
   }, [feedbackResponse, isSuccess])
-  const [showForm, setShowForm] = useState(false)
+  const [showCreateForm, setShowCreateForm] = useState(false)
   const {
     control,
     handleSubmit,
@@ -103,19 +125,58 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
   const ratingValue = useWatch({ control, name: 'rating' })
   const contentValue = useWatch({ control, name: 'content' })
   const { mutate: createFeedbackMutate } = useMutation({
-    mutationFn: async (payload: {
-      session: Session
-      productId: string
-      star: number
-      content: string
-    }) => requestCreateFeedback(payload),
+    mutationFn: async ({ session, payload }: { session: Session; payload: FeedbackRequest }) =>
+      requestCreateFeedback(session, payload),
     onSuccess: () => {
-      setShowForm(false)
+      setShowCreateForm(false)
       reset()
       toast.success('Thank you for your review!')
     },
   })
-  const [editingFeedback, setEditingFeedback] = useState<Feedback | null>(null)
+  const { mutate: updateFeedbackMutate } = useMutation({
+    mutationFn: async ({ session, payload }: { session: Session; payload: FeedbackRequest }) =>
+      requestUpdateFeedback(session, payload),
+    onSuccess: (data: FeedbackExtended) => {
+      const updatedItems = feedbackList.map((item) => {
+        if (item.id === feedbackToEdit) {
+          return {
+            ...item,
+            star: data.star,
+            content: data.content,
+            modifiedAt: data.modifiedAt,
+            createdAt: data.createdAt,
+          }
+        }
+        return item
+      })
+      setFeedbackList(updatedItems)
+      setFeedbackToEdit(null)
+      toast.success('Your review has been successfully updated.')
+    },
+    onError: () => {
+      toast.error('Failed to update review')
+    },
+  })
+  const { mutate: deleteFeedbackMutate } = useMutation({
+    mutationFn: async ({
+      session,
+      productId,
+      feedbackId,
+    }: {
+      session: Session
+      productId: string
+      feedbackId: string
+    }) => requestDeleteFeedback(session, productId, feedbackId),
+    onSuccess: () => {
+      setFeedbackList(feedbackList.filter((item) => item.id !== feedbackToDelete))
+      setFeedbackToDelete(null)
+      toast.success('Your feedback has been removed.')
+    },
+    onError: () => {
+      toast.error('Failed to delete review')
+    },
+  })
+  const [feedbackToEdit, setFeedbackToEdit] = useState<string | null>(null)
   const [feedbackToDelete, setFeedbackToDelete] = useState<string | null>(null)
 
   const onPageChange = (page: number) => {
@@ -125,16 +186,53 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
     })
   }
 
-  const onFeedbackSubmit = ({ rating, content }: FeedbackFormProps) => {
-    if (rating === 0 || !content.trim()) {
-      toast.error('Please provide a rating and a comment.')
+  const onCreateFeedbackSubmit = ({ rating, content }: FeedbackFormProps) => {
+    if (!rating || !content.trim()) {
+      toast.warning('Please provide a rating and a comment.')
       return
     }
     createFeedbackMutate({
       session: sessionHelper.dataClient(),
+      payload: {
+        productId: productHelper.id,
+        star: rating,
+        content,
+      },
+    })
+  }
+
+  const handleEditRequest = (feedbackId: string) => {
+    setFeedbackToEdit(feedbackId)
+  }
+
+  const handleDeleteRequest = (feedbackId: string) => {
+    setFeedbackToDelete(feedbackId)
+  }
+
+  const onUpdateFeedbackSubmit = ({ rating, content }: FeedbackFormProps) => {
+    if (!feedbackToEdit) return
+
+    if (!rating || !content.trim()) {
+      toast.warning('Please provide a rating and a comment.')
+      return
+    }
+    updateFeedbackMutate({
+      session: sessionHelper.dataClient(),
+      payload: {
+        productId: productHelper.id,
+        star: rating,
+        content,
+        id: feedbackToEdit,
+      },
+    })
+  }
+
+  const handleDeleteConfirm = () => {
+    if (!feedbackToDelete) return
+    deleteFeedbackMutate({
+      session: sessionHelper.dataClient(),
       productId: productHelper.id,
-      star: rating,
-      content,
+      feedbackId: feedbackToDelete,
     })
   }
 
@@ -221,9 +319,13 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
             </DropdownMenuContent>
           </DropdownMenu>
           {sessionHelper.isLoggedInClient() ? (
-            <Button onClick={() => setShowForm(!showForm)} variant="outline">
-              {showForm ? <X className="mr-2 h-4 w-4" /> : <PenSquare className="mr-2 h-4 w-4" />}
-              {showForm ? 'Cancel' : 'Write a Review'}
+            <Button onClick={() => setShowCreateForm(!showCreateForm)} variant="outline">
+              {showCreateForm ? (
+                <X className="mr-2 h-4 w-4" />
+              ) : (
+                <PenSquare className="mr-2 h-4 w-4" />
+              )}
+              {showCreateForm ? 'Cancel' : 'Write a Review'}
             </Button>
           ) : null}
         </div>
@@ -231,9 +333,9 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
 
       <Separator className="my-6" />
 
-      {showForm && (
+      {showCreateForm ? (
         <form
-          onSubmit={handleSubmit(onFeedbackSubmit)}
+          onSubmit={handleSubmit(onCreateFeedbackSubmit)}
           className="p-4 mb-6 border rounded-lg bg-secondary/30"
         >
           <h3 className="text-lg font-semibold mb-3">Your Review</h3>
@@ -257,7 +359,7 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
             {isSubmitting ? 'Submitting ...' : 'Submit Review'}
           </Button>
         </form>
-      )}
+      ) : null}
       {isSuccess ? (
         <>
           <ScrollArea className="h-[800px] pr-4">
@@ -265,7 +367,11 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
               {feedbackList.length > 0 ? (
                 feedbackList.map((feedback, index) => (
                   <div key={feedback.id}>
-                    <FeedbackItem feedback={feedback} />
+                    <FeedbackItem
+                      feedback={feedback}
+                      onEdit={handleEditRequest}
+                      onDelete={handleDeleteRequest}
+                    />
                     {index < feedbackList.length - 1 && <Separator />}
                   </div>
                 ))
@@ -289,12 +395,52 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
       ) : (
         <Spinner />
       )}
-      {/* <AlertDialog open={!!feedbackToDelete} onOpenChange={(open) => !open && setFeedbackToDelete(null)}>
+
+      <Dialog open={!!feedbackToEdit} onOpenChange={(open) => !open && setFeedbackToEdit(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Your Review</DialogTitle>
+            <DialogDescription>Update your rating and comment for this product.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(onUpdateFeedbackSubmit)} className="space-y-4 pt-4">
+            <div>
+              <p className="text-sm font-medium mb-2">Your rating</p>
+              <Controller
+                name="rating"
+                control={control}
+                render={({ field }) => (
+                  <StarRating rating={field.value} onRatingChange={field.onChange} size={24} />
+                )}
+              />
+            </div>
+            <Textarea
+              {...register('content')}
+              placeholder="Share your thoughts about the product..."
+              className="mb-4 bg-background"
+              disabled={isSubmitting}
+            />
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button type="submit">Update Review</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={!!feedbackToDelete}
+        onOpenChange={(open) => !open && setFeedbackToDelete(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to delete this review?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently remove your feedback from the server.
+              This action cannot be undone. This will permanently remove your feedback from the
+              server.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -307,7 +453,7 @@ export const ProductFeedback: FC<Props> = ({ product, averageStar, totalFeedback
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog> */}
+      </AlertDialog>
     </>
   )
 }
@@ -321,10 +467,11 @@ type FeedbackItemProps = {
 const FeedbackItem = ({ feedback, onDelete, onEdit }: FeedbackItemProps) => {
   const { customer, star, content, createdAt, id } = feedback
   const customerHelper = new CustomerHelper(customer)
-  const { getProfile } = useProfile()
   const session = useSession()
   const sessionHelper = new SessionHelper(session)
-  const isOwner = sessionHelper.isLoggedInClient() && getProfile()?.userId === customerHelper.orElseNull()?.userId
+  const isOwner =
+    sessionHelper.isLoggedInClient() &&
+    sessionHelper.dataClientOrNull()?.userId === customerHelper.orElseNull()?.userId
 
   return (
     <div className="flex gap-4 py-4">
@@ -346,7 +493,12 @@ const FeedbackItem = ({ feedback, onDelete, onEdit }: FeedbackItemProps) => {
                 <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onEdit(id)}>
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => onDelete(id)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 text-destructive hover:text-destructive"
+                  onClick={() => onDelete(id)}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>

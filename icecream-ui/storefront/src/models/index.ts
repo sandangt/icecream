@@ -20,6 +20,7 @@ import type {
 import type {
   CreateOrderItemRequest,
   CreateOrderRequest,
+  FeedbackRequest,
   FiltersRequest,
   PaginationRequest,
   RequestAllParams,
@@ -55,4 +56,5 @@ export {
   Stock,
   StockExtended,
   FeedbackStat,
+  FeedbackRequest,
 }

@@ -9,7 +9,6 @@ import sanlab.icecream.consul.model.Customer;
 import sanlab.icecream.consul.model.Product;
 import sanlab.icecream.consul.repository.crud.CustomerRepository;
 import sanlab.icecream.consul.repository.crud.ProductRepository;
-import sanlab.icecream.consul.utils.SecurityContextUtils;
 import sanlab.icecream.fundamentum.dto.aggregated.FeedbackStatDto;
 import sanlab.icecream.fundamentum.dto.core.FeedbackDto;
 import sanlab.icecream.fundamentum.dto.exntended.FeedbackExtendedDto;
@@ -20,6 +19,7 @@ import sanlab.icecream.fundamentum.contractmodel.response.CollectionQueryRespons
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CUSTOMER_NOT_FOUND;
@@ -86,10 +86,9 @@ public class FeedbackService {
     }
 
     @Transactional
-    public FeedbackExtendedDto create(UUID productId, FeedbackDto request) {
-        var userDetails = SecurityContextUtils.getRegisteredUserInfo();
-        Customer customer = customerRepository.findFirstByUserId(UUID.fromString(userDetails.getSub()))
-            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(userDetails.getSub())));;
+    public FeedbackExtendedDto create(UUID userId, UUID productId, FeedbackDto request) {
+        Customer customer = customerRepository.findFirstByUserId(userId)
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(userId)));;
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(productId)));
         Feedback feedback = Feedback.builder()
@@ -107,15 +106,14 @@ public class FeedbackService {
     }
 
     @Transactional
-    public FeedbackExtendedDto update(UUID id, FeedbackDto request) {
-        var userDetails = SecurityContextUtils.getRegisteredUserInfo();
-        Feedback targetFeedback = feedbackRepository.findById(id)
-            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
+    public FeedbackExtendedDto update(UUID userId, FeedbackDto request) {
+        Feedback targetFeedback = feedbackRepository.findById(request.getId())
+            .orElseThrow(() -> new IcRuntimeException(REPOSITORY_FEEDBACK_NOT_FOUND, "id: %s".formatted(request.getId())));
         Customer customer = targetFeedback.getCustomer();
-        if (customer.getUserId() != UUID.fromString(userDetails.getSub())) {
+        if (!Objects.equals(customer.getUserId(), userId)) {
             throw new IcRuntimeException(SERVICE_UPDATE_FEEDBACK_FORBIDDEN, null,
                 "Feedback ID: %s".formatted(targetFeedback.getId()),
-                "Customer ID: %s".formatted(customer.getUserId())
+                "Customer User ID: %s".formatted(customer.getUserId())
             );
         }
         try {
@@ -128,15 +126,27 @@ public class FeedbackService {
     }
 
     @Transactional
-    public FeedbackExtendedDto delete(UUID id) {
-        Feedback feedback = feedbackRepository.findById(id)
+    public FeedbackExtendedDto delete(UUID userId, UUID id, UUID feedbackId) {
+        if (!customerRepository.existsByUserId(userId)) {
+            throw new IcRuntimeException(REPOSITORY_CUSTOMER_NOT_FOUND, "id: %s".formatted(userId));
+        }
+        if (!productRepository.existsById(id)) {
+            throw new IcRuntimeException(REPOSITORY_PRODUCT_NOT_FOUND, "id: %s".formatted(id));
+        }
+        Feedback feedback = feedbackRepository.findById(feedbackId)
             .orElseThrow(() -> new IcRuntimeException(REPOSITORY_FEEDBACK_NOT_FOUND, "id: %s".formatted(id)));
+        Customer customer = feedback.getCustomer();
+        if (!Objects.equals(customer.getUserId(), userId)) {
+            throw new IcRuntimeException(SERVICE_UPDATE_FEEDBACK_FORBIDDEN, null,
+                "Feedback ID: %s".formatted(feedback.getId()),
+                "Customer User ID: %s".formatted(userId)
+            );
+        }
         try {
-            feedbackRepository.deleteById(id);
+            feedbackRepository.deleteById(feedbackId);
             return feedbackMapper.entityToExtendedDto(feedback);
         } catch (Exception ex) {
             throw new IcRuntimeException(ex, REPOSITORY_PERSIST_DATA_FAILED, "feedback");
         }
     }
-
 }

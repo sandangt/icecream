@@ -2,8 +2,10 @@ package sanlab.icecream.consul.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.exception.HttpForbiddenException;
 import sanlab.icecream.consul.exception.HttpServiceUnavailableException;
 import sanlab.icecream.consul.exception.HttpUnauthorizedException;
 import sanlab.icecream.consul.service.FeedbackService;
@@ -34,6 +37,7 @@ import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_CUSTO
 import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_FEEDBACK_NOT_FOUND;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PERSIST_DATA_FAILED;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.REPOSITORY_PRODUCT_NOT_FOUND;
+import static sanlab.icecream.consul.exception.ConsulErrorModel.SERVICE_UPDATE_FEEDBACK_FORBIDDEN;
 import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.HAS_ROLE_NORMIE;
 import static sanlab.icecream.fundamentum.constant.EPreAuthorizeRole.PERMIT_ALL;
 
@@ -101,8 +105,9 @@ public class ProductController {
     public ResponseEntity<FeedbackExtendedDto> create(@PathVariable UUID id,
                                                     @Valid @RequestBody FeedbackDto requestBody) {
         try {
-            var result = feedbackService.create(id, requestBody);
-            return ResponseEntity.ok(result);
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = feedbackService.create(UUID.fromString(userDetails.getSub()), id, requestBody);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
@@ -116,16 +121,36 @@ public class ProductController {
 
     @PutMapping("/{id}/feedbacks")
     @PreAuthorize(HAS_ROLE_NORMIE)
-    public ResponseEntity<FeedbackExtendedDto> update(@PathVariable UUID id,
-                                                      @Valid @RequestBody FeedbackDto requestBody) {
+    public ResponseEntity<FeedbackExtendedDto> update(@Valid @RequestBody FeedbackDto requestBody) {
         try {
-            var result = feedbackService.update(id, requestBody);
-            return ResponseEntity.ok(result);
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = feedbackService.update(UUID.fromString(userDetails.getSub()), requestBody);
+            return ResponseEntity.accepted().body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch (error) {
                 case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case SERVICE_UPDATE_FEEDBACK_FORBIDDEN -> new HttpForbiddenException(ex);
                 case REPOSITORY_FEEDBACK_NOT_FOUND -> new HttpNotFoundException(ex);
+                case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
+                default -> new HttpInternalServerErrorException(ex);
+            };
+        }
+    }
+
+    @DeleteMapping("/{id}/feedbacks/{feedbackId}")
+    @PreAuthorize(HAS_ROLE_NORMIE)
+    public ResponseEntity<FeedbackExtendedDto> delete(@PathVariable UUID id, @PathVariable UUID feedbackId) {
+        try {
+            var userDetails = SecurityContextUtils.getRegisteredUserInfo();
+            var result = feedbackService.delete(UUID.fromString(userDetails.getSub()), id, feedbackId);
+            return ResponseEntity.accepted().body(result);
+        } catch (IcRuntimeException ex) {
+            var error = ex.getError();
+            throw switch (error) {
+                case REPOSITORY_CUSTOMER_NOT_FOUND -> new HttpUnauthorizedException(ex);
+                case REPOSITORY_PRODUCT_NOT_FOUND, REPOSITORY_FEEDBACK_NOT_FOUND -> new HttpNotFoundException(ex);
+                case SERVICE_UPDATE_FEEDBACK_FORBIDDEN -> new HttpForbiddenException(ex);
                 case REPOSITORY_PERSIST_DATA_FAILED -> new HttpServiceUnavailableException(ex);
                 default -> new HttpInternalServerErrorException(ex);
             };

@@ -8,6 +8,7 @@ import {
   RequestAllResult,
   Session,
 } from '@/models'
+import { FeedbackRequest } from '@/models'
 import { CONSUL_URL } from '@/settings'
 
 export const requestFeedbacksByProductId = async ({
@@ -43,18 +44,32 @@ export const requestFeedbackStatByProductId = async (productId: string): Promise
   }
 }
 
-export const requestCreateFeedback = async ({
-  session,
-  productId,
-  star,
-  content,
-}: {
-  session: Session
-  productId: string
-  star: number
-  content: string
-}) => {
+export const requestCreateFeedback = async (
+  session: Session,
+  payload: FeedbackRequest,
+): Promise<FeedbackExtended> => {
+  const { productId } = payload
   const extendedPath = [API_PATHS.PRODUCT, productId, 'feedbacks']
   const url = generateUrl(CONSUL_URL, extendedPath)
-  return await api.post<FeedbackExtended>(url, session, { productId, star, content })
+  return await api.post<FeedbackExtended>(url, session, payload)
+}
+
+export const requestUpdateFeedback = async (
+  session: Session,
+  payload: FeedbackRequest,
+): Promise<FeedbackExtended> => {
+  const { productId } = payload
+  const extendedPath = [API_PATHS.PRODUCT, productId, 'feedbacks']
+  const url = generateUrl(CONSUL_URL, extendedPath)
+  return await api.put<FeedbackExtended>(url, session, payload)
+}
+
+export const requestDeleteFeedback = async (
+  session: Session,
+  productId: string,
+  feedbackId: string,
+): Promise<FeedbackExtended> => {
+  const extendedPath = [API_PATHS.PRODUCT, productId, 'feedbacks', feedbackId]
+  const url = generateUrl(CONSUL_URL, extendedPath)
+  return await api.delete<FeedbackExtended>(url, session, undefined)
 }
