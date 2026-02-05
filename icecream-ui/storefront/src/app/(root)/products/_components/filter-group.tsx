@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Category } from '@/models/core'
+import { Category } from '@/models'
 
 type Props = {
   path: string

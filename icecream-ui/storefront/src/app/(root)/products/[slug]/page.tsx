@@ -1,11 +1,18 @@
+import { ChevronLeft } from 'lucide-react'
 import { NextPage } from 'next'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
+import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/lib/constants'
 import { ProductHelper } from '@/lib/helpers'
-import { requestProductBySlug } from '@/repositories/consul'
+import {
+  requestFeedbackStatByProductId,
+  requestFeedbacksByProductId,
+  requestProductBySlug,
+} from '@/repositories/consul'
 
-import { DetailsProductCard } from '../../_components'
+import { DetailsProductCard, ExtraTabs } from './_components'
 
 type Props = {
   params: {
@@ -14,8 +21,7 @@ type Props = {
 }
 
 const Page: NextPage<Props> = async ({ params }) => {
-  const { slug } = await params
-
+  const { slug } = params
   const product = await requestProductBySlug(slug)
   const productService = new ProductHelper(product)
 
@@ -23,29 +29,34 @@ const Page: NextPage<Props> = async ({ params }) => {
     redirect(ROUTES.PRODUCT_NOT_FOUND)
   }
 
-  // const relatedProducts = products
-  //   .filter((p) => p.category === product.category && p.id !== product.id)
-  //   .slice(0, 4)
+  const { averageStar, total: totalFeedbacks } = await requestFeedbackStatByProductId(
+    productService.id,
+  )
 
   return (
     <div className="space-y-12">
-      <DetailsProductCard data={productService.get()} />
-
-      {/* {relatedProducts.length > 0 && (
-        <section>
-          <Separator className="my-12" />
-          <h2 className="text-3xl font-headline font-semibold text-foreground mb-8">
-            Related Products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {relatedProducts.map((relatedProduct) => (
-              <ProductCard key={relatedProduct.id} data={relatedProduct} />
-            ))}
-          </div>
-        </section>
-      )} */}
+      <BackToProductsBtn />
+      <DetailsProductCard
+        product={productService.get()}
+        totalFeedbacks={totalFeedbacks}
+        averageStar={averageStar}
+      />
+      <ExtraTabs
+        product={productService.get()}
+        totalFeedbacks={totalFeedbacks}
+        averageStar={averageStar}
+      />
+      {/* <RelatedProducts /> */}
     </div>
   )
 }
 
 export default Page
+
+const BackToProductsBtn = () => (
+  <Button variant="outline" asChild className="mb-6">
+    <Link href={ROUTES.PRODUCTS}>
+      <ChevronLeft className="mr-2 h-4 w-4" /> Back to Products
+    </Link>
+  </Button>
+)

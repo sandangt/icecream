@@ -75,6 +75,8 @@ export interface Stock {
   id: string
   quantity: number
   reservedQuantity: number
+  createdAt: number
+  modifiedAt: number
 }
 
 export interface CartItem {
@@ -88,6 +90,14 @@ export interface Cart {
   cartItems: CartItem[]
   totalItems?: number
   totalCost?: number
+}
+
+export interface Feedback {
+  id: string
+  content: string
+  star: number
+  createdAt: number
+  modifiedAt: number
 }
 
 export interface NotificationMessage {
@@ -108,12 +118,29 @@ export interface CategoryExtended extends Category {
 export interface ProductExtended extends Product {
   categories: Category[]
   media: Media[]
-  stocks: Stock[]
+  stocks: StockExtended[]
 }
 
 export interface CustomerExtended extends Customer {
   media: Media[]
   addresses: Address[]
   primaryAddress: Address
+}
+
+export interface FeedbackExtended extends Feedback {
+  product: Product
+  customer: CustomerExtended
+}
+
+export interface StockExtended extends Stock {
+  address: Address
+}
+//#endregion
+
+//#region Aggregated
+export interface FeedbackStat {
+  productId: string
+  total: number
+  averageStar: number
 }
 //#endregion

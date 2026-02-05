@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 import sanlab.icecream.fundamentum.dto.core.CategoryDto;
 import sanlab.icecream.fundamentum.dto.core.ImageDto;
 import sanlab.icecream.fundamentum.dto.core.ProductDto;
-import sanlab.icecream.fundamentum.dto.core.StockDto;
 
 import java.util.List;
 
@@ -22,6 +21,6 @@ import java.util.List;
 public class ProductExtendedDto extends ProductDto {
     private List<CategoryDto> categories;
     private List<ImageDto> media;
-    private List<StockDto> stocks;
+    private List<StockExtendedDto> stocks;
     private ImageDto featuredBanner;
 }

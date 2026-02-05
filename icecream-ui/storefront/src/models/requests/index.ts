@@ -1,6 +1,10 @@
 import type { FiltersRequest, PaginationRequest, RequestAllParams, SortingRequest } from './all'
-import type { UpdateProfileRequest } from './customer'
-import type { CreateOrderItemRequest, CreateOrderRequest } from './order'
+import type {
+  CreateOrderItemRequest,
+  CreateOrderRequest,
+  FeedbackRequest,
+  UpdateProfileRequest,
+} from './consul'
 
 export {
   PaginationRequest,
@@ -10,4 +14,5 @@ export {
   UpdateProfileRequest,
   CreateOrderItemRequest,
   CreateOrderRequest,
+  FeedbackRequest,
 }

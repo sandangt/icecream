@@ -18,15 +18,28 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @NotNull
     Page<Product> findAll(@NotNull Pageable pageable);
+
     Page<Product> findAllByIsFeaturedTrue(@NotNull Pageable pageable);
+
     long countByIsFeaturedTrue();
+
     Optional<Product> findFirstByOrderByName();
+
     Optional<Product> findFirstBySlug(String slug);
+
     List<Product> findAllByIdIn(List<UUID> ids);
+
     boolean existsById(UUID id);
+
     @Query("SELECT img FROM Product p JOIN p.media img WHERE p.id = :id")
     Set<Image> findAllMediaById(@Param("id") UUID id);
+
     @Query("SELECT img FROM Product p JOIN p.featuredBanner img WHERE p.id = :id ORDER BY img.id ASC")
     Optional<Image> findFirstFeaturedBannerById(@Param("id") UUID id);
 
+    @Query(value = "SELECT p.id FROM product p ORDER BY created_at DESC", nativeQuery = true)
+    List<UUID> findAllId();
+
+    @Query(value = "SELECT * FROM product ORDER BY created_at DESC LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Product> findWithOffsetLimit(@Param("offset") int offset, @Param("limit") int limit);
 }

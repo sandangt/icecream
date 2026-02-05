@@ -31,7 +31,6 @@ public interface FeedbackMapper {
 
     //region To Entity
     @Named("dtoToEntity")
-    @BeanMapping(ignoreByDefault = true)
     Feedback dtoToEntity(FeedbackDto feedbackDto);
 
     @Named("dtoToEntityIter")

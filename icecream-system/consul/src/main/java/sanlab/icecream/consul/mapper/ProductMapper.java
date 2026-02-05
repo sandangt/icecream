@@ -12,7 +12,7 @@ import sanlab.icecream.fundamentum.dto.core.ProductDto;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { SharedMapper.class, CategoryMapper.class, ImageMapper.class, StockMapper.class })
+@Mapper(componentModel = "spring", uses = { SharedMapper.class, CategoryMapper.class, ImageMapper.class, StockMapper.class, AddressMapper.class })
 public interface ProductMapper {
 
     //region To DTO
@@ -26,6 +26,7 @@ public interface ProductMapper {
 
     @Named("entityToExtendedDto")
     @Mapping(target = "status", source = "status", qualifiedByName = "nameToEProductStatus")
+    @Mapping(target = "stocks", source = "stocks", qualifiedByName = "entityToExtendedDtoIter")
     ProductExtendedDto entityToExtendedDto(Product product);
 
     @Named("entityToExtendedDtoIter")
@@ -46,7 +47,6 @@ public interface ProductMapper {
 
     //region To Entity
     @Named("dtoToEntity")
-    @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "status", source = "status", qualifiedByName = "eProductStatusToName")
     Product dtoToEntity(ProductDto productDto);
 

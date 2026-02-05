@@ -53,7 +53,7 @@ public class CartController {
         try {
             var userDetails = SecurityContextUtils.getRegisteredUserInfo();
             var result = service.upsert(UUID.fromString(userDetails.getSub()), payload);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.accepted().body(result);
         } catch (IcRuntimeException ex) {
             var error = ex.getError();
             throw switch(error) {

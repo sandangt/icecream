@@ -1,3 +1,4 @@
-import { DetailsProductCard, ProductCard } from './product-card'
+import { AddToCartButton } from './cart'
+import { ProductCard } from './product-card'
 
-export { ProductCard, DetailsProductCard }
+export { ProductCard, AddToCartButton }

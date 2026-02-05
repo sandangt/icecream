@@ -1,4 +1,4 @@
 import { FilterGroup } from './filter-group'
-import { PaginationControls } from './pagination-controls'
+import { PaginationControls, PaginationControlsClient } from './pagination-controls-wrapper'
 
-export { PaginationControls, FilterGroup }
+export { PaginationControls, FilterGroup, PaginationControlsClient }

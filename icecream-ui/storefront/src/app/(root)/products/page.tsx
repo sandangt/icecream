@@ -87,7 +87,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
           </p>
         </div>
       )}
-      <PaginationControls currentPage={page} totalPages={totalPages} />
+      <PaginationControls currentPage={page} totalPages={totalPages} showControls={true} />
     </div>
   )
 }

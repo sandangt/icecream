@@ -7,15 +7,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import sanlab.icecream.consul.dto.keycloak.KeycloakCreateUserDto;
 import sanlab.icecream.consul.dto.keycloak.TokenResponseDto;
-import sanlab.icecream.consul.dto.keycloak.KeycloakUserInfoDto;
+import sanlab.icecream.consul.dto.keycloak.KeycloakUpdateUserInfoDto;
 import sanlab.icecream.consul.repository.restclient.IdentityRepository;
 import sanlab.icecream.fundamentum.exception.IcRuntimeException;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_CREATE_USER_REQUEST_FAILED;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_IDENTITY_ADMIN_TOKEN_FAILED;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED;
 import static sanlab.icecream.consul.exception.ConsulErrorModel.IDENTITY_IDENTITY_SERVICE_UNAVAILABLE;
@@ -63,14 +66,14 @@ public class IdentityRepositoryImpl implements IdentityRepository {
     }
 
     @Override
-    public Optional<KeycloakUserInfoDto> getUserInfoByUserId(UUID userId) {
+    public Optional<KeycloakUpdateUserInfoDto> getUserInfoByUserId(UUID userId) {
         var adminToken = adminLogin();
         try {
             var response = identityClient.get()
                 .uri("/admin/realms/%s/users/%s".formatted(this.realm, userId))
                 .header("Authorization", BEARER_TOKEN.formatted(adminToken.getAccessToken()))
                 .retrieve()
-                .body(KeycloakUserInfoDto.class);
+                .body(KeycloakUpdateUserInfoDto.class);
             return Optional.ofNullable(response);
         } catch (HttpClientErrorException ex) {
             return Optional.empty();
@@ -78,7 +81,7 @@ public class IdentityRepositoryImpl implements IdentityRepository {
     }
 
     @Override
-    public void updateUserInfoByUserId(UUID userId, KeycloakUserInfoDto payload) {
+    public void updateUserInfoByUserId(UUID userId, KeycloakUpdateUserInfoDto payload) {
         var adminToken = adminLogin();
         identityClient.put()
             .uri("/admin/realms/%s/users/%s".formatted(this.realm, userId))
@@ -88,6 +91,24 @@ public class IdentityRepositoryImpl implements IdentityRepository {
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
                 throw new IcRuntimeException(IDENTITY_UPDATE_USER_INFO_REQUEST_FAILED);
+            })
+            .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
+                throw new IcRuntimeException(IDENTITY_IDENTITY_SERVICE_UNAVAILABLE);
+            })
+            .toBodilessEntity();
+    }
+
+    @Override
+    public void createUserUnverified(KeycloakCreateUserDto.Tidy payload) {
+        var adminToken = adminLogin();
+        identityClient.post()
+            .uri("/admin/realms/%s/users".formatted(this.realm))
+            .header("Authorization", BEARER_TOKEN.formatted(adminToken.getAccessToken()))
+            .body(KeycloakCreateUserDto.extractFromTidyUnverified(payload))
+            .contentType(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
+                throw new IcRuntimeException(IDENTITY_CREATE_USER_REQUEST_FAILED);
             })
             .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
                 throw new IcRuntimeException(IDENTITY_IDENTITY_SERVICE_UNAVAILABLE);

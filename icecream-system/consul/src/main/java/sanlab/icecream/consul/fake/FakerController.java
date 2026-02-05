@@ -10,18 +10,22 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sanlab.icecream.consul.dto.keycloak.KeycloakCreateUserDto;
 import sanlab.icecream.consul.model.Address;
 import sanlab.icecream.consul.model.Category;
 import sanlab.icecream.consul.model.Customer;
+import sanlab.icecream.consul.model.Feedback;
 import sanlab.icecream.consul.model.Image;
 import sanlab.icecream.consul.model.Product;
 import sanlab.icecream.consul.model.Stock;
 import sanlab.icecream.consul.repository.crud.AddressRepository;
 import sanlab.icecream.consul.repository.crud.CategoryRepository;
 import sanlab.icecream.consul.repository.crud.CustomerRepository;
+import sanlab.icecream.consul.repository.crud.FeedbackRepository;
 import sanlab.icecream.consul.repository.crud.ImageRepository;
 import sanlab.icecream.consul.repository.crud.ProductRepository;
 import sanlab.icecream.consul.repository.crud.StockRepository;
+import sanlab.icecream.consul.repository.restclient.IdentityRepository;
 import sanlab.icecream.consul.service.ImageService;
 import sanlab.icecream.consul.viewmodel.request.IcMultipartFileRequest;
 import sanlab.icecream.fundamentum.constant.ECustomerStatus;
@@ -40,9 +44,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,42 +71,49 @@ public class FakerController {
     private final StockRepository stockRepository;
     private final CustomerRepository customerRepository;
     private final ImageService imageService;
+    private final FeedbackRepository feedbackRepository;
+    private final IdentityRepository identityRepository;
+    private final Faker faker = new Faker();
 
     @Value("${app.temp-dir:''}")
     private String tmpDir;
 
     private static final String LOREM_IMAGE_ENTITY_PATH = "lorem";
     private static final String IMAGE_EXT = "jpg";
+    private static final String SEED_USER_PASSWORD = "loremIpsumUser1234";
     private final Slugify slugMaker = Slugify.builder().build();
-
-    public Faker getFaker() {
-        return new Faker();
-    }
 
     @PostMapping("/seed")
     public ResponseEntity<Void> seedData() {
-        seedImage(8326);
-        seedAddress(7512);
         seedCategory(8);
         seedProduct(1000);
-        seedStock(3101);
-        seedCustomer(1);
-        seedProductImage();
         seedProductCategory();
-        seedCategoryImage();
-        seedStockAddress();
-        seedProductStock();
-        seedCustomerImage();
+        seedCustomer(300);
         return ResponseEntity.ok().build();
     }
 
-    private void seedProduct(int number) {
-        if (productRepository.count() > 0) {
-            return;
+    private void seedCategory(int number) {
+        Set<String> existingNames = new HashSet<>();
+        List<Category> categoryList = IntStream.range(0, number).mapToObj(ignore -> {
+            String name;
+            do {
+                name = faker.funnyName().name();
+            } while (existingNames.contains(slugMaker.slugify(name)));
+            existingNames.add(name);
+            return new Category(name, faker.lorem().characters(5, 50));
+        }).toList();
+        for (var category : categoryList) {
+            try {
+                Image img = generateImage(null);
+                category.setAvatar(img);
+            } catch (IOException ignored) {}
         }
-        var faker = getFaker();
+        categoryRepository.saveAll(categoryList);
+        LogUtils.logInfo(log, "=== seedCategory finished ===");
+    }
 
-        var result = IntStream.range(0, number).mapToObj(ignore -> {
+    private void seedProduct(int number) {
+        List<Product> productList = IntStream.range(0, number).mapToObj(ignore -> {
             long quantity = faker.number().numberBetween(0, 1_000_000L);
             EProductStatus status = quantity == 0 ? UNAVAILABLE : AVAILABLE;
             String name = faker.funnyName().name();
@@ -119,83 +131,36 @@ public class FakerController {
                 .metaKeyword(faker.lorem().characters(3, 10))
                 .metaDescription(faker.lorem().paragraph(5))
                 .build();
-        }).toList();
-        productRepository.saveAll(result);
-        LogUtils.logInfo(log, "seedProduct finished");
-    }
-
-    private void seedCategory(int number) {
-        if (categoryRepository.count() > 0) {
-            return;
-        }
-        var faker = getFaker();
-        Set<String> existingNames = new HashSet<>();
-        var result = IntStream.range(0, number).mapToObj(ignore -> {
-            String name;
-            do {
-                name = faker.funnyName().name();
-            } while (existingNames.contains(slugMaker.slugify(name)));
-            existingNames.add(name);
-            return new Category(name, faker.lorem().characters(5, 50));
-        }).toList();
-        categoryRepository.saveAll(result);
-        LogUtils.logInfo(log, "seedCategory finished");
-    }
-
-    private void seedImage(int number) {
-        if (imageRepository.count() > 0) {
-            return;
-        }
-        IntStream.range(0, number).forEach(ignore -> {
+        }).map(Product.class::cast).toList();
+        for (var product : productList) {
+            //#region Generate images
             try {
-                generateImage();
-            } catch (IOException ignored) {}
-        });
-        LogUtils.logInfo(log, "seedImage finished");
-    }
-
-    private void seedAddress(int number) {
-        if (addressRepository.count() > 0) {
-            return;
+                int imageNum = faker.number().numberBetween(1, 10);
+                Image avatar = generateImage(EImageType.AVATAR);
+                Set<Image> imgSet = IntStream.range(0, imageNum).mapToObj(ignore -> {
+                    try {
+                        return generateImage(null);
+                    } catch (IOException _) {
+                        return null;
+                    }
+                }).filter(Objects::nonNull).collect(Collectors.toSet());
+                imgSet.add(avatar);
+                product.setMedia(imgSet);
+            } catch (IOException _) {}
+            //#endregion
+            //#region Generate stocks
+            int stockNum = faker.number().numberBetween(1, 10);
+            List<Stock> stockList = IntStream.range(0, stockNum)
+                .mapToObj(ignore -> generateStock())
+                .toList();
+            product.setStocks(stockList);
+            //#endregion
         }
-        var faker = getFaker();
-        var result = IntStream.range(0, number).mapToObj(ignore -> Address.builder()
-            .contactName(faker.funnyName().name())
-            .phone(faker.phoneNumber().cellPhone())
-            .addressLine1(faker.address().fullAddress())
-            .addressLine2(faker.address().fullAddress())
-            .city(faker.address().city())
-            .zipCode(faker.address().zipCode())
-            .district(faker.address().streetName())
-            .stateOrProvince(faker.address().cityName())
-            .country(faker.address().country())
-            .build()
-        ).toList();
-        addressRepository.saveAll(result);
-        LogUtils.logInfo(log, "seedAddress finished");
-    }
-
-    private void seedStock(int number) {
-        if (stockRepository.count() > 0) {
-            return;
-        }
-        var faker = getFaker();
-        var result = IntStream.range(0, number)
-            .mapToObj(ignore -> Stock.builder()
-                .quantity(faker.number().numberBetween(1L, 999_999_999L))
-                .reservedQuantity(faker.number().numberBetween(1L, 999_999_999L))
-                .build()
-            ).toList();
-        stockRepository.saveAll(result);
-        LogUtils.logInfo(log, "seedStock finished");
+        productRepository.saveAll(productList);
+        LogUtils.logInfo(log, "=== seedProduct finished ===");
     }
 
     private void seedProductCategory() {
-        Optional<Product> firstProduct = productRepository.findFirstByOrderByName();
-        if (firstProduct.isEmpty() || !firstProduct.get().getCategories().isEmpty()) {
-            return;
-        }
-        var faker = getFaker();
         long totalCategories = categoryRepository.count();
         List<Category> categories = categoryRepository.findAll();
         List<Product> productList = productRepository.findAll();
@@ -206,150 +171,8 @@ public class FakerController {
         productRepository.saveAll(productList);
     }
 
-    private void seedProductImage() {
-        long totalProducts = productRepository.count();
-        long totalImages = imageRepository.count();
-        if (totalProducts > totalImages) {
-            return;
-        }
-        Optional<Product> firstProduct = productRepository.findFirstByOrderByName();
-        var firstProductMediaOptional = firstProduct.map(Product::getMedia);
-        if (firstProductMediaOptional.isPresent() && !firstProductMediaOptional.get().isEmpty()) {
-            return;
-        }
-        var faker = getFaker();
-
-        List<Product> products = productRepository.findAll();
-        List<Image> images = imageRepository.findAllByOrderById();
-        int currentIndex = 0;
-        for (Product product: products) {
-            Set<Image> imageSet = new HashSet<>();
-            long numberOfImages = faker.number().numberBetween(1, (totalImages - currentIndex) / (totalProducts - products.indexOf(product)));
-            for (int i = 0; i < numberOfImages && currentIndex < totalImages; i++) {
-                Image targetImage = images.get(currentIndex++);
-                imageSet.add(targetImage);
-            }
-            product.setMedia(imageSet);
-        }
-
-        while (currentIndex < totalImages) {
-            for (Product product: products) {
-                Set<Image> imageSet = product.getMedia();
-                if (currentIndex < totalImages) {
-                    Image targetImage = images.get(currentIndex++);
-                    imageSet.add(targetImage);
-                    product.setMedia(imageSet);
-                } else {
-                    break;
-                }
-            }
-        }
-        productRepository.saveAll(products);
-        LogUtils.logInfo(log, "seedProductImage finished");
-    }
-
-    private void seedCategoryImage() {
-        Optional<Category> firstCategory = categoryRepository.findFirstByOrderByName();
-        if (firstCategory.map(Category::getAvatar).isPresent()) {
-            return;
-        }
-        List<Category> categories = categoryRepository.findAll();
-        for (Category category : categories) {
-            try {
-                Image img = generateImage();
-                category.setAvatar(img);
-            } catch (IOException ignored) {}
-        }
-        categoryRepository.saveAll(categories);
-        LogUtils.logInfo(log, "seedCategoryImage finished");
-    }
-
-    private void seedStockAddress() {
-        long totalStocks = stockRepository.count();
-        long totalAddresses = addressRepository.count();
-        if (totalStocks > totalAddresses) {
-            return;
-        }
-        Optional<Stock> firstStock = stockRepository.findFirstByOrderByCreatedAt();
-        var firstStockAddressOptional = firstStock.map(Stock::getAddresses);
-        if (firstStockAddressOptional.isPresent() && !firstStockAddressOptional.get().isEmpty()) {
-            return;
-        }
-        var faker = getFaker();
-        List<Stock> stocks = stockRepository.findAll();
-        List<Address> addresses = addressRepository.findAllByOrderByCreatedAt();
-        int currentIndex = 0;
-        for (Stock stock : stocks) {
-            Set<Address> addressSet = new HashSet<>();
-            long numberOfAddresses = faker.number().numberBetween(1,
-                (totalAddresses - currentIndex) / (totalAddresses - stocks.indexOf(stock)));
-            for (int i=0; i < numberOfAddresses && currentIndex < totalAddresses; i++) {
-                Address targetAddress = addresses.get(currentIndex++);
-                addressSet.add(targetAddress);
-            }
-            stock.setAddresses(addressSet);
-        }
-        while (currentIndex < totalAddresses) {
-            for (Stock stock : stocks) {
-                Set<Address> addressSet = stock.getAddresses();
-                if (currentIndex < totalAddresses) {
-                    Address targetAddress = addresses.get(currentIndex++);
-                    addressSet.add(targetAddress);
-                    stock.setAddresses(addressSet);
-                } else {
-                    break;
-                }
-            }
-        }
-        stockRepository.saveAll(stocks);
-        LogUtils.logInfo(log, "seedStockAddress finished");
-    }
-
-    private void seedProductStock() {
-        long totalProducts = productRepository.count();
-        long totalStocks = stockRepository.count();
-        if (totalProducts > totalStocks) {
-            return;
-        }
-        Optional<Product> firstProduct = productRepository.findFirstByOrderByName();
-        var firstProductStockOptional = firstProduct.map(Product::getStocks);
-        if (firstProductStockOptional.isPresent() && !firstProductStockOptional.get().isEmpty()) {
-            return;
-        }
-        var faker = getFaker();
-        List<Product> products = productRepository.findAll();
-        List<Stock> stocks = stockRepository.findAllByOrderByCreatedAt();
-        int currentIndex = 0;
-        for (Product product : products) {
-            List<Stock> stockList = new ArrayList<>();
-            long numberOfStocks = faker.number().numberBetween(1,
-                (totalStocks - currentIndex) / (totalStocks - products.indexOf(product)));
-            for (int i=0; i < numberOfStocks && currentIndex < totalStocks; i++) {
-                Stock targetStock = stocks.get(currentIndex++);
-                stockList.add(targetStock);
-            }
-            stockList.forEach(stock -> stock.setProduct(product));
-        }
-        while (currentIndex < totalStocks) {
-            for (Product product : products) {
-                List<Stock> stockList = product.getStocks();
-                if (currentIndex < totalStocks) {
-                    Stock targetStock = stocks.get(currentIndex++);
-                    stockList.add(targetStock);
-                    stockList.forEach(stock -> stock.setProduct(product));
-                }
-            }
-        }
-        stockRepository.saveAll(stocks);
-        LogUtils.logInfo(log, "seedProductStock finished");
-    }
-
     private void seedCustomer(int number) {
-        if (customerRepository.count() > 0) {
-            return;
-        }
-        var faker = getFaker();
-        var result = IntStream.range(0, number).mapToObj(ignore -> Customer.builder()
+        List<Customer> customerList = IntStream.range(0, number).mapToObj(ignore -> Customer.builder()
             .userId(UUID.randomUUID())
             .email(faker.internet().emailAddress())
             .username(faker.name().username())
@@ -357,45 +180,87 @@ public class FakerController {
             .firstName(faker.name().firstName())
             .lastName(faker.name().lastName())
             .status(ECustomerStatus.ACTIVE.name())
-            .build()).toList();
-        customerRepository.saveAll(result);
-        LogUtils.logInfo(log, "seedCustomer finished");
-    }
-
-    private void seedCustomerImage() {
-        long totalCustomers = customerRepository.count();
-        long totalImages = imageRepository.count();
-        if (totalCustomers > totalImages) {
-            return;
-        }
-        Optional<Customer> firstCustomer = customerRepository.findFirstByOrderByUsername();
-        var firstCustomerMediaOptional = firstCustomer.map(Customer::getMedia);
-        if (firstCustomerMediaOptional.isPresent() && !firstCustomerMediaOptional.get().isEmpty()) {
-            return;
-        }
-        var faker = getFaker();
-        List<Customer> customers = customerRepository.findAll();
-        for (Customer customer : customers) {
+            .build()).map(Customer.class::cast).toList();
+        List<UUID> productIds = productRepository.findAllId();
+        List<UUID> productIdSubLst;
+        for (var customer : customerList) {
+            //#region Create keycloak user
+            identityRepository.createUserUnverified(new KeycloakCreateUserDto.Tidy(
+                customer.getUsername(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), SEED_USER_PASSWORD
+            ));
+            //#endregion
+            //#region Generate image
             try {
-                Set<Image> imgSet = new HashSet<>();
-                Image avatar = generateImage();
-                avatar.setType(EImageType.AVATAR.name());
-                imgSet.add(avatar);
-                int imgNum = faker.number().numberBetween(1, 10);
-                for (int i=0;i<imgNum;i++) {
-                    Image img = generateImage();
-                    img.setType(EImageType.MEDIA.name());
-                    imgSet.add(img);
-                }
-                customer.setMedia(imgSet);
-                customerRepository.save(customer);
-            } catch (IOException ignored) {}
+                Image avatar = generateImage(EImageType.AVATAR);
+                customer.setMedia(Set.of(avatar));
+            } catch (IOException _) {}
+            //#endregion
+            //#region Generate addresses
+            int addressNum = faker.number().numberBetween(1, 5);
+            var addressSet = IntStream.range(0, addressNum).mapToObj(ignore -> generateAddress()).collect(Collectors.toSet());
+            customer.setAddresses(addressSet);
+            customer.setPrimaryAddress(addressSet.stream().findFirst().orElse(null));
+            //#endregion
         }
-        LogUtils.logInfo(log, "seedCustomerImage finished");
+        var savedCustomers = customerRepository.saveAll(customerList);
+        for (var customer : savedCustomers) {
+            int productNum = faker.number().numberBetween(1, productIds.size() - 2);
+            productIdSubLst = new ArrayList<>(productIds);
+            Collections.shuffle(productIdSubLst);
+            List<Product> productLst = productRepository.findAllByIdIn(productIdSubLst.subList(0, productNum));
+            productLst.forEach(product -> generateFeedback(customer, product));
+        }
+        LogUtils.logInfo(log, "=== seedCustomer finished ===");
     }
 
-    private Image generateImage() throws IOException {
-        var faker = getFaker();
+    private Stock generateStock() {
+        var stock = Stock.builder()
+            .quantity(faker.number().numberBetween(1L, 999_999_999L))
+            .reservedQuantity(faker.number().numberBetween(1L, 999_999_999L))
+            .build();
+        var address = generateAddress();
+        stock.setAddresses(Set.of(address));
+        var result = stockRepository.save(stock);
+        log.info("+++ generateStock finished +++");
+        return result;
+    }
+
+    private Address generateAddress() {
+        var address = Address.builder()
+            .contactName(faker.funnyName().name())
+            .phone(faker.phoneNumber().cellPhone())
+            .addressLine1(faker.address().fullAddress())
+            .addressLine2(faker.address().fullAddress())
+            .city(faker.address().city())
+            .zipCode(faker.address().zipCode())
+            .district(faker.address().streetName())
+            .stateOrProvince(faker.address().cityName())
+            .country(faker.address().country())
+            .build();
+        var result = addressRepository.save(address);
+        log.info("+++ generateAddress finished +++");
+        return result;
+    }
+
+    private Feedback generateFeedback(Customer customer, Product product) {
+        String content = faker.lorem().paragraph(5);
+        int star = faker.number().numberBetween(1, 5);
+        Feedback feedback = Feedback.builder()
+            .content(content)
+            .star(star)
+            .customer(customer)
+            .product(product)
+            .build();
+        var result = feedbackRepository.save(feedback);
+        log.info("+++ generateFeedback finished +++");
+        return result;
+    }
+
+    private Image generateImage(EImageType imageType) throws IOException {
+        EImageType imgType = imageType;
+        if (imageType == null) {
+            imgType = EImageType.MEDIA;
+        }
         String fileName = "%s.%s".formatted(UUID.randomUUID(), IMAGE_EXT);
         Path filePath = Path.of(LOREM_IMAGE_ENTITY_PATH, fileName);
         var imageDto = imageService.upsertImage(filePath,
@@ -404,12 +269,13 @@ public class FakerController {
         var image = Image.builder()
             .description(imageDto.getDescription())
             .relativePath(imageDto.getRelativePath())
-            .type(EImageType.MEDIA.name()).build();
-        return imageRepository.save(image);
+            .type(imgType.name()).build();
+        var result = imageRepository.save(image);
+        log.info("+++ generateImage finished +++");
+        return result;
     }
 
     private IcMultipartFileRequest genRandomImg(int width, int height, String relativeFilePath) throws IOException {
-        var faker = getFaker();
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = img.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

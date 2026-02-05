@@ -34,7 +34,6 @@ public interface CartMapper {
 
     //region To Entity
     @Named("dtoToEntity")
-    @BeanMapping(ignoreByDefault = true)
     Cart dtoToEntity(CartDto cartDto);
 
     @Named("dtoToEntityIter")

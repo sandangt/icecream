@@ -37,11 +37,11 @@ const EMPTY_CART_STATE = {
 }
 
 export const useCartStore = create<State & Action>()(
-  immer((set, get) => ({
+  immer((_set, _get) => ({
     ...EMPTY_CART_STATE,
 
     addToCart: (item: ProductExtended) =>
-      set((state) => {
+      _set((state) => {
         const cartItem = state.productMap.get(item.id)
 
         if (!cartItem) {
@@ -60,7 +60,7 @@ export const useCartStore = create<State & Action>()(
       }),
 
     removeFromCart: (item: ProductExtended) =>
-      set((state) => {
+      _set((state) => {
         const cartItem = state.productMap.get(item.id)
         if (!cartItem) return
 
@@ -74,10 +74,10 @@ export const useCartStore = create<State & Action>()(
         state.empty = !state.totalItems
       }),
 
-    resetCart: () => set(() => EMPTY_CART_STATE),
+    resetCart: () => _set(() => EMPTY_CART_STATE),
 
     deleteItem: (item: ProductExtended) =>
-      set((state) => {
+      _set((state) => {
         const cartItem = state.productMap.get(item.id)
         if (!cartItem) return
 
@@ -88,7 +88,7 @@ export const useCartStore = create<State & Action>()(
       }),
 
     syncUp: (cart: Cart) =>
-      set((state) => {
+      _set((state) => {
         const cartItems = cart.cartItems ?? []
         const map = new Map<string, CartItem>()
         let size = 0
@@ -115,30 +115,30 @@ export const useCartStore = create<State & Action>()(
       }),
 
     setCartId: (id: string) =>
-      set((state) => {
+      _set((state) => {
         state.cartId = id
       }),
 
     clearCartId: () =>
-      set((state) => {
+      _set((state) => {
         state.cartId = ''
       }),
 
-    getProductMap: () => get().productMap,
-    getCartId: () => get().cartId,
-    getTotalItems: () => get().totalItems,
-    getTotalCost: () => get().totalCost,
-    isEmpty: () => get().empty,
+    getProductMap: () => _get().productMap,
+    getCartId: () => _get().cartId,
+    getTotalItems: () => _get().totalItems,
+    getTotalCost: () => _get().totalCost,
+    isEmpty: () => _get().empty,
     getShippingCost: () => {
-      if (get().totalItems > 10) {
-        return get().totalCost * 0.35
-      } else if (get().totalItems > 2 && get().totalItems <= 10) {
-        return get().totalCost * 0.25
+      if (_get().totalItems > 10) {
+        return _get().totalCost * 0.35
+      } else if (_get().totalItems > 2 && _get().totalItems <= 10) {
+        return _get().totalCost * 0.25
       }
-      return get().totalCost * 0.1
+      return _get().totalCost * 0.1
     },
     getDiscount: () => {
-      return get().totalItems > 10 ? 0.1 : 0
+      return _get().totalItems > 10 ? 0.1 : 0
     },
   })),
 )

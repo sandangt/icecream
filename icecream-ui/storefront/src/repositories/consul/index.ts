@@ -9,6 +9,13 @@ import {
   requestUpdateCustomerProfile,
   requestUploadAvatar,
 } from './customers'
+import {
+  requestCreateFeedback,
+  requestDeleteFeedback,
+  requestFeedbackStatByProductId,
+  requestFeedbacksByProductId,
+  requestUpdateFeedback,
+} from './feedbacks'
 import { requestCreateOrder } from './orders'
 import {
   queryProducts,
@@ -34,4 +41,9 @@ export {
   fetchCart,
   requestResetCart,
   requestCreateOrder,
+  requestFeedbacksByProductId,
+  requestFeedbackStatByProductId,
+  requestCreateFeedback,
+  requestUpdateFeedback,
+  requestDeleteFeedback,
 }

@@ -7,7 +7,7 @@ import org.mapstruct.Named;
 import sanlab.icecream.fundamentum.dto.core.CustomerDto;
 import sanlab.icecream.consul.dto.core.RegisteredUserInfoDto;
 import sanlab.icecream.fundamentum.dto.exntended.CustomerExtendedDto;
-import sanlab.icecream.consul.dto.keycloak.KeycloakUserInfoDto;
+import sanlab.icecream.consul.dto.keycloak.KeycloakUpdateUserInfoDto;
 import sanlab.icecream.consul.model.Customer;
 
 import java.util.List;
@@ -66,8 +66,8 @@ public interface CustomerMapper {
     // endregion
 
     // region Keycloak user info
-    default KeycloakUserInfoDto dtoToKeycloakUserInfo(CustomerDto dto) {
-        var userInfo = new KeycloakUserInfoDto();
+    default KeycloakUpdateUserInfoDto dtoToKeycloakUserInfo(CustomerDto dto) {
+        var userInfo = new KeycloakUpdateUserInfoDto();
         var dtoOptional = Optional.ofNullable(dto);
         dtoOptional.map(CustomerDto::getUserId).map(UUID::toString).ifPresent(userInfo::setId);
         dtoOptional.map(CustomerDto::getEmail).ifPresent(userInfo::setEmail);

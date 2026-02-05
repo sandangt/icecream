@@ -1,3 +1,9 @@
+export type UpdateProfileRequest = {
+  firstName?: string
+  lastName?: string
+  phone?: string
+}
+
 export type CreateOrderItemRequest = {
   productId: string
   price: number
@@ -15,4 +21,11 @@ export type CreateOrderRequest = {
   paymentMethod: string
   orderItems: CreateOrderItemRequest[]
   addressId: string
+}
+
+export type FeedbackRequest = {
+  id?: string
+  productId: string
+  star: number
+  content: string
 }
