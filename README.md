@@ -8,7 +8,7 @@ Not so monolithic e-commerce system
 
 ## 🗺️ High‑Level System Overview
 
-![Architecture Diagram](/assets/architecture.png)
+![Architecture Diagram](/readme-assets/architecture.png)
 
 At a glance:
 
@@ -23,7 +23,7 @@ At a glance:
 
 ## Observability architecture
 
-![Observability Architecture Diagram](/assets/observability-architecture.png)
+![Observability Architecture Diagram](/readme-assets/observability-architecture.png)
 
 1. **Data Sources**
 

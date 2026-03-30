@@ -11,7 +11,7 @@ import { SessionHelper } from '@/lib/helpers'
 import { generateUrl } from '@/lib/utils'
 import { fetchNewMessages } from '@/repositories/echo'
 import { FETCH_NEW_MESSAGES_BY_CUSTOMER_USERNAME } from '@/repositories/query-keys'
-import { ECHO_URL } from '@/settings'
+import { ECHO_URL } from '@/lib/env'
 
 import { useNotiStore } from './states'
 

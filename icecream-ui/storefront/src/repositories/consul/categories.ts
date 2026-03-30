@@ -2,7 +2,7 @@ import { API_PATHS } from '@/lib/constants'
 import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
 import { CategoryExtended } from '@/models'
-import { CONSUL_URL } from '@/settings'
+import { CONSUL_URL } from '@/lib/env'
 
 export const fetchAllCategories = async (): Promise<CategoryExtended[]> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CATEGORY])

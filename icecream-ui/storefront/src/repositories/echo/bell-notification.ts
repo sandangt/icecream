@@ -2,7 +2,7 @@ import { API_PATHS } from '@/lib/constants'
 import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
 import { NotificationMessage, Session } from '@/models'
-import { ECHO_URL } from '@/settings'
+import { ECHO_URL } from '@/lib/env'
 
 export const fetchNewMessages = async (session: Session): Promise<NotificationMessage[]> => {
   const url = generateUrl(ECHO_URL, [API_PATHS.BELL_NOTIFICATION_NEW_MESSAGES])

@@ -8,6 +8,7 @@ import {
 } from '@/components/providers'
 import '@/global.css'
 import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/constants'
+import { ClientEnvConf } from '@/lib/env'
 
 export const metadata = {
   title: SITE_NAME,
@@ -32,6 +33,7 @@ const RootLayout: FC<Props> = ({ children }) => (
         rel="stylesheet"
       />
       <link rel="icon" href="/img/favicon.ico" sizes="any" />
+      <EnvHeaderScript />
     </head>
     <body className="font-body antialiased flex flex-col min-h-screen" cz-shortcut-listen="true">
       <AppProvider>{children}</AppProvider>
@@ -53,3 +55,18 @@ const AppProvider: FC<AppProviderProps> = async ({ children }) => (
     </QueryProvider>
   </AuthProvider>
 )
+
+const EnvHeaderScript = () => {
+  const env: ClientEnvConf = {
+    CONSUL_URL: process.env.CONSUL_URL || '',
+    ECHO_URL: process.env.ECHO_URL || '',
+    STORAGE_URL: process.env.STORAGE_URL || '',
+  }
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `window.__ENV__ = ${JSON.stringify(env)};`,
+      }}
+    />
+  )
+}

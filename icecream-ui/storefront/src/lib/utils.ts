@@ -5,7 +5,7 @@ import { type ClassValue, clsx } from 'clsx'
 import qs from 'qs'
 import { twMerge } from 'tailwind-merge'
 
-import { STORAGE_URL } from '@/settings'
+import { STORAGE_URL } from '@/lib/env'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
