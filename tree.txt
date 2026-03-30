@@ -1,0 +1,196 @@
+icecream
+├── .env.template
+├── .github
+│   └── workflows
+│       └── actions.yaml
+├── .gitignore
+├── .gitmodules
+├── icecream-document/
+├── icecream-ops
+│   └── .gitkeep
+├── icecream-system
+│   ├── chronos
+│   │   ├── .env.template
+│   │   ├── pom.xml
+│   │   └── src
+│   │       └── main
+│   │           ├── java
+│   │           │   └── sanlab
+│   │           │       └── icecream
+│   │           │           └── chronos/
+│   │           └── resources
+│   │               ├── application-dev.yaml
+│   │               ├── banner.txt
+│   │               └── logback-spring.xml
+│   ├── codex
+│   │   ├── .env.template
+│   │   ├── pom.xml
+│   │   └── src
+│   │       └── main
+│   │           ├── java
+│   │           │   └── sanlab
+│   │           │       └── icecream
+│   │           │           └── codex/
+│   │           └── resources
+│   │               ├── application.properties
+│   │               ├── banner.txt
+│   │               ├── config
+│   │               │   ├── application-dev.yaml
+│   │               │   ├── chronos-dev.yaml
+│   │               │   ├── conflux-dev.yaml
+│   │               │   ├── consul-dev.yaml
+│   │               │   ├── echo-dev.yaml
+│   │               │   └── memoir-dev.yaml
+│   │               └── logback-spring.xml
+│   ├── conflux
+│   │   ├── .env.template
+│   │   ├── pom.xml
+│   │   └── src
+│   │       └── main
+│   │           ├── java
+│   │           │   └── sanlab
+│   │           │       └── icecream
+│   │           │           └── conflux/
+│   │           └── resources
+│   │               ├── application-dev.yaml
+│   │               ├── banner.txt
+│   │               └── logback-spring.xml
+│   ├── consul
+│   │   ├── .env.template
+│   │   ├── pom.xml
+│   │   └── src
+│   │       ├── main
+│   │       │   ├── java
+│   │       │   │   └── sanlab
+│   │       │   │       └── icecream
+│   │       │   │           └── consul/
+│   │       │   └── resources
+│   │       │       ├── application-dev.yaml
+│   │       │       ├── banner.txt
+│   │       │       ├── db
+│   │       │       │   └── changelog/
+│   │       │       ├── elasticsearch
+│   │       │       │   └── product-index-settings.json
+│   │       │       └── logback-spring.xml
+│   │       └── test/
+│   ├── dev-composes
+│   │   ├── compose.yml
+│   │   ├── debezium
+│   │   │   ├── connectors
+│   │   │   │   ├── elasticsearch-sink.jsonc
+│   │   │   │   └── postgresql-source.jsonc
+│   │   │   ├── Dockerfile
+│   │   │   └── plugins
+│   │   │       ├── confluentinc-kafka-connect-elasticsearch-15.0.1.zip
+│   │   │       └── debezium-connector-postgres-2.7.3.Final-plugin.tar.gz
+│   │   ├── kafka
+│   │   │   ├── docker-entrypoint.sh
+│   │   │   ├── Dockerfile
+│   │   │   └── init-scripts
+│   │   │       └── create-topics.sh
+│   │   ├── loki
+│   │   │   └── loki-config.yaml
+│   │   ├── mimir
+│   │   │   └── mimir-config.yaml
+│   │   ├── minio
+│   │   │   ├── Dockerfile
+│   │   │   └── init-scripts
+│   │   │       └── create-buckets.sh
+│   │   ├── mongodb
+│   │   │   ├── Dockerfile
+│   │   │   └── mongo-init
+│   │   │       └── init-mongo.sh
+│   │   ├── otel-collector
+│   │   │   └── otel-collector-config.yaml
+│   │   ├── postgresql
+│   │   │   ├── create-multiple-postgresql-databases.sh
+│   │   │   └── Dockerfile
+│   │   ├── prometheus
+│   │   │   └── prometheus-config.yaml
+│   │   ├── stripe
+│   │   └── tempo
+│   │       └── tempo-config.yaml
+│   ├── Dockerfile
+│   ├── echo
+│   │   ├── .env.template
+│   │   ├── pom.xml
+│   │   └── src
+│   │       └── main
+│   │           ├── java
+│   │           │   └── sanlab
+│   │           │       └── icecream
+│   │           │           └── echo/
+│   │           └── resources
+│   │               ├── application-dev.yaml
+│   │               ├── banner.txt
+│   │               ├── logback-spring.xml
+│   │               └── templates
+│   │                   └── email
+│   │                       ├── checkout-summary.html
+│   │                       └── successful-payment.html
+│   ├── .editorconfig
+│   ├── .env.template
+│   ├── fundamentum
+│   │   ├── pom.xml
+│   │   └── src
+│   │       └── main
+│   │           └── java
+│   │               └── sanlab
+│   │                   └── icecream
+│   │                       └── fundamentum/
+│   ├── .gitignore
+│   ├── identity
+│   │   ├── data
+│   │   │   └── import
+│   │   │       └── realm-export.json
+│   │   ├── Dockerfile
+│   │   └── themes
+│   │       └── icecream
+│   │           └── login/
+│   ├── java-packages
+│   │   └── opentelemetry-javaagent.jar
+│   ├── .java-version
+│   ├── memoir
+│   │   ├── .env.template
+│   │   ├── pom.xml
+│   │   └── src
+│   │       └── main
+│   │           ├── java
+│   │           │   └── sanlab
+│   │           │       └── icecream
+│   │           │           └── memoir/
+│   │           └── resources
+│   │               ├── application-dev.yaml
+│   │               ├── banner.txt
+│   │               ├── db
+│   │               │   └── changelog/
+│   │               └── logback-spring.xml
+│   ├── pom.xml
+│   └── README.md
+├── icecream-ui
+│   └── storefront
+│       ├── components.json
+│       ├── Dockerfile
+│       ├── .editorconfig
+│       ├── .env.template
+│       ├── .eslintrc.json
+│       ├── .gitignore
+│       ├── next.config.js
+│       ├── package.json
+│       ├── pnpm-workspace.yaml
+│       ├── postcss.config.mjs
+│       ├── .prettierignore
+│       ├── .prettierrc.json
+│       ├── public
+│       │   └── img
+│       │       └── favicon.ico
+│       ├── README.md
+│       ├── src/
+│       ├── tailwind.config.ts
+│       └── tsconfig.json
+├── LICENSE
+├── readme-assets
+│   ├── architecture.png
+│   └── observability-architecture.png
+├── README.md
+└── tree.txt
