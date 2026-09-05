@@ -14,7 +14,7 @@ run-name: "[${{ inputs.ENV }}](🚀): codex-service"
 jobs:
   build:
     name: Build Codex Service (${{ inputs.ENV }})
-    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
+    uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system
       module: codex
