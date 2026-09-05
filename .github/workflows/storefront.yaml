@@ -1,4 +1,4 @@
-name: Build Storefront
+name: Storefront script
 
 on:
   workflow_dispatch:
@@ -16,6 +16,7 @@ run-name: "[${{ inputs.ENV }}](🚀): storefront"
 
 jobs:
   build:
+    name: Build Icecream Storefront (${{ inputs.ENV }})
     uses: ./.github/workflows/build-nextjs.yaml
     with:
       root-path: icecream-ui/storefront

@@ -1,4 +1,4 @@
-name: "Build Consul service"
+name: "Memoir service script"
 
 on:
   workflow_dispatch:
@@ -9,15 +9,15 @@ on:
         required: true
         default: DEV
 
-run-name: "[${{ inputs.ENV }}](🚀): consul-service"
+run-name: "[${{ inputs.ENV }}](🚀): memoir-service"
 
 jobs:
   build:
-    name: Build Consul Service (${{ inputs.ENV }})
+    name: Build Icecream Memoir Service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system
-      module: consul
-      image-name: icecream-consul-service
+      module: memoir
+      image-name: icecream-memoir-service
       ENV: ${{ inputs.ENV }}
     secrets: inherit
