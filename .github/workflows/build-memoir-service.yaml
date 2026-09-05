@@ -13,7 +13,7 @@ run-name: "[${{ inputs.ENV }}](🚀): memoir-service"
 
 jobs:
   build:
-    name: Build and push memoir service (${{ inputs.ENV }})
+    name: Build Memoir Service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system

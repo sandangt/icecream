@@ -13,7 +13,7 @@ run-name: "[${{ inputs.ENV }}](🚀): echo-service"
 
 jobs:
   build:
-    name: Build and push echo service (${{ inputs.ENV }})
+    name: Build Echo Service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system

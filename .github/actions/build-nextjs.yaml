@@ -1,0 +1,80 @@
+name: Reusable NextJS workflow template
+
+on:
+  workflow_call:
+    inputs:
+      root-path:
+        type: string
+        required: true
+      image-name:
+        description: "GHCR image name (defaults to the module name)"
+        required: false
+        type: string
+        default: ""
+      ENV:
+        type: string
+        description: Environment
+        required: true
+    outputs:
+      image-tag:
+        description: Built image tag
+        value: ${{ jobs.build.outputs.image-tag }}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: Build NextJS App (${{ inputs.ENV }})
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.ENV }}
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: |
+            ${{ inputs.root-path }}/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: ${{ inputs.root-path }}
+        run: pnpm install --frozen-lockfile
+      - name: Build frontend
+        working-directory: ${{ inputs.root-path }}
+        run: pnpm build
+      - name: Login GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}
+          tags: |
+            type=sha,format=short
+            type=ref,event=branch
+      - name: Build & Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.root-path }}
+          file: ${{ inputs.root-path }}/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ inputs.image-name }}
+          cache-to: type=gha,mode=max,scope=${{ inputs.image-name }}
