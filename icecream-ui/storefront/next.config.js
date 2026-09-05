@@ -27,7 +27,8 @@ const nextConfig = {
   experimental: {
     authInterrupts: true,
     instrumentationHook: true,
-  }
+  },
+  output: 'standalone',
 }
 
 module.exports = nextConfig

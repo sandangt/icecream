@@ -1,4 +1,4 @@
-name: "Build Codex service"
+name: "Codex service script"
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ run-name: "[${{ inputs.ENV }}](🚀): codex-service"
 
 jobs:
   build:
-    name: Build Codex Service (${{ inputs.ENV }})
+    name: Build Icecream Codex Service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system

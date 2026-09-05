@@ -1,4 +1,4 @@
-name: "Build memoir service"
+name: "Echo service script"
 
 on:
   workflow_dispatch:
@@ -9,15 +9,15 @@ on:
         required: true
         default: DEV
 
-run-name: "[${{ inputs.ENV }}](🚀): memoir-service"
+run-name: "[${{ inputs.ENV }}](🚀): echo-service"
 
 jobs:
   build:
-    name: Build Memoir Service (${{ inputs.ENV }})
+    name: Build Icecream Echo Service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system
-      module: memoir
-      image-name: icecream-memoir-service
+      module: echo
+      image-name: icecream-echo-service
       ENV: ${{ inputs.ENV }}
     secrets: inherit
