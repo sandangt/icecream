@@ -16,6 +16,7 @@ jobs:
     name: Build and push echo service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
+      root-path: icecream-system
       module: echo
       image-name: icecream-echo-service
       ENV: ${{ inputs.ENV }}
