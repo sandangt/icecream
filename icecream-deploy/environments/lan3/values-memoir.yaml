@@ -1,0 +1,30 @@
+# memoir = user audit log service. Postgres-backed (searchable audit trail),
+# consumes events async from kafka, stores attachments in object storage.
+nameOverride: "memoir"
+fullnameOverride: "memoir"
+
+image:
+  repository: registry.sanlab.zone/icecream/memoir
+  tag: "1.0.0"
+
+replicaCount: 1
+
+containerPort: 8080
+managementPort: 8080
+
+resources:
+  requests: { cpu: 150m, memory: 384Mi }
+  limits:   { cpu: 500m, memory: 768Mi }
+
+env:
+  SPRING_PROFILES_ACTIVE: "k8s"
+  CONFIG_SERVER_URL: "http://codex:80"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://memoir-postgresql:5432/memoir"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  MINIO_ENDPOINT: "http://minio:9000"
+  MINIO_BUCKET: "memoir-attachments"
+
+secret:
+  create: false
+  name: "memoir-db-secret"
+  # expected keys: SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD, MINIO_ACCESS_KEY, MINIO_SECRET_KEY

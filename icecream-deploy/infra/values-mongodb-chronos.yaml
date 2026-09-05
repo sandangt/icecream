@@ -1,0 +1,9 @@
+# bitnami/mongodb - dedicated instance for `chronos` (scheduler)
+architecture: standalone
+auth:
+  usernames: ["chronos"]
+  databases: ["chronos"]
+  existingSecret: "chronos-mongodb-secret"
+persistence:
+  enabled: true
+  size: 5Gi

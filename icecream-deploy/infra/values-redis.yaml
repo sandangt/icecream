@@ -1,0 +1,9 @@
+# bitnami/redis - single shared cache for the whole platform
+architecture: standalone
+auth:
+  enabled: true
+  existingSecret: "redis-secret"     # key: redis-password
+master:
+  persistence:
+    enabled: true
+    size: 5Gi

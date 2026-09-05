@@ -1,0 +1,65 @@
+nameOverride: "storefront"
+fullnameOverride: "storefront"
+
+replicaCount: 2   # SSR benefits from 2+ replicas for zero-downtime deploys
+
+image:
+  repository: registry.sanlab.zone/icecream/storefront
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+containerPort: 3000   # default NextJS port
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 256Mi
+  limits:
+    cpu: 750m
+    memory: 768Mi
+
+probes:
+  liveness:
+    path: /api/health
+    initialDelaySeconds: 15
+    periodSeconds: 10
+  readiness:
+    path: /api/health
+    initialDelaySeconds: 10
+    periodSeconds: 5
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 75
+
+# Non-secret, public build/runtime config (NEXT_PUBLIC_* vars go here)
+env:
+  NODE_ENV: "production"
+  NEXTAUTH_URL: "https://icecream.sanlab.zone"
+  NEXT_PUBLIC_API_BASE_URL: "https://icecream.sanlab.zone/api"
+
+# Secrets: NEXTAUTH_SECRET, KEYCLOAK_CLIENT_SECRET etc.
+# Create with scripts/20-create-secrets.sh, reference the resulting name here.
+secret:
+  create: false
+  name: "storefront-secret"
+  data: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

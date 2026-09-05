@@ -1,0 +1,15 @@
+# Overrides on top of charts/storefront/values.yaml defaults, kept here so all
+# per-service overrides live in one place.
+image:
+  tag: "1.0.0"
+
+env:
+  NODE_ENV: "production"
+  NEXTAUTH_URL: "https://icecream.sanlab.zone"
+  NEXT_PUBLIC_API_BASE_URL: "https://icecream.sanlab.zone/api"
+  KEYCLOAK_ISSUER: "https://icecream.sanlab.zone/auth/realms/icecream"
+
+secret:
+  create: false
+  name: "storefront-secret"
+  # expected keys: NEXTAUTH_SECRET, KEYCLOAK_CLIENT_ID, KEYCLOAK_CLIENT_SECRET

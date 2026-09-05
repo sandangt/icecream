@@ -1,0 +1,37 @@
+# consul = transactional service (core order/checkout logic). Postgres-backed.
+# Talks to: codex (config), kafka (message queue), rabbitmq (task queue), postgres.
+nameOverride: "consul"
+fullnameOverride: "consul"
+
+image:
+  repository: registry.sanlab.zone/icecream/consul
+  tag: "1.0.0"
+
+replicaCount: 2
+
+containerPort: 8080
+managementPort: 8080
+
+resources:
+  requests: { cpu: 200m, memory: 512Mi }
+  limits:   { cpu: 750m, memory: 1Gi }
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+env:
+  SPRING_PROFILES_ACTIVE: "k8s"
+  CONFIG_SERVER_URL: "http://codex:80"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://consul-postgresql:5432/consul"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  SPRING_RABBITMQ_HOST: "rabbitmq"
+  SPRING_RABBITMQ_PORT: "5672"
+  SPRING_ELASTICSEARCH_URIS: "http://elasticsearch:9200"
+
+secret:
+  create: false
+  name: "consul-db-secret"   # created via scripts/20-create-secrets.sh
+  # expected keys: SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD, SPRING_RABBITMQ_USERNAME, SPRING_RABBITMQ_PASSWORD

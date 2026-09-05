@@ -1,0 +1,22 @@
+name: "Build Chronos service"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): chronos-service"
+
+jobs:
+  build:
+    name: Build and push chronos service (${{ inputs.ENV }})
+    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
+    with:
+      module: chronos
+      image-name: icecream-chronos-service
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit

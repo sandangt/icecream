@@ -1,0 +1,14 @@
+# apache/apisix - API gateway, single public entry point for icecream.sanlab.zone
+apisix:
+  ssl:
+    enabled: false   # TLS terminated at pfsense HAProxy (Acme cert); internal is plain HTTP
+service:
+  type: LoadBalancer   # MetalLB (LAN3 pool 10.0.10.100-10.0.10.149) will assign a VIP
+etcd:
+  enabled: true
+  replicaCount: 1
+ingress-controller:
+  enabled: true
+  config:
+    apisix:
+      serviceNamespace: icecream

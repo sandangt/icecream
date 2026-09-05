@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "storefront.fullname" . }}
+  labels:
+    {{- include "storefront.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      name: http
+  selector:
+    {{- include "storefront.selectorLabels" . | nindent 4 }}

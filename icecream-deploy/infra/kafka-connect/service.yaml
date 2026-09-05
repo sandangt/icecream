@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-connect
+  namespace: icecream
+spec:
+  selector:
+    app.kubernetes.io/name: kafka-connect
+  ports:
+    - port: 8083
+      targetPort: rest
+      name: rest

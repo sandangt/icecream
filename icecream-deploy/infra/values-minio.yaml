@@ -1,0 +1,8 @@
+# bitnami/minio - centralized S3-compatible object storage
+mode: standalone   # move to "distributed" if you add more nodes later
+auth:
+  existingSecret: "minio-secret"    # keys: root-user, root-password
+persistence:
+  enabled: true
+  size: 50Gi
+defaultBuckets: "memoir-attachments,echo-attachments,storefront-media"

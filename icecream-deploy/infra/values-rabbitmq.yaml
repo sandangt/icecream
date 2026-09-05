@@ -1,0 +1,7 @@
+# bitnami/rabbitmq - shared task queue
+auth:
+  username: icecream
+  existingPasswordSecret: "rabbitmq-secret"   # key: rabbitmq-password
+persistence:
+  enabled: true
+  size: 8Gi

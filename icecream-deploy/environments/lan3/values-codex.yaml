@@ -1,0 +1,24 @@
+# codex = central configuration server (Spring Cloud Config style). No DB.
+nameOverride: "codex"
+fullnameOverride: "codex"
+
+image:
+  repository: registry.sanlab.zone/icecream/codex
+  tag: "1.0.0"
+
+replicaCount: 1   # config server is read at startup by others; 1 is fine to start
+
+containerPort: 8080
+managementPort: 8080   # keep actuator on same port unless you split it in application.yml
+
+resources:
+  requests: { cpu: 100m, memory: 256Mi }
+  limits:   { cpu: 300m, memory: 384Mi }
+
+env:
+  SPRING_PROFILES_ACTIVE: "k8s"
+  SERVER_PORT: "8080"
+
+secret:
+  create: false   # no DB creds needed; add git repo token here if config repo is private
+  name: ""

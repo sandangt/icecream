@@ -1,0 +1,11 @@
+# bitnami/kafka - shared message/log queue (KRaft mode, no zookeeper needed)
+listeners:
+  client:
+    protocol: PLAINTEXT   # fine for internal-only LAN3 cluster traffic
+controller:
+  replicaCount: 1
+broker:
+  replicaCount: 1
+persistence:
+  enabled: true
+  size: 20Gi

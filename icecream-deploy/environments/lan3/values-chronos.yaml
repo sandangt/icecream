@@ -1,0 +1,30 @@
+# chronos = scheduler service (cron jobs, delayed tasks). MongoDB-backed.
+# Consumes from rabbitmq (task queue) and kafka (message queue).
+nameOverride: "chronos"
+fullnameOverride: "chronos"
+
+image:
+  repository: registry.sanlab.zone/icecream/chronos
+  tag: "1.0.0"
+
+replicaCount: 1   # keep at 1 unless you implement a distributed scheduler lock (e.g. ShedLock)
+
+containerPort: 8080
+managementPort: 8080
+
+resources:
+  requests: { cpu: 150m, memory: 384Mi }
+  limits:   { cpu: 500m, memory: 768Mi }
+
+env:
+  SPRING_PROFILES_ACTIVE: "k8s"
+  CONFIG_SERVER_URL: "http://codex:80"
+  SPRING_DATA_MONGODB_URI_HOST: "chronos-mongodb"
+  SPRING_DATA_MONGODB_DATABASE: "chronos"
+  SPRING_RABBITMQ_HOST: "rabbitmq"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+
+secret:
+  create: false
+  name: "chronos-db-secret"
+  # expected keys: SPRING_DATA_MONGODB_USERNAME, SPRING_DATA_MONGODB_PASSWORD, SPRING_RABBITMQ_USERNAME, SPRING_RABBITMQ_PASSWORD

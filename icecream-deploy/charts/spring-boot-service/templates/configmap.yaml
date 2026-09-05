@@ -1,0 +1,12 @@
+{{- if .Values.env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "spring-service.fullname" . }}-config
+  labels:
+    {{- include "spring-service.labels" . | nindent 4 }}
+data:
+  {{- range $k, $v := .Values.env }}
+    {{ $k }}: {{ $v | quote }}
+  {{- end }}
+{{- end }}

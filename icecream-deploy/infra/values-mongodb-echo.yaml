@@ -1,0 +1,9 @@
+# bitnami/mongodb - dedicated instance for `echo` (notifications)
+architecture: standalone   # switch to "replicaset" later for HA
+auth:
+  usernames: ["echo"]
+  databases: ["echo"]
+  existingSecret: "echo-mongodb-secret"
+persistence:
+  enabled: true
+  size: 10Gi

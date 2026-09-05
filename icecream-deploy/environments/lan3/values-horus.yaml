@@ -1,0 +1,30 @@
+# horus = internal backoffice site. Reads from elasticsearch (search) and
+# consul's transactional DB (read-mostly), and calls consul for writes.
+# NOTE: this one should stay INTERNAL ONLY (no public ApisixRoute) unless you
+# add a dedicated auth flow for staff - see gateway/ notes in README.
+nameOverride: "horus"
+fullnameOverride: "horus"
+
+image:
+  repository: registry.sanlab.zone/icecream/horus
+  tag: "1.0.0"
+
+replicaCount: 1
+
+containerPort: 8080
+managementPort: 8080
+
+resources:
+  requests: { cpu: 150m, memory: 384Mi }
+  limits:   { cpu: 500m, memory: 768Mi }
+
+env:
+  SPRING_PROFILES_ACTIVE: "k8s"
+  CONFIG_SERVER_URL: "http://codex:80"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://consul-postgresql:5432/consul"
+  SPRING_ELASTICSEARCH_URIS: "http://elasticsearch:9200"
+
+secret:
+  create: false
+  name: "horus-db-secret"
+  # expected keys: SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD (read-only DB user recommended)
