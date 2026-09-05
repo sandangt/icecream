@@ -16,8 +16,7 @@ run-name: "[${{ inputs.ENV }}](🚀): storefront"
 
 jobs:
   build:
-    uses: sandangt/icecream/.github/actions/build-nextjs.yaml@master
-
+    uses: ./.github/workflows/build-nextjs.yaml
     with:
       root-path: icecream-ui/storefront
       image-name: icecream-storefront
