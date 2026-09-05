@@ -1,17 +1,21 @@
 FROM node:24-alpine AS builder
 
+ENV CI=true
+
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN corepack enable
-RUN CI=true pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
 RUN pnpm build
 
 FROM node:24-alpine
+
+ENV CI=true
 
 WORKDIR /app
 

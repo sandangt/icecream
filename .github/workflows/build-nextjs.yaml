@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ inputs.root-path }}
         run: pnpm install --frozen-lockfile
-      - name: Build frontend
+      - name: Build app
         working-directory: ${{ inputs.root-path }}
         run: pnpm build
       - name: Login GHCR
