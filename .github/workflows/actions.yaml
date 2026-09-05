@@ -1,8 +1,17 @@
 name: Build & Push All Images
 
+# on:
+  # push:
+  #   branches: ["master"]
+
 on:
-  push:
-    branches: ["master"]
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
 
 env:
   REGISTRY: ghcr.io
