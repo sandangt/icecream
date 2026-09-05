@@ -21,7 +21,3 @@ dist-ssr
 .vscode/
 *~
 *.swp
-
-# package management lock
-yarn.lock
-pnpm-lock.yaml

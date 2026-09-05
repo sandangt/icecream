@@ -8,20 +8,19 @@ import { ROUTES } from '@/lib/constants'
 import { ProductHelper } from '@/lib/helpers'
 import {
   requestFeedbackStatByProductId,
-  requestFeedbacksByProductId,
   requestProductBySlug,
 } from '@/repositories/consul'
 
 import { DetailsProductCard, ExtraTabs } from './_components'
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 const Page: NextPage<Props> = async ({ params }) => {
-  const { slug } = params
+  const { slug } = await params
   const product = await requestProductBySlug(slug)
   const productService = new ProductHelper(product)
 

@@ -8,7 +8,7 @@ import { ProductCard } from '../_components'
 import { FilterGroup, PaginationControls } from './_components'
 
 type Props = {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string
     size?: string
     search?: string
@@ -20,7 +20,7 @@ type Props = {
     createdBefore?: string
     modifiedAfter?: string
     modifiedBefore?: string
-  }
+  }>
 }
 
 const DEFAULT_FIRST_PAGE = 1

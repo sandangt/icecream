@@ -1,4 +1,4 @@
-import type { FiltersRequest, PaginationRequest, RequestAllParams, SortingRequest } from './all'
+import type { FiltersRequest, PaginationRequest, RequestAllParams, SortingRequest, SortingOrder } from './all'
 import type {
   CreateOrderItemRequest,
   CreateOrderRequest,
@@ -15,4 +15,5 @@ export {
   CreateOrderItemRequest,
   CreateOrderRequest,
   FeedbackRequest,
+  SortingOrder
 }

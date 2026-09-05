@@ -3,9 +3,11 @@ export type PaginationRequest = {
   offset: number
 }
 
+export type SortingOrder = 'ASC' | 'DESC'
+
 export type SortingRequest = {
   field: string
-  order: 'ASC' | 'DESC'
+  order: SortingOrder
 }
 
 export type FiltersRequest = {

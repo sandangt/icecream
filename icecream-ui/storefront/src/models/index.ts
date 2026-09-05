@@ -26,6 +26,7 @@ import type {
   RequestAllParams,
   SortingRequest,
   UpdateProfileRequest,
+  SortingOrder,
 } from './requests'
 import type { CreateOrderResponse, RequestAllResult } from './responses'
 
@@ -57,4 +58,5 @@ export {
   StockExtended,
   FeedbackStat,
   FeedbackRequest,
+  SortingOrder,
 }
