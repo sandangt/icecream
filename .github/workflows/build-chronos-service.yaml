@@ -16,6 +16,7 @@ jobs:
     name: Build and push chronos service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
+      root-path: icecream-system
       module: chronos
       image-name: icecream-chronos-service
       ENV: ${{ inputs.ENV }}

@@ -16,6 +16,7 @@ jobs:
     name: Build and push memoir service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
+      root-path: icecream-system
       module: memoir
       image-name: icecream-memoir-service
       ENV: ${{ inputs.ENV }}

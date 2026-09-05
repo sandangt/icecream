@@ -16,6 +16,10 @@ on:
         type: string
         description: Environment
         required: true
+      root-path:
+        type: string
+        description: Root path for group of services (e.g. icecream-system, icecream-ui ...)
+        required: true
     outputs:
       image-tag:
         description: "Full image reference(s) that were built/pushed"
@@ -43,6 +47,7 @@ jobs:
           java-version: 25
           cache: maven
       - name: Build ${{ inputs.module }}
+        working-directory: ${{ inputs.root-path }}
         run: |
           mvn --batch-mode --no-transfer-progress -pl ${{ inputs.module }} -am clean package -DskipTests
       - name: Log in to GHCR
@@ -65,7 +70,7 @@ jobs:
       - name: Build & push image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ${{ inputs.root-path }}
           file: ${{ inputs.module }}/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
