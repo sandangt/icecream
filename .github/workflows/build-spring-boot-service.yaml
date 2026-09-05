@@ -71,7 +71,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.root-path }}
-          file: ${{ inputs.module }}/Dockerfile
+          file: ${{ inputs.root-path }}/${{ inputs.module }}/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
