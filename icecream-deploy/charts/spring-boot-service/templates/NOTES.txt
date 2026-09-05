@@ -1,0 +1,7 @@
+{{ include "spring-service.fullname" . }} has been deployed to namespace {{ .Release.Namespace }}.
+
+Check status:
+  kubectl -n {{ .Release.Namespace }} get pods -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Internal DNS name (use this in other services' env vars):
+  {{ include "spring-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}

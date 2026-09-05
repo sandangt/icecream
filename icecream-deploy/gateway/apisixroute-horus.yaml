@@ -1,0 +1,29 @@
+# horus (backoffice) is intentionally NOT exposed publicly by default.
+# If/when you need staff access from outside LAN3, expose it on a separate
+# subdomain (e.g. backoffice.sanlab.zone) and put it behind Keycloak auth via
+# the apisix-plugin "openid-connect", rather than routing it under the main
+# storefront host. Left as a commented template:
+#
+# apiVersion: apisix.apache.org/v2
+# kind: ApisixRoute
+# metadata:
+#   name: horus-route
+#   namespace: icecream
+# spec:
+#   http:
+#     - name: horus
+#       match:
+#         hosts:
+#           - backoffice.sanlab.zone
+#         paths:
+#           - "/*"
+#       plugins:
+#         - name: openid-connect
+#           enable: true
+#           config:
+#             client_id: horus
+#             client_secret: "<from secret>"
+#             discovery: "https://icecream.sanlab.zone/auth/realms/icecream/.well-known/openid-configuration"
+#       backends:
+#         - serviceName: horus
+#           servicePort: 80

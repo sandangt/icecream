@@ -1,0 +1,13 @@
+# bitnami/keycloak - OIDC/OAuth2 identity provider ("idp" in the diagram)
+auth:
+  adminUser: admin
+  existingSecret: "keycloak-admin-secret"   # key: admin-password
+externalDatabase:
+  host: "keycloak-postgresql"
+  database: keycloak
+  user: keycloak
+  existingSecret: "keycloak-postgresql-secret"
+  existingSecretPasswordKey: password
+postgresql:
+  enabled: false   # we deploy postgres separately above, disable the built-in one
+proxy: edge   # TLS is terminated upstream at pfsense HAProxy

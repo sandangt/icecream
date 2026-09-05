@@ -1,0 +1,22 @@
+name: "Build echo service"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): echo-service"
+
+jobs:
+  build:
+    name: Build and push echo service (${{ inputs.ENV }})
+    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
+    with:
+      module: echo
+      image-name: icecream-echo-service
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit

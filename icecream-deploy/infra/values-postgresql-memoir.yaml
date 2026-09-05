@@ -1,0 +1,9 @@
+# bitnami/postgresql - dedicated instance for `memoir` (audit log, full-text search DB)
+auth:
+  username: memoir
+  database: memoir
+  existingSecret: "memoir-postgresql-secret"
+primary:
+  persistence:
+    enabled: true
+    size: 20Gi   # audit logs grow - size generously

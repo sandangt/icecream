@@ -1,0 +1,10 @@
+# bitnami/elasticsearch - search engine, fed via kafka-connect + debezium CDC
+master:
+  replicaCount: 1
+data:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    size: 20Gi
+coordinating:
+  replicaCount: 1

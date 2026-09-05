@@ -1,0 +1,22 @@
+name: "Build memoir service"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): memoir-service"
+
+jobs:
+  build:
+    name: Build and push memoir service (${{ inputs.ENV }})
+    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
+    with:
+      module: memoir
+      image-name: icecream-memoir-service
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit

@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 
 import { encodeBase64Str } from '@/lib/utils'
 import { requestCreateCustomerProfileIfNotExist } from '@/repositories/consul'
-import { AUTH_KEYCLOAK_ID, AUTH_KEYCLOAK_ISSUER, AUTH_KEYCLOAK_SECRET } from '@/settings'
+import { AUTH_KEYCLOAK_ID, AUTH_KEYCLOAK_ISSUER, AUTH_KEYCLOAK_SECRET } from '@/lib/env'
 
 import authConfig from './auth.config'
 

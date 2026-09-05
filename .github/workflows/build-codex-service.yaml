@@ -1,0 +1,22 @@
+name: "Build Codex service"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): codex-service"
+
+jobs:
+  build:
+    name: Build and push codex service (${{ inputs.ENV }})
+    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
+    with:
+      module: codex
+      image-name: icecream-codex-service
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit

@@ -1,0 +1,8 @@
+apiVersion: v2
+name: storefront
+description: >
+  Helm chart for the "storefront" NextJS 16 frontend (SSR/SSG) with NextAuth
+  + Keycloak SSO for the icecream e-commerce platform.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

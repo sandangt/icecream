@@ -9,7 +9,7 @@ import {
   Session,
 } from '@/models'
 import { FeedbackRequest } from '@/models'
-import { CONSUL_URL } from '@/settings'
+import { CONSUL_URL } from '@/lib/env'
 
 export const requestFeedbacksByProductId = async ({
   productId,

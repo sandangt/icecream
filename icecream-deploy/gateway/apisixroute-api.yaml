@@ -1,0 +1,32 @@
+# Public API route: https://icecream.sanlab.zone/api/*  ->  consul (BFF/transactional service)
+# Add more path-based routes here as you expose more endpoints (e.g. /api/notifications -> echo).
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: api-route
+  namespace: icecream
+spec:
+  http:
+    - name: consul-api
+      match:
+        hosts:
+          - icecream.sanlab.zone
+        paths:
+          - "/api/*"
+      backends:
+        - serviceName: consul
+          servicePort: 80
+      plugins:
+        - name: proxy-rewrite
+          enable: true
+          config:
+            regex_uri: ["^/api/(.*)", "/$1"]
+    - name: auth
+      match:
+        hosts:
+          - icecream.sanlab.zone
+        paths:
+          - "/auth/*"
+      backends:
+        - serviceName: keycloak
+          servicePort: 80

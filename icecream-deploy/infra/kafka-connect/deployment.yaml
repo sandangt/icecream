@@ -1,0 +1,41 @@
+# Kafka Connect worker, pre-loaded with the Debezium Postgres connector plugin.
+# Build your own image FROM debezium/connect:2.x (already includes the
+# Postgres + MongoDB connector jars) — see README for the one-line Dockerfile.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-connect
+  namespace: icecream
+  labels:
+    app.kubernetes.io/name: kafka-connect
+    app.kubernetes.io/part-of: icecream
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kafka-connect
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kafka-connect
+    spec:
+      containers:
+        - name: kafka-connect
+          image: registry.sanlab.zone/icecream/kafka-connect-debezium:2.x
+          ports:
+            - containerPort: 8083
+              name: rest
+          env:
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka:9092"
+            - name: GROUP_ID
+              value: "icecream-cdc"
+            - name: CONFIG_STORAGE_TOPIC
+              value: "icecream-connect-configs"
+            - name: OFFSET_STORAGE_TOPIC
+              value: "icecream-connect-offsets"
+            - name: STATUS_STORAGE_TOPIC
+              value: "icecream-connect-status"
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits:   { cpu: 750m, memory: 1Gi }

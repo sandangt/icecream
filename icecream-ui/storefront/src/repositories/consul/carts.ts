@@ -2,7 +2,7 @@ import { API_PATHS } from '@/lib/constants'
 import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
 import { Cart, Session } from '@/models'
-import { CONSUL_URL } from '@/settings'
+import { CONSUL_URL } from '@/lib/env'
 
 export const fetchCart = async (session: Session): Promise<Cart> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CART])

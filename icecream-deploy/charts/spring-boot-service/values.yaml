@@ -1,0 +1,80 @@
+# ---------------------------------------------------------------------------
+# DEFAULT values for the generic spring-service chart.
+# Every real service (codex/consul/memoir/echo/chronos/conflux)
+# overrides only what it needs in environments/lan3/values-<service>.yaml
+# ---------------------------------------------------------------------------
+
+nameOverride: ""          # e.g. "consul" - REQUIRED override per service
+fullnameOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: registry.sanlab.zone/icecream/CHANGE_ME   # your own registry/image
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+# - name: regcred
+
+serviceAccount:
+  create: true
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+# Spring Boot actuator is assumed on all services for health checks.
+containerPort: 8080
+managementPort: 8081     # actuator port, set equal to containerPort if you don't split them
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+probes:
+  liveness:
+    path: /actuator/health/liveness
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readiness:
+    path: /actuator/health/readiness
+    initialDelaySeconds: 15
+    periodSeconds: 5
+  startup:
+    path: /actuator/health
+    failureThreshold: 30
+    periodSeconds: 5
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
+
+# Plain, non-secret configuration -> becomes a ConfigMap -> mounted as env vars
+env: {}
+  # SPRING_PROFILES_ACTIVE: "prod"
+  # CONFIG_SERVER_URL: "http://codex:80"
+
+# Secret configuration (DB passwords, API keys, etc).
+# For a homelab, values here go into a Kubernetes Secret created by this chart
+# ONLY if secret.create=true and you pass values via --set or a separate
+# (git-ignored) secrets values file. Otherwise create the Secret yourself
+# (see /scripts/20-create-secrets.sh) and just reference its name below.
+secret:
+  create: false
+  name: ""          # name of an EXISTING secret to use if create=false
+  data: {}          # key: value pairs, only used if create=true (avoid committing real secrets!)
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

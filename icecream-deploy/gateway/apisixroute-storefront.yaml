@@ -1,0 +1,19 @@
+# Public route: https://icecream.sanlab.zone/*  ->  storefront (NextJS SSR)
+# TLS itself is terminated at pfsense HAProxy (Acme cert for icecream.sanlab.zone);
+# HAProxy backend forwards plain HTTP to APISIX's MetalLB VIP.
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: storefront-route
+  namespace: icecream
+spec:
+  http:
+    - name: storefront
+      match:
+        hosts:
+          - icecream.sanlab.zone
+        paths:
+          - "/*"
+      backends:
+        - serviceName: storefront
+          servicePort: 80

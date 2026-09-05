@@ -1,0 +1,9 @@
+# bitnami/postgresql - dedicated instance backing Keycloak (idp)
+auth:
+  username: keycloak
+  database: keycloak
+  existingSecret: "keycloak-postgresql-secret"
+primary:
+  persistence:
+    enabled: true
+    size: 5Gi

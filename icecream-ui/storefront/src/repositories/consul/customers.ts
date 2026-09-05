@@ -9,7 +9,7 @@ import { ALRIGHT_STATUSES, API_PATHS, HttpStatusCode } from '@/lib/constants'
 import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
 import { Address, CustomerExtended, Media, Session, UpdateProfileRequest } from '@/models'
-import { CONSUL_URL } from '@/settings'
+import { CONSUL_URL } from '@/lib/env'
 
 const requestGetCustomerProfile = async (session: Session): Promise<CustomerExtended> => {
   const url = generateUrl(CONSUL_URL, [API_PATHS.CUSTOMER])

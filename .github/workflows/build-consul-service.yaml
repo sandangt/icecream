@@ -1,0 +1,22 @@
+name: "Build Consul service"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): consul-service"
+
+jobs:
+  build:
+    name: Build and push codex service (${{ inputs.ENV }})
+    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
+    with:
+      module: consul
+      image-name: icecream-consul-service
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit

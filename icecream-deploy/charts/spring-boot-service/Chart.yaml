@@ -1,0 +1,10 @@
+apiVersion: v2
+name: spring-service
+description: >
+  Generic, reusable Helm chart for any Spring Boot backend service in the
+  "icecream" platform (codex, consul, memoir, echo, chronos, conflux).
+  Instead of writing 6 nearly-identical charts, we write ONE chart and deploy
+  it 6 times with 6 different values files (see /environments).
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

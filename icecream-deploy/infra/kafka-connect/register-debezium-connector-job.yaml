@@ -1,0 +1,34 @@
+# One-shot Job that POSTs the Debezium Postgres connector config to Kafka
+# Connect's REST API once it's up. This wires: consul-postgresql -> kafka
+# (CDC flow in your diagram), which conflux then consumes and pushes into
+# elasticsearch.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: register-debezium-consul-connector
+  namespace: icecream
+spec:
+  backoffLimit: 6
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: register-connector
+          image: curlimages/curl:8.9.1
+          command:
+            - sh
+            - -c
+            - |
+              until curl -sf http://kafka-connect:8083/connectors; do echo waiting for kafka-connect...; sleep 5; done
+              curl -s -X PUT http://kafka-connect:8083/connectors/consul-cdc/config \
+                -H "Content-Type: application/json" \
+                -d '{
+                  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+                  "database.hostname": "consul-postgresql",
+                  "database.port": "5432",
+                  "database.dbname": "consul",
+                  "database.user": "${file:/etc/secrets/consul-db.properties:username}",
+                  "database.password": "${file:/etc/secrets/consul-db.properties:password}",
+                  "topic.prefix": "icecream.consul",
+                  "plugin.name": "pgoutput"
+                }'
