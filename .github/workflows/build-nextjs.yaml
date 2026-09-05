@@ -43,9 +43,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          cache: pnpm
+          cache-dependency-path: |
+            ${{ inputs.root-path }}/pnpm-lock.yaml
       - name: Install dependencies
         working-directory: ${{ inputs.root-path }}
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Build frontend
         working-directory: ${{ inputs.root-path }}
         run: pnpm build

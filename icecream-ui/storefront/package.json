@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "~4.1.0",
+    "embla-carousel-react": "^8.6.0",
     "immer": "~10.2.0",
     "lucide-react": "0.544.0",
     "next": "15.5.9",
@@ -75,6 +76,6 @@
     "start": "next start",
     "lint": "next lint --no-cache",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
-    "clean": "rm -rf .next node_modules"
+    "clean": "rm -rf .next node_modules pnpm-lock.yaml"
   }
 }

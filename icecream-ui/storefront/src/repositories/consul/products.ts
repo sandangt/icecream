@@ -1,7 +1,7 @@
 import { API_PATHS } from '@/lib/constants'
 import { api } from '@/lib/rest-client'
 import { generateUrl } from '@/lib/utils'
-import { ProductExtended, RequestAllParams, RequestAllResult } from '@/models'
+import { ProductExtended, RequestAllParams, RequestAllResult, SortingOrder } from '@/models'
 import { CONSUL_URL } from '@/lib/env'
 
 const _requestAllProducts = async (
@@ -31,7 +31,7 @@ export const requestProductBySlug = async (slug: string): Promise<ProductExtende
 
 export const requestFeaturedProducts = async (): Promise<ProductExtended[]> => {
   const pagination = { limit: 8, offset: 0 }
-  const sorting = { field: 'createdAt', order: 'DESC' }
+  const sorting: {field: string, order: SortingOrder } = { field: 'createdAt', order: 'DESC' }
   try {
     const { data } = await _requestAllProducts({ pagination, sorting }, true)
     return data
@@ -42,7 +42,7 @@ export const requestFeaturedProducts = async (): Promise<ProductExtended[]> => {
 
 export const requestNewProducts = async (): Promise<ProductExtended[]> => {
   const pagination = { limit: 8, offset: 0 }
-  const sorting = { field: 'modifiedAt', order: 'DESC' }
+  const sorting: {field: string, order: SortingOrder } = { field: 'modifiedAt', order: 'DESC' }
   try {
     const { data } = await _requestAllProducts({ pagination, sorting })
     return data
