@@ -13,7 +13,7 @@ run-name: "[${{ inputs.ENV }}](🚀): chronos-service"
 
 jobs:
   build:
-    name: Build and push chronos service (${{ inputs.ENV }})
+    name: Build Icecream Chronos Service (${{ inputs.ENV }})
     uses: ./.github/workflows/build-spring-boot-service.yaml
     with:
       root-path: icecream-system

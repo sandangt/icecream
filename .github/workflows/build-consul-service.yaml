@@ -13,8 +13,8 @@ run-name: "[${{ inputs.ENV }}](🚀): consul-service"
 
 jobs:
   build:
-    name: Build and push codex service (${{ inputs.ENV }})
-    uses: ./.github/workflows/build-spring-boot-service.yaml
+    name: Build Consul Service (${{ inputs.ENV }})
+    uses: sandangt/icecream/.github/actions/build-spring-boot-service.yaml@master
     with:
       root-path: icecream-system
       module: consul

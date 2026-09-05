@@ -1,0 +1,25 @@
+name: Build Storefront
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options:
+          - DEV
+          - STAG
+          - PROD
+        default: DEV
+        required: true
+
+run-name: "[${{ inputs.ENV }}](🚀): storefront"
+
+jobs:
+  build:
+    uses: sandangt/icecream/.github/actions/build-nextjs.yaml@master
+
+    with:
+      root-path: icecream-ui/storefront
+      image-name: icecream-storefront
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit
