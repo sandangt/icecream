@@ -1,0 +1,23 @@
+name: "Conflux service script"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): conflux-service"
+
+jobs:
+  build:
+    name: Build Icecream Conflux Service (${{ inputs.ENV }})
+    uses: ./.github/workflows/build-spring-boot-service.yaml
+    with:
+      root-path: icecream-system
+      module: conflux
+      image-name: icecream-conflux-service
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit
