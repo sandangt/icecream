@@ -1,0 +1,15 @@
+apiVersion: v2
+name: apisix
+description: >-
+  Apache APISIX API gateway for the icecream platform. Wraps the official
+  Apache APISIX Helm chart (which bundles its own etcd dependency for
+  dynamic config storage) as a dependency. Not present in the original
+  docker-compose - added here as the platform's ingress/API gateway, per
+  the target infras/ layout.
+type: application
+version: 0.1.0
+appVersion: 3.18.0
+dependencies:
+  - name: apisix
+    version: 2.17.0
+    repository: 'https://charts.apiseven.com'

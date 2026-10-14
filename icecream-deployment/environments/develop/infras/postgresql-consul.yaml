@@ -1,0 +1,8 @@
+postgresql:
+  auth:
+    username: consul
+    database: consul
+    existingSecret: postgresql-consul
+  primary:
+    persistence:
+      size: 8Gi
