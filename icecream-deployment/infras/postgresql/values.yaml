@@ -1,0 +1,64 @@
+nameOverride: ""
+fullnameOverride: ""
+
+auth:
+  username: admin
+  password: ""
+  database: consul
+  existingSecret: ""
+  secretPasswordKey: postgres-password
+
+postgresql:
+  architecture: standalone
+  auth:
+    existingSecret: postgresql-credentials
+    username: icecream
+    database: icecream
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    extendedConfiguration: |
+      wal_level = logical
+      max_wal_senders = 10
+      max_replication_slots = 10
+  metrics:
+    enabled: false
+
+extraEnv: []
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+podSecurityContext:
+  fsGroup: 999
+
+securityContext:
+  runAsUser: 999
+  runAsNonRoot: true
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+podAnnotations: {}
+annotations: {}

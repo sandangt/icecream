@@ -1,0 +1,9 @@
+apiVersion: v2
+name: redis
+description: >-
+  Redis for the icecream platform. Wraps the upstream Bitnami Redis chart
+  as a dependency (standalone architecture, matching the single
+  `icecream-redis` container in the original docker-compose).
+type: application
+version: 0.1.0
+appVersion: 8.8.3

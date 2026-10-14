@@ -1,0 +1,79 @@
+version: '3'
+
+dotenv: ['.env']
+
+vars:
+  LOCAL_STORE: ./.local-volumes
+  NAMESPACE: icecream
+  REGISTRY_URL: code.sanlab.zone/sandang
+
+includes:
+  deployment:
+    taskfile: ./icecream-deployment/Taskfile.yaml
+    dir: ./icecream-deployment
+  image:
+    taskfile: ./icecream-image/Taskfile.yaml
+    dir: ./icecream-image
+
+tasks:
+  init-ns:
+    desc: Create namespace {{.NAMESPACE}}
+    if: '! kubectl get ns {{.NAMESPACE}}'
+    cmd: kubectl create ns {{.NAMESPACE}}
+  end-ns:
+    desc: Delete namespace
+    if: kubectl get ns {{.NAMESPACE}}
+    cmd: kubectl delete ns {{.NAMESPACE}}
+  getall:
+    cmd: kubectl get all,cm,secrets,pvc,pv -n {{.NAMESPACE}}
+  delete-item:
+    deps: [init-ns]
+    if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+    cmd: kubectl delete {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+  describe-item:
+    deps: [init-ns]
+    if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+    cmd: kubectl describe {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+  delete-file:
+    deps: [init-ns]
+    preconditions:
+      - test -f {{index .CLI_ARGS_LIST 0}}
+    cmd: kubectl delete -f {{index .CLI_ARGS_LIST 0}}
+  apply-file:
+    deps: [init-ns]
+    preconditions:
+      - test -f {{index .CLI_ARGS_LIST 0}}
+    cmd: kubectl apply -f {{index .CLI_ARGS_LIST 0}}
+
+  greet:
+    silent: true
+    cmds:
+      - echo $GREETING
+      # - ls "{{.ENV}}"
+      - ls "{{.HOME}}"
+      - echo $JAVA_HOME
+    env:
+      GREETING: Hey, there!
+  is-internal:
+    desc: This is internal task, should not be show
+    internal: true
+    cmds:
+      - echo "Not showing"
+  new-task:
+    deps:
+      - task: echo-sth
+        vars: { TEXT: 'Before 1' }
+      - task: echo-sth
+        vars: { TEXT: 'Before 2' }
+      - task: should-fail
+    cmd: echo somthing
+    failfast: true
+    silent: true
+  hello-loop:
+    cmds:
+      - for:
+          matrix:
+            OS: ['windows', 'linux', 'darwin']
+            ARCH: ['amd64', 'arm64']
+        cmd: echo "{{.ITEM.OS}}"/"{{.ITEM.ARCH}}"
+    silent: true

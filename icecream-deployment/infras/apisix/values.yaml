@@ -1,0 +1,6 @@
+apisix:
+  replicaCount: 1
+  image:
+    repository: apache/apisix
+    pullPolicy: IfNotPresent
+    tag: 3.18.0-debian

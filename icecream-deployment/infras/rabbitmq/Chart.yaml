@@ -1,0 +1,9 @@
+apiVersion: v2
+name: rabbitmq
+description:  >-
+  RabbitMQ for the icecream platform. Wraps the upstream Bitnami RabbitMQ
+  chart as a dependency, with the management plugin enabled (matching the
+  `rabbitmq:4.3.6-management` image used in docker-compose).
+type: application
+version: 0.1.0
+appVersion: 4.3.6-management
