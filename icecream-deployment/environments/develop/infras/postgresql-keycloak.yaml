@@ -1,8 +1,0 @@
-postgresql:
-  auth:
-    username: keycloak
-    database: keycloak
-    existingSecret: postgresql-keycloak
-  primary:
-    persistence:
-      size: 8Gi

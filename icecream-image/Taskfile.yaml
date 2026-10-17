@@ -10,13 +10,19 @@ vars:
       version: 4.3.6-management
     - name: postgresql
       path: './postgresql'
-      version: 16.8
+      version: '16.8'
     - name: mongodb
       path: './mongodb'
       version: 8.0.10
     - name: elasticsearch
       path: './elasticsearch'
       version: 8.19.6
+    - name: apisix
+      path: './apisix'
+      version: 3.19.0-debian
+    - name: minio
+      path: './minio'
+      version: RELEASE.2025-04-22T22-12-26Z
 
 tasks:
   build:
@@ -35,6 +41,18 @@ tasks:
     cmds:
       - echo '{{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}} {{.PATH}}'
       - docker build -t {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}} {{.PATH}}
+  # task build-one NAME=redis
+  build-one:
+    requires:
+      vars: [NAME]
+    cmds:
+      - for: {var: IMAGE_LIST}
+        if: '[ "{{.ITEM.name}}" = "{{.NAME}}" ]'
+        task: build-item
+        vars:
+          NAME: '{{.ITEM.name}}'
+          PATH: '{{.ITEM.path}}'
+          VERSION: '{{.ITEM.version}}'
   push:
     cmds:
       - for: {var: IMAGE_LIST}
@@ -47,7 +65,18 @@ tasks:
     internal: true
     status:
       - '! test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"'
-    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}
+    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}\
+  # task push-one NAME=redis
+  push-one:
+    requires:
+      vars: [NAME]
+    cmds:
+      - for: { var: IMAGE_LIST }
+        if: '[ "{{.ITEM.name}}" = "{{.NAME}}" ]'
+        task: push-item
+        vars:
+          NAME: '{{.ITEM.name}}'
+          VERSION: '{{.ITEM.version}}'  
   cleanup:
     silent: true
     cmds:

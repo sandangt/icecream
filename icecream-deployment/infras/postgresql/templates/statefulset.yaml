@@ -1,109 +1,89 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "postgresql.fullname" . }}
-  labels:
-    {{- include "postgresql.labels" . | nindent 4 }}
+  name: {{ include "pg.fullname" . }}
+  labels: {{- include "pg.labels" . | nindent 4 }}
 spec:
-  serviceName: {{ include "postgresql.fullname" . }}
+  serviceName: {{ include "pg.fullname" . }}-headless
   replicas: 1
   selector:
-    matchLabels:
-      {{- include "postgresql.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "pg.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        {{- include "postgresql.labels" . | nindent 8 }}
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      labels: {{- include "pg.selectorLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        fsGroup: 999
       containers:
         - name: postgresql
-          image: {{ include "postgresql.image" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          args:
-            - "postgres"
-            {{- range $key, $value := .Values.postgresConf }}
-            - "-c"
-            - "{{ $key }}={{ $value }}"
-            {{- end }}
           ports:
             - name: postgresql
               containerPort: 5432
-              protocol: TCP
           env:
             - name: POSTGRES_USER
-              value: {{ .Values.auth.username | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: icecream-configmaps
+                  key: postgresql-username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "postgresql.secretName" . }}
-                  key: {{ .Values.auth.secretPasswordKey }}
-            - name: POSTGRES_DB
-              value: {{ .Values.auth.database | quote }}
+                  name: icecream-credentials
+                  key: postgresql-password
+            - name: POSTGRES_MULTIPLE_DATABASES
+              valueFrom:
+                configMapKeyRef:
+                  name: icecream-configmaps
+                  key: postgresql-multiple-databases
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
-            {{- with .Values.extraEnv }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
+          startupProbe:
             exec:
-              command:
-                - /bin/sh
-                - -c
-                - pg_isready -U {{ .Values.auth.username }} -d {{ .Values.auth.database }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d postgres"]
+            periodSeconds: 10
+            failureThreshold: 30
           readinessProbe:
             exec:
-              command:
-                - /bin/sh
-                - -c
-                - pg_isready -U {{ .Values.auth.username }} -d {{ .Values.auth.database }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d postgres"]
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d postgres"]
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 256Mi
       {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
+      tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
-  {{- if .Values.persistence.enabled }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
       spec:
-        accessModes:
-          {{- toYaml .Values.persistence.accessModes | nindent 10 }}
-        {{- if .Values.persistence.storageClassName }}
-        storageClassName: {{ .Values.persistence.storageClassName }}
-        {{- end }}
+        storageClassName: {{ .Values.persistence.storageClass }}
+        accessModes: {{- toYaml .Values.persistence.accessModes | nindent 10 }}
         resources:
           requests:
             storage: {{ .Values.persistence.size }}
-  {{- end }}

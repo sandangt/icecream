@@ -1,6 +1,33 @@
-apisix:
-  replicaCount: 1
-  image:
-    repository: apache/apisix
-    pullPolicy: IfNotPresent
-    tag: 3.18.0-debian
+replicaCount: 1
+
+fullnameOverride: ""
+
+image:
+  repository: code.sanlab.zone/sandang/apisix
+  tag: 3.19.0-debian
+  pullPolicy: IfNotPresent
+
+
+service:
+  type: NodePort
+  http:
+    port: 80
+    nodePort: 30080
+  https:
+    port: 443
+    nodePort: 30443
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+routes: []
+upstreams: []
+services: []
+globalRules: []
+tolerations: []
+imagePullSecrets: []
+nodeSelector: {}
+affinity: {}
