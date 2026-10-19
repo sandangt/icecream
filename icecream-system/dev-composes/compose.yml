@@ -65,28 +65,75 @@ services:
     networks:
       - icecream-network
 
+#  minio:
+#    build:
+#      context: .
+#      dockerfile: minio/Dockerfile
+#    command: server --address ":9000" --console-address ":9001" /data
+#    environment:
+#      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+#      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+#    container_name: icecream-minio
+#    hostname: minio
+#    ports:
+#      - "${MINIO_API_PORT}:9000"
+#      - "${MINIO_CONSOLE_PORT}:9001"
+#    volumes:
+#      - ${MINIO_VOLUME}:/data
+#    networks:
+#      - icecream-network
+#    healthcheck:
+#      test: ["CMD-SHELL", "mc ls local/images || exit 1"]
+#      interval: 5s # Check more frequently during startup
+#      timeout: 5s
+#      retries: 10
+
   minio:
     build:
       context: .
       dockerfile: minio/Dockerfile
-    command: server --address ":9000" --console-address ":9001" /data
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
-      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    command: ["server", "--single-node", "--default-bucket"]
     container_name: icecream-minio
     hostname: minio
+    environment:
+      GARAGE_RPC_SECRET: ${MINIO_RPC_SECRET}
+      GARAGE_ADMIN_TOKEN: ${MINIO_ADMIN_TOKEN}
+      GARAGE_DEFAULT_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      GARAGE_DEFAULT_SECRET_KEY: ${MINIO_SECRET_KEY}
+      GARAGE_DEFAULT_BUCKET: images
+      EXTRA_BUCKETS: "icecream-logs icecream-traces icecream-metrics"
+      PUBLIC_BUCKETS: "images"
     ports:
-      - "${MINIO_API_PORT}:9000"
-      - "${MINIO_CONSOLE_PORT}:9001"
+      - "${MINIO_API_PORT}:3900"
     volumes:
-      - ${MINIO_VOLUME}:/data
+      - ./minio/garage.toml:/etc/garage.toml:ro
+      - ${MINIO_VOLUME}:/var/lib/garage
     networks:
       - icecream-network
     healthcheck:
-      test: ["CMD-SHELL", "mc ls local/images || exit 1"]
-      interval: 5s # Check more frequently during startup
+      test: ["CMD-SHELL", "test -f /tmp/garage-ready"]
+      interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
+      start_period: 5s
+
+  minio-webui:
+    image: khairul169/garage-webui:latest
+    container_name: icecream-minio-webui
+    environment:
+      API_BASE_URL: "http://minio:3903"
+      S3_ENDPOINT_URL: "http://minio:3900"
+      S3_REGION: ${REGION}
+      API_ADMIN_KEY: ${MINIO_ADMIN_TOKEN}
+    volumes:
+      - ./minio/garage.toml:/etc/garage.toml:ro
+    ports:
+      - "${MINIO_UI_PORT}:3909"
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - icecream-network
 
   rabbitmq:
     container_name: icecream-rabbitmq
@@ -163,6 +210,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - ${ZOOKEEPER_VOLUME}:/var/lib/zookeeper
     networks:
       - icecream-network
     healthcheck:

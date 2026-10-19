@@ -1,0 +1,147 @@
+
+# -- Default values for the storefront (Next.js) chart.
+
+replicaCount: 2
+
+image:
+  registry: ghcr.io
+  repository: your-org/icecream-storefront
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ghcr-registry-credentials
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  fsGroup: 1000
+
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop: ["ALL"]
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: http
+  annotations: {}
+
+# -- Storefront is customer-facing, so ingress is enabled by default,
+# fronted by the APISIX gateway (or any ingress controller you run).
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: shop.icecream.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: storefront-tls
+  #    hosts:
+  #      - shop.icecream.example.com
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: ""
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+  policyTypes:
+    - Ingress
+  ingressRules:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: icecream-gateway
+      ports:
+        - port: 3000
+          protocol: TCP
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env: []
+#  - name: NODE_ENV
+#    value: "production"
+
+envFrom: []
+
+configMap:
+  enabled: true
+  data: {}
+  #   NEXT_PUBLIC_API_BASE_URL: "https://api.icecream.example.com"
+  #   NEXT_PUBLIC_IDENTITY_ISSUER: "https://identity.icecream.example.com/realms/icecream-dev"
+
+secret:
+  enabled: false
+  existingSecret: ""
+  data: {}
+  stringData: {}
+
+probes:
+  liveness:
+    enabled: true
+    path: /api/health
+    port: http
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+  readiness:
+    enabled: true
+    path: /api/health
+    port: http
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+  startup:
+    enabled: true
+    path: /api/health
+    port: http
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    failureThreshold: 30
+
+extraVolumes: []
+extraVolumeMounts: []
+extraContainers: []
+initContainers: []
+
+annotations: {}

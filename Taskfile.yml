@@ -26,14 +26,14 @@ tasks:
     cmd: kubectl delete ns {{.NAMESPACE}}
   getall:
     cmd: kubectl get all,cm,secrets,pvc,pv -n {{.NAMESPACE}}
-  delete-item:
-    deps: [init-ns]
-    if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
-    cmd: kubectl delete {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
   describe-item:
     deps: [init-ns]
     if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
     cmd: kubectl describe {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+  delete-item:
+    deps: [init-ns]
+    if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+    cmd: kubectl delete {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
   delete-file:
     deps: [init-ns]
     preconditions:
@@ -44,6 +44,14 @@ tasks:
     preconditions:
       - test -f {{index .CLI_ARGS_LIST 0}}
     cmd: kubectl apply -f {{index .CLI_ARGS_LIST 0}}
+  deployment-a-z:
+    desc: From run from tasks a-z
+    cmds:
+      - task: end-ns
+      - task: init-ns
+      - task: deployment:create-params
+      - task: deployment:create-creds
+      - task: deployment:install-infras
 
   greet:
     silent: true

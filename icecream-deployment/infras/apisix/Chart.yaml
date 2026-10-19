@@ -8,8 +8,4 @@ description: >-
   the target infras/ layout.
 type: application
 version: 0.1.0
-appVersion: 3.18.0
-dependencies:
-  - name: apisix
-    version: 2.17.0
-    repository: 'https://charts.apiseven.com'
+appVersion: 3.19.0-debian

@@ -2,16 +2,11 @@ version: '3'
 
 vars:
   INFRA_LIST:
-    - name: redis
-      templatePath: './infras/redis'
-    - name: rabbitmq
-      templatePath: './infras/rabbitmq'
-    - name: postgresql
-      templatePath: './infras/postgresql'
-    - name: mongodb
-      templatePath: './infras/mongodb'
-    - name: elasticsearch
-      templatePath: './infras/elasticsearch'
+    - redis
+    - rabbitmq
+    - postgresql
+    - mongodb
+    # - elasticsearch
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
@@ -26,7 +21,7 @@ vars:
   PARAMETER_LIST:
     - name: rabbitmq-username
       value: '{{.RABBITMQ_USERNAME}}'
-    - name: postgresl-username
+    - name: postgresql-username
       value: '{{.POSTGRESQL_USER}}'
     - name: mongodb-username
       value: '{{.MONGODB_USER}}'
@@ -40,16 +35,13 @@ vars:
       value: '{{.MONGODB_CHRONOS_DB}}'
     - name: echo-db
       value: '{{.MONGODB_ECHO_DB}}'
+    - name: postgresql-multiple-databases
+      value: '{{.POSTGRESQL_CONSUL_DB}},{{.POSTGRESQL_MEMOIR_DB}},{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: mongodb-multiple-databases
+      value: '{{.MONGODB_ECHO_DB}},{{.MONGODB_CHRONOS_DB}}'
   PROFILE: '{{.PROFILE | default "develop"}}'
 
 tasks:
-  a-z:
-    desc: Run all tasks sequentially
-    cmds:
-      - task: init
-      - task: create-secrets
-      - task: build-infras
-      - task: deploy-infras
   create-creds:
     silent: true
     if: '! kubectl get secrets {{.CREDENTIAL_GROUP_NAME}} -n {{.NAMESPACE}}'
@@ -57,32 +49,29 @@ tasks:
       kubectl create secret generic {{.CREDENTIAL_GROUP_NAME}}
       {{- range .CREDENTIAL_LIST }} --from-literal='{{ .name }}={{ .value }}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
-  create-configmaps:
+  create-params:
     silent: true
     if: '! kubectl get configmaps {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}'
     cmd: >-
       kubectl create configmap {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}
       {{- range .PARAMETER_LIST}} --from-literal='{{.name}}={{.value}}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
-  build-infras:
-    failfast: true
-    cmds:
-      - for: {var: INFRA_LIST}
-        cmd: >-
-          if [ ! -d "{{.ITEM.templatePath}}/charts" ] || [ ! -f "{{.ITEM.templatePath}}/Chart.lock" ]; then
-            helm dependency build {{.ITEM.templatePath}}
-          else
-            echo 'Skipping {{.ITEM.name}}, charts and Chart.lock already exist.'
-          fi
-  install-infras:
-    failfast: true
-    cmds:
-      - for: {var: INFRA_LIST}
-        cmd: helm upgrade --install {{.ITEM.name}} {{.ITEM.templatePath}} -f ./environments/${PROFILE}/infras/{{.ITEM.name}}.yaml -n {{.NAMESPACE}}
-      - kubectl get all -n {{.NAMESPACE}}
   template-infra:
     if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
     cmd: helm template ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+  install-infras:
+    cmds:
+      - for: {var: INFRA_LIST}
+        task: install-infra-internal
+        vars:
+          NAME: '{{.ITEM}}'
   install-infra:
     if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
     cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+  install-infra-internal:
+    internal: true
+    if: test -d ./infras/{{.NAME}} && test -f ./environments/${PROFILE}/infras/{{.NAME}}.yaml
+    cmd: helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/${PROFILE}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+  uninstall-chart:
+    if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
+    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}

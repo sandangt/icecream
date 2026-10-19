@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "apisix.fullname" . }}
+  labels:
+    {{- include "apisix.labels" . | nindent 4 }}
+
+data:
+  config.yaml: |
+    apisix:
+      node_listen:
+        - port: 9080
+      ssl:
+        enable: true
+        listen:
+          - port: 9443
+      enable_ipv6: false
+    deployment:
+      role: data_plane
+      role_data_plane:
+        config_provider: yaml
+  apisix.yaml: |
+    {{- with .Values.routes }}
+    routes:
+      {{- toYaml . | nindent 6 }}
+    {{- else }}
+    routes: []
+    {{- end }}
+    {{- with .Values.upstreams }}
+    upstreams:
+      {{- toYaml . | nindent 6 }}
+    {{- else }}
+    upstreams: []
+    {{- end }}
+    {{- with .Values.services }}
+    services:
+      {{- toYaml . | nindent 6 }}
+    {{- else }}
+    services: []
+    {{- end }}
+    {{- with .Values.globalRules }}
+    global_rules:
+      {{- toYaml . | nindent 6 }}
+    {{- else }}
+    global_rules: []
+    {{- end }}
