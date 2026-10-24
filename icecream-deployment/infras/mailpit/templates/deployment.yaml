@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mailpit.fullname" . }}
+  labels: {{- include "mailpit.labels" . | nindent 4 }}
+spec:
+  replicas: 1                # SQLite on an RWO volume: keep it at 1
+  strategy:
+    type: Recreate           # RWO + SQLite: old pod must stop before new one starts
+  selector:
+    matchLabels: {{- include "mailpit.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "mailpit.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: mailpit
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MP_MAX_MESSAGES
+              value: {{ .Values.maxMessages | quote }}
+            - name: MP_DATABASE
+              value: /data/mailpit.db
+            - name: MP_SMTP_AUTH_ACCEPT_ANY
+              value: {{ ternary "1" "0" .Values.smtpAuthAcceptAny | quote }}
+            - name: MP_SMTP_AUTH_ALLOW_INSECURE
+              value: {{ ternary "1" "0" .Values.smtpAuthAllowInsecure | quote }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8025
+            - name: smtp
+              containerPort: 1025
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: http
+            periodSeconds: 20
+            failureThreshold: 5
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "mailpit.fullname" . }}-data
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}

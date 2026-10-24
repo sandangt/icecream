@@ -44,3 +44,4 @@ data:
     {{- else }}
     global_rules: []
     {{- end }}
+    #END

@@ -21,7 +21,7 @@ service:
 
 persistence:
   storageClass: longhorn
-  size: 8Gi
+  size: 1Gi
   accessModes:
     - ReadWriteOnce
 

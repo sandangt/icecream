@@ -1,5 +1,8 @@
 FROM postgres:16.8
 
+LABEL maintainer='dangthaisan@hotmail.com'
+LABEL repackaged='true'
+
 RUN apt-get update && \
     apt-get install -y postgresql-16-wal2json && \
     rm -rf /var/lib/apt/lists/*

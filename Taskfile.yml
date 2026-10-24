@@ -62,11 +62,6 @@ tasks:
       - echo $JAVA_HOME
     env:
       GREETING: Hey, there!
-  is-internal:
-    desc: This is internal task, should not be show
-    internal: true
-    cmds:
-      - echo "Not showing"
   new-task:
     deps:
       - task: echo-sth

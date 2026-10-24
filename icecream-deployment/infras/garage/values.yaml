@@ -1,0 +1,113 @@
+# ---------------------------------------------------------------------------
+# Image - use the official distroless image directly (it has NO shell).
+# ---------------------------------------------------------------------------
+image:
+  repository: code.sanlab.zone/sandang/garage
+  tag: v2.4.1
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+
+imagePullSecrets: []
+
+# Single-node Garage: keep this at 1.
+replicaCount: 1
+
+# ---------------------------------------------------------------------------
+# Garage settings (rendered into /etc/garage.toml)
+# ---------------------------------------------------------------------------
+garage:
+  region: sanlab
+  dbEngine: sqlite
+  replicationFactor: 1
+  web:
+    rootDomain: ".web.garage.lan"
+    index: index.html
+
+# ---------------------------------------------------------------------------
+# Credentials. Keys inside the Secret MUST be named:
+#   GARAGE_RPC_SECRET, GARAGE_ADMIN_TOKEN,
+#   GARAGE_DEFAULT_ACCESS_KEY, GARAGE_DEFAULT_SECRET_KEY
+# Use existingSecret in real environments; the inline values are for quick tests.
+# ---------------------------------------------------------------------------
+credentials:
+  existingSecret: ""
+  rpcSecret: ""
+  adminToken: ""
+  accessKey: ""
+  secretKey: ""
+
+# ---------------------------------------------------------------------------
+# Bucket created natively by `garage server --single-node --default-bucket`
+# (together with the default access key from the credentials above).
+# ---------------------------------------------------------------------------
+defaultBucket: images
+
+# ---------------------------------------------------------------------------
+# Provisioning of the additional buckets (replaces entrypoint.sh).
+# Runs as a Helm post-install/post-upgrade hook Job calling the Garage admin
+# API (v2). Idempotent - safe to run on every upgrade.
+# ---------------------------------------------------------------------------
+provisioning:
+  enabled: true
+  image:
+    repository: curlimages/curl
+    tag: 8.11.1
+    pullPolicy: IfNotPresent
+  # Buckets to create; the default access key gets read/write/owner on them.
+  buckets:
+    - icecream-logs
+    - icecream-traces
+    - icecream-metrics
+  # Buckets served via the S3 web endpoint (replacement for `mc anonymous set download`).
+  publicBuckets:
+    - images
+  backoffLimit: 3
+  resources: {}
+
+# ---------------------------------------------------------------------------
+# Service
+# ---------------------------------------------------------------------------
+service:
+  type: ClusterIP
+  annotations: {}
+  s3:
+    port: 3900
+  admin:
+    port: 3903
+  web:
+    enabled: false
+    port: 3902
+
+# ---------------------------------------------------------------------------
+# Storage (/var/lib/garage -> meta + data)
+# ---------------------------------------------------------------------------
+persistence:
+  size: 20Gi
+  storageClass: ""        # "" = cluster default StorageClass
+  accessModes:
+    - ReadWriteOnce
+  annotations: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 1Gi
+
+podAnnotations: {}
+podLabels: {}
+
+# Official image runs as root by default; leave empty unless your PSA policy needs more.
+podSecurityContext: {}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

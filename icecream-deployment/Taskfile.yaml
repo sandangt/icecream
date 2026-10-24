@@ -6,7 +6,9 @@ vars:
     - rabbitmq
     - postgresql
     - mongodb
-    # - elasticsearch
+    - elasticsearch
+    - apisix
+    - mailpit
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
