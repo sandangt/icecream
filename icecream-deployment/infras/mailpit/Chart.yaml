@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mailpit
+description: Mailpit SMTP catcher with web UI for the icecream stack
+type: application
+version: 0.1.0
+appVersion: "v1.28.2"

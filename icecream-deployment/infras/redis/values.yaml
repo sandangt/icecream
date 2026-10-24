@@ -1,0 +1,35 @@
+fullnameOverride: ""
+
+image:
+  repository: code.sanlab.zone/sandang/redis
+  tag: 8.8.3
+  pullPolicy: IfNotPresent
+
+auth:
+  enabled: false
+  existingSecret: ""
+
+service:
+  type: ClusterIP
+  port: 6379
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 500Mi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+podSecurityContext: {}
+nodeSelector: {}
+affinity: {}
+extraArgs: []
+tolerations: []
+imagePullSecrets: []

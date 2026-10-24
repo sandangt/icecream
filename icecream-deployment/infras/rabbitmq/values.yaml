@@ -1,0 +1,39 @@
+fullnameOverride: ""
+
+image:
+  repository: code.sanlab.zone/sandang/rabbitmq
+  tag: "4.3.6-management"
+  pullPolicy: IfNotPresent
+
+auth:
+  username: icecream
+  existingSecret: ""
+
+extraConfig: ""
+
+service:
+  type: ClusterIP
+  amqpPort: 5672
+  managementPort: 15672
+  nodePorts:
+    amqp: null
+    management: null
+
+persistence:
+  storageClass: longhorn
+  size: 1Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 1Gi
+
+imagePullSecrets: []
+podSecurityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

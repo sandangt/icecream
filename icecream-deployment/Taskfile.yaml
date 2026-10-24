@@ -1,0 +1,79 @@
+version: '3'
+
+vars:
+  INFRA_LIST:
+    - redis
+    - rabbitmq
+    - postgresql
+    - mongodb
+    - elasticsearch
+    - apisix
+    - mailpit
+  CREDENTIAL_GROUP_NAME: icecream-credentials
+  PARAMETER_GROUP_NAME: icecream-configmaps
+  CREDENTIAL_LIST:
+    - name: rabbitmq-password
+      value: '{{.RABBITMQ_PASSWORD}}'
+    - name: postgresql-password
+      value: '{{.POSTGRESQL_PASSWORD}}'
+    - name: mongodb-password
+      value: '{{.MONGODB_PASSWORD}}'
+    - name: elasticsearch-password
+      value: '{{.ELASTICSEARCH_PASSWORD}}'    
+  PARAMETER_LIST:
+    - name: rabbitmq-username
+      value: '{{.RABBITMQ_USERNAME}}'
+    - name: postgresql-username
+      value: '{{.POSTGRESQL_USER}}'
+    - name: mongodb-username
+      value: '{{.MONGODB_USER}}'
+    - name: consul-db
+      value: '{{.POSTGRESQL_CONSUL_DB}}'
+    - name: memoir-db
+      value: '{{.POSTGRESQL_MEMOIR_DB}}'
+    - name: identity-db
+      value: '{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: chronos-db
+      value: '{{.MONGODB_CHRONOS_DB}}'
+    - name: echo-db
+      value: '{{.MONGODB_ECHO_DB}}'
+    - name: postgresql-multiple-databases
+      value: '{{.POSTGRESQL_CONSUL_DB}},{{.POSTGRESQL_MEMOIR_DB}},{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: mongodb-multiple-databases
+      value: '{{.MONGODB_ECHO_DB}},{{.MONGODB_CHRONOS_DB}}'
+  PROFILE: '{{.PROFILE | default "develop"}}'
+
+tasks:
+  create-creds:
+    silent: true
+    if: '! kubectl get secrets {{.CREDENTIAL_GROUP_NAME}} -n {{.NAMESPACE}}'
+    cmd: >-
+      kubectl create secret generic {{.CREDENTIAL_GROUP_NAME}}
+      {{- range .CREDENTIAL_LIST }} --from-literal='{{ .name }}={{ .value }}' {{- end }}
+      --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+  create-params:
+    silent: true
+    if: '! kubectl get configmaps {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}'
+    cmd: >-
+      kubectl create configmap {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}
+      {{- range .PARAMETER_LIST}} --from-literal='{{.name}}={{.value}}' {{- end }}
+      --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+  template-infra:
+    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+    cmd: helm template ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+  install-infras:
+    cmds:
+      - for: {var: INFRA_LIST}
+        task: install-infra-internal
+        vars:
+          NAME: '{{.ITEM}}'
+  install-infra:
+    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/${PROFILE}/infras/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+  install-infra-internal:
+    internal: true
+    if: test -d ./infras/{{.NAME}} && test -f ./environments/${PROFILE}/infras/{{.NAME}}.yaml
+    cmd: helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/${PROFILE}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+  uninstall-chart:
+    if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
+    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
