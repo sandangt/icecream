@@ -1,22 +1,27 @@
-fullnameOverride: ""
+fullnameOverride: ''
 
 image:
   repository: code.sanlab.zone/sandang/mongodb
   tag: 8.0.10
   pullPolicy: IfNotPresent
 
+replicaCount: 1
+
 auth:
   rootUsername: root
-  existingSecret: ""
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
 
 service:
   type: ClusterIP
-  port: 27017
+  port: 38001
   nodePort: null
 
 persistence:
   storageClass: longhorn
-  size: 10Gi
+  size: 3Gi
   accessModes:
     - ReadWriteOnce
 

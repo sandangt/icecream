@@ -4,7 +4,7 @@ metadata:
   name: {{ include "rabbitmq.fullname" . }}
   labels: {{- include "rabbitmq.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -12,10 +12,7 @@ spec:
   template:
     metadata:
       labels: {{- include "rabbitmq.selectorLabels" . | nindent 8 }}
-      annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      # Fixed hostname so the RabbitMQ node name (rabbit@<hostname>) stays the same across restarts
       hostname: {{ include "rabbitmq.fullname" . }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets: {{- toYaml . | nindent 8 }}
@@ -32,13 +29,13 @@ spec:
             - name: RABBITMQ_DEFAULT_USER
               valueFrom:
                 configMapKeyRef:
-                  name: icecream-configmaps
-                  key: rabbitmq-username
+                  name: {{ include "rabbitmq.configMapName" . }}
+                  key: RABBITMQ_USERNAME
             - name: RABBITMQ_DEFAULT_PASS
               valueFrom:
                 secretKeyRef:
-                  name: icecream-credentials
-                  key: rabbitmq-password
+                  name: {{ include "rabbitmq.secretName" . }}
+                  key: RABBITMQ_PASSWORD
           ports:
             - name: amqp
               containerPort: 5672
@@ -74,11 +71,6 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: {{ include "rabbitmq.fullname" . }}-data
-        {{- if .Values.extraConfig }}
-        - name: custom-config
-          configMap:
-            name: {{ include "rabbitmq.fullname" . }}-config
-        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}

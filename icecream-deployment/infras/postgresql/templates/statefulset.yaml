@@ -5,7 +5,7 @@ metadata:
   labels: {{- include "pg.labels" . | nindent 4 }}
 spec:
   serviceName: {{ include "pg.fullname" . }}-headless
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "pg.selectorLabels" . | nindent 6 }}
   template:
@@ -15,31 +15,32 @@ spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets: {{- toYaml . | nindent 8 }}
       {{- end }}
-      securityContext:
-        fsGroup: 999
+      {{- with .Values.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: postgresql
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: postgresql
+            - name: jdbc
               containerPort: 5432
           env:
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
-                  name: icecream-configmaps
-                  key: postgresql-username
+                  name: {{ include "pg.configMapName" . }}
+                  key: POSTGRESQL_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: icecream-credentials
-                  key: postgresql-password
+                  name: {{ include "pg.secretName" . }}
+                  key: POSTGRESQL_PASSWORD
             - name: POSTGRES_MULTIPLE_DATABASES
               valueFrom:
                 configMapKeyRef:
-                  name: icecream-configmaps
-                  key: postgresql-multiple-databases
+                  name: {{ include "pg.configMapName" . }}
+                  key: POSTGRES_MULTIPLE_DATABASES
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
           startupProbe:
@@ -62,13 +63,12 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
-            - name: dshm
-              mountPath: /dev/shm
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
-        - name: dshm
-          emptyDir:
-            medium: Memory
-            sizeLimit: 256Mi
+        - name: init-script
+          configMap:
+            name: {{ include "pg.fullname" . }}-init-script
       {{- with .Values.nodeSelector }}
       nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -82,7 +82,7 @@ spec:
     - metadata:
         name: data
       spec:
-        storageClassName: {{ .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass | quote }}
         accessModes: {{- toYaml .Values.persistence.accessModes | nindent 10 }}
         resources:
           requests:

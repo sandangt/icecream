@@ -1,0 +1,67 @@
+image:
+  repository: code.sanlab.zone/sandang/kafka
+  tag: 7.8.4
+  pullPolicy: IfNotPresent
+
+fullnameOverride: ''
+
+service:
+  type: ClusterIP
+  port: 38009
+  nodePort: null
+
+replicaCount: 1
+
+auth:
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+  zookeeperConnect: zookeeper:38008
+  clusterDomain: cluster.local
+  heapOpts: "-Xms512m -Xmx512m"
+  replicationFactor: null
+  minInsyncReplicas: null
+  groupInitialRebalanceDelayMs: 0
+  logCleanupPolicy: "compact,delete"
+  logCleanerMinCleanableRatio: 0.01
+  logSegmentMs: 600000
+  topicPartitions: 1
+  topicInitRetryInterval: 5
+  topicInitMaxAttempts: 60
+  extraEnv: {}
+
+topicInit:
+  enabled: true
+  backoffLimit: 6
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
+persistence:
+  enabled: true
+  storageClass: longhorn
+  size: 512Mi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 768Mi
+  limits:
+    memory: 1536Mi
+
+podSecurityContext:
+  fsGroup: 1000
+nodeSelector: {}
+tolerations: []
+affinity: {}
+imagePullSecrets: []

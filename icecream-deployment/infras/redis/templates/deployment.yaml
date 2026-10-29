@@ -4,7 +4,7 @@ metadata:
   name: {{ include "redis.fullname" . }}
   labels: {{- include "redis.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -37,16 +37,16 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: icecream-credentials
-                  key: redis-password
+                  name: {{ include "redis.secretName" . }}
+                  key: REDIST_PASSWORD
             - name: REDISCLI_AUTH
               valueFrom:
                 secretKeyRef:
-                  name: icecream-credentials
-                  key: redis-password
+                  name: {{ include "redis.secretName" . }}
+                  key: REDIST_PASSWORD
           {{- end }}
           ports:
-            - name: redis
+            - name: tcp
               containerPort: 6379
           startupProbe:
             exec:

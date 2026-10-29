@@ -19,3 +19,19 @@ helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{- define "mongodb.secretName" -}}
+{{- if and .Values.auth .Values.auth.existingSecret -}}
+{{- .Values.auth.existingSecret -}}
+{{- else -}}
+{{- include "mongodb.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "mongodb.configMapName" -}}
+{{- if and .Values.config .Values.config.existingConfigMap -}}
+{{- .Values.config.existingConfigMap -}}
+{{- else -}}
+{{- include "mongodb.fullname" . -}}
+{{- end -}}
+{{- end -}}

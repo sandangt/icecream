@@ -7,7 +7,7 @@ common:
   path_prefix: /loki
   storage:
     s3:
-      endpoint: minio:3900
+      endpoint: garage:3900
       region: sanlab
       bucketnames: icecream-logs
       access_key_id: ${AWS_ACCESS_KEY_ID}

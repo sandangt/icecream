@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mailpit.fullname" . }}
+  labels: {{- include "mailpit.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  selector: {{- include "mailpit.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.service.httpPort }}
+      targetPort: http
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.http }}
+      nodePort: {{ .Values.service.nodePorts.http }}
+      {{- end }}
+    - name: smtp
+      port: {{ .Values.service.smtpPort }}
+      targetPort: smtp
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.smtp }}
+      nodePort: {{ .Values.service.nodePorts.smtp }}
+      {{- end }}

@@ -1,0 +1,8 @@
+fullnameOverride: mongodb
+
+auth:
+  existingSecret: icecream-credentials
+
+config:
+  existingConfigMap: icecream-configmaps
+

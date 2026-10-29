@@ -1,0 +1,7 @@
+fullnameOverride: garage
+
+auth:
+  existingSecret: icecream-credentials
+
+config:
+  existingConfigMap: icecream-configmaps

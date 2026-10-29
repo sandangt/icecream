@@ -1,0 +1,56 @@
+image:
+  repository: code.sanlab.zone/sandang/garage
+  tag: v2.4.1
+  pullPolicy: IfNotPresent
+
+fullnameOverride: ''
+
+imagePullSecrets: []
+
+replicaCount: 1
+
+auth:
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+
+garage:
+  dbEngine: sqlite
+  replicationFactor: 1
+  region: sanlab
+  web:
+    rootDomain: .web.garage.lan
+    index: index.html
+
+service:
+  type: ClusterIP
+  s3Port: 38004
+  rpcPort: 38018
+
+buckets:
+  default: images
+  extra:
+    - icecream-logs
+    - icecream-traces
+    - icecream-metrics
+  public:
+    - images
+
+persistence:
+  storageClass: longhorn
+  size: 7Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 1Gi
+
+podSecurityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

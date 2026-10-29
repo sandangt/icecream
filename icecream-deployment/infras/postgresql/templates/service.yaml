@@ -7,9 +7,9 @@ spec:
   clusterIP: None
   selector: {{- include "pg.selectorLabels" . | nindent 4 }}
   ports:
-    - name: postgresql
-      port: 5432
-      targetPort: postgresql
+    - name: jdbc
+      port: {{ .Values.service.port | default 5432 }}
+      targetPort: jdbc
 
 ---
 
@@ -19,12 +19,12 @@ metadata:
   name: {{ include "pg.fullname" . }}
   labels: {{- include "pg.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
   selector: {{- include "pg.selectorLabels" . | nindent 4 }}
   ports:
-    - name: postgresql
-      port: {{ .Values.service.port }}
-      targetPort: postgresql
+    - name: jdbc
+      port: {{ .Values.service.port | default 5432 }}
+      targetPort: jdbc
       {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}

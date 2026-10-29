@@ -20,3 +20,19 @@ helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
+
+{{- define "pg.secretName" -}}
+{{- if and .Values.auth .Values.auth.existingSecret -}}
+{{- .Values.auth.existingSecret -}}
+{{- else -}}
+{{- include "pg.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "pg.configMapName" -}}
+{{- if and .Values.config .Values.config.existingConfigMap -}}
+{{- .Values.config.existingConfigMap -}}
+{{- else -}}
+{{- include "pg.fullname" . -}}
+{{- end -}}
+{{- end -}}
