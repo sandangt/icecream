@@ -8,7 +8,7 @@ spec:
   selector: {{- include "mongodb.selectorLabels" . | nindent 4 }}
   ports:
     - name: mongodb
-      port: 27017
+      port: {{ .Values.service.port | default 27017 }}
       targetPort: mongodb
 
 ---
@@ -19,11 +19,11 @@ metadata:
   name: {{ include "mongodb.fullname" . }}
   labels: {{- include "mongodb.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
   selector: {{- include "mongodb.selectorLabels" . | nindent 4 }}
   ports:
     - name: mongodb
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.port | default 27017 }}
       targetPort: mongodb
       {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}

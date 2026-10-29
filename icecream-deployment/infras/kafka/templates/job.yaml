@@ -1,0 +1,71 @@
+{{- if .Values.topicInit.enabled }}
+# Runs the image's own /opt/kafka/init-scripts/create-topics.sh ONCE per
+# install/upgrade, after all brokers are registered. Idempotent (--if-not-exists).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "kafka.fullname" . }}-topic-init-job
+  labels:
+    {{- include "kafka.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ .Values.topicInit.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "kafka.name" . }}-topic-init-job
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: OnFailure
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: topic-init-job
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              # wait until ALL brokers have registered (needed for replication-factor > 1)
+              expected={{ .Values.replicaCount }}
+              for i in $(seq 1 "${TOPIC_INIT_MAX_ATTEMPTS:-60}"); do
+                n=$(kafka-broker-api-versions --bootstrap-server "${KAFKA_BROKER}" 2>/dev/null | grep -c '(id:' || true)
+                echo "brokers registered: ${n}/${expected}"
+                [ "${n}" -ge "${expected}" ] && break
+                sleep "${TOPIC_INIT_RETRY_INTERVAL:-5}"
+              done
+              exec /opt/kafka/init-scripts/create-topics.sh
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.config.existingConfigMap | default (include "kafka.fullname" .) }}
+          env:
+            - name: KAFKA_BROKER
+              value: {{ include "kafka.bootstrap" . | quote }}
+            - name: KAFKA_HEAP_OPTS
+              value: "-Xms64m -Xmx256m"
+          resources:
+            {{- toYaml .Values.topicInit.resources | nindent 12 }}
+          volumeMounts:
+            - name: create-topic-script
+              mountPath: /opt/kafka/init-scripts/create-topics.sh
+              subPath: create-topics.sh
+      volumes:
+        - name: create-topic-script
+          configMap:
+            name: {{ include "kafka.fullname" . }}-create-topic-script
+            defaultMode: 0555
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

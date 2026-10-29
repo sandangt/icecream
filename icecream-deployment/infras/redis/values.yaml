@@ -1,22 +1,27 @@
-fullnameOverride: ""
+fullnameOverride: ''
 
 image:
   repository: code.sanlab.zone/sandang/redis
   tag: 8.8.3
   pullPolicy: IfNotPresent
 
+replicaCount: 1
+
 auth:
   enabled: false
-  existingSecret: ""
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
 
 service:
   type: ClusterIP
-  port: 6379
+  port: 38100
   nodePort: null
 
 persistence:
   storageClass: longhorn
-  size: 1Gi
+  size: 500Mi
   accessModes:
     - ReadWriteOnce
 

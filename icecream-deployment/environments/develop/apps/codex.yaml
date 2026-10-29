@@ -1,0 +1,10 @@
+nameOverride: codex
+fullnameOverride: icecream-codex
+image:
+  repository: ghcr.io/sandangt/icecream-codex-service
+  tag: sha-5013f2f
+config:
+  SPRING_PROFILES_ACTIVE: develop
+  existingConfigMap: icecream-configmaps
+auth:
+  existingSecret: icecream-credentials

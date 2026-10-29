@@ -5,7 +5,7 @@ metadata:
   labels: {{- include "mongodb.labels" . | nindent 4 }}
 spec:
   serviceName: {{ include "mongodb.fullname" . }}-headless
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "mongodb.selectorLabels" . | nindent 6 }}
   template:
@@ -36,18 +36,18 @@ spec:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 configMapKeyRef:
-                  name: icecream-configmaps
-                  key: mongodb-username
+                  name: {{ include "mongodb.configMapName" . }}
+                  key: MONGODB_USER
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: icecream-credentials
-                  key: mongodb-password
+                  name: {{ include "mongodb.secretName" . }}
+                  key: MONGODB_PASSWORD
             - name: MONGO_MULTIPLE_DATABASES
               valueFrom:
                 configMapKeyRef:
-                  name: icecream-configmaps
-                  key: mongodb-multiple-databases
+                  name: {{ include "mongodb.configMapName" . }}
+                  key: MONGO_MULTIPLE_DATABASES
           ports:
             - name: mongodb
               containerPort: 27017
@@ -72,13 +72,13 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data/db
-            - name: init-scripts
+            - name: init-script
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
       volumes:
-        - name: init-scripts
+        - name: init-script
           configMap:
-            name: {{ include "mongodb.fullname" . }}-init
+            name: {{ include "mongodb.fullname" . }}-init-script
             defaultMode: 0755
       {{- with .Values.nodeSelector }}
       nodeSelector: {{- toYaml . | nindent 8 }}
@@ -93,7 +93,7 @@ spec:
     - metadata:
         name: data
       spec:
-        storageClassName: {{ .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass | quote }}
         accessModes: {{- toYaml .Values.persistence.accessModes | nindent 10 }}
         resources:
           requests:

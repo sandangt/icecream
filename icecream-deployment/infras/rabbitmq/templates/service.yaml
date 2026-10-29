@@ -4,7 +4,7 @@ metadata:
   name: {{ include "rabbitmq.fullname" . }}
   labels: {{- include "rabbitmq.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
   selector: {{- include "rabbitmq.selectorLabels" . | nindent 4 }}
   ports:
     - name: amqp

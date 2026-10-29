@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: apisix
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'s
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

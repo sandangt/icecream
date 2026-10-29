@@ -1,3 +1,5 @@
+fullnameOverride: apisix
+
 routes:
   - id: identity-api
     uri: /identity/*

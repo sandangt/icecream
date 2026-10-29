@@ -1,0 +1,40 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/mailpit
+  tag: v1.28.2
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+maxMessages: 5000
+smtpAuthAcceptAny: true
+smtpAuthAllowInsecure: true
+
+service:
+  type: ClusterIP
+  httpPort: 38017
+  smtpPort: 38016
+  nodePorts:
+    http: null
+    smtp: null
+
+persistence:
+  storageClass: longhorn
+  size: 1Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
+
+podSecurityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+imagePullSecrets: []
+extraEnv: []

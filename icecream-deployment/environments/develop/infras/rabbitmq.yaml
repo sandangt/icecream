@@ -1,14 +1,7 @@
-rabbitmq:
-  # auth:
-  #   existingPasswordSecret: "icecream-credentials"   # key: rabbitmq-password
-  #   existingErlangSecret: "icecream-credentials"      # key: rabbitmq-erlang-cookie
-  persistence:
-    size: 2Gi
-    storageClass: ""
-  resources:
-    requests:
-      cpu: 150m
-      memory: 512Mi
-    limits:
-      cpu: "500m"
-      memory: 768Mi
+fullnameOverride: rabbitmq
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials

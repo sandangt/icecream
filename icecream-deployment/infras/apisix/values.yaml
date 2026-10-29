@@ -1,6 +1,6 @@
 replicaCount: 1
 
-fullnameOverride: ""
+fullnameOverride: ''
 
 image:
   repository: code.sanlab.zone/sandang/apisix

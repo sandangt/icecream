@@ -19,7 +19,7 @@ storage:
   trace:
     backend: s3
     s3:
-      endpoint: minio:3900
+      endpoint: garage:3900
       bucket: icecream-traces
       access_key: ${AWS_ACCESS_KEY_ID}
       secret_key: ${AWS_SECRET_ACCESS_KEY}

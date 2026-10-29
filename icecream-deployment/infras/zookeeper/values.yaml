@@ -1,0 +1,35 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/zookeeper
+  tag: 7.8.4
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 38008
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 500Mi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    memory: 512Mi
+
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+podAnnotations: {}
+imagePullSecrets: []

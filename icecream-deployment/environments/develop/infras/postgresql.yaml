@@ -1,4 +1,7 @@
-postgresql:
-  primary:
-    persistence:
-      size: 8Gi
+fullnameOverride: postgresql
+
+auth:
+  existingSecret: icecream-credentials
+
+config:
+  existingConfigMap: icecream-configmaps
