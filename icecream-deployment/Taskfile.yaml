@@ -35,6 +35,8 @@ vars:
       value: '{{.STORAGE_ACCESS_KEY}}'
     - name: STORAGE_SECRET_KEY
       value: '{{.STORAGE_SECRET_KEY}}'
+    - name: GRAFANA_ADMIN_PASSWORD
+      value: '{{.GRAFANA_ADMIN_PASSWORD}}'
     - name: STOREFRONT_AUTH_SECRET
       value: '{{.STOREFRONT_AUTH_SECRET}}'
     - name: IDENTITY_STOREFRONT_CLIENT_ID
@@ -85,9 +87,9 @@ vars:
     - name: MONGODB_USER
       value: '{{.MONGODB_USER}}'
     - name: MONGODB_HOST
-      -value: '{{.MONGODB_HOST}}'
+      value: '{{.MONGODB_HOST}}'
     - name: MONGODB_PORT
-      -value: '{{.MONGODB_PORT}}'
+      value: '{{.MONGODB_PORT}}'
     - name: MONGODB_CHRONOS_DB
       value: '{{.MONGODB_CHRONOS_DB}}'
     - name: MONGODB_ECHO_DB
@@ -98,6 +100,8 @@ vars:
       value: '{{.GARAGE_API_PORT}}'
     - name: GARAGE_UI_PORT
       value: '{{.GARAGE_UI_PORT}}'
+    - name: GARAGE_HOST
+      value: '{{.GARAGE_HOST}}'
     - name: STORAGE_URL
       value: '{{.STORAGE_URL}}'
     - name: ELASTICSEARCH_HOST
@@ -112,6 +116,24 @@ vars:
       value: '{{.MAILPIT_PORT}}'
     - name: MAILPIT_UI_PORT
       value: '{{.MAILPIT_UI_PORT}}'
+    - name: ZOOKEEPER_CLIENT_PORT
+      value: '{{.ZOOKEEPER_CLIENT_PORT}}'
+    - name: KAFKA_HOST
+      value: '{{.KAFKA_HOST}}'
+    - name: KAFKA_PORT
+      value: '{{.KAFKA_PORT}}'
+    - name: DEBEZIUM_CONNECT_PORT
+      value: '{{.DEBEZIUM_CONNECT_PORT}}'
+    - name: GRAFANA_HOST
+      value: '{{.GRAFANA_HOST}}'
+    - name: GRAFANA_PORT
+      value: '{{.GRAFANA_PORT}}'
+    - name: GRAFANA_ADMIN_USER
+      value: '{{.GRAFANA_ADMIN_USER}}'
+    - name: OTEL_COLLECTOR_HOST
+      value: '{{.OTEL_COLLECTOR_HOST}}'
+    - name: OTEL_COLLECTOR_PORT
+      value: '{{.OTEL_COLLECTOR_PORT}}'
     - name: STOREFRONT_URL
       value: '{{.STOREFRONT_URL}}'
     - name: IDENTITY_REALM

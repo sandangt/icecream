@@ -10,23 +10,17 @@ auth:
 
 config:
   existingConfigMap: ''
+  clusterName: icecream
 
 replicaCount: 1
-
-clusterName: icecream
-javaOpts: "-Xms1g -Xmx1g"
 
 sysctlInitContainer:
   enabled: false
   image: busybox:1.37
 
-extraEnv:
-  - name: node.store.allow_mmap
-    value: "false"
-
 service:
   type: ClusterIP
-  port: 38012
+  port: 9200
   nodePort: null
 
 persistence:

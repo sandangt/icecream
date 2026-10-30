@@ -5,3 +5,8 @@ auth:
 
 config:
   existingConfigMap: icecream-configmaps
+
+service:
+  type: ClusterIP
+  s3Port: 38004
+  rpcPort: 38018

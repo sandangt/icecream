@@ -7,17 +7,19 @@ image:
 
 replicaCount: 1
 
-maxMessages: 5000
-smtpAuthAcceptAny: true
-smtpAuthAllowInsecure: true
+config:
+  maxMessages: 5000
+  smtpAuthAcceptAny: true
+  smtpAuthAllowInsecure: true
 
 service:
   type: ClusterIP
-  httpPort: 38017
-  smtpPort: 38016
-  nodePorts:
-    http: null
-    smtp: null
+  clusterIp:
+    httpPort: 8025
+    smtpPort: 1025
+  nodePort:
+    httpPort: null
+    smtpPort: null
 
 persistence:
   storageClass: longhorn

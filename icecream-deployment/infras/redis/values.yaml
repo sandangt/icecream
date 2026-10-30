@@ -16,7 +16,7 @@ config:
 
 service:
   type: ClusterIP
-  port: 38100
+  port: 6379
   nodePort: null
 
 persistence:

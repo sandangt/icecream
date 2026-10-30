@@ -5,3 +5,9 @@ config:
 
 auth:
   existingSecret: icecream-credentials
+
+service:
+  type: ClusterIP
+  clusterIp:
+    amqpPort: 38006
+    managementPort: 38007

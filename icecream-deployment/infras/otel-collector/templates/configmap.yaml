@@ -1,0 +1,66 @@
+{{- if not .Values.config.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "otel-collector.configMapName" . }}
+  labels:
+    {{- include "otel-collector.labels" . | nindent 4 }}
+data:
+  otel-collector-config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          http:
+            endpoint: 0.0.0.0:{{ .Values.service.port }}
+          grpc:
+            endpoint: 0.0.0.0:{{ .Values.service.grpcPort }}
+
+    processors:
+      batch:
+        timeout: 10s
+        send_batch_size: 1024
+      memory_limiter:
+        check_interval: 1s
+        limit_mib: {{ .Values.config.memoryLimitMib }}
+      resource:
+        attributes:
+          - key: job
+            from_attribute: service.name
+            action: upsert
+
+    exporters:
+      otlphttp/loki:
+        endpoint: {{ .Values.config.exporters.lokiEndpoint }}
+      otlphttp/tempo:
+        endpoint: {{ .Values.config.exporters.tempoEndpoint }}
+        retry_on_failure:
+          enabled: true
+          initial_interval: 5s
+          max_interval: 30s
+        sending_queue:
+          enabled: true
+          num_consumers: 10
+      prometheus:
+        endpoint: "0.0.0.0:{{ .Values.service.metricsPort }}"
+      debug:
+
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:{{ .Values.service.healthPort }}
+
+    service:
+      extensions: [health_check]
+      pipelines:
+        metrics:
+          receivers: [otlp]
+          processors: [resource, batch, memory_limiter]
+          exporters: [prometheus]
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlphttp/tempo]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlphttp/loki, debug]
+{{- end }}
