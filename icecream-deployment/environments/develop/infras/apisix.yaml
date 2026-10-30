@@ -1,0 +1,30 @@
+fullnameOverride: apisix
+
+routes:
+  - id: identity-api
+    uri: /identity/*
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    upstream_id: identity-api
+  - id: memoir-api
+    uri: /memoir/*
+    upstream_id: memoir-api
+  - id: payment-api
+    uri: /payment/*
+    upstream_id: payment-api
+upstreams:
+  - id: identity-api
+    type: roundrobin
+    nodes:
+      "icecream-identity:8080": 1
+  - id: memoir-api
+    type: roundrobin
+    nodes:
+      "icecream-memoir:8080": 1
+  - id: payment-api
+    type: roundrobin
+    nodes:
+      "icecream-payment:8080": 1

@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "kafka.fullname" . }}
+  labels:
+    {{- include "kafka.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "kafka.fullname" . }}-headless
+  # Kafka brokers do not need ordered startup; Parallel avoids a slow,
+  # serial bootstrap (and a stuck pod-0 blocking the rest).
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "kafka.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kafka.selectorLabels" . | nindent 8 }}
+      {{- if not .Values.config.existingConfigMap }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- end }}
+    spec:
+      # Without this, k8s injects KAFKA_PORT=tcp://<ip>:<port> (from the Service
+      # named "kafka") and the Confluent image aborts on it.
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 120
+      containers:
+        - name: kafka
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # Per-broker identity is derived from the pod name (kafka-0, kafka-1, ...):
+          #   broker.id            = ordinal
+          #   advertised listeners = <pod>.<headless>.<ns>.svc.<domain>
+          # We start the Confluent launcher directly (exec => PID 1 gets SIGTERM and
+          # shuts down gracefully). Topic creation is handled by the topic-init Job,
+          # not by the image's docker-entrypoint.sh, so brokers never race each other.
+          command: ["/bin/bash", "-ec"]
+          args:
+            - |
+              export KAFKA_BROKER_ID="${HOSTNAME##*-}"
+              FQDN="${HOSTNAME}.{{ include "kafka.headlessName" . }}.{{ .Release.Namespace }}.svc.{{ .Values.config.clusterDomain }}"
+              export KAFKA_ADVERTISED_LISTENERS="BROKER://${FQDN}:29092,CLIENT://${FQDN}:9092"
+              exec /etc/confluent/docker/run
+          ports:
+            - name: client
+              containerPort: 9092
+              protocol: TCP
+            - name: broker
+              containerPort: 29092
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.config.existingConfigMap | default (include "kafka.fullname" .) }}
+            {{- if .Values.auth.existingSecret }}
+            - secretRef:
+                name: {{ .Values.auth.existingSecret }}
+            {{- end }}
+          env:
+            - name: KAFKA_LISTENERS
+              value: "BROKER://0.0.0.0:29092,CLIENT://0.0.0.0:9092"
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: "BROKER:PLAINTEXT,CLIENT:PLAINTEXT"
+            - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              value: "BROKER"
+          startupProbe:
+            tcpSocket:
+              port: client
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: client
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: client
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/kafka/data
+              subPath: data
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if not .Values.persistence.enabled }}
+      volumes:
+        - name: data
+          emptyDir: {}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          {{- include "kafka.selectorLabels" . | nindent 10 }}
+      spec:
+        accessModes:
+          {{- toYaml .Values.persistence.accessModes | nindent 10 }}
+        {{- if .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
+  {{- end }}

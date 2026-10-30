@@ -1,0 +1,8 @@
+apiVersion: v2
+name: redis
+description: >-
+  Cache for the icecream platform. standalone architecture,
+  matching the single `icecream-redis` container in the original docker-compose).
+type: application
+version: 0.1.0
+appVersion: 8.8.3

@@ -1,0 +1,242 @@
+version: '3'
+
+vars:
+  INFRA_LIST:
+    - redis
+    - rabbitmq
+    - postgresql
+    - mongodb
+    - elasticsearch
+    - mailpit
+    - garage
+    - zookeeper
+    - kafka
+    # - apisix
+  CREDENTIAL_GROUP_NAME: icecream-credentials
+  PARAMETER_GROUP_NAME: icecream-configmaps
+  CREDENTIAL_LIST:
+    - name: RABBITMQ_PASSWORD
+      value: '{{.RABBITMQ_PASSWORD}}'
+    - name: POSTGRESQL_PASSWORD
+      value: '{{.POSTGRESQL_PASSWORD}}'
+    - name: MONGODB_PASSWORD
+      value: '{{.MONGODB_PASSWORD}}'
+    - name: ELASTICSEARCH_PASSWORD
+      value: '{{.ELASTICSEARCH_PASSWORD}}'
+    - name: GARAGE_RPC_SECRET
+      value: '{{.GARAGE_RPC_SECRET}}'
+    - name: GARAGE_ADMIN_TOKEN
+      value: '{{.GARAGE_ADMIN_TOKEN}}'
+    - name: GARAGE_ACCESS_KEY
+      value: '{{.GARAGE_ACCESS_KEY}}'
+    - name: GARAGE_SECRET_KEY
+      value: '{{.GARAGE_SECRET_KEY}}'
+    - name: STORAGE_ACCESS_KEY
+      value: '{{.STORAGE_ACCESS_KEY}}'
+    - name: STORAGE_SECRET_KEY
+      value: '{{.STORAGE_SECRET_KEY}}'
+    - name: GRAFANA_ADMIN_PASSWORD
+      value: '{{.GRAFANA_ADMIN_PASSWORD}}'
+    - name: STOREFRONT_AUTH_SECRET
+      value: '{{.STOREFRONT_AUTH_SECRET}}'
+    - name: IDENTITY_STOREFRONT_CLIENT_ID
+      value: '{{.IDENTITY_STOREFRONT_CLIENT_ID}}'
+    - name: IDENTITY_STOREFRONT_CLIENT_SECRET
+      value: '{{.IDENTITY_STOREFRONT_CLIENT_SECRET}}'
+    - name: IDENTITY_BACKOFFICE_CLIENT_ID
+      value: '{{.IDENTITY_BACKOFFICE_CLIENT_ID}}'
+    - name: IDENTITY_BACKOFFICE_CLIENT_SECRET
+      value: '{{.IDENTITY_BACKOFFICE_CLIENT_SECRET}}'
+    - name: KEYCLOAK_DB_PASSWORD
+      value: '{{.KEYCLOAK_DB_PASSWORD}}'
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: '{{.KEYCLOAK_ADMIN_PASSWORD}}'
+    - name: CONSUL_API_KEY_0
+      value: '{{.CONSUL_API_KEY_0}}'
+    - name: CONSUL_API_KEY_1
+      value: '{{.CONSUL_API_KEY_1}}'
+  PARAMETER_LIST:
+    - name: REGION
+      value: '{{.REGION}}'
+    - name: REDIS_HOST
+      value: '{{.REDIS_HOST}}'
+    - name: REDIS_PORT
+      value: '{{.REDIS_PORT}}'
+    - name: RABBITMQ_USERNAME
+      value: '{{.RABBITMQ_USERNAME}}'
+    - name: RABBITMQ_HOST
+      value: '{{.RABBITMQ_HOST}}'
+    - name: RABBITMQ_PORT
+      value: '{{.RABBITMQ_PORT}}'
+    - name: RABBITMQ_MANAGEMENT_PORT
+      value: '{{.RABBITMQ_MANAGEMENT_PORT}}'
+    - name: POSTGRESQL_USER
+      value: '{{.POSTGRESQL_USER}}'
+    - name: POSTGRESQL_HOST
+      value: '{{.POSTGRESQL_HOST}}'
+    - name: POSTGRESQL_PORT
+      value: '{{.POSTGRESQL_PORT}}'
+    - name: POSTGRESQL_CONSUL_DB
+      value: '{{.POSTGRESQL_CONSUL_DB}}'
+    - name: POSTGRESQL_MEMOIR_DB
+      value: '{{.POSTGRESQL_MEMOIR_DB}}'
+    - name: POSTGRESQL_IDENTITY_DB
+      value: '{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: POSTGRES_MULTIPLE_DATABASES
+      value: '{{.POSTGRESQL_CONSUL_DB}},{{.POSTGRESQL_MEMOIR_DB}},{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: MONGODB_USER
+      value: '{{.MONGODB_USER}}'
+    - name: MONGODB_HOST
+      value: '{{.MONGODB_HOST}}'
+    - name: MONGODB_PORT
+      value: '{{.MONGODB_PORT}}'
+    - name: MONGODB_CHRONOS_DB
+      value: '{{.MONGODB_CHRONOS_DB}}'
+    - name: MONGODB_ECHO_DB
+      value: '{{.MONGODB_ECHO_DB}}'
+    - name: MONGO_MULTIPLE_DATABASES
+      value: '{{.MONGODB_ECHO_DB}},{{.MONGODB_CHRONOS_DB}}'
+    - name: GARAGE_API_PORT
+      value: '{{.GARAGE_API_PORT}}'
+    - name: GARAGE_UI_PORT
+      value: '{{.GARAGE_UI_PORT}}'
+    - name: GARAGE_HOST
+      value: '{{.GARAGE_HOST}}'
+    - name: STORAGE_URL
+      value: '{{.STORAGE_URL}}'
+    - name: ELASTICSEARCH_HOST
+      value: '{{.ELASTICSEARCH_HOST}}'
+    - name: ELASTICSEARCH_PORT
+      value: '{{.ELASTICSEARCH_PORT}}'
+    - name: ELASTICSEARCH_USERNAME
+      value: '{{.ELASTICSEARCH_USERNAME}}'
+    - name: MAILPIT_HOST
+      value: '{{.MAILPIT_HOST}}'
+    - name: MAILPIT_PORT
+      value: '{{.MAILPIT_PORT}}'
+    - name: MAILPIT_UI_PORT
+      value: '{{.MAILPIT_UI_PORT}}'
+    - name: ZOOKEEPER_CLIENT_PORT
+      value: '{{.ZOOKEEPER_CLIENT_PORT}}'
+    - name: KAFKA_HOST
+      value: '{{.KAFKA_HOST}}'
+    - name: KAFKA_PORT
+      value: '{{.KAFKA_PORT}}'
+    - name: DEBEZIUM_CONNECT_PORT
+      value: '{{.DEBEZIUM_CONNECT_PORT}}'
+    - name: GRAFANA_HOST
+      value: '{{.GRAFANA_HOST}}'
+    - name: GRAFANA_PORT
+      value: '{{.GRAFANA_PORT}}'
+    - name: GRAFANA_ADMIN_USER
+      value: '{{.GRAFANA_ADMIN_USER}}'
+    - name: OTEL_COLLECTOR_HOST
+      value: '{{.OTEL_COLLECTOR_HOST}}'
+    - name: OTEL_COLLECTOR_PORT
+      value: '{{.OTEL_COLLECTOR_PORT}}'
+    - name: STOREFRONT_URL
+      value: '{{.STOREFRONT_URL}}'
+    - name: IDENTITY_REALM
+      value: '{{.IDENTITY_REALM}}'
+    - name: IDENTITY_URL
+      value: '{{.IDENTITY_URL}}'
+    - name: IDENTITY_ISSUER
+      value: '{{.IDENTITY_ISSUER}}'
+    - name: KEYCLOAK_ADMIN
+      value: '{{.KEYCLOAK_ADMIN}}'
+    - name: KEYCLOAK_DB_USER
+      value: '{{.KEYCLOAK_DB_USER}}'
+    - name: CONSUL_PORT
+      value: '{{.CONSUL_PORT}}'
+    - name: CONSUL_HOST
+      value: '{{.CONSUL_HOST}}'
+    - name: CONSUL_RSOCKET_PORT
+      value: '{{.CONSUL_RSOCKET_PORT}}'
+    - name: CONSUL_RSOCKET_HOST
+      value: '{{.CONSUL_RSOCKET_HOST}}'
+    - name: CONSUL_URL
+      value: '{{.CONSUL_URL}}'
+    - name: ECHO_PORT
+      value: '{{.ECHO_PORT}}'
+    - name: ECHO_HOST
+      value: '{{.ECHO_HOST}}'
+    - name: ECHO_RSOCKET_PORT
+      value: '{{.ECHO_RSOCKET_PORT}}'
+    - name: ECHO_RSOCKET_HOST
+      value: '{{.ECHO_RSOCKET_HOST}}'
+    - name: ECHO_URL
+      value: '{{.ECHO_URL}}'
+    - name: CHRONOS_PORT
+      value: '{{.CHRONOS_PORT}}'
+    - name: CHRONOS_HOST
+      value: '{{.CHRONOS_HOST}}'
+    - name: CHRONOS_RSOCKET_PORT
+      value: '{{.CHRONOS_RSOCKET_PORT}}'
+    - name: CHRONOS_RSOCKET_HOST
+      value: '{{.CHRONOS_RSOCKET_HOST}}'
+    - name: CHRONOS_URL
+      value: '{{.CHRONOS_URL}}'
+    - name: CODEX_HOST
+      value: '{{.CODEX_HOST}}'
+    - name: CODEX_PORT
+      value: '{{.CODEX_PORT}}'
+    - name: MEMOIR_PORT
+      value: '{{.MEMOIR_PORT}}'
+    - name: MEMOIR_HOST
+      value: '{{.MEMOIR_HOST}}'
+    - name: MEMOIR_RSOCKET_PORT
+      value: '{{.MEMOIR_RSOCKET_PORT}}'
+    - name: MEMOIR_RSOCKET_HOST
+      value: '{{.MEMOIR_RSOCKET_HOST}}'
+    - name: MEMOIR_URL
+      value: '{{.MEMOIR_URL}}'
+    - name: CONFLUX_HOST
+      value: '{{.CONFLUX_HOST}}'
+    - name: CONFLUX_PORT
+      value: '{{.CONFLUX_PORT}}'
+    - name: CONFLUX_RSOCKET_PORT
+      value: '{{.CONFLUX_RSOCKET_PORT}}'
+    - name: CONFLUX_RSOCKET_HOST
+      value: '{{.CONFLUX_RSOCKET_HOST}}'
+  PROFILE: '{{.PROFILE | default "develop"}}'
+
+tasks:
+  create-creds:
+    silent: true
+    if: '! kubectl get secrets {{.CREDENTIAL_GROUP_NAME}} -n {{.NAMESPACE}}'
+    cmd: >-
+      kubectl create secret generic {{.CREDENTIAL_GROUP_NAME}}
+      {{- range .CREDENTIAL_LIST }} --from-literal='{{ .name }}={{ .value }}' {{- end }}
+      --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+  create-params:
+    silent: true
+    if: '! kubectl get configmaps {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}'
+    cmd: >-
+      kubectl create configmap {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}
+      {{- range .PARAMETER_LIST}} --from-literal='{{.name}}={{.value}}' {{- end }}
+      --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+  template-infra:
+    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+    cmd: helm template ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+  install-infras:
+    cmds:
+      - for: {var: INFRA_LIST}
+        task: install-infra-internal
+        vars:
+          NAME: '{{.ITEM}}'
+  install-infra:
+    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+  install-infra-internal:
+    internal: true
+    if: test -d ./infras/{{.NAME}} && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
+    cmd: helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+  template-backend:
+    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
+    cmd: helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
+  install-backend:
+    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
+    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+  uninstall-chart:
+    if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
+    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}

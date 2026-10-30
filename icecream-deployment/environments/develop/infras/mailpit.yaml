@@ -1,0 +1,7 @@
+fullnameOverride: mailpit
+
+service:
+  type: ClusterIP
+  clusterIp:
+    httpPort: 38017
+    smtpPort: 38016

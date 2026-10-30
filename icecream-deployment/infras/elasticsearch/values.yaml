@@ -1,0 +1,45 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/elasticsearch
+  tag: '8.19.6'
+  pullPolicy: IfNotPresent
+
+auth:
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+  clusterName: icecream
+
+replicaCount: 1
+
+sysctlInitContainer:
+  enabled: false
+  image: busybox:1.37
+
+service:
+  type: ClusterIP
+  port: 9200
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 3Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 2Gi
+  limits:
+    memory: 2Gi
+
+podSecurityContext:
+  fsGroup: 1000
+  fsGroupChangePolicy: OnRootMismatch
+nodeSelector: {}
+tolerations: []
+affinity: {}
+imagePullSecrets: []

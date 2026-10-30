@@ -143,11 +143,12 @@ otel:
     servlet.enabled: true
 
 app:
+  region: ${REGION:sanlab}
   minio:
     url: ${STORAGE_URL}
     access:
-      key: ${MINIO_ACCESS_KEY}
-      secret: ${MINIO_SECRET_KEY}
+      key: ${STORAGE_ACCESS_KEY}
+      secret: ${STORAGE_SECRET_KEY}
     bucket:
       image: images
   consul:

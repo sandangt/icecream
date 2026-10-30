@@ -1,0 +1,11 @@
+fullnameOverride: mongodb
+
+auth:
+  existingSecret: icecream-credentials
+
+config:
+  existingConfigMap: icecream-configmaps
+
+service:
+  type: ClusterIP
+  port: 38001
