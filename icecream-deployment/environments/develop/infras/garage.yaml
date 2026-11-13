@@ -1,0 +1,9 @@
+fullnameOverride: garage
+
+auth:
+  existingSecret: icecream-credentials
+
+service:
+  type: ClusterIP
+  s3Port: 38004
+  rpcPort: 38018

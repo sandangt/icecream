@@ -1,0 +1,114 @@
+version: '3'
+
+vars:
+  IMAGE_LIST:
+    - name: redis
+      path: './redis'
+      version: 8.8.3
+    - name: rabbitmq
+      path: './rabbitmq'
+      version: 4.3.6-management
+    - name: postgresql
+      path: './postgresql'
+      version: '16.8'
+    - name: mongodb
+      path: './mongodb'
+      version: 8.0.10
+    - name: elasticsearch
+      path: './elasticsearch'
+      version: 8.19.6
+    - name: apisix
+      path: './apisix'
+      version: 3.19.0-debian
+    - name: garage
+      path: './garage'
+      version: v2.4.1
+    - name: mailpit
+      path: './mailpit'
+      version: v1.28.2
+    - name: kafka
+      path: './kafka'
+      version: 7.8.4
+    - name: zookeeper
+      path: './zookeeper'
+      version: 7.8.4
+    - name: prometheus
+      path: './prometheus'
+      version: v3.8.1
+    - name: loki
+      path: './loki'
+      version: main-993b3ae
+    - name: tempo
+      path: './tempo'
+      version: 2.8.2
+    - name: mimir
+      path: './mimir'
+      version: 2.17.4
+    - name: grafana
+      path: './grafana'
+      version: 12.3.1
+    - name: otel-collector
+      path: './otel-collector'
+      version: 2.17.4
+
+tasks:
+  build:
+    cmds:
+      - for: {var: IMAGE_LIST}
+        task: build-item
+        vars:
+          NAME: '{{.ITEM.name}}'
+          PATH: '{{.ITEM.path}}'
+          VERSION: '{{.ITEM.version}}'
+  build-item:
+    silent: true
+    internal: true
+    status:
+      - test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"
+    cmds:
+      - echo '{{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}} {{.PATH}}'
+      - docker build -t {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}} {{.PATH}}
+  # task build-one NAME=redis
+  build-one:
+    requires:
+      vars: [NAME]
+    cmds:
+      - for: {var: IMAGE_LIST}
+        if: '[ "{{.ITEM.name}}" = "{{.NAME}}" ]'
+        task: build-item
+        vars:
+          NAME: '{{.ITEM.name}}'
+          PATH: '{{.ITEM.path}}'
+          VERSION: '{{.ITEM.version}}'
+  push:
+    cmds:
+      - for: {var: IMAGE_LIST}
+        task: push-item
+        vars:
+          NAME: '{{.ITEM.name}}'
+          VERSION: '{{.ITEM.version}}'
+  push-item:
+    silent: true
+    internal: true
+    status:
+      - '! test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"'
+    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}\
+  # task push-one NAME=redis
+  push-one:
+    requires:
+      vars: [NAME]
+    cmds:
+      - for: { var: IMAGE_LIST }
+        if: '[ "{{.ITEM.name}}" = "{{.NAME}}" ]'
+        task: push-item
+        vars:
+          NAME: '{{.ITEM.name}}'
+          VERSION: '{{.ITEM.version}}'  
+  cleanup:
+    silent: true
+    cmds:
+      - |
+        for id in $(docker images --format '{{`{{.ID}}`}} {{`{{.Repository}}`}}:{{`{{.Tag}}`}}' | awk -v p="{{.REGISTRY_URL}}" '$2 ~ "^"p {print $1}'); do
+          echo "Deleting image ID: $id"
+          docker image rm -f "$id"
+        done

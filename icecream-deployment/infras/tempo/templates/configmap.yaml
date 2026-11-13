@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tempo.fullname" . }}-config
+  labels:
+    {{- include "tempo.labels" . | nindent 4 }}
+data:
+  tempo-config.yaml: |
+    server:
+      http_listen_port: {{ .Values.service.port }}
+      grpc_listen_port: {{ .Values.service.grpcPort }}
+
+    distributor:
+
+    ingester:
+      trace_idle_period: 10s
+      max_block_duration: 5m
+      max_block_bytes: 524288000
+
+    storage:
+      trace:
+        backend: s3
+        s3:
+          endpoint: ${STORAGE_URL_NO_PROTOCOL}
+          bucket: {{ .Values.config.s3Bucket }}
+          access_key: ${AWS_ACCESS_KEY_ID}
+          secret_key: ${AWS_SECRET_ACCESS_KEY}
+          insecure: true
+        wal:
+          path: /tmp/tempo/wal
+        pool:
+          max_workers: 100
+          queue_depth: 10000
+
+    compactor:
+      compaction:
+        block_retention: 24h
+        compaction_window: 1h
+        max_compaction_objects: 1000000
+        retention_concurrency: 10
+
+    querier:
+      max_concurrent_queries: 20
+      frontend_worker:
+        frontend_address: 0.0.0.0:{{ .Values.service.grpcPort }}
+
+    query_frontend:
+      search:
+        max_duration: 24h

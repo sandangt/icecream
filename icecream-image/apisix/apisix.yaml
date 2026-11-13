@@ -1,0 +1,7 @@
+routes:
+  - id: test-route
+    uri: /anything/test
+    upstream:
+      type: roundrobin
+      nodes:
+        "httpbin.org:80": 1

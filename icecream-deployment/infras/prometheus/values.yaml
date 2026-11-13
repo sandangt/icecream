@@ -1,0 +1,51 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/prometheus
+  tag: v3.8.1
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+config:
+  remoteWriteUrl: http://mimir:39002/api/v1/push
+  scrapeConfigs:
+    - job_name: prometheus
+      static_configs:
+        - targets: ["localhost:{{ .Values.service.port }}"]
+    - job_name: grafana
+      static_configs:
+        - targets: ["grafana:39003"]
+    - job_name: otel-collector
+      honor_labels: true
+      static_configs:
+        - targets: ["otel-collector:39201"]
+
+service:
+  type: ClusterIP
+  port: 39005
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 2.5Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
+  fsGroup: 65534
+nodeSelector: {}
+affinity: {}
+extraArgs: []
+tolerations: []
+imagePullSecrets: []

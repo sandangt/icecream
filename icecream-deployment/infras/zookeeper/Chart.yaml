@@ -1,0 +1,6 @@
+apiVersion: v2
+name: zookeeper
+description: Single-node Confluent ZooKeeper for the icecream stack
+type: application
+version: 0.1.0
+appVersion: 7.8.4

@@ -29,11 +29,13 @@ public class ClientConfig {
     @Bean
     public MinioClient minioClient(
         @Value("${app.minio.url}") String url,
+        @Value("${app.region}") String region,
         @Value("${app.minio.access.key}") String accessKey,
         @Value("${app.minio.access.secret}") String accessSecret
     ) {
         return MinioClient.builder()
             .endpoint(url)
+            .region(region)
             .credentials(accessKey, accessSecret)
             .build();
     }

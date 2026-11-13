@@ -1,0 +1,15 @@
+apiVersion: v2
+name: storefront
+description: >-
+  Helm chart for the icecream Next.js storefront (customer-facing frontend).
+  Deployed as a public-facing Deployment + Ingress, distinct from the
+  internal backend-service chart used by Spring Boot microservices.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - nextjs
+  - frontend
+  - icecream
+maintainers:
+  - name: icecream-platform-team
