@@ -15,10 +15,6 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "kafka.headlessName" -}}
-{{- printf "%s-headless" (include "kafka.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
 {{- define "kafka.labels" -}}
 helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{ include "kafka.selectorLabels" . }}
@@ -31,7 +27,6 @@ app.kubernetes.io/name: {{ include "kafka.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{/* Bootstrap address for in-cluster clients (client Service) */}}
 {{- define "kafka.bootstrap" -}}
 {{- printf "%s.%s.svc.%s:%v" (include "kafka.fullname" .) .Release.Namespace .Values.config.clusterDomain .Values.service.port -}}
 {{- end -}}

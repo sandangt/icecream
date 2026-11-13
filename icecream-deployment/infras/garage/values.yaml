@@ -12,9 +12,6 @@ replicaCount: 1
 auth:
   existingSecret: ''
 
-config:
-  existingConfigMap: ''
-
 garage:
   dbEngine: sqlite
   replicationFactor: 1

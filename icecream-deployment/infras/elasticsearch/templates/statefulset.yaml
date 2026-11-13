@@ -39,11 +39,11 @@ spec:
             - name: discovery.type
               value: single-node
             - name: cluster.name
-              value: {{ .Values.clusterName | quote }}
+              value: {{ .Values.config.clusterName }}
             - name: xpack.security.enabled
               value: "false"
             - name: ES_JAVA_OPTS
-              value: {{ .Values.javaOpts | quote }}
+              value: '-Xms1g -Xmx1g'
             - name: ELASTICSEARCH_USERNAME
               valueFrom:
                 configMapKeyRef:
@@ -54,9 +54,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "elasticsearch.secretName" . }}
                   key: ELASTICSEARCH_PASSWORD
-            {{- with .Values.extraEnv }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            - name: node.store.allow_mmap
+              value: "false"
           ports:
             - name: http
               containerPort: 9200

@@ -1,0 +1,43 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/loki
+  tag: main-993b3ae
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+auth:
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+  s3Bucket: icecream-logs
+  retentionPeriod: 168h
+
+
+service:
+  type: ClusterIP
+  port: 39003
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 2.5Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+podSecurityContext:
+  fsGroup: 10001
+nodeSelector: {}
+affinity: {}
+extraArgs: []
+tolerations: []
+imagePullSecrets: []

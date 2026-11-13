@@ -16,11 +16,12 @@ config:
 
 service:
   type: ClusterIP
-  amqpPort: 38006
-  managementPort: 38007
-  nodePorts:
-    amqp: null
-    management: null
+  clusterIp:
+    amqpPort: 5672
+    managementPort: 15672
+  nodePort:
+    amqpPort: null
+    managementPort: null
 
 persistence:
   storageClass: longhorn

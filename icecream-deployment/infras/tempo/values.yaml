@@ -1,0 +1,43 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/tempo
+  tag: 2.8.2
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+config:
+  existingConfigMap: ''
+  blockRetention: 24h
+  s3Bucket: icecream-traces
+
+auth:
+  existingSecret: ''
+
+service:
+  type: ClusterIP
+  port: 39004
+  grpcPort: 39104
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 2.5Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+podSecurityContext:
+  fsGroup: 10001
+nodeSelector: {}
+affinity: {}
+extraArgs: []
+tolerations: []
+imagePullSecrets: []

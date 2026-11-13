@@ -1,0 +1,6 @@
+apiVersion: v2
+name: loki
+description: Grafana Loki (logs) with S3 backend
+type: application
+version: 0.1.0
+appVersion: main-993b3ae

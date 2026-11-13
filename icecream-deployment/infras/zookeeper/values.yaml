@@ -7,7 +7,7 @@ image:
 
 service:
   type: ClusterIP
-  port: 38008
+  port: 2181
   nodePort: null
 
 persistence:

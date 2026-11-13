@@ -6,8 +6,6 @@ metadata:
     {{- include "kafka.labels" . | nindent 4 }}
 spec:
   clusterIP: None
-  # Brokers must be able to resolve each other BEFORE they are Ready
-  # (inter-broker traffic, controller election, readiness depends on it).
   publishNotReadyAddresses: true
   ports:
     - name: client
