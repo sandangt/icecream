@@ -16,11 +16,13 @@ service:
   targetPort: 8080
 
 config:
-  SPRING_PROFILES_ACTIVE: staging
-  JAVA_TOOL_OPTIONS: '-XX:MaxRAMPercentage=75.0'
-  exsitingConfigMap: ''
+  existingConfigMap: ''
 
-extraEnv: []
+extraEnv:
+  - name: SPRING_PROFILES_ACTIVE
+    value: staging
+  - name: JAVA_TOOL_OPTIONS
+    value: '-XX:MaxRAMPercentage=75.0'
 
 auth:
   existingSecret: ''

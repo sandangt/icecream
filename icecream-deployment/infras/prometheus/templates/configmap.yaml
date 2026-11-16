@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "prometheus.fullname" . }}-config
+  labels:
+    {{- include "prometheus.labels" . | nindent 4 }}
+data:
+  prometheus-config.yaml: |
+    global:
+      scrape_interval: 5s
+
+    scrape_configs:
+    {{- with .Values.config.scrapeConfigs }}
+    {{- toYaml . | nindent 6 }}
+    {{- end }}
+
+    remote_write:
+      - url: {{ .Values.config.remoteWriteUrl }}

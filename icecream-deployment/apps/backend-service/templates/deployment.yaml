@@ -28,7 +28,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -36,11 +36,9 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: {{ include "app.fullname" . }}
-            {{- if and .Values.auth  .Values.auth.existingSecret }}
+                name: {{ .Values.config.existingConfigMap }}
             - secretRef:
                 name: {{ .Values.auth.existingSecret }}
-            {{- end }}
           {{- with .Values.extraEnv }}
           env:
             {{- toYaml . | nindent 12 }}

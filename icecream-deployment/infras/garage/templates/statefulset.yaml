@@ -30,6 +30,8 @@ spec:
         - name: garage
           image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /docker-entrypoint-initdb.d/init-script.sh
           args:
             - server
             - --single-node
@@ -114,6 +116,7 @@ spec:
         - name: init-script
           configMap:
             name: {{ include "garage.fullname" . }}-init-script
+            defaultMode: 0755
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

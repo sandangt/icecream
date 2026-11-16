@@ -3,8 +3,23 @@ fullnameOverride: icecream-codex
 image:
   repository: ghcr.io/sandangt/icecream-codex-service
   tag: sha-5013f2f
+
 config:
-  SPRING_PROFILES_ACTIVE: develop
   existingConfigMap: icecream-configmaps
+
 auth:
   existingSecret: icecream-credentials
+
+extraEnv:
+  - name: SPRING_PROFILES_ACTIVE
+    value: develop
+  - name: JAVA_TOOL_OPTIONS
+    value: '-javaagent:/java-packages/opentelemetry-javaagent.jar -XX:NativeMemoryTracking=summary'
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: http/protobuf
+  - name: OTEL_LOGS_EXPORTER
+    value: otlp
+  - name: OTEL_METRICS_EXPORTER
+    value: otlp
+  - name: OTEL_TRACES_EXPORTER
+    value: otlp

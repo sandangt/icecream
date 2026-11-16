@@ -60,7 +60,11 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: data
-              mountPath: /var/lib/zookeeper
+              mountPath: /var/lib/zookeeper/data
+              subPath: data
+            - name: data
+              mountPath: /var/lib/zookeeper/log
+              subPath: log
       volumes:
         - name: data
           persistentVolumeClaim:

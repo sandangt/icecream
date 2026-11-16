@@ -1,0 +1,28 @@
+{{- if .Values.config.datasources.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana.fullname" . }}-config
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Mimir
+        uid: mimir
+        type: prometheus
+        access: proxy
+        url: {{ .Values.config.datasources.mimirUrl }}
+        isDefault: true
+      - name: Loki
+        uid: loki
+        type: loki
+        access: proxy
+        url: {{ .Values.config.datasources.lokiUrl }}
+      - name: Tempo
+        uid: tempo
+        type: tempo
+        access: proxy
+        url: {{ .Values.config.datasources.tempoUrl }}
+{{- end }}

@@ -8,14 +8,14 @@ spec:
   selector: {{- include "rabbitmq.selectorLabels" . | nindent 4 }}
   ports:
     - name: amqp
-      port: {{ .Values.service.amqpPort }}
+      port: {{ .Values.service.clusterIp.amqpPort }}
       targetPort: amqp
-      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.amqp }}
-      nodePort: {{ .Values.service.nodePorts.amqp }}
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort.amqpPort }}
+      nodePort: {{ .Values.service.nodePort.amqpPort }}
       {{- end }}
     - name: management
-      port: {{ .Values.service.managementPort }}
+      port: {{ .Values.service.clusterIp.managementPort }}
       targetPort: management
-      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.management }}
-      nodePort: {{ .Values.service.nodePorts.management }}
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort.managementPort }}
+      nodePort: {{ .Values.service.nodePort.managementPort }}
       {{- end }}

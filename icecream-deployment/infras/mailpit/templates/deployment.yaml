@@ -25,13 +25,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: MP_MAX_MESSAGES
-              value: {{ .Values.maxMessages | quote }}
+              value: {{ .Values.config.maxMessages | quote }}
             - name: MP_DATABASE
               value: /data/mailpit.db
             - name: MP_SMTP_AUTH_ACCEPT_ANY
-              value: {{ ternary "1" "0" .Values.smtpAuthAcceptAny | quote }}
+              value: {{ ternary "1" "0" .Values.config.smtpAuthAcceptAny | quote }}
             - name: MP_SMTP_AUTH_ALLOW_INSECURE
-              value: {{ ternary "1" "0" .Values.smtpAuthAllowInsecure | quote }}
+              value: {{ ternary "1" "0" .Values.config.smtpAuthAllowInsecure | quote }}
             {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

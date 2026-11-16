@@ -1,0 +1,7 @@
+fullnameOverride: loki
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials
