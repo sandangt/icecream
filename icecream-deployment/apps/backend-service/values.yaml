@@ -18,11 +18,7 @@ service:
 config:
   existingConfigMap: ''
 
-extraEnv:
-  - name: SPRING_PROFILES_ACTIVE
-    value: staging
-  - name: JAVA_TOOL_OPTIONS
-    value: '-XX:MaxRAMPercentage=75.0'
+extraEnv: []
 
 auth:
   existingSecret: ''
