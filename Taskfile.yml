@@ -52,6 +52,7 @@ tasks:
       - task: deployment:create-params
       - task: deployment:create-creds
       - task: deployment:install-infras
+      - task: deployment:install-backends
 
   greet:
     silent: true

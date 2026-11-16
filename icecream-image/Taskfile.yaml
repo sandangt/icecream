@@ -50,6 +50,9 @@ vars:
     - name: otel-collector
       path: './otel-collector'
       version: 2.17.4
+    - name: icecream-identity
+      path: '../icecream-system/identity'
+      version: 0.1.0
 
 tasks:
   build:

@@ -18,6 +18,8 @@ vars:
     - grafana
     - otel-collector
     # - apisix
+  BACKEND_LIST:
+    - codex
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
@@ -154,6 +156,8 @@ vars:
       value: '{{.KEYCLOAK_ADMIN}}'
     - name: KEYCLOAK_DB_USER
       value: '{{.KEYCLOAK_DB_USER}}'
+    - name: KEYCLOAK_DB_URL
+      value: 'jdbc:postgresql://{{.POSTGRESQL_HOST}}:{{.POSTGRESQL_PORT}}/{{.POSTGRESQL_IDENTITY_DB}}'
     - name: CONSUL_PORT
       value: '{{.CONSUL_PORT}}'
     - name: CONSUL_HOST
@@ -244,9 +248,19 @@ tasks:
   template-backend:
     if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
     cmd: helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
+  install-backends:
+    cmds:
+      - for: {var: BACKEND_LIST}
+        task: install-backend-internal
+        vars:
+          NAME: '{{.ITEM}}'
   install-backend:
     if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
     cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+  install-backend-internal:
+    internal: true
+    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml
+    cmd: helm upgrade --install {{.NAME}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml -n {{.NAMESPACE}}
   uninstall-chart:
     if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
     cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}

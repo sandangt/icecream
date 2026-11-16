@@ -1,0 +1,34 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/icecream-identity
+  tag: '0.1.0'
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+auth:
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+
+service:
+  type: ClusterIP
+  port: 32000
+  nodePort: null
+
+extraEnv: []
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 1Gi
+
+podSecurityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+imagePullSecrets: []
