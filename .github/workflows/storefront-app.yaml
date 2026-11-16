@@ -12,14 +12,14 @@ on:
         default: DEV
         required: true
 
-run-name: "[${{ inputs.ENV }}](🚀): storefront"
+run-name: "[${{ inputs.ENV }}](🚀): storefront-app"
 
 jobs:
   build:
     name: Build Icecream Storefront (${{ inputs.ENV }})
-    uses: ./.github/workflows/build-nextjs.yaml
+    uses: ./.github/workflows/build-nextjs-app.yaml
     with:
       root-path: icecream-ui/storefront
-      image-name: icecream-storefront
+      image-name: icecream-storefront-app
       ENV: ${{ inputs.ENV }}
     secrets: inherit

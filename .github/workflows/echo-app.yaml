@@ -1,0 +1,23 @@
+name: "Icecream Echo app script"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        type: choice
+        options: [DEV, STAG, PROD]
+        required: true
+        default: DEV
+
+run-name: "[${{ inputs.ENV }}](🚀): echo-app"
+
+jobs:
+  build:
+    name: Build Icecream Echo App (${{ inputs.ENV }})
+    uses: ./.github/workflows/build-spring-boot-app.yaml
+    with:
+      root-path: icecream-system
+      module: echo
+      image-name: icecream-echo-app
+      ENV: ${{ inputs.ENV }}
+    secrets: inherit
