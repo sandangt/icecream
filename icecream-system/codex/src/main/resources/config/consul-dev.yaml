@@ -1,5 +1,5 @@
 server:
-  address: ${CONSUL_HOST}
+  address: 0.0.0.0
   port: ${CONSUL_PORT}
   servlet.context-path: /console
 
