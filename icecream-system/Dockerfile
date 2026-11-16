@@ -22,6 +22,7 @@ ENTRYPOINT [
   "java",
   "-javaagent:/otel/agent.jar",
   "-XX:MaxRAMPercentage=75.0",
+  "-XX:NativeMemoryTracking=summary",
   "-jar",
   "app.jar"
 ]

@@ -1,4 +1,4 @@
-name: "Echo service script"
+name: "Icecream Codex app script"
 
 on:
   workflow_dispatch:
@@ -9,15 +9,15 @@ on:
         required: true
         default: DEV
 
-run-name: "[${{ inputs.ENV }}](🚀): echo-service"
+run-name: "[${{ inputs.ENV }}](🚀): codex-app"
 
 jobs:
   build:
-    name: Build Icecream Echo Service (${{ inputs.ENV }})
-    uses: ./.github/workflows/build-spring-boot-service.yaml
+    name: Build Icecream Codex App (${{ inputs.ENV }})
+    uses: ./.github/workflows/build-spring-boot-app.yaml
     with:
       root-path: icecream-system
-      module: echo
-      image-name: icecream-echo-service
+      module: codex
+      image-name: icecream-codex-app
       ENV: ${{ inputs.ENV }}
     secrets: inherit

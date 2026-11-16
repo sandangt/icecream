@@ -1,4 +1,4 @@
-name: "Chronos service script"
+name: "Icecream Chronos app script"
 
 on:
   workflow_dispatch:
@@ -9,15 +9,15 @@ on:
         required: true
         default: DEV
 
-run-name: "[${{ inputs.ENV }}](🚀): chronos-service"
+run-name: "[${{ inputs.ENV }}](🚀): chronos-app"
 
 jobs:
   build:
-    name: Build Icecream Chronos Service (${{ inputs.ENV }})
-    uses: ./.github/workflows/build-spring-boot-service.yaml
+    name: Build Icecream Chronos App (${{ inputs.ENV }})
+    uses: ./.github/workflows/build-spring-boot-app.yaml
     with:
       root-path: icecream-system
       module: chronos
-      image-name: icecream-chronos-service
+      image-name: icecream-chronos-app
       ENV: ${{ inputs.ENV }}
     secrets: inherit

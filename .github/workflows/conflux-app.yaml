@@ -1,4 +1,4 @@
-name: "Conflux service script"
+name: "Icecream Conflux app script"
 
 on:
   workflow_dispatch:
@@ -9,15 +9,15 @@ on:
         required: true
         default: DEV
 
-run-name: "[${{ inputs.ENV }}](🚀): conflux-service"
+run-name: "[${{ inputs.ENV }}](🚀): conflux-app"
 
 jobs:
   build:
-    name: Build Icecream Conflux Service (${{ inputs.ENV }})
-    uses: ./.github/workflows/build-spring-boot-service.yaml
+    name: Build Icecream Conflux App (${{ inputs.ENV }})
+    uses: ./.github/workflows/build-spring-boot-app.yaml
     with:
       root-path: icecream-system
       module: conflux
-      image-name: icecream-conflux-service
+      image-name: icecream-conflux-app
       ENV: ${{ inputs.ENV }}
     secrets: inherit
