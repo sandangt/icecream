@@ -1,0 +1,42 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/mimir
+  tag: 2.17.4
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+config:
+  existingConfigMap: ''
+  blocksRetention: 3d
+  s3Bucket: icecream-metrics
+
+auth:
+  existingSecret: ''
+
+service:
+  type: ClusterIP
+  port: 39002
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 5Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    memory: 2Gi
+
+podSecurityContext:
+  fsGroup: 10001
+nodeSelector: {}
+affinity: {}
+extraArgs: []
+tolerations: []
+imagePullSecrets: []

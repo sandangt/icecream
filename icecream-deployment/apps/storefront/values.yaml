@@ -1,0 +1,60 @@
+replicaCount: 2
+
+image:
+  repository: your-registry/your-nextjs-app
+  tag: ""            # defaults to .Chart.AppVersion if empty
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []   # e.g. [{ name: regcred }]
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+config:
+  NODE_ENV: "production"
+  HOSTNAME: "0.0.0.0"
+  PORT: "3000"
+  NEXT_TELEMETRY_DISABLED: "1"
+  # BFF -> backend services (cluster DNS, via ClusterIP services or APISIX)
+  # ORDERS_API_URL: "http://orders-service.backend.svc.cluster.local"
+  # USERS_API_URL: "http://users-service.backend.svc.cluster.local"
+
+# Extra env vars as raw k8s entries (valueFrom, etc.)
+extraEnv: []
+#  - name: SESSION_SECRET
+#    valueFrom:
+#      secretKeyRef: { name: my-secret, key: session-secret }
+
+# Name of an existing Secret to load all keys as env vars (optional)
+existingSecret: ""
+
+# Needs a lightweight health route in the app, e.g. app/api/health/route.ts
+# returning 200. Don't point probes at "/" (SSR page, may call backends).
+probes:
+  path: /api/health
+  startup:
+    failureThreshold: 30
+    periodSeconds: 2
+  liveness:
+    periodSeconds: 10
+    failureThreshold: 3
+  readiness:
+    periodSeconds: 10
+    failureThreshold: 3
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

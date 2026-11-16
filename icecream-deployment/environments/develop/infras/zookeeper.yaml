@@ -1,0 +1,5 @@
+fullnameOverride: zookeeper
+
+service:
+  type: ClusterIP
+  port: 38008

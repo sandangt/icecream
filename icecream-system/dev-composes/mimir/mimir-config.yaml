@@ -11,7 +11,7 @@ common:
   storage:
     backend: s3
     s3:
-      endpoint: minio:9000
+      endpoint: garage:3900
       bucket_name: icecream-metrics
       access_key_id: ${AWS_ACCESS_KEY_ID}
       secret_access_key: ${AWS_SECRET_ACCESS_KEY}

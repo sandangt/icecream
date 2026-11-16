@@ -1,0 +1,48 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/grafana
+  tag: 12.3.1
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+auth:
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+  datasources:
+    enabled: true
+    mimirUrl: http://mimir:39002/prometheus
+    lokiUrl: http://loki:39003
+    tempoUrl: http://tempo:39004
+
+service:
+  type: ClusterIP
+  port: 39000
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 1Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 512Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 472
+  runAsGroup: 472
+  fsGroup: 472
+nodeSelector: {}
+affinity: {}
+extraArgs: []
+tolerations: []
+imagePullSecrets: []

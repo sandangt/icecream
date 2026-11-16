@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "garage.fullname" . }}-config
+  labels: {{- include "garage.labels" . | nindent 4 }}
+data:
+  garage.toml: |
+    metadata_dir = "/var/lib/garage/meta"
+    data_dir     = "/var/lib/garage/data"
+    db_engine    = {{ .Values.garage.dbEngine | quote }}
+    replication_factor = {{ .Values.garage.replicationFactor }}
+
+    rpc_bind_addr   = "[::]:3901"
+    rpc_public_addr = "127.0.0.1:3901"
+    # rpc_secret   -> env GARAGE_RPC_SECRET
+    # admin_token  -> env GARAGE_ADMIN_TOKEN
+
+    [s3_api]
+    s3_region     = {{ .Values.garage.region | quote }}
+    api_bind_addr = "[::]:3900"
+
+    [s3_web]
+    bind_addr   = "[::]:3902"
+    root_domain = {{ .Values.garage.web.rootDomain | quote }}
+    index       = {{ .Values.garage.web.index | quote }}
+
+    [admin]
+    api_bind_addr = "[::]:3903"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "garage.fullname" . }}-init-script
+  labels: {{- include "garage.labels" . | nindent 4 }}
+data:
+  init-script.sh: |
+{{ .Files.Get "files/init-script.sh" | indent 4 }}

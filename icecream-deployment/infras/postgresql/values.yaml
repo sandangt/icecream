@@ -1,0 +1,40 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/postgresql
+  tag: '16.8'
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+auth:
+  username: icecream
+  existingSecret: ''
+
+config:
+  existingConfigMap: ''
+
+service:
+  type: ClusterIP
+  port: 5432
+  nodePort: null
+
+persistence:
+  storageClass: longhorn
+  size: 5Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 1Gi
+
+podSecurityContext:
+  fsGroup: 999
+nodeSelector: {}
+tolerations: []
+affinity: {}
+imagePullSecrets: []
