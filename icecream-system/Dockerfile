@@ -10,6 +10,10 @@ RUN mvn -pl ${MODULE} -am clean package -DskipTests
 # -------- Runtime --------
 FROM eclipse-temurin:25-jre-jammy
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # (Optional) OpenTelemetry agent
