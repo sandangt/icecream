@@ -145,7 +145,7 @@ otel:
     servlet.enabled: true
 
 app:
-  region: ${REGION:sanlab}
+  region: ${REGION}
   minio:
     url: ${STORAGE_URL}
     access:

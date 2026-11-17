@@ -29,7 +29,7 @@ public class ClientConfig {
     @Bean
     public MinioClient minioClient(
         @Value("${app.minio.url}") String url,
-        @Value("${app.region}") String region,
+        @Value("${app.region:sanlab}") String region,
         @Value("${app.minio.access.key}") String accessKey,
         @Value("${app.minio.access.secret}") String accessSecret
     ) {
