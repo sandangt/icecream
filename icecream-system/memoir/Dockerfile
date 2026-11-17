@@ -8,11 +8,10 @@ WORKDIR /app
 
 COPY java-packages/opentelemetry-javaagent.jar /otel/agent.jar
 
-COPY codex/target/*.jar /app/app.jar
+COPY memoir/target/*.jar /app/app.jar
 
 ENTRYPOINT ["java",\
   "-javaagent:/otel/agent.jar",\
   "-XX:MaxRAMPercentage=75.0",\
   "-XX:NativeMemoryTracking=summary",\
   "-jar", "app.jar"]
-
