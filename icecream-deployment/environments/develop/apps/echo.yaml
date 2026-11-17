@@ -1,0 +1,54 @@
+nameOverride: echo
+fullnameOverride: icecream-echo
+image:
+  repository: ghcr.io/sandangt/icecream-echo-app
+  tag: sha-b03e98f
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials
+
+service:
+  ports:
+    - name: http
+      port: 32002
+      targetPort: 32002
+      protocol: TCP
+    - name: rsocket
+      port: 42002
+      targetPort: 42002
+      protocol: TCP
+
+extraEnv:
+  - name: SPRING_PROFILES_ACTIVE
+    value: dev
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: http/protobuf
+  - name: OTEL_LOGS_EXPORTER
+    value: otlp
+  - name: OTEL_METRICS_EXPORTER
+    value: otlp
+  - name: OTEL_TRACES_EXPORTER
+    value: otlp
+
+probes:
+  startup:
+    httpGet:
+      path: /echo/actuator/health/liveness
+      port: http
+    failureThreshold: 30
+    periodSeconds: 10
+  liveness:
+    httpGet:
+      path: /echo/actuator/health/liveness
+      port: http
+    failureThreshold: 3
+    periodSeconds: 10
+  readiness:
+    httpGet:
+      path: /echo/actuator/health/readiness
+      port: http
+    failureThreshold: 3
+    periodSeconds: 10

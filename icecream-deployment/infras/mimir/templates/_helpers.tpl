@@ -35,4 +35,3 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- include "mimir.fullname" . -}}
 {{- end -}}
 {{- end -}}
-

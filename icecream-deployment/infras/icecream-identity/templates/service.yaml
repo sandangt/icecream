@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "icecream-identity.fullname" . }}
+  name: {{ include "icecream-identity.name" . }}
   labels:
     {{- include "icecream-identity.labels" . | nindent 4 }}
 spec:

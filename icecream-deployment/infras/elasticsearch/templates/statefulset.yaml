@@ -30,7 +30,7 @@ spec:
       {{- end }}
       containers:
         - name: elasticsearch
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             runAsUser: 1000

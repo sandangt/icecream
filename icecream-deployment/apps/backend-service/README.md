@@ -1,0 +1,61 @@
+# ConfigMap and Secret existing name:
+- `auth.existingSecret`: icecream-credentials
+- `config.existingConfigMap`: icecream-configmaps
+# `auth.existingSecret` required fields:
+```env
+POSTGRESQL_PASSWORD=password1234
+MONGODB_PASSWORD=password1234
+ELASTICSEARCH_PASSWORD=password1234
+CONSUL_API_KEY_0=api-key-0
+CONSUL_API_KEY_1=api-key-1
+STORAGE_ACCESS_KEY=garageadmin
+STORAGE_SECRET_KEY=password1234
+KEYCLOAK_ADMIN_PASSWORD=password1234
+IDENTITY_STOREFRONT_CLIENT_ID=icecream-storefront-client
+```
+# `config.existingConfigMap` required fields:
+```env
+REGION=sanlab
+OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:39001
+OTEL_COLLECTOR_HOST=otel-collector
+OTEL_COLLECTOR_PORT=39001
+CODEX_HOST=codex
+CODEX_PORT=32010
+CONSUL_PORT=32001
+CONSUL_RSOCKET_PORT=42001
+POSTGRESQL_HOST=postgresql
+POSTGRESQL_PORT=38000
+POSTGRESQL_USER=admin
+POSTGRESQL_CONSUL_DB=consul                                                                         
+POSTGRESQL_MEMOIR_DB=memoir
+MONGODB_HOST=mongodb
+MONGODB_PORT=38001
+MONGODB_USER=admin
+MONGODB_CHRONOS_DB=chronos
+MONGODB_ECHO_DB=echo
+REDIS_HOST=redis
+REDIS_PORT=38100
+ELASTICSEARCH_HOST=elasticsearch
+ELASTICSEARCH_PORT=38012
+ELASTICSEARCH_USERNAME=sandang
+KAFKA_HOST=kafka
+KAFKA_PORT=38009
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=38007
+IDENTITY_ISSUER=http://identity:32000/realms/icecream-dev
+STORAGE_URL=http://garage:38004
+MEMOIR_RSOCKET_HOST=memoir
+MEMOIR_RSOCKET_PORT=42004
+ECHO_RSOCKET_HOST=echo
+ECHO_RSOCKET_PORT=42005
+CHRONOS_RSOCKET_HOST=chronos
+CHRONOS_RSOCKET_PORT=42006
+CONFLUX_RSOCKET_HOST=conflux
+CONFLUX_RSOCKET_PORT=42007
+IDENTITY_URL=http://identity:1234/
+KEYCLOAK_ADMIN=admin
+IDENTITY_REALM=icecream-dev
+PAYMENT_URL=
+STOREFRONT_URL=
+```
+

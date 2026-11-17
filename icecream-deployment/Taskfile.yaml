@@ -20,6 +20,8 @@ vars:
     # - apisix
   BACKEND_LIST:
     - codex
+    - consul
+    - chronos
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
@@ -63,6 +65,8 @@ vars:
       value: '{{.CONSUL_API_KEY_0}}'
     - name: CONSUL_API_KEY_1
       value: '{{.CONSUL_API_KEY_1}}'
+    - name: PAYMENT_WEBHOOK_SECRET
+      value: '{{.PAYMENT_WEBHOOK_SECRET}}'
   PARAMETER_LIST:
     - name: REGION
       value: '{{.REGION}}'
@@ -212,6 +216,10 @@ vars:
       value: '{{.CONFLUX_RSOCKET_PORT}}'
     - name: CONFLUX_RSOCKET_HOST
       value: '{{.CONFLUX_RSOCKET_HOST}}'
+    - name: PAYMENT_URL
+      value: '{{.PAYMENT_URL}}'
+    - name: ICECREAM_VOLUME
+      value: ''
   PROFILE: '{{.PROFILE | default "develop"}}'
 
 tasks:
