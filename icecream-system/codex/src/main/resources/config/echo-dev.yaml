@@ -23,9 +23,11 @@ spring:
         notifyPayment-in-0:
           binder: rabbit-binder
           destination: icecream.consul.payment.notify
+          group: echo-consumer-group
         notifyCheckout-in-0:
           binder: rabbit-binder
           destination: icecream.consul.checkout.notify
+          group: echo-consumer-group
         helloRabbit-in-0:
           group: echo-consumer-group
         helloKafka-in-0:
