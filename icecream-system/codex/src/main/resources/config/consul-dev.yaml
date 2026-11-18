@@ -52,6 +52,10 @@ spring:
         notifyCheckout-out-0:
           binder: rabbit-binder
           destination: icecream.consul.checkout.notify
+        helloRabbit-in-0:
+          group: consul-consumer-group
+        helloKafka-in-0:
+          group: consul-consumer-group
   rsocket:
     server:
       port: ${CONSUL_RSOCKET_PORT}
