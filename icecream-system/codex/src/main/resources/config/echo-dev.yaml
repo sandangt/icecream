@@ -26,6 +26,10 @@ spring:
         notifyCheckout-in-0:
           binder: rabbit-binder
           destination: icecream.consul.checkout.notify
+        helloRabbit-in-0:
+          group: echo-consumer-group
+        helloKafka-in-0:
+          group: echo-consumer-group
   mail:
     host: ${MAILPIT_HOST}
     port: ${MAILPIT_PORT}

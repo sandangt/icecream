@@ -19,6 +19,11 @@ spring:
         deleteImage-in-0:
           binder: rabbit-binder
           destination: icecream.consul.media.delete-image
+          group: chronos-consumer-group
+        helloRabbit-in-0:
+          group: chronos-consumer-group
+        helloKafka-in-0:
+          group: chronos-consumer-group
 
 otel:
   instrumentation:

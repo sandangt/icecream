@@ -22,6 +22,8 @@ spring:
           destination: icecream.conflux.enriched.product
           producer:
             use-native-encoding: true
+        helloRabbit-in-0:
+          group: conflux-consumer-group
         helloKafka-in-0:
           group: conflux-consumer-group
       kafka:

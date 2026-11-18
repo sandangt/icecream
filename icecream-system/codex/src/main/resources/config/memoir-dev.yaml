@@ -24,3 +24,5 @@ spring:
           group: memoir-consumer-group
         helloKafka-in-0:
           group: memoir-consumer-group
+        helloRabbit-in-0:
+          group: memoir-consumer-group
