@@ -2,7 +2,7 @@ nameOverride: codex
 fullnameOverride: icecream-codex
 image:
   repository: ghcr.io/sandangt/icecream-codex-app
-  tag: sha-be115be
+  tag: sha-3efa71d
 
 config:
   existingConfigMap: icecream-configmaps
@@ -11,7 +11,11 @@ auth:
   existingSecret: icecream-credentials
 
 service:
-  targetPort: 32010
+  ports:
+    - name: http
+      port: 32010
+      targetPort: 32010
+      protocol: TCP
 
 extraEnv:
   - name: OTEL_EXPORTER_OTLP_PROTOCOL

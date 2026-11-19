@@ -18,6 +18,12 @@ vars:
     - grafana
     - otel-collector
     # - apisix
+  BACKEND_LIST:
+    - codex
+    - consul
+    - chronos
+    - echo
+    - memoir
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
@@ -61,6 +67,8 @@ vars:
       value: '{{.CONSUL_API_KEY_0}}'
     - name: CONSUL_API_KEY_1
       value: '{{.CONSUL_API_KEY_1}}'
+    - name: PAYMENT_WEBHOOK_SECRET
+      value: '{{.PAYMENT_WEBHOOK_SECRET}}'
   PARAMETER_LIST:
     - name: REGION
       value: '{{.REGION}}'
@@ -124,8 +132,8 @@ vars:
       value: '{{.MAILPIT_PORT}}'
     - name: MAILPIT_UI_PORT
       value: '{{.MAILPIT_UI_PORT}}'
-    - name: ZOOKEEPER_CLIENT_PORT
-      value: '{{.ZOOKEEPER_CLIENT_PORT}}'
+    - name: ZOOKEEPER_URL
+      value: '{{.ZOOKEEPER_HOST}}:{{.ZOOKEEPER_PORT}}'
     - name: KAFKA_HOST
       value: '{{.KAFKA_HOST}}'
     - name: KAFKA_PORT
@@ -154,6 +162,8 @@ vars:
       value: '{{.KEYCLOAK_ADMIN}}'
     - name: KEYCLOAK_DB_USER
       value: '{{.KEYCLOAK_DB_USER}}'
+    - name: KEYCLOAK_DB_URL
+      value: 'jdbc:postgresql://{{.POSTGRESQL_HOST}}:{{.POSTGRESQL_PORT}}/{{.POSTGRESQL_IDENTITY_DB}}'
     - name: CONSUL_PORT
       value: '{{.CONSUL_PORT}}'
     - name: CONSUL_HOST
@@ -208,6 +218,10 @@ vars:
       value: '{{.CONFLUX_RSOCKET_PORT}}'
     - name: CONFLUX_RSOCKET_HOST
       value: '{{.CONFLUX_RSOCKET_HOST}}'
+    - name: PAYMENT_URL
+      value: '{{.PAYMENT_URL}}'
+    - name: ICECREAM_VOLUME
+      value: ''
   PROFILE: '{{.PROFILE | default "develop"}}'
 
 tasks:
@@ -244,9 +258,19 @@ tasks:
   template-backend:
     if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
     cmd: helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
+  install-backends:
+    cmds:
+      - for: {var: BACKEND_LIST}
+        task: install-backend-internal
+        vars:
+          NAME: '{{.ITEM}}'
   install-backend:
     if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
     cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+  install-backend-internal:
+    internal: true
+    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml
+    cmd: helm upgrade --install {{.NAME}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml -n {{.NAMESPACE}}
   uninstall-chart:
     if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
     cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}

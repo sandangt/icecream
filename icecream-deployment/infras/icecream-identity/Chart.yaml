@@ -1,0 +1,6 @@
+apiVersion: v2
+name: icecream-identity
+description: Keycloak identity provider for Icecream (custom image with themes and realm import)
+type: application
+version: 0.1.0
+appVersion: '26.2.5'

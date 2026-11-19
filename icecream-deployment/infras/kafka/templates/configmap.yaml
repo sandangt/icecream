@@ -1,4 +1,3 @@
-{{- if not .Values.config.existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,12 +5,11 @@ metadata:
   labels:
     {{- include "kafka.labels" . | nindent 4 }}
 data:
-  KAFKA_ZOOKEEPER_CONNECT: {{ .Values.config.zookeeperConnect | quote }}
-  KAFKA_HEAP_OPTS: {{ .Values.config.heapOpts | quote }}
   KAFKA_DEFAULT_REPLICATION_FACTOR: {{ include "kafka.rf" . | quote }}
-  KAFKA_MIN_INSYNC_REPLICAS: {{ include "kafka.isr" . | quote }}
   KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: {{ include "kafka.rf" . | quote }}
   KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: {{ include "kafka.rf" . | quote }}
+  TOPIC_REPLICATION_FACTOR: {{ include "kafka.rf" . | quote }}
+  KAFKA_MIN_INSYNC_REPLICAS: {{ include "kafka.isr" . | quote }}
   KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: {{ include "kafka.isr" . | quote }}
   KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: {{ .Values.config.groupInitialRebalanceDelayMs | quote }}
   KAFKA_LOG_CLEANUP_POLICY: {{ .Values.config.logCleanupPolicy | quote }}
@@ -19,13 +17,11 @@ data:
   KAFKA_LOG_SEGMENT_MS: {{ .Values.config.logSegmentMs | quote }}
   KAFKA_LOG_DIRS: /var/lib/kafka/data
   TOPIC_PARTITIONS: {{ .Values.config.topicPartitions | quote }}
-  TOPIC_REPLICATION_FACTOR: {{ include "kafka.rf" . | quote }}
   TOPIC_INIT_RETRY_INTERVAL: {{ .Values.config.topicInitRetryInterval | quote }}
   TOPIC_INIT_MAX_ATTEMPTS: {{ .Values.config.topicInitMaxAttempts | quote }}
-  {{- range $k, $v := .Values.config.extraEnv }}
-  {{ $k }}: {{ $v | quote }}
-  {{- end }}
-{{- end }}
+  KAFKA_LISTENERS: 'BROKER://0.0.0.0:29092,CLIENT://0.0.0.0:9092'
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'BROKER:PLAINTEXT,CLIENT:PLAINTEXT'
+  KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
 
 ---
 

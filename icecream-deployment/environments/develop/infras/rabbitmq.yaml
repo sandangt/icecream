@@ -11,3 +11,10 @@ service:
   clusterIp:
     amqpPort: 38006
     managementPort: 38007
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 1Gi
+  limits:
+    memory: 1Gi

@@ -1,0 +1,68 @@
+nameOverride: consul
+fullnameOverride: icecream-consul
+image:
+  repository: ghcr.io/sandangt/icecream-consul-app
+  tag: sha-fc6bdf3
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials
+
+service:
+  ports:
+    - name: http
+      port: 32001
+      targetPort: 32001
+      protocol: TCP
+    - name: rsocket
+      port: 42001
+      targetPort: 42001
+      protocol: TCP
+
+extraEnv:
+  - name: SPRING_PROFILES_ACTIVE
+    value: dev
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: http/protobuf
+  - name: OTEL_LOGS_EXPORTER
+    value: otlp
+  - name: OTEL_METRICS_EXPORTER
+    value: otlp
+  - name: OTEL_TRACES_EXPORTER
+    value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-consul
+
+probes:
+  startup:
+    httpGet: null
+    exec:
+      command:
+        - /bin/sh
+        - -c
+        - "curl -fsS -H \"X-API-KEY: $CONSUL_API_KEY_0\" http://localhost:32001/console/actuator/health/liveness > /dev/null"
+    initialDelaySeconds: 5
+    failureThreshold: 30
+    periodSeconds: 10
+  liveness:
+    httpGet: null
+    exec:
+      command:
+        - /bin/sh
+        - -c
+        - "curl -fsS -H \"X-API-KEY: $CONSUL_API_KEY_0\" http://localhost:32001/console/actuator/health/liveness > /dev/null"
+    initialDelaySeconds: 5
+    failureThreshold: 5
+    periodSeconds: 10
+  readiness:
+    httpGet: null
+    exec:
+      command:
+        - /bin/sh
+        - -c
+        - "curl -fsS -H \"X-API-KEY: $CONSUL_API_KEY_0\" http://localhost:32001/console/actuator/health/readiness > /dev/null"
+    initialDelaySeconds: 5
+    failureThreshold: 5
+    periodSeconds: 10

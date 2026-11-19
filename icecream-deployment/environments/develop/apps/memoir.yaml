@@ -1,0 +1,36 @@
+nameOverride: memoir
+fullnameOverride: icecream-memoir
+image:
+  repository: ghcr.io/sandangt/icecream-memoir-app
+  tag: sha-fc6bdf3
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials
+
+service:
+  ports:
+    - name: http
+      port: 32004
+      targetPort: 32004
+      protocol: TCP
+    - name: rsocket
+      port: 42004
+      targetPort: 42004
+      protocol: TCP
+
+extraEnv:
+  - name: SPRING_PROFILES_ACTIVE
+    value: dev
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: http/protobuf
+  - name: OTEL_LOGS_EXPORTER
+    value: otlp
+  - name: OTEL_METRICS_EXPORTER
+    value: otlp
+  - name: OTEL_TRACES_EXPORTER
+    value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-memoir

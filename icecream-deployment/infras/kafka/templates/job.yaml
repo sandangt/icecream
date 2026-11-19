@@ -27,7 +27,7 @@ spec:
       {{- end }}
       containers:
         - name: topic-init-job
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/bash", "-c"]
           args:
@@ -43,12 +43,12 @@ spec:
               exec /opt/kafka/init-scripts/create-topics.sh
           envFrom:
             - configMapRef:
-                name: {{ .Values.config.existingConfigMap | default (include "kafka.fullname" .) }}
+                name: {{ include "kafka.fullname" . }}
           env:
             - name: KAFKA_BROKER
               value: {{ include "kafka.bootstrap" . | quote }}
             - name: KAFKA_HEAP_OPTS
-              value: "-Xms64m -Xmx256m"
+              value: '-Xms64m -Xmx256m'
           resources:
             {{- toYaml .Values.topicInit.resources | nindent 12 }}
           volumeMounts:

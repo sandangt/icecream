@@ -31,7 +31,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- printf "%s.%s.svc.%s:%v" (include "kafka.fullname" .) .Release.Namespace .Values.config.clusterDomain .Values.service.port -}}
 {{- end -}}
 
-{{/* Effective replication factor */}}
 {{- define "kafka.rf" -}}
 {{- if kindIs "invalid" .Values.config.replicationFactor -}}
 {{- min (int .Values.replicaCount) 3 -}}
@@ -40,11 +39,27 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 {{- end -}}
 
-{{/* Effective min.insync.replicas */}}
 {{- define "kafka.isr" -}}
 {{- if kindIs "invalid" .Values.config.minInsyncReplicas -}}
 {{- if ge (int (include "kafka.rf" .)) 2 -}}2{{- else -}}1{{- end -}}
 {{- else -}}
 {{- .Values.config.minInsyncReplicas -}}
+{{- end -}}
+{{- end -}}
+
+
+{{- define "kafka.secretName" -}}
+{{- if and .Values.auth .Values.auth.existingSecret -}}
+{{- .Values.auth.existingSecret -}}
+{{- else -}}
+{{- include "kafka.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "kafka.configMapName" -}}
+{{- if and .Values.config .Values.config.existingConfigMap -}}
+{{- .Values.config.existingConfigMap -}}
+{{- else -}}
+{{- include "kafka.fullname" . -}}
 {{- end -}}
 {{- end -}}

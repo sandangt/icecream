@@ -12,8 +12,15 @@ fullnameOverride: ''
 
 service:
   type: ClusterIP
-  port: 80
-  targetPort: 8080
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+    - name: rsocket
+      port: 7000
+      targetPort: 7000
+      protocol: TCP
 
 config:
   existingConfigMap: ''
@@ -25,17 +32,23 @@ auth:
 
 probes:
   startup:
-    path: /actuator/health/liveness
+    httpGet:
+      path: /actuator/health/liveness
+      port: http
     failureThreshold: 30
-    periodSeconds: 5
+    periodSeconds: 10
   liveness:
-    path: /actuator/health/liveness
-    periodSeconds: 10
+    httpGet:
+      path: /actuator/health/liveness
+      port: http
     failureThreshold: 3
+    periodSeconds: 10
   readiness:
-    path: /actuator/health/readiness
-    periodSeconds: 10
+    httpGet:
+      path: /actuator/health/readiness
+      port: http
     failureThreshold: 3
+    periodSeconds: 10
 
 resources:
   requests:
