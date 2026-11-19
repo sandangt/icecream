@@ -2,7 +2,7 @@ nameOverride: memoir
 fullnameOverride: icecream-memoir
 image:
   repository: ghcr.io/sandangt/icecream-memoir-app
-  tag: sha-a6eb1c8
+  tag: sha-fc6bdf3
 
 config:
   existingConfigMap: icecream-configmaps
@@ -32,3 +32,5 @@ extraEnv:
     value: otlp
   - name: OTEL_TRACES_EXPORTER
     value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-memoir

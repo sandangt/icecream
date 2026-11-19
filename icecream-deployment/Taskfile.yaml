@@ -22,6 +22,8 @@ vars:
     - codex
     - consul
     - chronos
+    - echo
+    - memoir
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
@@ -130,8 +132,8 @@ vars:
       value: '{{.MAILPIT_PORT}}'
     - name: MAILPIT_UI_PORT
       value: '{{.MAILPIT_UI_PORT}}'
-    - name: ZOOKEEPER_CLIENT_PORT
-      value: '{{.ZOOKEEPER_CLIENT_PORT}}'
+    - name: ZOOKEEPER_URL
+      value: '{{.ZOOKEEPER_HOST}}:{{.ZOOKEEPER_PORT}}'
     - name: KAFKA_HOST
       value: '{{.KAFKA_HOST}}'
     - name: KAFKA_PORT

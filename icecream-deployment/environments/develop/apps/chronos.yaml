@@ -2,7 +2,7 @@ nameOverride: chronos
 fullnameOverride: icecream-chronos
 image:
   repository: ghcr.io/sandangt/icecream-chronos-app
-  tag: sha-b03e98f
+  tag: sha-fc6bdf3
 
 config:
   existingConfigMap: icecream-configmaps
@@ -32,6 +32,8 @@ extraEnv:
     value: otlp
   - name: OTEL_TRACES_EXPORTER
     value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-chronos
 
 probes:
   startup:

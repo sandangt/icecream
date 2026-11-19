@@ -17,19 +17,16 @@ auth:
 
 config:
   existingConfigMap: ''
-  zookeeperConnect: zookeeper:38008
   clusterDomain: cluster.local
-  heapOpts: "-Xms512m -Xmx512m"
   replicationFactor: null
   minInsyncReplicas: null
   groupInitialRebalanceDelayMs: 0
-  logCleanupPolicy: "compact,delete"
+  logCleanupPolicy: 'compact,delete'
   logCleanerMinCleanableRatio: 0.01
   logSegmentMs: 600000
   topicPartitions: 1
   topicInitRetryInterval: 5
   topicInitMaxAttempts: 60
-  extraEnv: {}
 
 topicInit:
   enabled: true

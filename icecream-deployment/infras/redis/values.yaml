@@ -23,7 +23,7 @@ persistence:
   storageClass: longhorn
   size: 500Mi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
 
 resources:
   requests:

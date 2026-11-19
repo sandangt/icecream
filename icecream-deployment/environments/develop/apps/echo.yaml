@@ -2,7 +2,7 @@ nameOverride: echo
 fullnameOverride: icecream-echo
 image:
   repository: ghcr.io/sandangt/icecream-echo-app
-  tag: sha-b03e98f
+  tag: sha-3efa71d
 
 config:
   existingConfigMap: icecream-configmaps
@@ -32,6 +32,8 @@ extraEnv:
     value: otlp
   - name: OTEL_TRACES_EXPORTER
     value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-echo
 
 probes:
   startup:
