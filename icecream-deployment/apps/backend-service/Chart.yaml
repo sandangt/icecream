@@ -1,5 +1,5 @@
 apiVersion: v2
-name: spring-boot-backend-service
+name: icecream-backend
 description: Helm chart for deploying a Spring Boot application
 type: application
 version: 0.1.0

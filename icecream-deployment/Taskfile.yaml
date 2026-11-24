@@ -17,13 +17,16 @@ vars:
     - tempo
     - grafana
     - otel-collector
-    # - apisix
-  BACKEND_LIST:
+    - icecream-identity
+    - apisix-internal
+    - apisix-public
+  APP_LIST:
     - codex
     - consul
     - chronos
     - echo
     - memoir
+    - storefront
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
   CREDENTIAL_LIST:
@@ -69,6 +72,10 @@ vars:
       value: '{{.CONSUL_API_KEY_1}}'
     - name: PAYMENT_WEBHOOK_SECRET
       value: '{{.PAYMENT_WEBHOOK_SECRET}}'
+    - name: APISIX_ADMIN_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+    - name: APISIX_VIEWER_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
   PARAMETER_LIST:
     - name: REGION
       value: '{{.REGION}}'
@@ -150,6 +157,8 @@ vars:
       value: '{{.OTEL_COLLECTOR_HOST}}'
     - name: OTEL_COLLECTOR_PORT
       value: '{{.OTEL_COLLECTOR_PORT}}'
+    - name: STOREFRONT_PORT
+      value: '{{.STOREFRONT_PORT}}'
     - name: STOREFRONT_URL
       value: '{{.STOREFRONT_URL}}'
     - name: IDENTITY_REALM
@@ -239,9 +248,22 @@ tasks:
       kubectl create configmap {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}
       {{- range .PARAMETER_LIST}} --from-literal='{{.name}}={{.value}}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+
   template-infra:
-    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm template ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+    if: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        test -d ./infras/apisix && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      else
+        test -d ./infras/"$INFRA_NAME" && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      fi
+    cmd: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        helm template ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+      else
+        helm template ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+      fi
   install-infras:
     cmds:
       - for: {var: INFRA_LIST}
@@ -249,28 +271,88 @@ tasks:
         vars:
           NAME: '{{.ITEM}}'
   install-infra:
-    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
+    if: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        test -d ./infras/apisix && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      else
+        test -d ./infras/"$INFRA_NAME" && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      fi
+    cmd: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        helm upgrade --install "$INFRA_NAME" ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+      else
+        helm upgrade --install "$INFRA_NAME" ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+      fi
   install-infra-internal:
     internal: true
-    if: test -d ./infras/{{.NAME}} && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
-    cmd: helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
-  template-backend:
-    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
-  install-backends:
+    if: |
+      if [[ "{{.NAME}}" == *"apisix"* ]]; then
+        test -d ./infras/apisix && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
+      else
+        test -d ./infras/{{.NAME}} && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
+      fi
+    cmd: |
+      if [[ "{{.NAME}}" == *"apisix"* ]]; then
+        helm upgrade --install {{.NAME}} ./infras/apisix -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+      else
+        helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+      fi
+  
+  template-app:
+    if: |
+      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$APP_NAME" == "storefront" ]]; then
+        test -d ./apps/"$APP_NAME" && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      else
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      fi
+    cmd: |
+      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$APP_NAME" == "storefront" ]]; then
+        helm template ./apps/"$APP_NAME" -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      else
+        helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      fi
+  install-apps:
     cmds:
-      - for: {var: BACKEND_LIST}
-        task: install-backend-internal
+      - for: {var: APP_LIST}
+        task: install-app-internal
         vars:
           NAME: '{{.ITEM}}'
-  install-backend:
-    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
-  install-backend-internal:
+  install-app:
+    if: |
+      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$APP_NAME" == "storefront" ]]; then
+        test -d ./apps/"$APP_NAME" && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      else
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      fi
+    cmd: |
+      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$APP_NAME" == "storefront" ]]; then
+        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/"$APP_NAME" -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      else
+        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      fi
+  install-app-internal:
     internal: true
-    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml
-    cmd: helm upgrade --install {{.NAME}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml -n {{.NAMESPACE}}
+    if: |
+      APP_NAME="{{.NAME}}"
+      if [[ "$APP_NAME" == "storefront" ]]; then
+        test -d ./apps/"$APP_NAME" && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      else
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      fi
+    cmd: |
+      APP_NAME="{{.NAME}}"
+      if [[ "$APP_NAME" == "storefront" ]]; then
+        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/"$APP_NAME" -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      else
+        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      fi
+      
   uninstall-chart:
     if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
     cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}

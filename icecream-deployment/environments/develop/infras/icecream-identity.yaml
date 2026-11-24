@@ -9,9 +9,11 @@ auth:
 extraEnv:
   - name: KC_DB
     value: postgres
-  - name: KC_PROXY
-    value: passthrough
   - name: KC_HTTP_ENABLED
-    value: "true"
+    value: 'true'
   - name: KC_HOSTNAME_STRICT
-    value: "false"
+    value: 'true'
+  - name: KC_HOSTNAME
+    value: https://icecream-auth.sanlab.zone
+  - name: KC_PROXY_HEADERS
+    value: xforwarded

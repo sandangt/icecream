@@ -19,6 +19,15 @@ service:
   port: 32000
   nodePort: null
 
+route:
+  enabled: true
+  hostname: icecream-auth.sanlab.zone
+  gatewayName: apisix-public
+  gatewayNamespace: icecream
+  sectionName: http
+  pathPrefix: /
+  filters: []
+
 extraEnv: []
 
 resources:

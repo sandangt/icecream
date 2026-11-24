@@ -1,0 +1,111 @@
+profile: internal
+
+gatewayClass:
+  name: icecream-internal
+  controllerName: apisix.apache.org/icecream-internal
+
+gateway:
+  name: apisix-internal
+  proxyParametersName: apisix-internal-config
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: apisix-internal-gateway.icecream.svc.cluster.local
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: icecream
+        kinds:
+          - group: gateway.networking.k8s.io
+            kind: HTTPRoute
+
+dataplane:
+  nameOverride: apisix-internal
+  fullnameOverride: apisix-internal
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    annotations: {}
+    externalTrafficPolicy: Cluster
+    http:
+      enabled: true
+      servicePort: 80
+      containerPort: 9080
+    tls:
+      servicePort: 443
+  apisix:
+    ssl:
+      enabled: false
+      containerPort: 9443
+    admin:
+      credentials:
+        secretName: icecream-credentials
+        secretAdminKey: APISIX_ADMIN_PASSWORD
+        secretViewerKey: APISIX_VIEWER_PASSWORD
+      allow:
+        ipList:
+          - 127.0.0.0/8
+          - 10.244.0.0/16
+
+controller:
+  deployment:
+    replicas: 1
+  config:
+    controllerName: apisix.apache.org/icecream-internal
+    disableGatewayAPI: false
+    listenerPortMatchMode: auto
+    leaderElection:
+      id: icecream-apisix-internal-leader
+    provider:
+      type: apisix-standalone
+    kubernetes:
+      ingressClass: apisix-internal
+  crds:
+    gatewayAPI:
+      enabled: true
+  apisix:
+    adminService:
+      namespace: icecream
+      name: apisix-internal-admin
+      port: 9180
+  gatewayProxy:
+    createDefault: true
+    provider:
+      type: ControlPlane
+      controlPlane:
+        service:
+          name: apisix-internal-admin
+          port: 9180
+        auth:
+          type: AdminKey
+          adminKey:
+            valueFrom:
+              secretKeyRef:
+                name: icecream-credentials
+                key: APISIX_ADMIN_PASSWORD
+    publishService: ""
+
+networkPolicy:
+  enabled: true
+  clientNamespace: icecream
+  clientPodSelector:
+    app.kubernetes.io/name: icecream-storefront
+    app.kubernetes.io/instance: icecream-storefront
+  gatewayPort: 9080
+  adminPort: 9180
+  controllerPodSelector:
+    app.kubernetes.io/name: controller
+    app.kubernetes.io/instance: apisix-internal
+
+internalRoute:
+  hostname: apisix-internal-gateway.icecream.svc.cluster.local
+  services:
+    - name: icecream-consul
+      port: 32001
+      pathPrefix: /consul
+    - name: icecream-echo
+      port: 32002
+      pathPrefix: /echo

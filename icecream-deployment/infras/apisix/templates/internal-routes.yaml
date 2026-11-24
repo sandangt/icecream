@@ -1,0 +1,35 @@
+{{- if eq .Values.profile "internal" }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: icecream-internal-api
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "a6g.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ .Values.gateway.name }}
+      namespace: {{ .Release.Namespace }}
+      sectionName: http
+  hostnames:
+    - {{ .Values.internalRoute.hostname | quote }}
+  rules:
+    {{- range .Values.internalRoute.services }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .pathPrefix | quote }}
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - kind: Service
+          name: {{ .name }}
+          port: {{ .port }}
+          weight: 1
+    {{- end }}
+{{- end }}

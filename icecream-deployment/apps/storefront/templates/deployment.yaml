@@ -2,76 +2,88 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "app.fullname" . }}
-  labels:
-    {{- include "app.labels" . | nindent 4 }}
+  labels: {{- include "app.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: 3
   selector:
-    matchLabels:
-      {{- include "app.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "app.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
-      annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
-    spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
+        {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 30
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        - name: storefront
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: {{ include "app.fullname" . }}
-            {{- if .Values.existingSecret }}
+                name: {{ .Values.config.existingConfigMap }}
             - secretRef:
-                name: {{ .Values.existingSecret }}
-            {{- end }}
-          {{- with .Values.extraEnv }}
+                name: {{ .Values.auth.existingSecret }}
           env:
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "app.secretName" . }}
+                  key: STOREFRONT_AUTH_SECRET
+            - name: AUTH_KEYCLOAK_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "app.secretName" . }}
+                  key: IDENTITY_STOREFRONT_CLIENT_ID
+            - name: AUTH_KEYCLOAK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "app.secretName" . }}
+                  key: IDENTITY_STOREFRONT_CLIENT_SECRET
+            {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
+          {{- with .Values.probes }}
           startupProbe:
-            httpGet:
-              path: {{ .Values.probes.path }}
-              port: http
-            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
-            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
+            {{- toYaml .startup | nindent 12 }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.probes.path }}
-              port: http
-            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
-            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+            {{- toYaml .liveness | nindent 12 }}
           readinessProbe:
-            httpGet:
-              path: {{ .Values.probes.path }}
-              port: http
-            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
-            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .readiness | nindent 12 }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- toYaml . | nindent 8 }}
       {{- end }}

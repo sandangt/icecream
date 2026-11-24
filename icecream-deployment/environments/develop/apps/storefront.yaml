@@ -1,0 +1,44 @@
+nameOverride: storefront
+fullnameOverride: icecream-storefront
+
+replicaCount: 2
+
+image:
+  repository: ghcr.io/sandangt/icecream-storefront-app
+  tag: sha-1b4c283
+
+auth:
+  existingSecret: icecream-credentials
+
+config:
+  existingConfigMap: icecream-configmaps
+
+extraEnv:
+  - name: STORAGE_IMAGE_BUCKET
+    value: images
+  - name: CONSUL_URL
+    value: http://apisix-internal-gateway.icecream.svc.cluster.local/consul
+  - name: ECHO_URL
+    value: http://apisix-internal-gateway.icecream.svc.cluster.local/echo
+  - name: STORAGE_URL
+    value: http://apisix-internal-gateway.icecream.svc.cluster.local/storage
+  - name: AUTH_KEYCLOAK_ISSUER
+    value: https://icecream-auth.sanlab.zone/realms/icecream-dev
+  - name: AUTH_URL
+    value: https://icecream.sanlab.zone
+  - name: AUTH_TRUST_HOST
+    value: 'true'
+
+route:
+  enabled: true
+  hostname: icecream.sanlab.zone
+  gatewayName: apisix-public
+  gatewayNamespace: icecream
+  sectionName: http
+  pathPrefix: /
+  filters: []
+
+service:
+  type: ClusterIP
+  targetPort: 3000
+  port: 34000
