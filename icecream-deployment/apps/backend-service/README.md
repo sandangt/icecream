@@ -11,6 +11,7 @@ CONSUL_API_KEY_1=api-key-1
 STORAGE_ACCESS_KEY=garageadmin
 STORAGE_SECRET_KEY=password1234
 KEYCLOAK_ADMIN_PASSWORD=password1234
+RABBITMQ_PASSWORD=guest
 IDENTITY_STOREFRONT_CLIENT_ID=icecream-storefront-client
 ```
 # `config.existingConfigMap` required fields:
@@ -42,6 +43,7 @@ KAFKA_HOST=kafka
 KAFKA_PORT=38009
 RABBITMQ_HOST=rabbitmq
 RABBITMQ_PORT=38007
+RABBITMQ_USERNAME=guest
 IDENTITY_ISSUER=http://identity:32000/realms/icecream-dev
 STORAGE_URL=http://garage:38004
 MEMOIR_RSOCKET_HOST=memoir

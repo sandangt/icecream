@@ -81,8 +81,8 @@ spring:
               rabbitmq:
                 host: ${RABBITMQ_HOST}
                 port: ${RABBITMQ_PORT}
-                username: guest
-                password: guest
+                username: ${RABBITMQ_USERNAME}
+                password: ${RABBITMQ_PASSWORD}
                 virtual-host: /
       bindings:
         helloRabbit-in-0:
