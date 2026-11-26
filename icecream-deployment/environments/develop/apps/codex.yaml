@@ -26,3 +26,5 @@ extraEnv:
     value: otlp
   - name: OTEL_TRACES_EXPORTER
     value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-codex

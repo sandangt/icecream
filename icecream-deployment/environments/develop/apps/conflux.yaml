@@ -1,0 +1,36 @@
+nameOverride: conflux
+fullnameOverride: icecream-conflux
+image:
+  repository: ghcr.io/sandangt/icecream-conflux-app
+  tag: sha-f924959
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials
+
+service:
+  ports:
+    - name: http
+      port: 32005
+      targetPort: 32005
+      protocol: TCP
+    - name: rsocket
+      port: 42005
+      targetPort: 42005
+      protocol: TCP
+
+extraEnv:
+  - name: SPRING_PROFILES_ACTIVE
+    value: dev
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: http/protobuf
+  - name: OTEL_LOGS_EXPORTER
+    value: otlp
+  - name: OTEL_METRICS_EXPORTER
+    value: otlp
+  - name: OTEL_TRACES_EXPORTER
+    value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-conflux

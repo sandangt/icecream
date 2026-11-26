@@ -27,6 +27,7 @@ vars:
     - chronos
     - echo
     - memoir
+    - conflux
   PUBLIC_APP_LIST:
     - storefront
   CREDENTIAL_GROUP_NAME: icecream-credentials
