@@ -1,7 +1,7 @@
 profile: internal
 
 gatewayClass:
-  name: icecream-internal
+  name: apisix-internal
   controllerName: apisix.apache.org/icecream-internal
 
 gateway:
@@ -11,13 +11,13 @@ gateway:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: apisix-internal-gateway.icecream.svc.cluster.local
+      hostname: apisix-internal-gateway.icecream-internal.svc.cluster.local
       allowedRoutes:
         namespaces:
           from: Selector
           selector:
             matchLabels:
-              kubernetes.io/metadata.name: icecream
+              kubernetes.io/metadata.name: icecream-internal
         kinds:
           - group: gateway.networking.k8s.io
             kind: HTTPRoute
@@ -68,7 +68,7 @@ controller:
       enabled: true
   apisix:
     adminService:
-      namespace: icecream
+      namespace: icecream-internal
       name: apisix-internal-admin
       port: 9180
   gatewayProxy:
@@ -86,11 +86,11 @@ controller:
               secretKeyRef:
                 name: icecream-credentials
                 key: APISIX_ADMIN_PASSWORD
-    publishService: ""
+    publishService: ''
 
 networkPolicy:
   enabled: true
-  clientNamespace: icecream
+  clientNamespace: icecream-public
   clientPodSelector:
     app.kubernetes.io/name: icecream-storefront
     app.kubernetes.io/instance: icecream-storefront
@@ -101,7 +101,7 @@ networkPolicy:
     app.kubernetes.io/instance: apisix-internal
 
 internalRoute:
-  hostname: apisix-internal-gateway.icecream.svc.cluster.local
+  hostname: apisix-internal-gateway.icecream-internal.svc.cluster.local
   services:
     - name: icecream-consul
       port: 32001

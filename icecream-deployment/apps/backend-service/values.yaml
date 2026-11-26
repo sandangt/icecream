@@ -57,15 +57,6 @@ resources:
   limits:
     memory: 1Gi
 
-ingress:
-  enabled: false
-  className: ''
-  annotations: {}
-  host: app.example.com
-  path: /
-  pathType: Prefix
-  tls: []
-
 autoscaling:
   enabled: false
   minReplicas: 1

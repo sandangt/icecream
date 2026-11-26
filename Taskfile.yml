@@ -3,11 +3,11 @@ version: '3'
 dotenv: ['.env']
 
 vars:
+  PROJECT_NAME: icecream
   LOCAL_STORE: ./.local-volumes
-  NAMESPACE: icecream
   REGISTRY_URL: code.sanlab.zone/sandang
-  PUBLIC_NAMESPACE: icecream-public
   INTERNAL_NAMESPACE: icecream-internal
+  PUBLIC_NAMESPACE: icecream-public
 
 includes:
   deployment:
@@ -18,50 +18,38 @@ includes:
     dir: ./icecream-image
 
 tasks:
-  init-ns:
+  init-ns-internal:
+    internal: true
     desc: Create namespace {{.NAMESPACE}}
     if: '! kubectl get ns {{.NAMESPACE}}'
     cmd: kubectl create ns {{.NAMESPACE}}
-  end-ns:
+  end-ns-internal:
+    internal: true
     desc: Delete namespace
     if: kubectl get ns {{.NAMESPACE}}
     cmd: kubectl delete ns {{.NAMESPACE}}
-  init-public-ns:
-    desc: Create namespace {{.PUBLIC_NAMESPACE}}
-    if: '! kubectl get ns {{.PUBLIC_NAMESPACE}}'
-    cmd: kubectl create ns {{.PUBLIC_NAMESPACE}}
-  end-public-ns:
-    desc: Delete namespace
-    if: kubectl get ns {{.PUBLIC_NAMESPACE}}
-    cmd: kubectl delete ns {{.PUBLIC_NAMESPACE}}
-  init-internal-ns:
-    desc: Create namespace {{.INTERNAL_NAMESPACE}}
-    if: '! kubectl get ns {{.INTERNAL_NAMESPACE}}'
-    cmd: kubectl create ns {{.INTERNAL_NAMESPACE}}
-  end-internal-ns:
-    desc: Delete namespace
-    if: kubectl get ns {{.INTERNAL_NAMESPACE}}
-    cmd: kubectl delete ns {{.INTERNAL_NAMESPACE}}
+  init-ns:
+    vars:
+      ITEMS: '{{list .INTERNAL_NAMESPACE .PUBLIC_NAMESPACE | join ","}}'
+    cmds:
+      - for: { var: ITEMS, split: ',' }
+        task: init-ns-internal
+        vars: 
+          NAMESPACE: '{{.ITEM}}'
+  end-ns:
+    vars:
+      ITEMS: '{{list .INTERNAL_NAMESPACE .PUBLIC_NAMESPACE | join ","}}'
+    cmds:
+      - for: { var: ITEMS, split: ',' }
+        task: end-ns-internal
+        vars: 
+          NAMESPACE: '{{.ITEM}}'
   getall:
-    cmd: kubectl get all,cm,secrets,pvc,pv -n {{.NAMESPACE}}
-  describe-item:
-    deps: [init-ns]
-    if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
-    cmd: kubectl describe {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
-  delete-item:
-    deps: [init-ns]
-    if: kubectl get {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
-    cmd: kubectl delete {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
-  delete-file:
-    deps: [init-ns]
-    preconditions:
-      - test -f {{index .CLI_ARGS_LIST 0}}
-    cmd: kubectl delete -f {{index .CLI_ARGS_LIST 0}}
-  apply-file:
-    deps: [init-ns]
-    preconditions:
-      - test -f {{index .CLI_ARGS_LIST 0}}
-    cmd: kubectl apply -f {{index .CLI_ARGS_LIST 0}}
+    vars:
+      ITEMS: '{{list .INTERNAL_NAMESPACE .PUBLIC_NAMESPACE | join ","}}'
+    cmds:
+      - for: { var: ITEMS, split: ',' }
+        cmd: kubectl get all,cm,secrets,pvc,pv -n {{.ITEM}}
   deployment-a-z:
     desc: From run from tasks a-z
     cmds:

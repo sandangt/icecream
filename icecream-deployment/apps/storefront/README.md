@@ -3,17 +3,17 @@
 - `config.existingConfigMap`: icecream-configmaps
 # `auth.existingSecret` required fields:
 ```env
-STORAGE_ACCESS_KEY=1234
-STORAGE_SECRET_KEY=1234
-AUTH_SECRET=1234
-AUTH_KEYCLOAK_ID=1234
-AUTH_KEYCLOAK_SECRET=1234
-AUTH_KEYCLOAK_ISSUER=1234
+STORAGE_ACCESS_KEY=password1234
+STORAGE_SECRET_KEY=password1234
+STOREFRONT_AUTH_SECRET=password1234
+IDENTITY_STOREFRONT_CLIENT_ID=password1234
+IDENTITY_STOREFRONT_CLIENT_SECRET=password1234
 ```
 # `config.existingConfigMap` required fields:
 ```env
-STOREFRONT_PORT=1234
-CONSUL_URL=http://icecream-consul:32001
-ECHO_URL=http://icecream-echo:32002 
-STORAGE_URL=http://garage:38004 
+STOREFRONT_URL=https://icecream.sanlab.zone
+IDENTITY_ISSUER=https://keycloak/realms/icecream
+CONSUL_URL=http://gateway/consul
+ECHO_URL=http://gateway/echo
+STORAGE_URL=http://gateway/storage
 ```

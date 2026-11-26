@@ -12,3 +12,5 @@ KEYCLOAK_ADMIN=keycloakadmin
 KEYCLOAK_DB_USER=dbadmin
 KEYCLOAK_DB_URL=jdbc:postgresql://postgresql:5432/icecream-identity
 ```
+# Visiting admin site
+- Access `icecream-auth-admin.sanlab.zone/admin/master/console`

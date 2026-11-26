@@ -1,7 +1,7 @@
 profile: public
 
 gatewayClass:
-  name: icecream-public
+  name: apisix-public
   controllerName: apisix.apache.org/icecream-public
 
 gateway:
@@ -16,7 +16,7 @@ gateway:
           from: Selector
           selector:
             matchLabels:
-              kubernetes.io/metadata.name: icecream
+              kubernetes.io/metadata.name: icecream-public
         kinds:
           - group: gateway.networking.k8s.io
             kind: HTTPRoute
@@ -64,7 +64,7 @@ controller:
       enabled: false
   apisix:
     adminService:
-      namespace: icecream
+      namespace: icecream-public
       name: apisix-public-admin
       port: 9180
   gatewayProxy:

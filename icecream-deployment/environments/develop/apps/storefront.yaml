@@ -16,24 +16,24 @@ config:
 extraEnv:
   - name: STORAGE_IMAGE_BUCKET
     value: images
-  - name: CONSUL_URL
-    value: http://apisix-internal-gateway.icecream.svc.cluster.local/consul
-  - name: ECHO_URL
-    value: http://apisix-internal-gateway.icecream.svc.cluster.local/echo
-  - name: STORAGE_URL
-    value: http://apisix-internal-gateway.icecream.svc.cluster.local/storage
-  - name: AUTH_KEYCLOAK_ISSUER
-    value: https://icecream-auth.sanlab.zone/realms/icecream-dev
-  - name: AUTH_URL
-    value: https://icecream.sanlab.zone
   - name: AUTH_TRUST_HOST
     value: 'true'
+  - name: AUTH_URL
+    value: 'https://icecream.sanlab.zone'
+  - name: AUTH_KEYCLOAK_ISSUER
+    value: 'https://icecream-auth.sanlab.zone/realms/icecream-dev'
+  - name: CONSUL_URL
+    value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/consul'
+  - name: ECHO_URL
+    value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/echo'
+  - name: STORAGE_URL
+    value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/storage'
 
 route:
   enabled: true
   hostname: icecream.sanlab.zone
   gatewayName: apisix-public
-  gatewayNamespace: icecream
+  gatewayNamespace: icecream-public
   sectionName: http
   pathPrefix: /
   filters: []

@@ -6,7 +6,7 @@ gatewayClass:
 
 gateway:
   name: apisix-internal
-  proxyParametersName: ""
+  proxyParametersName: ''
   listeners:
     - name: http
       protocol: HTTP
@@ -113,7 +113,7 @@ controller:
               secretKeyRef:
                 name: apisix-internal-admin-credentials
                 key: admin
-    publishService: ""
+    publishService: ''
   serviceMonitor:
     enabled: false
 

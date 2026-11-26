@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  INFRA_LIST:
+  INTERNAL_INFRA_LIST:
     - redis
     - rabbitmq
     - postgresql
@@ -17,19 +17,21 @@ vars:
     - tempo
     - grafana
     - otel-collector
-    - icecream-identity
     - apisix-internal
+  PUBLIC_INFRA_LIST:
+    - icecream-identity
     - apisix-public
-  APP_LIST:
+  INTERNAL_APP_LIST:
     - codex
     - consul
     - chronos
     - echo
     - memoir
+  PUBLIC_APP_LIST:
     - storefront
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
-  CREDENTIAL_LIST:
+  INTERNAL_CREDENTIAL_LIST:
     - name: RABBITMQ_PASSWORD
       value: '{{.RABBITMQ_PASSWORD}}'
     - name: POSTGRESQL_PASSWORD
@@ -76,7 +78,26 @@ vars:
       value: '{{.APISIX_ADMIN_PASSWORD}}'
     - name: APISIX_VIEWER_PASSWORD
       value: '{{.APISIX_ADMIN_PASSWORD}}'
-  PARAMETER_LIST:
+  PUBLIC_CREDENTIAL_LIST:
+    - name: STOREFRONT_AUTH_SECRET
+      value: '{{.STOREFRONT_AUTH_SECRET}}'
+    - name: IDENTITY_STOREFRONT_CLIENT_ID
+      value: '{{.IDENTITY_STOREFRONT_CLIENT_ID}}'
+    - name: IDENTITY_STOREFRONT_CLIENT_SECRET
+      value: '{{.IDENTITY_STOREFRONT_CLIENT_SECRET}}'
+    - name: IDENTITY_BACKOFFICE_CLIENT_ID
+      value: '{{.IDENTITY_BACKOFFICE_CLIENT_ID}}'
+    - name: IDENTITY_BACKOFFICE_CLIENT_SECRET
+      value: '{{.IDENTITY_BACKOFFICE_CLIENT_SECRET}}'
+    - name: KEYCLOAK_DB_PASSWORD
+      value: '{{.KEYCLOAK_DB_PASSWORD}}'
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: '{{.KEYCLOAK_ADMIN_PASSWORD}}'
+    - name: APISIX_ADMIN_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+    - name: APISIX_VIEWER_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+  INTERNAL_PARAMETER_LIST:
     - name: REGION
       value: '{{.REGION}}'
     - name: REDIS_HOST
@@ -231,25 +252,66 @@ vars:
       value: '{{.PAYMENT_URL}}'
     - name: ICECREAM_VOLUME
       value: ''
+  PUBLIC_PARAMETER_LIST:
+    - name: KEYCLOAK_ADMIN
+      value: '{{.KEYCLOAK_ADMIN}}'
+    - name: KEYCLOAK_DB_USER
+      value: '{{.KEYCLOAK_DB_USER}}'
+    - name: KEYCLOAK_DB_URL
+      value: 'jdbc:postgresql://{{.POSTGRESQL_HOST}}:{{.POSTGRESQL_PORT}}/{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: POSTGRESQL_IDENTITY_DB
+      value: '{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: IDENTITY_REALM
+      value: '{{.IDENTITY_REALM}}'
+  
   PROFILE: '{{.PROFILE | default "develop"}}'
 
 tasks:
-  create-creds:
+  create-creds-internal:
     silent: true
+    internal: true
     if: '! kubectl get secrets {{.CREDENTIAL_GROUP_NAME}} -n {{.NAMESPACE}}'
     cmd: >-
       kubectl create secret generic {{.CREDENTIAL_GROUP_NAME}}
       {{- range .CREDENTIAL_LIST }} --from-literal='{{ .name }}={{ .value }}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
-  create-params:
+  create-params-internal:
     silent: true
+    internal: true
     if: '! kubectl get configmaps {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}'
     cmd: >-
-      kubectl create configmap {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}
+      kubectl create configmap {{.PARAMETER_GROUP_NAME}}
       {{- range .PARAMETER_LIST}} --from-literal='{{.name}}={{.value}}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+  create-creds:
+    cmds:
+      - task: create-creds-internal
+        vars:
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+          CREDENTIAL_LIST:
+            ref: .INTERNAL_CREDENTIAL_LIST
+      - task: create-creds-internal
+        vars:
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
+          CREDENTIAL_LIST:
+            ref: .PUBLIC_CREDENTIAL_LIST
+  create-params:
+    cmds:
+      - task: create-params-internal
+        vars:
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+          PARAMETER_LIST:
+            ref: .INTERNAL_PARAMETER_LIST
+      - task: create-params-internal
+        vars:
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
+          PARAMETER_LIST:
+            ref: .PUBLIC_PARAMETER_LIST
 
   template-infra:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
     if: |
       INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
       if [[ "$INFRA_NAME" == *"apisix"* ]]; then
@@ -259,18 +321,29 @@ tasks:
       fi
     cmd: |
       INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index .CLI_ARGS_LIST 1}}"
       if [[ "$INFRA_NAME" == *"apisix"* ]]; then
-        helm template ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+        helm template ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
       else
-        helm template ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+        helm template ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
       fi
+
   install-infras:
     cmds:
-      - for: {var: INFRA_LIST}
+      - for: {var: INTERNAL_INFRA_LIST}
         task: install-infra-internal
         vars:
           NAME: '{{.ITEM}}'
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+      - for: {var: PUBLIC_INFRA_LIST}
+        task: install-infra-internal
+        vars:
+          NAME: '{{.ITEM}}'
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
   install-infra:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
     if: |
       INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
       if [[ "$INFRA_NAME" == *"apisix"* ]]; then
@@ -280,10 +353,11 @@ tasks:
       fi
     cmd: |
       INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index .CLI_ARGS_LIST 1}}"
       if [[ "$INFRA_NAME" == *"apisix"* ]]; then
-        helm upgrade --install "$INFRA_NAME" ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+        helm upgrade --install "$INFRA_NAME" ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
       else
-        helm upgrade --install "$INFRA_NAME" ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n {{.NAMESPACE}}
+        helm upgrade --install "$INFRA_NAME" ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
       fi
   install-infra-internal:
     internal: true
@@ -301,58 +375,75 @@ tasks:
       fi
   
   template-app:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
     if: |
-      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
-      if [[ "$APP_NAME" == "storefront" ]]; then
-        test -d ./apps/"$APP_NAME" && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        test -d ./apps/"$NAME" && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
       else
-        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
       fi
     cmd: |
-      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
-      if [[ "$APP_NAME" == "storefront" ]]; then
-        helm template ./apps/"$APP_NAME" -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index CLI_ARGS_LIST 1}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        helm template ./apps/"$NAME" -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
       else
-        helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+        helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
       fi
   install-apps:
     cmds:
-      - for: {var: APP_LIST}
+      - for: {var: INTERNAL_APP_LIST}
         task: install-app-internal
         vars:
           NAME: '{{.ITEM}}'
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+      - for: {var: PUBLIC_APP_LIST}
+        task: install-app-internal
+        vars:
+          NAME: '{{.ITEM}}'
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
   install-app:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
     if: |
-      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
-      if [[ "$APP_NAME" == "storefront" ]]; then
-        test -d ./apps/"$APP_NAME" && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        test -d ./apps/"$NAME" && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
       else
-        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
       fi
     cmd: |
-      APP_NAME="{{index .CLI_ARGS_LIST 0}}"
-      if [[ "$APP_NAME" == "storefront" ]]; then
-        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/"$APP_NAME" -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index .CLI_ARGS_LIST 1}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/"$NAME" -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
       else
-        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
       fi
   install-app-internal:
     internal: true
     if: |
-      APP_NAME="{{.NAME}}"
-      if [[ "$APP_NAME" == "storefront" ]]; then
-        test -d ./apps/"$APP_NAME" && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+      NAME="{{.NAME}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        test -d ./apps/"$NAME" && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
       else
-        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
       fi
     cmd: |
-      APP_NAME="{{.NAME}}"
-      if [[ "$APP_NAME" == "storefront" ]]; then
-        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/"$APP_NAME" -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+      NAME="{{.NAME}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/"$NAME" -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n {{.NAMESPACE}}
       else
-        helm upgrade --install {{.NAMESPACE}}-"$APP_NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$APP_NAME".yaml -n {{.NAMESPACE}}
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n {{.NAMESPACE}}
       fi
       
   uninstall-chart:
-    if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
-    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
+    if: helm list -n {{index .CLI_ARGS_LIST 1}} | grep {{index .CLI_ARGS_LIST 0}}
+    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{index .CLI_ARGS_LIST 1}}
