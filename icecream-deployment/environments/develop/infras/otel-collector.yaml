@@ -1,8 +1,5 @@
 fullnameOverride: otel-collector
 
-persistence:
-  size: 10Gi
-
 resources:
   requests:
     cpu: 50m

@@ -26,3 +26,19 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/name: {{ include "app.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "app.secretName" -}}
+{{- if and .Values.auth .Values.auth.existingSecret -}}
+{{- .Values.auth.existingSecret -}}
+{{- else -}}
+{{- include "app.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "app.configMapName" -}}
+{{- if and .Values.config .Values.config.existingConfigMap -}}
+{{- .Values.config.existingConfigMap -}}
+{{- else -}}
+{{- include "app.fullname" . -}}
+{{- end -}}
+{{- end -}}

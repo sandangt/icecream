@@ -11,6 +11,7 @@ vars:
     - garage
     - zookeeper
     - kafka
+    - debezium
     - mimir
     - loki
     - prometheus
@@ -155,6 +156,8 @@ vars:
       value: '{{.ELASTICSEARCH_PORT}}'
     - name: ELASTICSEARCH_USERNAME
       value: '{{.ELASTICSEARCH_USERNAME}}'
+    - name: ELASTICSEARCH_URL
+      value: '{{.ELASTICSEARCH_URL}}'
     - name: MAILPIT_HOST
       value: '{{.MAILPIT_HOST}}'
     - name: MAILPIT_PORT
@@ -167,8 +170,14 @@ vars:
       value: '{{.KAFKA_HOST}}'
     - name: KAFKA_PORT
       value: '{{.KAFKA_PORT}}'
+    - name: KAFKA_URL_NO_PROTOCOL
+      value: '{{.KAFKA_HOST}}:{{.KAFKA_PORT}}'
     - name: DEBEZIUM_CONNECT_PORT
       value: '{{.DEBEZIUM_CONNECT_PORT}}'
+    - name: DEBEZIUM_CONNECT_HOST
+      value: '{{.DEBEZIUM_CONNECT_HOST}}'
+    - name: DEBEZIUM_CONNECT_URL
+      value: '{{.DEBEZIUM_CONNECT_URL}}'
     - name: GRAFANA_HOST
       value: '{{.GRAFANA_HOST}}'
     - name: GRAFANA_PORT

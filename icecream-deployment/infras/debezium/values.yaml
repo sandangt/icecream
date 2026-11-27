@@ -1,0 +1,45 @@
+fullnameOverride: ''
+
+image:
+  repository: code.sanlab.zone/sandang/debezium-connect
+  tag: '2.7.3.Final'
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+config:
+  existingConfigMap: ''
+
+auth:
+  existingSecret: ''
+
+registerJob:
+  enabled: true
+  image:
+    repository: curlimages/curl
+    tag: '8.10.1'
+    pullPolicy: IfNotPresent
+  backoffLimit: 3
+  resources: {}
+
+service:
+  type: ClusterIP
+  port: 38011
+  targetPort: 8083
+  nodePort: null
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 1Gi
+  limits:
+    memory: 2Gi
+
+podSecurityContext: {}
+securityContext: {}
+podAnnotations: {}
+extraEnv: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+imagePullSecrets: []

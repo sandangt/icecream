@@ -53,6 +53,9 @@ vars:
     - name: icecream-identity
       path: '../icecream-system/identity'
       version: 0.1.0
+    - name: debezium
+      path: './debezium'
+      version: 2.7.3.Final
 
 tasks:
   build:
