@@ -64,7 +64,7 @@ tasks:
           PATH: '{{.ITEM.path}}'
           VERSION: '{{.ITEM.version}}'
   build-item:
-    silent: true
+    # silent: true
     internal: true
     status:
       - test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"
@@ -95,7 +95,7 @@ tasks:
     internal: true
     status:
       - '! test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"'
-    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}\
+    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}
   # task push-one NAME=redis
   push-one:
     requires:

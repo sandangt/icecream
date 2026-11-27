@@ -34,3 +34,11 @@ extraEnv:
     value: otlp
   - name: OTEL_SERVICE_NAME
     value: icecream-memoir
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 640Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi

@@ -60,7 +60,7 @@ services:
       postgresql:
         condition: service_healthy
     volumes:
-      - ../identity/data/import:/opt/keycloak/data/import
+      - ../identity/data/import/realm-export-local.json:/opt/keycloak/data/import/realm-export.json
       - ../identity/themes:/opt/keycloak/themes
     networks:
       - icecream-network

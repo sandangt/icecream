@@ -9,3 +9,14 @@ config:
 service:
   type: ClusterIP
   port: 38012
+
+persistence:
+  size: 15Gi
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 2Gi
+  limits:
+    cpu: 1500m
+    memory: 2Gi

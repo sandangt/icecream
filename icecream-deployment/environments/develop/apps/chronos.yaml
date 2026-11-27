@@ -54,3 +54,11 @@ probes:
       port: http
     failureThreshold: 3
     periodSeconds: 10
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 768Mi

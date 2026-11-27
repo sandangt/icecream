@@ -1,8 +1,6 @@
 nameOverride: storefront
 fullnameOverride: icecream-storefront
 
-replicaCount: 2
-
 image:
   repository: ghcr.io/sandangt/icecream-storefront-app
   tag: sha-1b4c283
@@ -42,3 +40,18 @@ service:
   type: ClusterIP
   targetPort: 3000
   port: 34000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 93

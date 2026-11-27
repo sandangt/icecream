@@ -309,6 +309,39 @@ tasks:
           PARAMETER_LIST:
             ref: .PUBLIC_PARAMETER_LIST
 
+  build-dependencies-internal:
+    internal: true
+    if: |
+      TARGET_PATH="{{.PATH}}"
+      if [[ "$TARGET_PATH" == *"apisix"* ]]; then
+        CHART_DIR="./infras/apisix/charts"
+      else
+        CHART_DIR="$TARGET_PATH/charts"
+      fi
+      [ ! -d "$CHART_DIR" ] || [ -z "$(find "$CHART_DIR" -maxdepth 1 -type f -print -quit 2>/dev/null)" ]
+    cmd: |
+      TARGET_PATH={{.PATH}}
+      if [[ $TARGET_PATH == *"apisix"* ]]; then
+        helm dependency update "./infras/apisix"
+      else
+        helm dependency update "$TARGET_PATH"
+      fi
+
+  build-dependencies-all:
+    cmds:
+      - for: {var: INTERNAL_INFRA_LIST}
+        task: build-dependencies-internal
+        vars:
+          PATH: './infras/{{.ITEM}}'
+      - for: {var: PUBLIC_INFRA_LIST}
+        task: build-dependencies-internal
+        vars:
+          PATH: './infras/{{.ITEM}}'
+      - for: [backend-service, storefront]
+        task: build-dependencies-internal
+        vars:
+          PATH: './apps/{{.ITEM}}'
+
   template-infra:
     preconditions:
       - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'

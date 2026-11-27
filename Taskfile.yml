@@ -57,5 +57,6 @@ tasks:
       - task: init-ns
       - task: deployment:create-params
       - task: deployment:create-creds
+      - task: deployment:build-dependencies-all
       - task: deployment:install-infras
       - task: deployment:install-apps

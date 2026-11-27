@@ -49,6 +49,13 @@ dataplane:
         ipList:
           - 127.0.0.0/8
           - 10.244.0.0/16
+  resources:
+    requests:
+      cpu: 100m
+      memory: 192Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
 
 controller:
   deployment:

@@ -34,3 +34,11 @@ extraEnv:
     value: otlp
   - name: OTEL_SERVICE_NAME
     value: icecream-conflux
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 1536Mi

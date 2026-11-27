@@ -7,3 +7,14 @@ service:
   type: ClusterIP
   s3Port: 38004
   rpcPort: 38018
+
+persistence:
+  size: 30Gi
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
