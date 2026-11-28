@@ -3,5 +3,16 @@ fullnameOverride: mailpit
 service:
   type: ClusterIP
   clusterIp:
-    httpPort: 38017
-    smtpPort: 38016
+    httpPort: 38210
+    smtpPort: 38010
+
+persistence:
+  size: 1Gi
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi

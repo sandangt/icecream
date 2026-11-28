@@ -1,0 +1,95 @@
+profile: public
+
+gatewayClass:
+  name: apisix-public
+  controllerName: apisix.apache.org/icecream-public
+
+gateway:
+  name: apisix-public
+  proxyParametersName: apisix-public-config
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 9080 # Must match the dataplane's containerPort
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: icecream-public
+        kinds:
+          - group: gateway.networking.k8s.io
+            kind: HTTPRoute
+
+dataplane:
+  nameOverride: apisix-public
+  fullnameOverride: apisix-public
+  replicaCount: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Cluster
+    annotations: {}
+    http:
+      enabled: true
+      servicePort: 80
+      containerPort: 9080
+  apisix:
+    admin:
+      credentials:
+        secretName: icecream-credentials
+        secretAdminKey: APISIX_ADMIN_PASSWORD
+        secretViewerKey: APISIX_VIEWER_PASSWORD
+      allow:
+        ipList:
+          - 127.0.0.0/8
+          - 10.244.0.0/16
+  podDisruptionBudget:
+    enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 192Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+
+controller:
+  deployment:
+    replicas: 1
+  config:
+    controllerName: apisix.apache.org/icecream-public
+    disableGatewayAPI: false
+    listenerPortMatchMode: auto
+    leaderElection:
+      id: icecream-apisix-public-leader
+    provider:
+      type: apisix-standalone
+    kubernetes:
+      ingressClass: apisix-public
+  crds:
+    gatewayAPI:
+      enabled: false
+  apisix:
+    adminService:
+      namespace: icecream-public
+      name: apisix-public-admin
+      port: 9180
+  gatewayProxy:
+    createDefault: true
+    provider:
+      type: ControlPlane
+      controlPlane:
+        service:
+          name: apisix-public-admin
+          port: 9180
+        auth:
+          type: AdminKey
+          adminKey:
+            valueFrom:
+              secretKeyRef:
+                name: icecream-credentials
+                key: APISIX_ADMIN_PASSWORD
+    publishService: icecream/apisix-public-gateway
+
+networkPolicy:
+  enabled: false

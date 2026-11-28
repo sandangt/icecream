@@ -1,0 +1,78 @@
+{{- $hasConnectors := or .Values.config.existingConfigMap (.Files.Glob "connectors/*.jsonc") }}
+{{- if and .Values.registerJob.enabled $hasConnectors }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-connector-register" (include "dbz.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "dbz.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ .Values.registerJob.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ printf "%s-register" (include "dbz.name" .) | trunc 63 | trimSuffix "-" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: OnFailure
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: register
+          image: '{{ .Values.registerJob.image.repository }}:{{ .Values.registerJob.image.tag }}'
+          imagePullPolicy: {{ .Values.registerJob.image.pullPolicy }}
+          env:
+            - name: CONNECT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "dbz.configMapName" . }}
+                  key: DEBEZIUM_CONNECT_URL
+            - name: WAIT_TIMEOUT_SECONDS
+              value: '600'
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              echo "Waiting for Kafka Connect at ${CONNECT_URL} ..."
+              waited=0
+              until curl -fsS -o /dev/null "${CONNECT_URL}/connectors"; do
+                waited=$((waited + 5))
+                if [ "${waited}" -ge "${WAIT_TIMEOUT_SECONDS}" ]; then
+                  echo "Timed out after ${WAIT_TIMEOUT_SECONDS}s waiting for Kafka Connect" >&2
+                  exit 1
+                fi
+                sleep 5
+              done
+              echo "Kafka Connect is up."
+
+              for f in /connectors/*.json; do
+                [ -e "${f}" ] || continue
+                name="$(basename "${f}" .json)"
+                echo "Registering connector: ${name}"
+                # PUT .../config creates the connector or updates it; an unchanged config is a no-op.
+                curl --fail-with-body -sS \
+                  --retry 5 --retry-delay 5 --retry-all-errors \
+                  -X PUT -H 'Content-Type: application/json' \
+                  --data-binary "@${f}" \
+                  "${CONNECT_URL}/connectors/${name}/config"
+                echo
+              done
+              echo "All connectors registered."
+          volumeMounts:
+            - name: connectors
+              mountPath: /connectors
+              readOnly: true
+          {{- with .Values.registerJob.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: connectors
+          configMap:
+            name: {{ include "dbz.fullname" . }}-connector-files
+{{- end }}

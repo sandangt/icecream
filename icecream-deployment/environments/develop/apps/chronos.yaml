@@ -17,8 +17,8 @@ service:
       targetPort: 32003
       protocol: TCP
     - name: rsocket
-      port: 42003
-      targetPort: 42003
+      port: 32103
+      targetPort: 32103
       protocol: TCP
 
 extraEnv:
@@ -54,3 +54,11 @@ probes:
       port: http
     failureThreshold: 3
     periodSeconds: 10
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 768Mi

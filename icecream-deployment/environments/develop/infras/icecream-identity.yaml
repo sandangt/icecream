@@ -1,4 +1,10 @@
+nameOverride: identity
 fullnameOverride: icecream-identity
+
+image:
+  repository: code.sanlab.zone/sandang/icecream-identity
+  tag: '0.1.0'
+  pullPolicy: IfNotPresent
 
 config:
   existingConfigMap: icecream-configmaps
@@ -9,9 +15,39 @@ auth:
 extraEnv:
   - name: KC_DB
     value: postgres
-  - name: KC_PROXY
-    value: passthrough
   - name: KC_HTTP_ENABLED
-    value: "true"
+    value: 'true'
   - name: KC_HOSTNAME_STRICT
-    value: "false"
+    value: 'true'
+  - name: KC_HOSTNAME
+    value: https://icecream-auth.sanlab.zone
+  - name: KC_PROXY_HEADERS
+    value: xforwarded
+  - name: KC_HOSTNAME_ADMIN
+    value: https://icecream-auth-admin.sanlab.zone
+
+routes:
+  storefrontClient:
+    enabled: true
+    hostname: icecream-auth.sanlab.zone
+    gatewayName: apisix-public
+    gatewayNamespace: icecream-public
+    sectionName: http
+    pathPrefix: /
+    filters: []
+  admin:
+    enabled: true
+    hostname: icecream-auth-admin.sanlab.zone
+    gatewayName: apisix-public
+    gatewayNamespace: icecream-public
+    sectionName: http
+    pathPrefix: /
+    filters: []
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

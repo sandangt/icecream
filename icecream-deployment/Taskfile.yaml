@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  INFRA_LIST:
+  INTERNAL_INFRA_LIST:
     - redis
     - rabbitmq
     - postgresql
@@ -11,22 +11,29 @@ vars:
     - garage
     - zookeeper
     - kafka
+    - debezium
     - mimir
     - loki
     - prometheus
     - tempo
     - grafana
     - otel-collector
-    # - apisix
-  BACKEND_LIST:
+    - apisix-internal
+  PUBLIC_INFRA_LIST:
+    - icecream-identity
+    - apisix-public
+  INTERNAL_APP_LIST:
     - codex
     - consul
     - chronos
     - echo
     - memoir
+    - conflux
+  PUBLIC_APP_LIST:
+    - storefront
   CREDENTIAL_GROUP_NAME: icecream-credentials
   PARAMETER_GROUP_NAME: icecream-configmaps
-  CREDENTIAL_LIST:
+  INTERNAL_CREDENTIAL_LIST:
     - name: RABBITMQ_PASSWORD
       value: '{{.RABBITMQ_PASSWORD}}'
     - name: POSTGRESQL_PASSWORD
@@ -69,7 +76,30 @@ vars:
       value: '{{.CONSUL_API_KEY_1}}'
     - name: PAYMENT_WEBHOOK_SECRET
       value: '{{.PAYMENT_WEBHOOK_SECRET}}'
-  PARAMETER_LIST:
+    - name: APISIX_ADMIN_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+    - name: APISIX_VIEWER_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+  PUBLIC_CREDENTIAL_LIST:
+    - name: STOREFRONT_AUTH_SECRET
+      value: '{{.STOREFRONT_AUTH_SECRET}}'
+    - name: IDENTITY_STOREFRONT_CLIENT_ID
+      value: '{{.IDENTITY_STOREFRONT_CLIENT_ID}}'
+    - name: IDENTITY_STOREFRONT_CLIENT_SECRET
+      value: '{{.IDENTITY_STOREFRONT_CLIENT_SECRET}}'
+    - name: IDENTITY_BACKOFFICE_CLIENT_ID
+      value: '{{.IDENTITY_BACKOFFICE_CLIENT_ID}}'
+    - name: IDENTITY_BACKOFFICE_CLIENT_SECRET
+      value: '{{.IDENTITY_BACKOFFICE_CLIENT_SECRET}}'
+    - name: KEYCLOAK_DB_PASSWORD
+      value: '{{.KEYCLOAK_DB_PASSWORD}}'
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: '{{.KEYCLOAK_ADMIN_PASSWORD}}'
+    - name: APISIX_ADMIN_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+    - name: APISIX_VIEWER_PASSWORD
+      value: '{{.APISIX_ADMIN_PASSWORD}}'
+  INTERNAL_PARAMETER_LIST:
     - name: REGION
       value: '{{.REGION}}'
     - name: REDIS_HOST
@@ -126,6 +156,8 @@ vars:
       value: '{{.ELASTICSEARCH_PORT}}'
     - name: ELASTICSEARCH_USERNAME
       value: '{{.ELASTICSEARCH_USERNAME}}'
+    - name: ELASTICSEARCH_URL
+      value: '{{.ELASTICSEARCH_URL}}'
     - name: MAILPIT_HOST
       value: '{{.MAILPIT_HOST}}'
     - name: MAILPIT_PORT
@@ -138,8 +170,18 @@ vars:
       value: '{{.KAFKA_HOST}}'
     - name: KAFKA_PORT
       value: '{{.KAFKA_PORT}}'
+    - name: KAFKA_INTERNAL_PORT
+      value: '{{.KAFKA_INTERNAL_PORT}}'
+    - name: KAFKA_URL_NO_PROTOCOL
+      value: '{{.KAFKA_HOST}}:{{.KAFKA_PORT}}'
+    - name: KAFKA_INTERNAL_URL_NO_PROTOCOL
+      value: '{{.KAFKA_HOST}}:{{.KAFKA_INTERNAL_PORT}}'
     - name: DEBEZIUM_CONNECT_PORT
       value: '{{.DEBEZIUM_CONNECT_PORT}}'
+    - name: DEBEZIUM_CONNECT_HOST
+      value: '{{.DEBEZIUM_CONNECT_HOST}}'
+    - name: DEBEZIUM_CONNECT_URL
+      value: '{{.DEBEZIUM_CONNECT_URL}}'
     - name: GRAFANA_HOST
       value: '{{.GRAFANA_HOST}}'
     - name: GRAFANA_PORT
@@ -150,6 +192,8 @@ vars:
       value: '{{.OTEL_COLLECTOR_HOST}}'
     - name: OTEL_COLLECTOR_PORT
       value: '{{.OTEL_COLLECTOR_PORT}}'
+    - name: STOREFRONT_PORT
+      value: '{{.STOREFRONT_PORT}}'
     - name: STOREFRONT_URL
       value: '{{.STOREFRONT_URL}}'
     - name: IDENTITY_REALM
@@ -222,55 +266,231 @@ vars:
       value: '{{.PAYMENT_URL}}'
     - name: ICECREAM_VOLUME
       value: ''
+  PUBLIC_PARAMETER_LIST:
+    - name: KEYCLOAK_ADMIN
+      value: '{{.KEYCLOAK_ADMIN}}'
+    - name: KEYCLOAK_DB_USER
+      value: '{{.KEYCLOAK_DB_USER}}'
+    - name: KEYCLOAK_DB_URL
+      value: 'jdbc:postgresql://{{.POSTGRESQL_HOST}}:{{.POSTGRESQL_PORT}}/{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: POSTGRESQL_IDENTITY_DB
+      value: '{{.POSTGRESQL_IDENTITY_DB}}'
+    - name: IDENTITY_REALM
+      value: '{{.IDENTITY_REALM}}'
+  
   PROFILE: '{{.PROFILE | default "develop"}}'
 
 tasks:
-  create-creds:
+  create-creds-internal:
     silent: true
+    internal: true
     if: '! kubectl get secrets {{.CREDENTIAL_GROUP_NAME}} -n {{.NAMESPACE}}'
     cmd: >-
       kubectl create secret generic {{.CREDENTIAL_GROUP_NAME}}
       {{- range .CREDENTIAL_LIST }} --from-literal='{{ .name }}={{ .value }}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
-  create-params:
+  create-params-internal:
     silent: true
+    internal: true
     if: '! kubectl get configmaps {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}'
     cmd: >-
-      kubectl create configmap {{.PARAMETER_GROUP_NAME}} -n {{.NAMESPACE}}
+      kubectl create configmap {{.PARAMETER_GROUP_NAME}}
       {{- range .PARAMETER_LIST}} --from-literal='{{.name}}={{.value}}' {{- end }}
       --dry-run=client -o yaml -n {{.NAMESPACE}} | kubectl apply -f -
+  create-creds:
+    cmds:
+      - task: create-creds-internal
+        vars:
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+          CREDENTIAL_LIST:
+            ref: .INTERNAL_CREDENTIAL_LIST
+      - task: create-creds-internal
+        vars:
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
+          CREDENTIAL_LIST:
+            ref: .PUBLIC_CREDENTIAL_LIST
+  create-params:
+    cmds:
+      - task: create-params-internal
+        vars:
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+          PARAMETER_LIST:
+            ref: .INTERNAL_PARAMETER_LIST
+      - task: create-params-internal
+        vars:
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
+          PARAMETER_LIST:
+            ref: .PUBLIC_PARAMETER_LIST
+
+  build-dependencies-internal:
+    internal: true
+    if: |
+      TARGET_PATH="{{.PATH}}"
+      if [[ "$TARGET_PATH" == *"apisix"* ]]; then
+        CHART_DIR="./infras/apisix/charts"
+      else
+        CHART_DIR="$TARGET_PATH/charts"
+      fi
+      [ ! -d "$CHART_DIR" ] || [ -z "$(find "$CHART_DIR" -maxdepth 1 -type f -print -quit 2>/dev/null)" ]
+    cmd: |
+      TARGET_PATH={{.PATH}}
+      if [[ $TARGET_PATH == *"apisix"* ]]; then
+        helm dependency update "./infras/apisix"
+      else
+        helm dependency update "$TARGET_PATH"
+      fi
+
+  build-dependencies-all:
+    cmds:
+      - for: {var: INTERNAL_INFRA_LIST}
+        task: build-dependencies-internal
+        vars:
+          PATH: './infras/{{.ITEM}}'
+      - for: {var: PUBLIC_INFRA_LIST}
+        task: build-dependencies-internal
+        vars:
+          PATH: './infras/{{.ITEM}}'
+      - for: [backend-service, storefront]
+        task: build-dependencies-internal
+        vars:
+          PATH: './apps/{{.ITEM}}'
+
   template-infra:
-    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm template ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
+    if: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        test -d ./infras/apisix && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      else
+        test -d ./infras/"$INFRA_NAME" && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      fi
+    cmd: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index .CLI_ARGS_LIST 1}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        helm template ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
+      else
+        helm template ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
+      fi
+
   install-infras:
     cmds:
-      - for: {var: INFRA_LIST}
+      - for: {var: INTERNAL_INFRA_LIST}
         task: install-infra-internal
         vars:
           NAME: '{{.ITEM}}'
-  install-infra:
-    if: test -d ./infras/{{index .CLI_ARGS_LIST 0}} && test -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./infras/{{index .CLI_ARGS_LIST 0}} -f ./environments/{{.PROFILE}}/infras/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
-  install-infra-internal:
-    internal: true
-    if: test -d ./infras/{{.NAME}} && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
-    cmd: helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
-  template-backend:
-    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
-  install-backends:
-    cmds:
-      - for: {var: BACKEND_LIST}
-        task: install-backend-internal
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+      - for: {var: PUBLIC_INFRA_LIST}
+        task: install-infra-internal
         vars:
           NAME: '{{.ITEM}}'
-  install-backend:
-    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml
-    cmd: helm upgrade --install {{index .CLI_ARGS_LIST 0}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{index .CLI_ARGS_LIST 0}}.yaml -n {{.NAMESPACE}}
-  install-backend-internal:
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
+  install-infra:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
+    if: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        test -d ./infras/apisix && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      else
+        test -d ./infras/"$INFRA_NAME" && test -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml
+      fi
+    cmd: |
+      INFRA_NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index .CLI_ARGS_LIST 1}}"
+      if [[ "$INFRA_NAME" == *"apisix"* ]]; then
+        helm upgrade --install "$INFRA_NAME" ./infras/apisix -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
+      else
+        helm upgrade --install "$INFRA_NAME" ./infras/"$INFRA_NAME" -f ./environments/{{.PROFILE}}/infras/"$INFRA_NAME".yaml -n "$NAMESPACE"
+      fi
+  install-infra-internal:
     internal: true
-    if: test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml
-    cmd: helm upgrade --install {{.NAME}} ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/{{.NAME}}.yaml -n {{.NAMESPACE}}
+    if: |
+      if [[ "{{.NAME}}" == *"apisix"* ]]; then
+        test -d ./infras/apisix && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
+      else
+        test -d ./infras/{{.NAME}} && test -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml
+      fi
+    cmd: |
+      if [[ "{{.NAME}}" == *"apisix"* ]]; then
+        helm upgrade --install {{.NAME}} ./infras/apisix -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+      else
+        helm upgrade --install {{.NAME}} ./infras/{{.NAME}} -f ./environments/{{.PROFILE}}/infras/{{.NAME}}.yaml -n {{.NAMESPACE}}
+      fi
+  
+  template-app:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
+    if: |
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        test -d ./apps/"$NAME" && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
+      else
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
+      fi
+    cmd: |
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index CLI_ARGS_LIST 1}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        helm template ./apps/"$NAME" -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
+      else
+        helm template ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
+      fi
+  install-apps:
+    cmds:
+      - for: {var: INTERNAL_APP_LIST}
+        task: install-app-internal
+        vars:
+          NAME: '{{.ITEM}}'
+          NAMESPACE: '{{.INTERNAL_NAMESPACE}}'
+      - for: {var: PUBLIC_APP_LIST}
+        task: install-app-internal
+        vars:
+          NAME: '{{.ITEM}}'
+          NAMESPACE: '{{.PUBLIC_NAMESPACE}}'
+  install-app:
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
+    if: |
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        test -d ./apps/"$NAME" && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
+      else
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
+      fi
+    cmd: |
+      NAME="{{index .CLI_ARGS_LIST 0}}"
+      NAMESPACE="{{index .CLI_ARGS_LIST 1}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/"$NAME" -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
+      else
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n "$NAMESPACE"
+      fi
+  install-app-internal:
+    internal: true
+    if: |
+      NAME="{{.NAME}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        test -d ./apps/"$NAME" && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
+      else
+        test -d ./apps/backend-service && test -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml
+      fi
+    cmd: |
+      NAME="{{.NAME}}"
+      if [[ "$NAME" == "storefront" ]]; then
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/"$NAME" -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n {{.NAMESPACE}}
+      else
+        helm upgrade --install {{.PROJECT_NAME}}-"$NAME" ./apps/backend-service -f ./environments/{{.PROFILE}}/apps/"$NAME".yaml -n {{.NAMESPACE}}
+      fi
+      
   uninstall-chart:
-    if: helm list -n {{.NAMESPACE}} | grep {{index .CLI_ARGS_LIST 0}}
-    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{.NAMESPACE}}
+    preconditions:
+      - sh: 'set -- {{.CLI_ARGS}}; [ "$#" -eq 2 ]'
+        msg: 'Exactly 2 arguments are required: chart name & namespace'
+    if: helm list -n {{index .CLI_ARGS_LIST 1}} | grep {{index .CLI_ARGS_LIST 0}}
+    cmd: helm uninstall {{index .CLI_ARGS_LIST 0}} -n {{index .CLI_ARGS_LIST 1}}

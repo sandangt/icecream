@@ -9,12 +9,16 @@ auth:
 service:
   type: ClusterIP
   clusterIp:
-    amqpPort: 38006
-    managementPort: 38007
+    amqpPort: 38004
+    managementPort: 38204
+
+persistence:
+  size: 2Gi
 
 resources:
   requests:
-    cpu: 250m
-    memory: 1Gi
+    cpu: 100m
+    memory: 384Mi
   limits:
-    memory: 1Gi
+    cpu: 500m
+    memory: 768Mi

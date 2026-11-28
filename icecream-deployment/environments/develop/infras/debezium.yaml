@@ -1,0 +1,25 @@
+fullnameOverride: debezium
+
+image:
+  repository: code.sanlab.zone/sandang/debezium
+  tag: 2.7.3.Final
+
+config:
+  existingConfigMap: icecream-configmaps
+
+auth:
+  existingSecret: icecream-credentials
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 1Gi
+  limits:
+    cpu: 512m
+    memory: 2Gi
+
+service:
+  type: ClusterIP
+  port: 38008
+  nodePort: null
+  

@@ -17,8 +17,8 @@ service:
       targetPort: 32001
       protocol: TCP
     - name: rsocket
-      port: 42001
-      targetPort: 42001
+      port: 32101
+      targetPort: 32101
       protocol: TCP
 
 extraEnv:
@@ -66,3 +66,18 @@ probes:
     initialDelaySeconds: 5
     failureThreshold: 5
     periodSeconds: 10
+
+resources:
+  requests:
+    cpu: 300m
+    memory: 768Mi
+  limits:
+    cpu: 1500m
+    memory: 1Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 93

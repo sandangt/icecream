@@ -109,6 +109,52 @@ spec:
               readOnly: true
             - name: data
               mountPath: /var/lib/garage
+        {{- if .Values.webui.enabled }}
+        - name: garage-webui
+          image: '{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}'
+          imagePullPolicy: {{ .Values.webui.image.pullPolicy }}
+          env:
+            - name: API_BASE_URL
+              value: 'http://127.0.0.1:3903'
+            - name: S3_ENDPOINT_URL
+              value: 'http://127.0.0.1:3900'
+            - name: S3_REGION
+              value: {{ .Values.garage.region | quote }}
+            - name: API_ADMIN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "garage.secretName" . }}
+                  key: GARAGE_ADMIN_TOKEN
+          ports:
+            - name: webui
+              containerPort: 3909
+          readinessProbe:
+            tcpSocket:
+              port: webui
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: webui
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          {{- with .Values.webui.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/garage.toml
+              subPath: garage.toml
+              readOnly: true
+        {{- end }}
       volumes:
         - name: config
           configMap:

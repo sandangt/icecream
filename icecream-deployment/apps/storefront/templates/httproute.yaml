@@ -1,0 +1,30 @@
+{{- if .Values.route.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "app.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "app.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ .Values.route.gatewayName }}
+      namespace: {{ .Values.route.gatewayNamespace }}
+      sectionName: {{ .Values.route.sectionName }}
+  hostnames:
+    - {{ .Values.route.hostname | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.route.pathPrefix | quote }}
+      {{- with .Values.route.filters }}
+      filters: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      backendRefs:
+        - kind: Service
+          name: {{ include "app.fullname" . }}
+          port: {{ .Values.service.port }}
+          weight: 1
+{{- end }}

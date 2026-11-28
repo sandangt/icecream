@@ -1,0 +1,30 @@
+{{- if .Values.routes.storefrontClient.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "icecream-identity.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "icecream-identity.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ .Values.routes.storefrontClient.gatewayName }}
+      namespace: {{ .Values.routes.storefrontClient.gatewayNamespace }}
+      sectionName: {{ .Values.routes.storefrontClient.sectionName }}
+  hostnames:
+    - {{ .Values.routes.storefrontClient.hostname | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.routes.storefrontClient.pathPrefix | quote }}
+      {{- with .Values.routes.storefrontClient.filters }}
+      filters: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      backendRefs:
+        - kind: Service
+          name: {{ include "icecream-identity.fullname" . }}
+          port: {{ .Values.service.port }}
+          weight: 1
+{{- end }}

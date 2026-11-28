@@ -2,4 +2,15 @@ fullnameOverride: zookeeper
 
 service:
   type: ClusterIP
-  port: 38008
+  port: 38005
+
+persistence:
+  size: 2Gi
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi

@@ -1,0 +1,7 @@
+apiVersion: v2
+description: Kafka Connect (Debezium) with the PostgreSQL source and Elasticsearch
+  sink connectors registered automatically
+name: debezium
+type: application
+version: 0.1.0
+appVersion: 2.7.3.Final

@@ -5,3 +5,14 @@ config:
 
 auth:
   existingSecret: icecream-credentials
+
+persistence:
+  size: 5Gi
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 768Mi
+  limits:
+    cpu: 1000m
+    memory: 1536Mi

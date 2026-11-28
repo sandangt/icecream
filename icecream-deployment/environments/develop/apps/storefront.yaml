@@ -1,0 +1,57 @@
+nameOverride: storefront
+fullnameOverride: icecream-storefront
+
+image:
+  repository: code.sanlab.zone/sandang/icecream-storefront
+  tag: 0.1.0
+
+auth:
+  existingSecret: icecream-credentials
+
+config:
+  existingConfigMap: icecream-configmaps
+
+extraEnv:
+  - name: STORAGE_IMAGE_BUCKET
+    value: images
+  - name: AUTH_TRUST_HOST
+    value: 'true'
+  - name: AUTH_URL
+    value: 'https://icecream.sanlab.zone'
+  - name: AUTH_KEYCLOAK_ISSUER
+    value: 'https://icecream-auth.sanlab.zone/realms/icecream-dev'
+  - name: CONSUL_URL
+    value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/consul'
+  - name: ECHO_URL
+    value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/echo'
+  - name: STORAGE_URL
+    value: 'https://icecream-media.sanlab.zone'
+
+route:
+  enabled: true
+  hostname: icecream.sanlab.zone
+  gatewayName: apisix-public
+  gatewayNamespace: icecream-public
+  sectionName: http
+  pathPrefix: /
+  filters: []
+
+service:
+  type: ClusterIP
+  targetPort: 3000
+  port: 34000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 93

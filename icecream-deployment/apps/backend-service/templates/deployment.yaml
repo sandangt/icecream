@@ -37,9 +37,9 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ .Values.config.existingConfigMap }}
+                name: {{ include "app.configMapName" . }}
             - secretRef:
-                name: {{ .Values.auth.existingSecret }}
+                name: {{ include "app.secretName" . }}
           {{- with .Values.extraEnv }}
           env:
             {{- toYaml . | nindent 12 }}

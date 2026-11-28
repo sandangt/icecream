@@ -1,0 +1,19 @@
+{{- $files := .Files.Glob "files/*.jsonc" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dbz.fullname" . }}-connector-files
+  labels:
+    {{- include "dbz.labels" . | nindent 4 }}
+data:
+  {{- range $path, $_ := $files }}
+  {{- $raw := tpl ($.Files.Get $path) $ }}
+  {{- $json := regexReplaceAll `(?m)^[ \t]*//.*$` $raw "" | fromJson }}
+  {{- if hasKey $json "Error" }}
+  {{- fail (printf "%s is not valid JSON once comments are stripped: %s" $path $json.Error) }}
+  {{- end }}
+  {{- $name := required (printf "%s: top-level \"name\" is missing" $path) $json.name }}
+  {{- $config := required (printf "%s: top-level \"config\" is missing" $path) $json.config }}
+  {{ $name }}.json: |-
+    {{- toPrettyJson $config | nindent 4 }}
+{{- end }}

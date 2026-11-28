@@ -1,0 +1,63 @@
+{{- if .Values.initScripts.productIndex.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "elasticsearch.fullname" . }}-index-create
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels: {{- include "elasticsearch.selectorLabels" . | nindent 8 }}
+      name: {{ include "elasticsearch.fullname" . }}-index-creator
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-index
+          image: curlimages/curl:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              INDEX_NAME="{{ .Values.initScripts.productIndex.name }}"
+              ES_URL="http://{{ include "elasticsearch.fullname" . }}:{{ .Values.service.port }}"
+              
+              echo "Waiting for Elasticsearch to be ready..."
+              until curl -s -f "$ES_URL/_cluster/health" > /dev/null; do
+                echo "Elasticsearch is not ready yet. Retrying in 5 seconds..."
+                sleep 5
+              done
+              
+              echo "Checking if index $INDEX_NAME exists..."
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$ES_URL/$INDEX_NAME")
+              
+              if [ "$HTTP_CODE" = "200" ]; then
+                echo "Index $INDEX_NAME already exists. Skipping creation."
+                exit 0
+              else
+                echo "Creating index $INDEX_NAME..."
+                HTTP_CODE=$(curl -s -o /tmp/response.json -w "%{http_code}" --location --request PUT "$ES_URL/$INDEX_NAME" \
+                --header 'Content-Type: application/json' \
+                --data @/mapping/mapping.json)
+                
+                if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ]; then
+                  echo "Index $INDEX_NAME created successfully."
+                  exit 0
+                else
+                  echo "Failed to create index $INDEX_NAME. HTTP Code: $HTTP_CODE"
+                  cat /tmp/response.json
+                  exit 1
+                fi
+              fi
+          volumeMounts:
+            - name: mapping-volume
+              mountPath: /mapping
+              readOnly: true
+      volumes:
+        - name: mapping-volume
+          configMap:
+            name: {{ include "elasticsearch.fullname" . }}-index-mapping
+{{- end }}

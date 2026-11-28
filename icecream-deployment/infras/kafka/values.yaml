@@ -7,8 +7,12 @@ fullnameOverride: ''
 
 service:
   type: ClusterIP
-  port: 38009
-  nodePort: null
+  clusterIp:
+    port: 38009
+    internalPort: 38010
+  nodePort:
+    port: null
+    internalPort: null
 
 replicaCount: 1
 
@@ -37,10 +41,6 @@ topicInit:
       memory: 256Mi
     limits:
       memory: 512Mi
-
-podDisruptionBudget:
-  enabled: true
-  maxUnavailable: 1
 
 persistence:
   enabled: true

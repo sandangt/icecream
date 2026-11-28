@@ -23,6 +23,9 @@ vars:
     - name: garage
       path: './garage'
       version: v2.4.1
+    - name: garage-ui
+      path: './garage-ui'
+      version: 1.1.0
     - name: mailpit
       path: './mailpit'
       version: v1.28.2
@@ -53,6 +56,9 @@ vars:
     - name: icecream-identity
       path: '../icecream-system/identity'
       version: 0.1.0
+    - name: debezium
+      path: './debezium'
+      version: 2.7.3.Final
 
 tasks:
   build:
@@ -64,7 +70,7 @@ tasks:
           PATH: '{{.ITEM.path}}'
           VERSION: '{{.ITEM.version}}'
   build-item:
-    silent: true
+    # silent: true
     internal: true
     status:
       - test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"
@@ -95,7 +101,7 @@ tasks:
     internal: true
     status:
       - '! test -n "$(docker images -q {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}})"'
-    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}\
+    cmd: docker push {{.REGISTRY_URL}}/{{.NAME}}:{{.VERSION}}
   # task push-one NAME=redis
   push-one:
     requires:

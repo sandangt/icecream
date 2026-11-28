@@ -1,1 +1,9 @@
 fullnameOverride: otel-collector
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 192Mi
+  limits:
+    cpu: 300m
+    memory: 384Mi

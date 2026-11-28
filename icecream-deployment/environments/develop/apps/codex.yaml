@@ -2,7 +2,7 @@ nameOverride: codex
 fullnameOverride: icecream-codex
 image:
   repository: ghcr.io/sandangt/icecream-codex-app
-  tag: sha-3efa71d
+  tag: sha-ac3b9be
 
 config:
   existingConfigMap: icecream-configmaps
@@ -26,3 +26,13 @@ extraEnv:
     value: otlp
   - name: OTEL_TRACES_EXPORTER
     value: otlp
+  - name: OTEL_SERVICE_NAME
+    value: icecream-codex
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

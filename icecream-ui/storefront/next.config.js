@@ -15,6 +15,10 @@ const nextConfig = {
         hostname: 'placehold.co',
         port: '',
         pathname: '/**',
+      }, {
+        protocol: 'https',
+        hostname: 'icecream-media.sanlab.zone',
+        pathname: '/**',
       }
     ],
   },

@@ -19,6 +19,24 @@ service:
   port: 32000
   nodePort: null
 
+routes:
+  storefrontClient:
+    enabled: true
+    hostname: icecream-auth.sanlab.zone
+    gatewayName: apisix-public
+    gatewayNamespace: icecream-public
+    sectionName: http
+    pathPrefix: /
+    filters: []
+  admin:
+    enabled: true
+    hostname: icecream-auth-admin.sanlab.zone
+    gatewayName: apisix-public
+    gatewayNamespace: icecream-public
+    sectionName: http
+    pathPrefix: /
+    filters: []
+
 extraEnv: []
 
 resources:
