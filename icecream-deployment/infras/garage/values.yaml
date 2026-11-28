@@ -20,10 +20,25 @@ garage:
     rootDomain: .web.garage.lan
     index: index.html
 
+webui:
+  enabled: false
+  image:
+    repository: code.sanlab.zone/sandang/garage-ui
+    tag: 1.1.0
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
 service:
   type: ClusterIP
   s3Port: 38004
   rpcPort: 38018
+  uiPort: 38005
 
 buckets:
   default: images

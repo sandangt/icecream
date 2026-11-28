@@ -7,6 +7,7 @@ service:
   type: ClusterIP
   s3Port: 38003
   rpcPort: 38103
+  uiPort: 38203
 
 persistence:
   size: 30Gi
@@ -18,3 +19,10 @@ resources:
   limits:
     cpu: 500m
     memory: 512Mi
+
+webui:
+  enabled: true
+  image:
+    repository: code.sanlab.zone/sandang/garage-ui
+    tag: 1.1.0
+    pullPolicy: IfNotPresent

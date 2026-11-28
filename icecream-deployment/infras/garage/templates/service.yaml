@@ -35,3 +35,9 @@ spec:
       port: {{ .Values.service.rpcPort }}
       targetPort: rpc
       protocol: TCP
+    {{- if .Values.webui.enabled }}
+    - name: webui
+      port: {{ .Values.service.uiPort }}
+      targetPort: webui
+      protocol: TCP
+    {{- end }}
