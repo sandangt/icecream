@@ -17,8 +17,8 @@ service:
       targetPort: 32001
       protocol: TCP
     - name: rsocket
-      port: 42001
-      targetPort: 42001
+      port: 32101
+      targetPort: 32101
       protocol: TCP
 
 extraEnv:

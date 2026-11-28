@@ -5,8 +5,8 @@ auth:
 
 service:
   type: ClusterIP
-  s3Port: 38004
-  rpcPort: 38018
+  s3Port: 38003
+  rpcPort: 38103
 
 persistence:
   size: 30Gi

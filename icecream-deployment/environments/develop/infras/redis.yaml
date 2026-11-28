@@ -8,7 +8,7 @@ config:
 
 service:
   type: ClusterIP
-  port: 38100
+  port: 38002
 
 persistence:
   size: 1Gi

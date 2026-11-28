@@ -25,7 +25,6 @@ registerJob:
 service:
   type: ClusterIP
   port: 38011
-  targetPort: 8083
   nodePort: null
 
 resources:

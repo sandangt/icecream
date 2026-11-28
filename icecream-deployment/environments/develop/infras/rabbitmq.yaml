@@ -9,8 +9,8 @@ auth:
 service:
   type: ClusterIP
   clusterIp:
-    amqpPort: 38006
-    managementPort: 38007
+    amqpPort: 38004
+    managementPort: 38204
 
 persistence:
   size: 2Gi

@@ -27,10 +27,6 @@ app.kubernetes.io/name: {{ include "kafka.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "kafka.bootstrap" -}}
-{{- printf "%s.%s.svc.%s:%v" (include "kafka.fullname" .) .Release.Namespace .Values.config.clusterDomain .Values.service.port -}}
-{{- end -}}
-
 {{- define "kafka.rf" -}}
 {{- if kindIs "invalid" .Values.config.replicationFactor -}}
 {{- min (int .Values.replicaCount) 3 -}}

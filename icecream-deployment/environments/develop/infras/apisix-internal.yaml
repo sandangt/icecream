@@ -116,3 +116,6 @@ internalRoute:
     - name: icecream-echo
       port: 32002
       pathPrefix: /echo
+    - name: garage
+      port: 38003
+      pathPrefix: /storage

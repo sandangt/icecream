@@ -43,3 +43,8 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 imagePullSecrets: []
+
+initScripts:
+  productIndex:
+    enabled: false
+    name: ''

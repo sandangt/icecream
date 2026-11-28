@@ -37,11 +37,9 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           ports:
-            {{- with .Values.service }}
             - name: http
-              containerPort: {{ .targetPort }}
+              containerPort: 8083
               protocol: TCP
-            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ required "config.existingConfigMap is required" (include "dbz.configMapName" .) }}
@@ -52,7 +50,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "dbz.configMapName" . }}
-                  key: KAFKA_URL_NO_PROTOCOL
+                  key: KAFKA_INTERNAL_URL_NO_PROTOCOL
             - name: GROUP_ID
               value: '1'
             - name: CONFIG_STORAGE_TOPIC

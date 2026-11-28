@@ -16,3 +16,8 @@ resources:
   limits:
     cpu: 1000m
     memory: 1536Mi
+
+service:
+  clusterIp:
+    port: 38006
+    internalPort: 38007

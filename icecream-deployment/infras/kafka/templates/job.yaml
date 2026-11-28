@@ -46,7 +46,10 @@ spec:
                 name: {{ include "kafka.fullname" . }}
           env:
             - name: KAFKA_BROKER
-              value: {{ include "kafka.bootstrap" . | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "kafka.configMapName" . }}
+                  key: KAFKA_URL_NO_PROTOCOL
             - name: KAFKA_HEAP_OPTS
               value: '-Xms64m -Xmx256m'
           resources:

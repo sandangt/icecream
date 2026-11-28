@@ -8,7 +8,7 @@ config:
 
 service:
   type: ClusterIP
-  port: 38012
+  port: 38009
 
 persistence:
   size: 15Gi
@@ -20,3 +20,8 @@ resources:
   limits:
     cpu: 1500m
     memory: 2Gi
+
+initScripts:
+  productIndex:
+    enabled: true
+    name: icecream.conflux.enriched.product

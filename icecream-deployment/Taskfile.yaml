@@ -170,8 +170,12 @@ vars:
       value: '{{.KAFKA_HOST}}'
     - name: KAFKA_PORT
       value: '{{.KAFKA_PORT}}'
+    - name: KAFKA_INTERNAL_PORT
+      value: '{{.KAFKA_INTERNAL_PORT}}'
     - name: KAFKA_URL_NO_PROTOCOL
       value: '{{.KAFKA_HOST}}:{{.KAFKA_PORT}}'
+    - name: KAFKA_INTERNAL_URL_NO_PROTOCOL
+      value: '{{.KAFKA_HOST}}:{{.KAFKA_INTERNAL_PORT}}'
     - name: DEBEZIUM_CONNECT_PORT
       value: '{{.DEBEZIUM_CONNECT_PORT}}'
     - name: DEBEZIUM_CONNECT_HOST

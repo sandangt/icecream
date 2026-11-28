@@ -2,7 +2,7 @@ fullnameOverride: zookeeper
 
 service:
   type: ClusterIP
-  port: 38008
+  port: 38005
 
 persistence:
   size: 2Gi
