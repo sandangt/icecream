@@ -38,6 +38,7 @@ service:
   type: ClusterIP
   s3Port: 38004
   rpcPort: 38018
+  webPort: 38004
   uiPort: 38005
 
 buckets:

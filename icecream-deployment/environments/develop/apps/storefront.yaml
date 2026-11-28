@@ -2,8 +2,8 @@ nameOverride: storefront
 fullnameOverride: icecream-storefront
 
 image:
-  repository: ghcr.io/sandangt/icecream-storefront-app
-  tag: sha-1b4c283
+  repository: code.sanlab.zone/sandang/icecream-storefront
+  tag: 0.1.0
 
 auth:
   existingSecret: icecream-credentials
@@ -25,7 +25,7 @@ extraEnv:
   - name: ECHO_URL
     value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/echo'
   - name: STORAGE_URL
-    value: 'http://apisix-internal-gateway.icecream-internal.svc.cluster.local/storage'
+    value: 'https://icecream-media.sanlab.zone'
 
 route:
   enabled: true

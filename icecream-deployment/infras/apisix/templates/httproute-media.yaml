@@ -1,0 +1,31 @@
+{{- if eq .Values.profile "internal" }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Chart.Name }}-external-route-media
+  namespace: {{ .Values.externalRoutes.media.gatewayNamespace }}
+  labels: {{- include "a6g.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ .Values.externalRoutes.media.gatewayName }}
+      namespace: {{ .Values.externalRoutes.media.gatewayNamespace }}
+      sectionName: {{ .Values.externalRoutes.media.sectionName }}
+  hostnames:
+    - {{ .Values.externalRoutes.media.hostname | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.externalRoutes.media.pathPrefix | quote }}
+      {{- with .Values.externalRoutes.media.filters }}
+      filters: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      backendRefs:
+        - kind: Service
+          name: {{ .Values.externalRoutes.media.backendHostname }}
+          port: {{ .Values.externalRoutes.media.backendPort }}
+          namespace: {{ .Release.Namespace }}
+          weight: 1
+{{- end }}

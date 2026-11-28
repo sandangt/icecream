@@ -116,6 +116,14 @@ internalRoute:
     - name: icecream-echo
       port: 32002
       pathPrefix: /echo
-    - name: garage
-      port: 38003
-      pathPrefix: /storage
+
+externalRoutes:
+  media:
+    hostname: icecream-media.sanlab.zone
+    gatewayName: apisix-public
+    gatewayNamespace: icecream-public
+    sectionName: http
+    pathPrefix: /
+    filters: []
+    backendHostname: garage
+    backendPort: 38003
